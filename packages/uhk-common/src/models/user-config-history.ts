@@ -1,4 +1,4 @@
-import { UhkDeviceProduct } from './uhk-products';
+import { UhkDeviceProduct } from './uhk-products.js';
 
 export interface HistoryFileInfo {
     filePath: string;

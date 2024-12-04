@@ -4,14 +4,17 @@ import { Action, Store } from '@ngrx/store';
 import {
     ChangeKeyboardLayoutIpcResponse,
     DeviceConnectionState,
+    DeviceVersionInformation,
     FirmwareJson,
     FirmwareUpgradeIpcResponse,
+    HardwareConfiguration,
     HardwareModules,
     IpcEvents,
     IpcResponse,
     KeyboardLayout,
     LogService,
     SaveUserConfigurationData,
+    UHK_DEVICE_IDS_TYPE,
     UpdateFirmwareData,
     UploadFileData,
     UserConfiguration,
@@ -19,11 +22,19 @@ import {
     VersionInformation
 } from 'uhk-common';
 
+import { DeleteHostConnectionPayload } from '../models';
 import { AppState } from '../store';
+import {
+    DeleteHostConnectionFailedAction,
+    DeleteHostConnectionSuccessAction,
+    DonglePairingFailedAction,
+    DonglePairingSuccessAction,
+} from '../store/actions/dongle-pairing.action';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ChangeKeyboardLayoutReplyAction,
     ConnectionStateChangedAction,
+    DongleVersionInfoLoadedAction,
     CurrentlyUpdateSkipModuleAction,
     CurrentlyUpdatingModuleAction,
     HardwareModulesLoadedAction,
@@ -36,7 +47,11 @@ import {
     UpdateFirmwareJsonAction,
     UpdateFirmwareReplyAction
 } from '../store/actions/device';
-import { I2cWatchdogCounterChangedAction } from '../store/actions/advance-settings.action';
+import {
+    LeftHalfPairingFailedAction,
+    LeftHalfPairingSuccessAction,
+    I2cWatchdogCounterChangedAction,
+} from '../store/actions/advance-settings.action';
 import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
 import { LoadUserConfigurationHistorySuccessAction } from '../store/actions/user-configuration-history.actions';
 
@@ -50,8 +65,16 @@ export class DeviceRendererService {
         this.logService.misc('[DeviceRendererService] init success ');
     }
 
-    changeKeyboardLayout(layout: KeyboardLayout, deviceId: number): void {
-        this.ipcRenderer.send(IpcEvents.device.changeKeyboardLayout, layout, deviceId);
+    changeKeyboardLayout(layout: KeyboardLayout, hardwareConfiguration: HardwareConfiguration): void {
+        this.ipcRenderer.send(IpcEvents.device.changeKeyboardLayout, layout, hardwareConfiguration.toJsonObject());
+    }
+
+    deleteHostConnection(data: DeleteHostConnectionPayload, isConnectedDongleAddress: boolean): void {
+        this.ipcRenderer.send(IpcEvents.device.deleteHostConnection, {
+            isConnectedDongleAddress,
+            index: data.index,
+            address: data.hostConnection.address,
+        });
     }
 
     setPrivilegeOnLinux(): void {
@@ -74,8 +97,11 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.startConnectionPoller);
     }
 
-    recoveryDevice(userConfig: UserConfiguration): void {
-        this.ipcRenderer.send(IpcEvents.device.recoveryDevice, userConfig.toJsonObject());
+    recoveryDevice(userConfig: UserConfiguration, deviceId: UHK_DEVICE_IDS_TYPE): void {
+        this.ipcRenderer.send(IpcEvents.device.recoveryDevice, {
+            deviceId,
+            userConfig: userConfig.toJsonObject()
+        });
     }
 
     recoveryModule(moduleId: number): void {
@@ -98,6 +124,14 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.getUserConfigFromHistory, fileName);
     }
 
+    startDonglePairing(): void {
+        this.ipcRenderer.send(IpcEvents.device.startDonglePairing);
+    }
+
+    startLeftHalfPairing(): void {
+        this.ipcRenderer.send(IpcEvents.device.startLeftHalfPairing);
+    }
+
     toggleI2cDebugging(enabled: boolean): void {
         this.ipcRenderer.send(IpcEvents.device.toggleI2cDebugging, enabled);
     }
@@ -105,6 +139,18 @@ export class DeviceRendererService {
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.changeKeyboardLayoutReply, (event: string, response: ChangeKeyboardLayoutIpcResponse) => {
             this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.dongleVersionInfoLoaded, (event: string, response: DeviceVersionInformation) => {
+            this.dispachStoreAction(new DongleVersionInfoLoadedAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.deleteHostConnectionSuccess, (event: string, data: any) => {
+            this.dispachStoreAction(new DeleteHostConnectionSuccessAction(data));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.deleteHostConnectionFailed, (event: string, message: string) => {
+            this.dispachStoreAction(new DeleteHostConnectionFailedAction(message));
         });
 
         this.ipcRenderer.on(IpcEvents.device.hardwareModulesLoaded, (event: string, response: HardwareModules) => {
@@ -172,6 +218,22 @@ export class DeviceRendererService {
                 uploadFileData: response,
                 autoSave: false
             }));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.donglePairingSuccess, (event: string, bleAddress: string) => {
+            this.store.dispatch(new DonglePairingSuccessAction(bleAddress));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.donglePairingFailed, (event: string, message: string) => {
+            this.store.dispatch(new DonglePairingFailedAction(message));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.leftHalfPairingSuccess, (event: string, bleAddress: string) => {
+            this.store.dispatch(new LeftHalfPairingSuccessAction(bleAddress));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.leftHalfPairingFailed, (event: string, message: string) => {
+            this.store.dispatch(new LeftHalfPairingFailedAction(message));
         });
     }
 

@@ -26,6 +26,6 @@ import { UsbVariables } from 'uhk-usb';
 
         console.log(value);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

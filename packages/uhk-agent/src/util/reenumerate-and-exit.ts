@@ -1,7 +1,6 @@
 import {
     UhkHidDevice,
     EnumerationModes,
-    getDeviceEnumerateProductId,
     getCurrentUhkDeviceProduct,
     getUhkDevices
 } from 'uhk-usb';
@@ -24,12 +23,10 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
 
     const startTime = new Date();
     const reenumerationOption = parseReenumerateAndExitArg(arg);
-    const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
-    const enumerationProduct = getDeviceEnumerateProductId(uhkDeviceProduct, reenumerationOption.mode);
+    const uhkDeviceProduct = await getCurrentUhkDeviceProduct(options.commandLineArgs);
     await options.uhkHidDevice.reenumerate({
+        device: uhkDeviceProduct,
         enumerationMode: reenumerationOption.mode,
-        vendorId: uhkDeviceProduct.vendorId,
-        productId: enumerationProduct,
         timeout: reenumerationOption.timeout
     });
 

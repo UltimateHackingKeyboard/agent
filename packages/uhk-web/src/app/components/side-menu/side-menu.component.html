@@ -88,6 +88,13 @@
                         </div>
                     </li>
                     <li class="sidebar__level-2--item"
+                        *ngIf="!state.restoreUserConfiguration && isConnectionsMenuAllowed">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/device/host-connections']"
+                               [class.disabled]="state.updatingFirmware">Connections</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item"
                         *ngIf="!state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/typing-behavior']"

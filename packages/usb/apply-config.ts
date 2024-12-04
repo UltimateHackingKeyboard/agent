@@ -11,6 +11,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         const { operations } = Uhk(argv);
         await operations.applyConfiguration();
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

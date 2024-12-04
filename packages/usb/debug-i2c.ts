@@ -20,6 +20,6 @@ setInterval(async function () {
             i2cRecovery = debugInfo.i2cWatchdogRecoveryCounter;
         }
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 }, 1000);

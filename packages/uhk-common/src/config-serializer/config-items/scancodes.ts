@@ -211,9 +211,6 @@ const SCANCODES = [
         "children": [
             {
                 "id": "40",
-                "additional": {
-                    "explanation": "Return"
-                },
                 "text": "Enter"
             },
             {

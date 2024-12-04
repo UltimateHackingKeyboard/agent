@@ -15,6 +15,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
 
         console.log(`requestedBaudRate:${baudRate.requestedBaudRate} | actualBaudRate:${baudRate.actualBaudRate} | I2C0_F:0b${baudRate.i2c0F}`);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

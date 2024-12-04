@@ -12,7 +12,7 @@
                     <div class="form-check d-inline-block">
                         <input class="form-check-input" type="radio" id="ansiLayout" name="device-layout"
                                [checked]="keyboardLayout === keyboardLayoutEnum.ANSI"
-                               [disabled]="isKeyboardLayoutChanging$ | async"
+                               [disabled]="(isKeyboardLayoutChanging$ | async) || state.isLeftHalfPairing"
                                (click)="onChangeKeyboardLayout(keyboardLayoutEnum.ANSI)"
                         >
                         <label class="form-check-label" for="ansiLayout">
@@ -22,7 +22,7 @@
                     <div class="form-check d-inline-block">
                         <input class="form-check-input" type="radio" id="isoLayout" name="device-layout"
                                [checked]="keyboardLayout === keyboardLayoutEnum.ISO"
-                               [disabled]="isKeyboardLayoutChanging$ | async"
+                               [disabled]="(isKeyboardLayoutChanging$ | async) || state.isLeftHalfPairing"
                                (click)="onChangeKeyboardLayout(keyboardLayoutEnum.ISO)"
                         >
                         <label class="form-check-label" for="isoLayout">
@@ -31,11 +31,21 @@
                     </div>
                 </div>
 
+                <div *ngIf="isHalvesPairingAllowed" class="form-check mt-3">
+                    <button class="btn btn-default"
+                            [disabled]="state.isLeftHalfPairing"
+                            (click)="startLeftHalfPairing()"
+                    >
+                        Re-pair keyboard halves
+                    </button>
+                </div>
+
                 <div class="form-check mt-3">
                     <div class="checkbox d-inline-block mb-0 mt-0">
                         <label>
                             <input type="checkbox"
                                    [checked]="state.i2cDebuggingEnabled"
+                                   [disabled]="state.isLeftHalfPairing"
                                    (click)="onToggleI2cDebug()"
                             > I2cRecovery debugging
                         </label>
@@ -47,7 +57,7 @@
                         <label>
                             <input type="checkbox"
                                    [checked]="state.i2cDebuggingRingBellEnabled"
-                                   [disabled]="state.i2cDebuggingRingBellControlDisabled"
+                                   [disabled]="state.i2cDebuggingRingBellControlDisabled || state.isLeftHalfPairing"
                                    (click)="onToggleI2cDebugRingBell()"
                             > Ring an audible bell upon I2cRecovery increments
                         </label>

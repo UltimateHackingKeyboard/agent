@@ -7,6 +7,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UhkMessageComponent {
+    @Input() description: string;
     @Input() header: string;
     @Input() subtitle: string;
     @Input() rotateLogo = false;

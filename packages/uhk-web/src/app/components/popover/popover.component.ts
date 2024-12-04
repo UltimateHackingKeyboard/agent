@@ -93,6 +93,7 @@ export class PopoverComponent implements OnChanges {
     keymapOptions$: Observable<SelectOptionData[]>;
     shadowKeyAction: KeyAction;
     disableRemapOnAllLayer = false;
+    internalRemapInfo: RemapInfo;
     tabHeaders: TabHeader[] = [
         {
             tabName: TabName.Keypress,
@@ -140,6 +141,12 @@ export class PopoverComponent implements OnChanges {
     ngOnChanges(change: SimpleChanges) {
         let tab: TabHeader = this.tabHeaders[5];
 
+        if (change.remapInfo) {
+            this.internalRemapInfo = {
+                ...this.remapInfo,
+            };
+        }
+
         if (change['defaultKeyAction']) {
             this.disableRemapOnAllLayer = false;
 
@@ -174,8 +181,8 @@ export class PopoverComponent implements OnChanges {
 
     onAssignNewMacro(): void {
         this.remap.emit({
-            remapOnAllKeymap: this.remapInfo.remapOnAllKeymap,
-            remapOnAllLayer: this.remapInfo.remapOnAllLayer,
+            remapOnAllKeymap: this.internalRemapInfo.remapOnAllKeymap,
+            remapOnAllLayer: this.internalRemapInfo.remapOnAllLayer,
             assignNewMacro: true
         });
     }
@@ -188,8 +195,8 @@ export class PopoverComponent implements OnChanges {
         if (this.keyActionValid) {
             try {
                 this.remap.emit({
-                    remapOnAllKeymap: this.remapInfo.remapOnAllKeymap,
-                    remapOnAllLayer: this.remapInfo.remapOnAllLayer,
+                    remapOnAllKeymap: this.internalRemapInfo.remapOnAllKeymap,
+                    remapOnAllLayer: this.internalRemapInfo.remapOnAllLayer,
                     action: this.selectedTab.toKeyAction()
                 });
             } catch (e) {
@@ -224,7 +231,7 @@ export class PopoverComponent implements OnChanges {
     }
 
     remapInfoChange(): void {
-        this.selectedTab.remapInfoChanged(this.remapInfo);
+        this.selectedTab.remapInfoChanged(this.internalRemapInfo);
     }
 
     keystrokeActionChange(keystrokeAction: KeystrokeAction): void {
@@ -240,7 +247,7 @@ export class PopoverComponent implements OnChanges {
             this.disableRemapOnAllLayer = disableRemapOnAllLayer;
 
             if (disableRemapOnAllLayer) {
-                this.remapInfo.remapOnAllLayer = false;
+                this.internalRemapInfo.remapOnAllLayer = false;
             }
 
             this.cdRef.markForCheck();

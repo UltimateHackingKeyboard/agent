@@ -1,4 +1,26 @@
-export interface CommandLineArgs {
+export interface DeviceIdentifier {
+    /**
+     * USB product id
+     */
+    pid?: number;
+
+    /**
+     * USB interface id
+     */
+    'usb-interface'?: number;
+
+    /**
+     * Serial number
+     */
+    'serial-number'?: string;
+
+    /**
+     * USB vendor id
+     */
+    vid?: number;
+}
+
+export interface CommandLineArgs extends DeviceIdentifier {
     /**
      * Allow Developer Tools menu
      */
@@ -23,9 +45,9 @@ export interface CommandLineArgs {
      */
     help?: boolean;
     /**
-     * USB product id
+     * Don't use report id for USB communication
      */
-    pid?: number;
+    'no-report-id'?: boolean;
     /**
      * Agent not force the udev rule update
      */
@@ -40,19 +62,15 @@ export interface CommandLineArgs {
      */
     'reenumerate-and-exit'?: string;
     /**
+     * Report Id that used for USB communication
+     */
+    'report-id'?: number;
+    /**
      * simulate privilege escalation error
      */
     spe?: boolean;
     /**
-     * USB interface id
-     */
-    'usb-interface'?: number;
-    /**
      * Use USB non-blocking communication
      */
     'usb-non-blocking'?: boolean;
-    /**
-     * USB vendor id
-     */
-    vid?: number;
 }

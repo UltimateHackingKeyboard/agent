@@ -6,9 +6,14 @@ import { DEFAULT_LOG_OPTIONS } from './default-log-options.js';
 export class LogService {
 
     protected _options = DEFAULT_LOG_OPTIONS;
+    protected _usbReportId: number = 0;
 
     setLogOptions(options: LogOptions): void {
         this._options = options;
+    }
+
+    setUsbReportId(reportId: number): void {
+        this._usbReportId = reportId;
     }
 
     config(message: string, config: UserConfiguration | string): void {

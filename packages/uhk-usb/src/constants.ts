@@ -1,6 +1,4 @@
-export namespace Constants {
-    export const MAX_PAYLOAD_SIZE = 64;
-}
+export const MAX_USB_PAYLOAD_SIZE = 63;
 
 /**
  * UHK USB Communications command. All communication package should have start with a command code.
@@ -26,7 +24,15 @@ export enum UsbCommand {
     SwitchKeymap             = 0x11,
     GetVariable              = 0x12,
     SetVariable              = 0x13,
-    ExecMacroCommand         = 0x14
+    ExecMacroCommand         = 0x14,
+    DrawOled                 = 0x15,
+    GetPairingData           = 0x16,
+    SetPairingData           = 0x17,
+    PairPeripheral           = 0x18,
+    PairCentral              = 0x19,
+    UnpairAll                = 0x1a,
+    IsPaired                 = 0x1b,
+    EnterPairingMode         = 0x1c,
 }
 
 export enum EepromOperation {
@@ -49,7 +55,11 @@ export enum DevicePropertyIds {
     Uptime = 5,
     GitTag = 6,
     GitRepo = 7,
-    FirmwareChecksum = 8
+    FirmwareChecksum = 8,
+    BleAddress = 9,
+    PairedRightPeerBleAddress = 10,
+    PairingStatus = 11,
+    NewPairings = 12
 }
 
 export enum EnumerationModes {
@@ -71,6 +81,25 @@ export enum ModulePropertyId {
     GitRepo = 2,
     FirmwareChecksum = 3
 }
+
+export enum PairIds {
+    left = 0,
+    Right = 1,
+    Dongle = 2,
+    Hid = 3,
+}
+
+export enum PairingStatuses {
+    InProgress = 0,
+    Success = 1,
+    Failed = 2,
+}
+
+export const PAIRING_STATUS_TEXT = Object.freeze([
+    'InProgress',
+    'Success',
+    'Failed',
+]);
 
 export enum UsbVariables {
     testSwitches = 0,

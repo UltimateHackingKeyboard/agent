@@ -31,6 +31,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         console.log('read ', bufferToString(config));
         fs.writeFileSync(fileName, config);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

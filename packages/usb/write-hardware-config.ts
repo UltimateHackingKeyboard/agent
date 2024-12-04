@@ -6,8 +6,12 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
     try {
         const argv = yargs
             .scriptName('./write-hardware-config.ts')
-            .usage('Usage: $0 {uhk60v1|uhk60v2} {iso|ansi}')
+            .usage('Usage: $0 {uhk60v1|uhk60v2|uhk80} {iso|ansi}')
             .demandCommand(2, 'DeviceId and layout is required.')
+            .option('set-serial-number', {
+                description: 'Use the given serial number instead of randomly generated one.',
+                type: 'number',
+            })
             .argv;
 
         const deviceId = getDeviceIdFromArg(argv._[0] as string);
@@ -19,9 +23,9 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         }
 
         const { operations } = Uhk(argv);
-        await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
+        await operations.saveHardwareConfiguration(layout === 'iso', deviceId, argv.setSerialNumber);
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

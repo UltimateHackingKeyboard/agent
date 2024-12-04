@@ -19,6 +19,6 @@ setInterval(async function () {
             (receivedBuffer[2] * 255 + receivedBuffer[1]) / 4096 * 5.5 * 1.045
         );
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 }, 500);

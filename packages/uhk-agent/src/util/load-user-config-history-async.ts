@@ -1,11 +1,12 @@
 import { readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
-import { convertHistoryFilenameToDisplayText } from 'uhk-common';
-import { getMd5HashFromFilename } from 'uhk-common';
 import {
+    convertHistoryFilenameToDisplayText,
     DeviceUserConfigHistory,
+    getMd5HashFromFilename,
     sortStringDesc,
     UHK_DEVICES,
+    UNKNOWN_DEVICE,
     UserConfigHistory,
 } from 'uhk-common';
 
@@ -47,17 +48,9 @@ export async function loadUserConfigHistoryAsync(): Promise<UserConfigHistory> {
             }
 
             const deviceHistoryDir = path.join(userConfigHistoryDir, entry);
-            const device = UHK_DEVICES.find(device => device.id === deviceId);
-
-            if (!device) {
-                // The device is not supported by this version of Agent.
-                // Or someone manually modified the user-config history folder and set invalid device id.
-                continue;
-            }
-
             const deviceHistory: DeviceUserConfigHistory = {
                 uniqueId: Number.parseInt(entrySplit[0], 10),
-                device,
+                device: UHK_DEVICES.find(device => device.id === deviceId) || UNKNOWN_DEVICE,
                 deviceName: '',
                 files: (await readdir(deviceHistoryDir))
                     .filter(file => path.extname(file) === '.bin')

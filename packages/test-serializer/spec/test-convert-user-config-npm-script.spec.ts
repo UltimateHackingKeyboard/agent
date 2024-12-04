@@ -20,10 +20,21 @@ describe('convert-user-config-to-bin npm script', () => {
         await remove(tmpDirPath);
     });
 
-    it('should work', async () => {
+    it('should work with uhk60', async () => {
         const response = spawnSync(
             'npm',
-            ['run', 'convert-user-config-to-bin', '--', tmpConfigPath],
+            ['run', 'convert-user-config-to-bin', '--', 'uhk60', tmpConfigPath],
+            { shell: true, cwd: rootDirPath}
+        );
+
+        expect(response.error).toEqual(undefined);
+        expect(await pathExists(tmpConfigPath)).toEqual(true);
+    });
+
+    it('should work with uhk80', async () => {
+        const response = spawnSync(
+            'npm',
+            ['run', 'convert-user-config-to-bin', '--', 'uhk80', tmpConfigPath],
             { shell: true, cwd: rootDirPath}
         );
 

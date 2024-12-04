@@ -14,6 +14,8 @@ import {
     NotificationType,
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
+    UdevRulesInfo,
+    UHK_80_DEVICE,
     UserConfiguration
 } from 'uhk-common';
 
@@ -54,7 +56,8 @@ import {
     AppState,
     deviceConnected,
     disableUpdateAgentProtection,
-    getDeviceId,
+    getConnectedDevice,
+    getHardwareConfiguration,
     getRouterState,
     getShowFirmwareUpgradePanel,
     getUserConfiguration
@@ -78,9 +81,9 @@ export class DeviceEffects {
     changeKeyboardLayout$ = createEffect(() => this.actions$
         .pipe(
             ofType<ChangeKeyboardLayoutAction>(ActionTypes.ChangeKeyboardLayout),
-            withLatestFrom(this.store.select(getDeviceId)),
-            tap(([action, deviceId]) => {
-                this.deviceRendererService.changeKeyboardLayout(action.layout, deviceId);
+            withLatestFrom(this.store.select(getHardwareConfiguration)),
+            tap(([action, hardwareConfiguration]) => {
+                this.deviceRendererService.changeKeyboardLayout(action.layout, hardwareConfiguration);
             })
         ),
     {dispatch:false}
@@ -121,11 +124,11 @@ export class DeviceEffects {
                     return this.router.navigate(['/multi-device']);
                 }
 
-                if (!state.hasPermission) {
+                if (!state.hasPermission || state.udevRulesInfo === UdevRulesInfo.Different) {
                     return this.router.navigate(['/privilege']);
                 }
 
-                if (state.bootloaderActive) {
+                if (state.bootloaderActive || state.leftHalfBootloaderActive || state.dongle.bootloaderActive) {
                     return this.router.navigate(['/recovery-device']);
                 }
 
@@ -161,14 +164,16 @@ export class DeviceEffects {
 
                 return prevConnected === currConnected &&
                     prevAction.payload.hasPermission === currAction.payload.hasPermission &&
-                    prevAction.payload.communicationInterfaceAvailable === currAction.payload.communicationInterfaceAvailable;
+                    prevAction.payload.communicationInterfaceAvailable === currAction.payload.communicationInterfaceAvailable &&
+                    prevAction.payload.udevRulesInfo === currAction.payload.udevRulesInfo;
             }),
             mergeMap(([action, route, connected]) => {
                 const payload = action.payload;
 
                 if (connected
                     && payload.hasPermission
-                    && payload.communicationInterfaceAvailable) {
+                    && payload.communicationInterfaceAvailable
+                    && (payload.udevRulesInfo === UdevRulesInfo.Ok || payload.udevRulesInfo === UdevRulesInfo.UdevDirNotExists)) {
 
                     const result: Array<Action> = [
                         new ReadConfigSizesAction(),
@@ -287,8 +292,17 @@ export class DeviceEffects {
     resetUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.ResetUserConfiguration),
-            switchMap(() => {
-                const config = this.defaultUserConfigurationService.getDefault().clone();
+            withLatestFrom(this.store.select(getConnectedDevice)),
+            switchMap(([, uhkDeviceProduct]) => {
+                let config: UserConfiguration;
+
+                if (uhkDeviceProduct?.id === UHK_80_DEVICE.id) {
+                    config = this.defaultUserConfigurationService.getDefault80().clone();
+                }
+                else {
+                    config = this.defaultUserConfigurationService.getDefault60().clone();
+                }
+
                 config.keymaps = config.keymaps.filter(keymap => keymap.abbreviation !== 'EMP');
                 return of(new LoadResetUserConfigurationAction(config));
             })
@@ -355,7 +369,6 @@ export class DeviceEffects {
                 if (response.success) {
                     return of(new UpdateFirmwareSuccessAction({
                         firmwareDowngraded: response.firmwareDowngraded,
-                        hardwareModules: response.modules,
                         userConfigSaved: response.userConfigSaved
                     }));
                 }
@@ -366,7 +379,6 @@ export class DeviceEffects {
 
                 return of(new UpdateFirmwareFailedAction({
                     error: response.error,
-                    modules: response.modules
                 }));
             })
         )
@@ -383,7 +395,7 @@ export class DeviceEffects {
         .pipe(
             ofType<RecoveryDeviceAction>(ActionTypes.RecoveryDevice),
             withLatestFrom(this.store.select(getUserConfiguration)),
-            tap(([, userConfig]) => this.deviceRendererService.recoveryDevice(userConfig))
+            tap(([action, userConfig]) => this.deviceRendererService.recoveryDevice(userConfig, action.payload))
         ),
     { dispatch: false }
     );
@@ -398,7 +410,6 @@ export class DeviceEffects {
                     return [
                         new UpdateFirmwareSuccessAction({
                             firmwareDowngraded: response.firmwareDowngraded,
-                            hardwareModules: response.modules,
                             userConfigSaved: response.userConfigSaved
                         }),
                         new StartConnectionPollerAction()
@@ -408,7 +419,6 @@ export class DeviceEffects {
                 return [
                     new UpdateFirmwareFailedAction({
                         error: response.error,
-                        modules: response.modules
                     })
                 ];
             })

@@ -22,11 +22,13 @@ import { AddOnComponent } from './components/add-on';
 import { BackToComponent } from './components/back-to/back-to.component';
 import CircleTooltipComponent from './components/circle-tooltip/circle-tooltip.component';
 import { FadeTimeoutSliderComponent } from './components/device/led-settings/fade-timeout-slider.component';
+import { DonglePairingPanelComponent } from './components/device/dongle-pairing-panel/dongle-pairing-panel.component';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
     AdvancedSettingsPageComponent,
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
+    HostConnectionsComponent,
     FunctionalBacklightColorComponent,
     MouseSpeedComponent,
     LEDSettingsComponent,
@@ -94,7 +96,14 @@ import { appRoutingProviders, routing } from './app.routes';
 import { UhkAgentIconComponent } from './components/uhk-icon/uhk-agent-icon.component';
 
 import { CancelableDirective, ExternalUrlDirective } from './directives';
-import { AsHexColorPipe, NewLineToBrPipe, SafeHtmlPipe, SafeStylePipe, SafeUrlPipe } from './pipes';
+import {
+    AsHexColorPipe,
+    HostConnectionTypeLabelPipePipe,
+    NewLineToBrPipe,
+    SafeHtmlPipe,
+    SafeStylePipe,
+    SafeUrlPipe,
+} from './pipes';
 
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
@@ -163,6 +172,7 @@ import appInitFactory from './services/app-init-factory';
         AdvancedSettingsPageComponent,
         AsHexColorPipe,
         BackToComponent,
+        HostConnectionTypeLabelPipePipe,
         NewLineToBrPipe,
         SafeHtmlPipe,
         MainAppComponent,
@@ -170,6 +180,7 @@ import appInitFactory from './services/app-init-factory';
         CircleTooltipComponent,
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,
+        HostConnectionsComponent,
         FadeTimeoutSliderComponent,
         FirmwareFileUploadComponent,
         FirmwareUpgradePanelComponent,
@@ -179,6 +190,7 @@ import appInitFactory from './services/app-init-factory';
         KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,
+        DonglePairingPanelComponent,
         SvgIconTextKeyComponent,
         SvgKeyboardKeyComponent,
         SvgKeystrokeKeyComponent,

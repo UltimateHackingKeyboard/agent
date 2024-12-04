@@ -9,6 +9,7 @@ import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-updat
 import { EnableUsbStackTestAction, UpdateFirmwareAction } from './store/actions/device';
 import {
     AppState,
+    getDonglePairingState,
     getErrorPanelHeight,
     getShowAppUpdateAvailable,
     getParsedStatusBuffer,
@@ -21,10 +22,11 @@ import {
     getOutOfSpaceWaringData,
     getShowFirmwareUpgradePanel
 } from './store';
+import { StartDonglePairingAction } from './store/actions/dongle-pairing.action';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
 import { ErrorPanelSizeChangedAction, KeyUpAction, KeyDownAction } from './store/actions/app';
-import { OutOfSpaceWarningData } from './models';
+import { DonglePairingState, OutOfSpaceWarningData } from './models';
 import { filter } from 'rxjs/operators';
 import { SecondSideMenuContainerComponent } from './components/side-menu';
 
@@ -90,6 +92,7 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
 export class MainAppComponent implements OnDestroy {
     @ViewChild(SecondSideMenuContainerComponent) secondarySideMenuContainer: SecondSideMenuContainerComponent;
 
+    donglePairingState: DonglePairingState;
     showFirmwareUpgradePanel: boolean;
     showUpdateAvailable: boolean;
     updateInfo$: Observable<UpdateInfo>;
@@ -104,6 +107,7 @@ export class MainAppComponent implements OnDestroy {
         bottom: 0
     };
     statusBuffer: string;
+    private donglePairingStateSubscription: Subscription;
     private errorPanelHeightSubscription: Subscription;
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
@@ -119,6 +123,11 @@ export class MainAppComponent implements OnDestroy {
                 private route: ActivatedRoute,
                 private router: Router,
                 private cdRef: ChangeDetectorRef) {
+        this.donglePairingStateSubscription = store.select(getDonglePairingState)
+            .subscribe(data => {
+                this.donglePairingState = data;
+                this.cdRef.markForCheck();
+            });
         this.errorPanelHeightSubscription = store.select(getErrorPanelHeight)
             .subscribe(height => {
                 this.splitSizes = {
@@ -133,7 +142,10 @@ export class MainAppComponent implements OnDestroy {
                 this.cdRef.markForCheck();
             });
         this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
-            .subscribe(data => this.showUpdateAvailable = data);
+            .subscribe(data => {
+                this.showUpdateAvailable = data;
+                this.cdRef.markForCheck();
+            });
         this.updateInfo$ = store.select(getUpdateInfo);
         this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
@@ -179,6 +191,7 @@ export class MainAppComponent implements OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.donglePairingStateSubscription.unsubscribe();
         this.errorPanelHeightSubscription.unsubscribe();
         this.saveToKeyboardStateSubscription.unsubscribe();
         this.keypressCapturingSubscription.unsubscribe();
@@ -238,10 +251,14 @@ export class MainAppComponent implements OnDestroy {
     }
 
     isTopNotificationPanelVisible(): boolean {
-        return this.showFirmwareUpgradePanel || this.showUpdateAvailable;
+        return this.showFirmwareUpgradePanel || this.showUpdateAvailable || this.donglePairingState?.showDonglePairingPanel;
     }
 
     updateFirmware(): void {
         this.store.dispatch(new UpdateFirmwareAction(false));
+    }
+
+    startDonglePairing(): void {
+        this.store.dispatch(new StartDonglePairingAction());
     }
 }

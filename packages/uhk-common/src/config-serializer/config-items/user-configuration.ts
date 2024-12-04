@@ -4,10 +4,16 @@ import { assertEnum, assertUInt16, assertUInt32, assertUInt8 } from '../assert.j
 import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { BacklightingMode } from './backlighting-mode.js';
-import { KeystrokeAction, NoneAction } from './key-action/index.js';
+import {
+    defaultHostConnections,
+    HOST_CONNECTION_COUNT_MAX,
+    HostConnection,
+} from './host-connection.js';
+import { KeyActionHelper, KeystrokeAction, NoneAction } from './key-action/index.js';
 import { Keymap } from './keymap.js';
 import { LayerName } from './layer-name.js';
 import { Macro } from './macro.js';
+import { Module } from './module.js';
 import { ModuleConfiguration } from './module-configuration.js';
 import { defaultKeyClusterLeftModuleConfig } from './module-configuration/default-key-cluster-left-module-config.js';
 import { defaultTouchpadRightModuleConfig } from './module-configuration/default-touchpad-right-module-config.js';
@@ -35,13 +41,44 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16 doubleTapSwitchLayerTimeout: number;
 
+    /**
+     * Deprecated in version 8.
+     */
     @assertUInt8 iconsAndLayerTextsBrightness: number;
 
+    /**
+     * Deprecated in version 8.
+     * Use
+     * - `displayBrightness`
+     * - `displayBrightnessBattery`
+     */
     @assertUInt8 alphanumericSegmentsBrightness: number;
+
+    @assertUInt8 displayBrightness: number;
+
+    @assertUInt8 displayBrightnessBattery: number;
 
     @assertUInt8 keyBacklightBrightness: number;
 
+    /**
+     * Deprecated in version 8.
+     * Use
+     * - `displayFadeOutTimeout`
+     * - `displayFadeOutBatteryTimeout`
+     * - `keyBacklightFadeOutTimeout`
+     * - `keyBacklightFadeOutBatteryTimeout`
+     */
     @assertUInt16 ledsFadeTimeout: number;
+
+    @assertUInt8 keyBacklightBrightnessBattery: number;
+
+    @assertUInt16 displayFadeOutTimeout: number;
+
+    @assertUInt16 displayFadeOutBatteryTimeout: number;
+
+    @assertUInt16 keyBacklightFadeOutTimeout: number;
+
+    @assertUInt16 keyBacklightFadeOutBatteryTimeout: number;
 
     perKeyRgbPresent: boolean;
 
@@ -107,6 +144,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16 keystrokeDelay: number;
 
+    hostConnections: HostConnection[] = [];
+
     moduleConfigurations: ModuleConfiguration[] = [];
 
     keymaps: Keymap[] = [];
@@ -119,8 +158,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     clone(): UserConfiguration {
         const userConfig = Object.assign(new UserConfiguration(), this);
+        userConfig.hostConnections = userConfig.hostConnections.map(hostConnection => new HostConnection(hostConnection));
         userConfig.keymaps = userConfig.keymaps.map(keymap => new Keymap(keymap));
         userConfig.macros = userConfig.macros.map(macro => new Macro(macro));
+        userConfig.moduleConfigurations = userConfig.moduleConfigurations.map(module => new ModuleConfiguration(module));
 
         return userConfig;
     }
@@ -147,6 +188,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 this.fromJsonObjectV7(jsonObject);
                 break;
 
+            case 8:
+                this.fromJsonObjectV8(jsonObject);
+                break;
+
             default:
                 throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
         }
@@ -156,6 +201,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV6();
         this.migrateToV7();
         this.migrateToV7_1();
+        this.migrateToV8();
+        this.migrateToV8_1();
+        this.migrateToV8_2();
+        this.migrateToV8_3();
+
         this.recalculateConfigurationLength();
 
         return this;
@@ -183,6 +233,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 this.fromBinaryV7(buffer);
                 break;
 
+            case 8:
+                this.fromBinaryV8(buffer);
+                break;
+
             default:
                 throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
         }
@@ -204,6 +258,22 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             this.userConfigurationLength = 0;
         }
 
+        if (this.migrateToV8()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV8_1()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV8_2()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV8_3()) {
+            this.userConfigurationLength = 0;
+        }
+
         if (this.userConfigurationLength === 0) {
             this.recalculateConfigurationLength();
         }
@@ -218,10 +288,6 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             userConfigPatchVersion: this.userConfigPatchVersion,
             deviceName: this.deviceName,
             doubleTapSwitchLayerTimeout: this.doubleTapSwitchLayerTimeout,
-            iconsAndLayerTextsBrightness: this.iconsAndLayerTextsBrightness,
-            alphanumericSegmentsBrightness: this.alphanumericSegmentsBrightness,
-            keyBacklightBrightness: this.keyBacklightBrightness,
-            ledsFadeTimeout: this.ledsFadeTimeout,
             perKeyRgbPresent: this.perKeyRgbPresent,
             backlightingMode: BacklightingMode[this.backlightingMode],
             backlightingNoneActionColor: this.backlightingNoneActionColor.toJsonObject(),
@@ -254,6 +320,17 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             diagonalSpeedCompensation: this.diagonalSpeedCompensation,
             doubletapTimeout: this.doubletapTimeout,
             keystrokeDelay: this.keystrokeDelay,
+
+            displayBrightness: this.displayBrightness,
+            displayBrightnessBattery: this.displayBrightnessBattery,
+            keyBacklightBrightness: this.keyBacklightBrightness,
+            keyBacklightBrightnessBattery: this.keyBacklightBrightnessBattery,
+            displayFadeOutTimeout: this.displayFadeOutTimeout,
+            displayFadeOutBatteryTimeout: this.displayFadeOutBatteryTimeout,
+            keyBacklightFadeOutTimeout: this.keyBacklightFadeOutTimeout,
+            keyBacklightFadeOutBatteryTimeout: this.keyBacklightFadeOutBatteryTimeout,
+
+            hostConnections: this.hostConnections.map(hostConnection => hostConnection.toJsonObject()),
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.getSerialisationInfo(), this.macros)),
             macros: this.macros.map(macro => macro.toJsonObject())
@@ -267,10 +344,6 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt32(this.userConfigurationLength);
         buffer.writeString(this.deviceName);
         buffer.writeUInt16(this.doubleTapSwitchLayerTimeout);
-        buffer.writeUInt8(this.iconsAndLayerTextsBrightness);
-        buffer.writeUInt8(this.alphanumericSegmentsBrightness);
-        buffer.writeUInt8(this.keyBacklightBrightness);
-        buffer.writeUInt16(this.ledsFadeTimeout);
         buffer.writeBoolean(this.perKeyRgbPresent);
         buffer.writeUInt8(this.backlightingMode);
         this.backlightingNoneActionColor.toBinary(buffer);
@@ -305,6 +378,19 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt16(this.doubletapTimeout);
         buffer.writeUInt16(this.keystrokeDelay);
 
+        buffer.writeUInt8(this.displayBrightness);
+        buffer.writeUInt8(this.displayBrightnessBattery);
+        buffer.writeUInt8(this.keyBacklightBrightness);
+        buffer.writeUInt8(this.keyBacklightBrightnessBattery);
+        buffer.writeUInt16(this.displayFadeOutTimeout);
+        buffer.writeUInt16(this.displayFadeOutBatteryTimeout);
+        buffer.writeUInt16(this.keyBacklightFadeOutTimeout);
+        buffer.writeUInt16(this.keyBacklightFadeOutBatteryTimeout);
+
+        for(let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
+            const hostConnection = this.hostConnections[i];
+            hostConnection.toBinary(buffer);
+        }
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
@@ -503,6 +589,76 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     }
 
+    private fromBinaryV8(buffer: UhkBuffer): void {
+        this.userConfigurationLength = buffer.readUInt32();
+        this.deviceName = buffer.readString();
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = buffer.readUInt16();
+        this.perKeyRgbPresent = buffer.readBoolean();
+        this.backlightingMode = buffer.readUInt8();
+        this.backlightingNoneActionColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingScancodeColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingModifierColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingShortcutColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingSwitchLayerColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingSwitchKeymapColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingMouseColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingMacroColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.mouseMoveInitialSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleration = buffer.readUInt8();
+        this.mouseMoveDeceleratedSpeed = buffer.readUInt8();
+        this.mouseMoveBaseSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollInitialSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleration = buffer.readUInt8();
+        this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollBaseSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
+
+        this.secondaryRoleStrategy = buffer.readUInt8();
+        this.secondaryRoleAdvancedStrategyDoubletapTimeout = buffer.readUInt16();
+        this.secondaryRoleAdvancedStrategyTimeout = buffer.readUInt16();
+        this.secondaryRoleAdvancedStrategySafetyMargin = buffer.readInt16();
+        this.secondaryRoleAdvancedStrategyTriggerByRelease = buffer.readBoolean();
+        this.secondaryRoleAdvancedStrategyDoubletapToPrimary = buffer.readBoolean();
+        this.secondaryRoleAdvancedStrategyTimeoutAction = buffer.readUInt8();
+        this.mouseScrollAxisSkew = buffer.readFloat();
+        this.mouseMoveAxisSkew = buffer.readFloat();
+        this.diagonalSpeedCompensation = buffer.readBoolean();
+        this.doubletapTimeout = buffer.readUInt16();
+        this.keystrokeDelay = buffer.readUInt16();
+
+        this.displayBrightness = buffer.readUInt8();
+        this.displayBrightnessBattery = buffer.readUInt8();
+        this.keyBacklightBrightness = buffer.readUInt8();
+        this.keyBacklightBrightnessBattery = buffer.readUInt8();
+        this.displayFadeOutTimeout = buffer.readUInt16();
+        this.displayFadeOutBatteryTimeout = buffer.readUInt16();
+        this.keyBacklightFadeOutTimeout = buffer.readUInt16();
+        this.keyBacklightFadeOutBatteryTimeout = buffer.readUInt16();
+
+        const serialisationInfo = this.getSerialisationInfo();
+
+        if (this.userConfigMinorVersion >= 1) {
+            this.hostConnections = [];
+            for(let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
+                this.hostConnections.push(new HostConnection().fromBinary(buffer, serialisationInfo));
+            }
+        }
+
+        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
+            return new ModuleConfiguration().fromBinary(uhkBuffer, serialisationInfo);
+        });
+        this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
+            const macro = new Macro().fromBinary(uhkBuffer, serialisationInfo);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
+        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+
+    }
+
     private fromJsonObjectV1(jsonObject: any): void {
         this.deviceName = jsonObject.deviceName;
         this.setDefaultDeviceName();
@@ -632,6 +788,74 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         });
     }
 
+    private fromJsonObjectV8(jsonObject: any): void {
+        this.deviceName = jsonObject.deviceName;
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = jsonObject.doubleTapSwitchLayerTimeout;
+        this.perKeyRgbPresent = jsonObject.perKeyRgbPresent;
+        this.backlightingMode = BacklightingMode[jsonObject.backlightingMode as string];
+        this.backlightingNoneActionColor = new RgbColor().fromJsonObject(jsonObject.backlightingNoneActionColor, this.userConfigMajorVersion);
+        this.backlightingScancodeColor = new RgbColor().fromJsonObject(jsonObject.backlightingScancodeColor, this.userConfigMajorVersion);
+        this.backlightingModifierColor = new RgbColor().fromJsonObject(jsonObject.backlightingModifierColor, this.userConfigMajorVersion);
+        this.backlightingShortcutColor = new RgbColor().fromJsonObject(jsonObject.backlightingShortcutColor, this.userConfigMajorVersion);
+        this.backlightingSwitchLayerColor = new RgbColor().fromJsonObject(jsonObject.backlightingSwitchLayerColor, this.userConfigMajorVersion);
+        this.backlightingSwitchKeymapColor = new RgbColor().fromJsonObject(jsonObject.backlightingSwitchKeymapColor, this.userConfigMajorVersion);
+        this.backlightingMouseColor = new RgbColor().fromJsonObject(jsonObject.backlightingMouseColor, this.userConfigMajorVersion);
+        this.backlightingMacroColor = new RgbColor().fromJsonObject(jsonObject.backlightingMacroColor, this.userConfigMajorVersion);
+        this.mouseMoveInitialSpeed = jsonObject.mouseMoveInitialSpeed;
+        this.mouseMoveAcceleration = jsonObject.mouseMoveAcceleration;
+        this.mouseMoveDeceleratedSpeed = jsonObject.mouseMoveDeceleratedSpeed;
+        this.mouseMoveBaseSpeed = jsonObject.mouseMoveBaseSpeed;
+        this.mouseMoveAcceleratedSpeed = jsonObject.mouseMoveAcceleratedSpeed;
+        this.mouseScrollInitialSpeed = jsonObject.mouseScrollInitialSpeed;
+        this.mouseScrollAcceleration = jsonObject.mouseScrollAcceleration;
+        this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
+        this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
+        this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
+
+        this.secondaryRoleStrategy = SecondaryRoleStrategy[jsonObject.secondaryRoleStrategy as string];
+        this.secondaryRoleAdvancedStrategyDoubletapTimeout = jsonObject.secondaryRoleAdvancedStrategyDoubletapTimeout;
+        this.secondaryRoleAdvancedStrategyTimeout = jsonObject.secondaryRoleAdvancedStrategyTimeout;
+        this.secondaryRoleAdvancedStrategySafetyMargin = jsonObject.secondaryRoleAdvancedStrategySafetyMargin;
+        this.secondaryRoleAdvancedStrategyTriggerByRelease = jsonObject.secondaryRoleAdvancedStrategyTriggerByRelease;
+        this.secondaryRoleAdvancedStrategyDoubletapToPrimary = jsonObject.secondaryRoleAdvancedStrategyDoubletapToPrimary;
+        this.secondaryRoleAdvancedStrategyTimeoutAction = SecondaryRoleAdvancedStrategyTimeoutAction[jsonObject.secondaryRoleAdvancedStrategyTimeoutAction as string];
+        this.mouseScrollAxisSkew = jsonObject.mouseScrollAxisSkew;
+        this.mouseMoveAxisSkew = jsonObject.mouseMoveAxisSkew;
+        this.diagonalSpeedCompensation = jsonObject.diagonalSpeedCompensation;
+        this.doubletapTimeout = jsonObject.doubletapTimeout;
+        this.keystrokeDelay = jsonObject.keystrokeDelay;
+
+        this.displayBrightness = jsonObject.displayBrightness;
+        this.displayBrightnessBattery = jsonObject.displayBrightnessBattery;
+        this.keyBacklightBrightness = jsonObject.keyBacklightBrightness;
+        this.keyBacklightBrightnessBattery = jsonObject.keyBacklightBrightnessBattery;
+        this.displayFadeOutTimeout = jsonObject.displayFadeOutTimeout;
+        this.displayFadeOutBatteryTimeout = jsonObject.displayFadeOutBatteryTimeout;
+        this.keyBacklightFadeOutTimeout = jsonObject.keyBacklightFadeOutTimeout;
+        this.keyBacklightFadeOutBatteryTimeout = jsonObject.keyBacklightFadeOutBatteryTimeout;
+
+        const serialisationInfo = this.getSerialisationInfo();
+
+        if (this.userConfigMinorVersion >= 1) {
+            this.hostConnections = jsonObject.hostConnections.map((hostConnection: any) => {
+                return new HostConnection().fromJsonObject(hostConnection, serialisationInfo);
+            });
+        }
+
+        this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, serialisationInfo);
+        });
+        this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
+            const macro = new Macro().fromJsonObject(macroJsonObject, serialisationInfo);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = jsonObject.keymaps.map((keymap: any) => {
+            return new Keymap().fromJsonObject(keymap, this.macros, serialisationInfo);
+        });
+    }
+
     private migrateToV5(): boolean {
         if (this.userConfigMajorVersion > 4) {
             return false;
@@ -702,7 +926,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             return false;
         }
 
-        if (this.userConfigMinorVersion > 1) {
+        if (this.userConfigMinorVersion >= 1) {
             return false;
         }
 
@@ -711,11 +935,164 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         return true;
     }
 
+    private migrateToV8(): boolean {
+        if (this.userConfigMajorVersion > 7) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 8;
+        this.userConfigMinorVersion = 0;
+        this.userConfigPatchVersion = 0;
+        this.displayBrightness = this.alphanumericSegmentsBrightness;
+        this.displayBrightnessBattery = this.alphanumericSegmentsBrightness;
+        this.keyBacklightBrightnessBattery = this.keyBacklightBrightness;
+        this.displayFadeOutTimeout = this.ledsFadeTimeout;
+        this.displayFadeOutBatteryTimeout = this.ledsFadeTimeout;
+        this.keyBacklightFadeOutTimeout = this.ledsFadeTimeout;
+        this.keyBacklightFadeOutBatteryTimeout = this.ledsFadeTimeout;
+
+        return true;
+    }
+
+    private migrateToV8_1(): boolean {
+        if (this.userConfigMajorVersion > 8) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 1) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 1;
+        this.hostConnections = defaultHostConnections();
+
+        return true;
+    }
+
+    private migrateToV8_2(): boolean {
+        if (this.userConfigMajorVersion > 8) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 2) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 2;
+
+        for (const keymap of this.keymaps) {
+            for (const layer of keymap.layers) {
+                layer.modules = layer.modules.map(originalModule => {
+                    // right half
+                    if (originalModule.id === 0) {
+                        const module = new Module();
+                        module.id = originalModule.id;
+
+                        module.keyActions[0] = KeyActionHelper.fromKeyAction(originalModule.keyActions[0]);
+                        module.keyActions[1] = KeyActionHelper.fromKeyAction(originalModule.keyActions[1]);
+                        module.keyActions[2] = KeyActionHelper.fromKeyAction(originalModule.keyActions[2]);
+                        module.keyActions[3] = KeyActionHelper.fromKeyAction(originalModule.keyActions[3]);
+                        module.keyActions[4] = KeyActionHelper.fromKeyAction(originalModule.keyActions[4]);
+                        module.keyActions[5] = KeyActionHelper.fromKeyAction(originalModule.keyActions[5]);
+                        module.keyActions[6] = KeyActionHelper.fromKeyAction(originalModule.keyActions[6]);
+                        module.keyActions[7] = KeyActionHelper.fromKeyAction(originalModule.keyActions[14]);
+                        module.keyActions[8] = KeyActionHelper.fromKeyAction(originalModule.keyActions[7]);
+                        module.keyActions[9] = KeyActionHelper.fromKeyAction(originalModule.keyActions[8]);
+                        module.keyActions[10] = KeyActionHelper.fromKeyAction(originalModule.keyActions[9]);
+                        module.keyActions[11] = KeyActionHelper.fromKeyAction(originalModule.keyActions[10]);
+                        module.keyActions[12] = KeyActionHelper.fromKeyAction(originalModule.keyActions[11]);
+                        module.keyActions[13] = KeyActionHelper.fromKeyAction(originalModule.keyActions[12]);
+                        module.keyActions[14] = KeyActionHelper.fromKeyAction(originalModule.keyActions[13]);
+                        module.keyActions[15] = KeyActionHelper.fromKeyAction(originalModule.keyActions[21]);
+                        module.keyActions[16] = KeyActionHelper.fromKeyAction(originalModule.keyActions[15]);
+                        module.keyActions[17] = KeyActionHelper.fromKeyAction(originalModule.keyActions[16]);
+                        module.keyActions[18] = KeyActionHelper.fromKeyAction(originalModule.keyActions[17]);
+                        module.keyActions[19] = KeyActionHelper.fromKeyAction(originalModule.keyActions[18]);
+                        module.keyActions[20] = KeyActionHelper.fromKeyAction(originalModule.keyActions[19]);
+                        module.keyActions[21] = KeyActionHelper.fromKeyAction(originalModule.keyActions[20]);
+                        module.keyActions[22] = KeyActionHelper.fromKeyAction(originalModule.keyActions[22]);
+                        module.keyActions[23] = KeyActionHelper.fromKeyAction(originalModule.keyActions[23]);
+                        module.keyActions[24] = KeyActionHelper.fromKeyAction(originalModule.keyActions[24]);
+                        module.keyActions[25] = KeyActionHelper.fromKeyAction(originalModule.keyActions[25]);
+                        module.keyActions[26] = KeyActionHelper.fromKeyAction(originalModule.keyActions[26]);
+                        module.keyActions[27] = KeyActionHelper.fromKeyAction(originalModule.keyActions[27]);
+                        module.keyActions[28] = KeyActionHelper.fromKeyAction(originalModule.keyActions[29]);
+                        module.keyActions[29] = KeyActionHelper.fromKeyAction(originalModule.keyActions[31]);
+                        module.keyActions[30] = KeyActionHelper.fromKeyAction(originalModule.keyActions[32]);
+                        module.keyActions[31] = KeyActionHelper.fromKeyAction(originalModule.keyActions[33]);
+                        module.keyActions[32] = KeyActionHelper.fromKeyAction(originalModule.keyActions[34]);
+                        module.keyActions[33] = KeyActionHelper.fromKeyAction(originalModule.keyActions[30]);
+
+                        return module;
+                    }
+                    // left half
+                    else if (originalModule.id === 1) {
+                        const module = new Module();
+                        module.id = originalModule.id;
+
+                        module.keyActions[0] = KeyActionHelper.fromKeyAction(originalModule.keyActions[0]);
+                        module.keyActions[1] = KeyActionHelper.fromKeyAction(originalModule.keyActions[1]);
+                        module.keyActions[2] = KeyActionHelper.fromKeyAction(originalModule.keyActions[2]);
+                        module.keyActions[3] = KeyActionHelper.fromKeyAction(originalModule.keyActions[3]);
+                        module.keyActions[4] = KeyActionHelper.fromKeyAction(originalModule.keyActions[4]);
+                        module.keyActions[5] = KeyActionHelper.fromKeyAction(originalModule.keyActions[5]);
+                        module.keyActions[6] = KeyActionHelper.fromKeyAction(originalModule.keyActions[6]);
+                        module.keyActions[7] = KeyActionHelper.fromKeyAction(originalModule.keyActions[7]);
+                        module.keyActions[8] = KeyActionHelper.fromKeyAction(originalModule.keyActions[8]);
+                        module.keyActions[9] = KeyActionHelper.fromKeyAction(originalModule.keyActions[9]);
+                        module.keyActions[10] = KeyActionHelper.fromKeyAction(originalModule.keyActions[10]);
+                        module.keyActions[11] = KeyActionHelper.fromKeyAction(originalModule.keyActions[11]);
+                        module.keyActions[12] = KeyActionHelper.fromKeyAction(originalModule.keyActions[13]);
+                        module.keyActions[13] = KeyActionHelper.fromKeyAction(originalModule.keyActions[14]);
+                        module.keyActions[14] = KeyActionHelper.fromKeyAction(originalModule.keyActions[15]);
+                        module.keyActions[15] = KeyActionHelper.fromKeyAction(originalModule.keyActions[16]);
+                        module.keyActions[16] = KeyActionHelper.fromKeyAction(originalModule.keyActions[17]);
+                        module.keyActions[17] = KeyActionHelper.fromKeyAction(originalModule.keyActions[18]);
+                        module.keyActions[18] = KeyActionHelper.fromKeyAction(originalModule.keyActions[20]);
+                        module.keyActions[19] = KeyActionHelper.fromKeyAction(originalModule.keyActions[21]);
+                        module.keyActions[20] = KeyActionHelper.fromKeyAction(originalModule.keyActions[22]);
+                        module.keyActions[21] = KeyActionHelper.fromKeyAction(originalModule.keyActions[23]);
+                        module.keyActions[22] = KeyActionHelper.fromKeyAction(originalModule.keyActions[24]);
+                        module.keyActions[23] = KeyActionHelper.fromKeyAction(originalModule.keyActions[25]);
+                        module.keyActions[24] = KeyActionHelper.fromKeyAction(originalModule.keyActions[26]);
+                        module.keyActions[25] = KeyActionHelper.fromKeyAction(originalModule.keyActions[27]);
+                        module.keyActions[26] = KeyActionHelper.fromKeyAction(originalModule.keyActions[28]);
+                        module.keyActions[27] = KeyActionHelper.fromKeyAction(originalModule.keyActions[29]);
+                        module.keyActions[28] = KeyActionHelper.fromKeyAction(originalModule.keyActions[30]);
+                        module.keyActions[29] = KeyActionHelper.fromKeyAction(originalModule.keyActions[31]);
+                        module.keyActions[30] = KeyActionHelper.fromKeyAction(originalModule.keyActions[33]);
+                        module.keyActions[31] = KeyActionHelper.fromKeyAction(originalModule.keyActions[32]);
+
+                        return module;
+                    }
+
+                    return originalModule;
+                });
+            }
+        }
+
+        return true;
+    }
+
+    private migrateToV8_3(): boolean {
+        if (this.userConfigMajorVersion > 8) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 3) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 3;
+
+        return true;
+    }
 
     private getSerialisationInfo(): SerialisationInfo {
         return {
             isUserConfigContainsRgbColors: this.perKeyRgbPresent,
-            userConfigMajorVersion: this.userConfigMajorVersion
+            userConfigMajorVersion: this.userConfigMajorVersion,
+            userConfigMinorVersion: this.userConfigMinorVersion,
         };
     }
 }

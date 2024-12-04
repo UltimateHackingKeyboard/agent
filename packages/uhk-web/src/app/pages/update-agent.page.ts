@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
-import { AppState, isForceUpdate } from '../store';
+import { AppState, isForceUpdate, upgradeAgentTooltip } from '../store';
 import { ForceUpdateAction } from '../store/actions/app-update.action';
 
 @Component({
@@ -14,8 +14,7 @@ import { ForceUpdateAction } from '../store/actions/app-update.action';
             <uhk-agent-icon class="agent-logo"></uhk-agent-icon>
             <div>
                 <h1>Update Agent</h1>
-                <p>Your UHK contains a newer configuration version than this Agent version can handle, so you
-                    must update Agent.</p>
+                <p>Your UHK contains a <span class="text-dotted" [ngbTooltip]="upgradeAgentTooltip$ | async">newer configuration version</span> than this Agent version can handle, so you must update Agent.</p>
             </div>
         </div>
         <div style="display: flex; justify-content: center">
@@ -32,10 +31,11 @@ import { ForceUpdateAction } from '../store/actions/app-update.action';
     `,
     styleUrls: ['../components/uhk-message/uhk-message.component.scss'],
 })
-export class UpdateAgentPageComponent {
+export class UpdateAgentPageComponent implements OnDestroy {
 
     faSpinner = faSpinner;
     isForceUpdate: boolean;
+    upgradeAgentTooltip$: Observable<string>;
 
     private subscriptions = new Subscription();
 
@@ -45,6 +45,13 @@ export class UpdateAgentPageComponent {
             this.isForceUpdate = value;
             cdRef.markForCheck();
         }));
+        this.upgradeAgentTooltip$ = store.select(upgradeAgentTooltip);
+    }
+
+    ngOnDestroy(): void {
+        if (this.subscriptions) {
+            this.subscriptions.unsubscribe();
+        }
     }
 
     onUpdate(): void {

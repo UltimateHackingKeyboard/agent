@@ -1,14 +1,20 @@
 import { getFormattedTimestamp } from 'uhk-common';
 
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
-import { I2cWatchdogCounterChangedAction } from '../actions/advance-settings.action';
-import { ActionTypes, Actions } from '../actions/advance-settings.action';
+import { appendXtermLogs } from '../../util/merge-xterm-logs';
+import {
+    Actions,
+    ActionTypes,
+    I2cWatchdogCounterChangedAction ,
+} from '../actions/advance-settings.action';
+import * as App from '../actions/app';
 
 export interface State {
     i2cDebuggingEnabled: boolean;
     i2cDebuggingRingBellEnabled: boolean,
     i2cDebuggingRingBellControlDisabled: boolean,
     i2cLogs: Array<XtermLog>;
+    isLeftHalfPairing: boolean;
     menuVisible: boolean;
 }
 
@@ -17,11 +23,25 @@ export const initialState = (): State => ({
     i2cDebuggingRingBellEnabled: false,
     i2cDebuggingRingBellControlDisabled: true,
     i2cLogs: [],
+    isLeftHalfPairing: false,
     menuVisible: false,
 });
 
-export function reducer(state = initialState(), action: Actions) {
+export function reducer(state = initialState(), action: Actions | App.Actions) {
     switch (action.type) {
+
+        case App.ActionTypes.ElectronMainLogReceived: {
+            if (!state.isLeftHalfPairing) {
+                return state;
+            }
+
+            const payload = (action as App.ElectronMainLogReceivedAction).payload;
+
+            return {
+                ...state,
+                i2cLogs: appendXtermLogs(state.i2cLogs, payload),
+            };
+        }
 
         case ActionTypes.i2cWatchdogCounterChanged: {
             const counter = (action as I2cWatchdogCounterChangedAction).counter;
@@ -36,6 +56,22 @@ export function reducer(state = initialState(), action: Actions) {
             ];
 
             return newState;
+        }
+
+        case ActionTypes.startLeftHalfPairing: {
+            return {
+                ...state,
+                i2cLogs: [],
+                isLeftHalfPairing: true,
+            };
+        }
+
+        case ActionTypes.leftHalfPairingSuccess:
+        case ActionTypes.leftHalfPairingFailed: {
+            return {
+                ...state,
+                isLeftHalfPairing: false,
+            };
         }
 
         case ActionTypes.toggleI2CDebugging: {
@@ -75,5 +111,6 @@ export function reducer(state = initialState(), action: Actions) {
 }
 
 export const isAdvancedSettingsMenuVisible = (state: State): boolean => state.menuVisible;
+export const isLeftHalfPairing = (state: State): boolean => state.isLeftHalfPairing;
 export const isI2cDebuggingEnabled = (state: State): boolean => state.i2cDebuggingEnabled;
 export const isI2cDebuggingRingBellEnabled = (state: State): boolean => state.i2cDebuggingRingBellEnabled;

@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BacklightingOption } from '../../../models/index';
-import { AppState, getBacklightingOptions, getUserConfiguration } from '../../../store';
+import { AppState, getBacklightingOptions, getConnectedDevice, getUserConfiguration } from '../../../store';
 import {
     SetUserConfigurationRgbValueAction,
     SetUserConfigurationValueAction
 } from '../../../store/actions/user-config';
 import { Observable, Subscription } from 'rxjs';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { BacklightingMode, RgbColorInterface, UserConfiguration } from 'uhk-common';
+import { BacklightingMode, RgbColorInterface, UHK_80_DEVICE, UserConfiguration } from 'uhk-common';
 
 @Component({
     selector: 'device-led-settings',
@@ -30,16 +30,23 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     backlightingMacroColor: RgbColorInterface;
 
     backlightingOptions: Array<BacklightingOption>;
-    ledsFadeTimeout = 0;
 
-    public iconsAndLayerTextsBrightness: number = 0;
-    public alphanumericSegmentsBrightness: number = 0;
-    public keyBacklightBrightness: number = 0;
+    displayBrightness = 255;
+    displayBrightnessBattery = 255;
+    keyBacklightBrightness = 255;
+    keyBacklightBrightnessBattery = 255;
+    displayFadeOutTimeout = 0;
+    displayFadeOutBatteryTimeout = 0;
+    keyBacklightFadeOutTimeout = 0;
+    keyBacklightFadeOutBatteryTimeout = 0;
+
     faSlidersH = faSlidersH;
+    showBatteryPoweredColumn = false;
 
     private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;
     private backlightingOptionsSubscription: Subscription;
+    private connectedDeviceSubscription: Subscription;
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {}
@@ -47,10 +54,15 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.userConfig$ = this.store.select(getUserConfiguration);
         this.userConfigSubscription = this.userConfig$.subscribe(config => {
-            this.iconsAndLayerTextsBrightness = config.iconsAndLayerTextsBrightness;
-            this.alphanumericSegmentsBrightness = config.alphanumericSegmentsBrightness;
+            this.displayBrightness = config.displayBrightness;
+            this.displayBrightnessBattery = config.displayBrightnessBattery;
             this.keyBacklightBrightness = config.keyBacklightBrightness;
-            this.ledsFadeTimeout = config.ledsFadeTimeout;
+            this.keyBacklightBrightnessBattery = config.keyBacklightBrightnessBattery;
+            this.displayFadeOutTimeout = config.displayFadeOutTimeout;
+            this.displayFadeOutBatteryTimeout = config.displayFadeOutBatteryTimeout;
+            this.keyBacklightFadeOutTimeout = config.keyBacklightFadeOutTimeout;
+            this.keyBacklightFadeOutBatteryTimeout = config.keyBacklightFadeOutBatteryTimeout;
+
             this.backlightingMode = config.backlightingMode;
             this.backlightingNoneActionColor = config.backlightingNoneActionColor.toJsonObject();
             this.backlightingScancodeColor = config.backlightingScancodeColor.toJsonObject();
@@ -67,9 +79,15 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
                 this.backlightingOptions = options;
                 this.cdRef.detectChanges();
             });
+        this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
+            .subscribe(connectedDevice => {
+                this.showBatteryPoweredColumn = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.cdRef.detectChanges();
+            });
     }
 
     ngOnDestroy() {
+        this.connectedDeviceSubscription?.unsubscribe();
         this.userConfigSubscription.unsubscribe();
         if (this.backlightingOptionsSubscription) {
             this.backlightingOptionsSubscription.unsubscribe();

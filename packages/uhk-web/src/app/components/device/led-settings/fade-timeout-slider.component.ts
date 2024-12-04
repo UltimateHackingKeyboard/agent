@@ -141,6 +141,6 @@ export class FadeTimeoutSliderComponent implements ControlValueAccessor{
             secs = '00';
         }
 
-        return `${mins}:${secs} s`;
+        return `${mins}:${secs}`;
     }
 }

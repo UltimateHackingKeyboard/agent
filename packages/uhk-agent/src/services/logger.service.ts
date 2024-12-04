@@ -39,7 +39,15 @@ export class ElectronLogService extends LogService {
         if (LogRegExps.writeRegExp.test(args[0])) {
             this.log('%c' + args.join(' '), 'color:blue');
         } else if (LogRegExps.readRegExp.test(args[0])) {
-            if (args[1] && args[1].substr(0, 2) === '00') {
+            let errorCodeStartIndex = 0;
+            let errorCodeEndIndex = 2;
+
+            if (this._usbReportId) {
+                errorCodeStartIndex = 3;
+                errorCodeEndIndex = 5;
+            }
+
+            if (args[1] && args[1].substring(errorCodeStartIndex, errorCodeEndIndex) === '00') {
                 this.log('%c' + args.join(' '), 'color:green');
             } else {
                 this.log('%c' + args.join(' '), 'color:red');

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { RgbColor } from 'colord';
-import { UserConfiguration, ConfigurationReply } from 'uhk-common';
+import { HostConnection, UserConfiguration, ConfigurationReply } from 'uhk-common';
 
 import {
     ApplyUserConfigurationFromFilePayload,
@@ -26,8 +26,11 @@ export enum ActionTypes {
     SaveUserConfigInBinFile = '[user-config] Save User Config in binary file',
     ToggleColorFromBacklightingColorPalette = '[user-config] toggle color from the backlighting color palette',
     LoadResetUserConfiguration = '[user-config] Load reset user configuration',
+    RenameHostConnection = '[user-config] Rename host connection',
     RenameUserConfiguration = '[user-config] Rename user configuration',
+    ReorderHostConnections = '[user-config] Reorder host connections',
     SelectModuleConfiguration = '[user-config] Select module configuration',
+    SetHostConnectionSwitchover = '[user-config] set host connection switchover',
     SetModuleConfigurationValue = '[user-config] Set module configuration value',
     SetUserConfigurationRgbValue = '[user-config] Set user configuration RGB value',
     SetUserConfigurationValue = '[user-config] Set user configuration value',
@@ -123,6 +126,13 @@ export class LoadResetUserConfigurationAction implements Action {
     }
 }
 
+export class RenameHostConnectionAction implements Action {
+    type = ActionTypes.RenameHostConnection;
+
+    constructor(public payload: {index: number, newName: string}) {
+    }
+}
+
 export class RenameUserConfigurationAction implements Action {
     type = ActionTypes.RenameUserConfiguration;
 
@@ -130,10 +140,25 @@ export class RenameUserConfigurationAction implements Action {
     }
 }
 
+export class ReorderHostConnectionsAction implements Action {
+    type = ActionTypes.ReorderHostConnections;
+
+    constructor(public payload: HostConnection[]) {
+    }
+}
+
+
 export class SelectModuleConfigurationAction implements Action {
     type = ActionTypes.SelectModuleConfiguration;
 
     constructor(public payload: number) {
+    }
+}
+
+export class SetHostConnectionSwitchoverAction implements Action {
+    type = ActionTypes.SetHostConnectionSwitchover;
+
+    constructor(public payload: {index: number, checked: boolean}) {
     }
 }
 
@@ -190,8 +215,11 @@ export type Actions
     | SaveUserConfigInBinaryFileAction
     | LoadResetUserConfigurationAction
     | PreviewUserConfigurationAction
+    | RenameHostConnectionAction
     | RenameUserConfigurationAction
+    | ReorderHostConnectionsAction
     | SelectModuleConfigurationAction
+    | SetHostConnectionSwitchoverAction
     | SetModuleConfigurationValueAction
     | SetUserConfigurationRgbValueAction
     | SetUserConfigurationValueAction

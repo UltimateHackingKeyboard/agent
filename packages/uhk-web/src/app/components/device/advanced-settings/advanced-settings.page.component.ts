@@ -10,10 +10,20 @@ import {
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { KeyboardLayout } from 'uhk-common';
+import { KeyboardLayout, UHK_80_DEVICE } from 'uhk-common';
 
-import { ToggleI2cDebuggingAction, ToggleI2cDebuggingRingBellAction } from '../../../store/actions/advance-settings.action';
-import { advanceSettingsState, AppState, getKeyboardLayout, isKeyboardLayoutChanging } from '../../../store';
+import {
+    ToggleI2cDebuggingAction,
+    ToggleI2cDebuggingRingBellAction,
+    StartLeftHalfPairingAction,
+} from '../../../store/actions/advance-settings.action';
+import {
+    advanceSettingsState,
+    AppState,
+    getConnectedDevice,
+    getKeyboardLayout,
+    isKeyboardLayoutChanging,
+} from '../../../store';
 import { ChangeKeyboardLayoutAction } from '../../../store/actions/device';
 import { initialState, State } from '../../../store/reducers/advanced-settings.reducer';
 
@@ -31,6 +41,7 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     @ViewChild('audioPlayer', {static: true,}) audioPlayer: ElementRef<HTMLAudioElement>;
 
     isKeyboardLayoutChanging$: Observable<boolean>;
+    isHalvesPairingAllowed: boolean;
     keyboardLayout: KeyboardLayout;
     keyboardLayoutEnum = KeyboardLayout;
 
@@ -38,6 +49,7 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     private i2cErrorsLength = 0;
     private stateSubscription: Subscription;
+    private connectedDeviceSubscription: Subscription;
     private keyboardLayoutSubscription: Subscription;
 
     constructor(private store: Store<AppState>,
@@ -47,6 +59,7 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.connectedDeviceSubscription?.unsubscribe();
         if(this.keyboardLayoutSubscription) {
             this.keyboardLayoutSubscription.unsubscribe();
         }
@@ -57,6 +70,11 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
+            .subscribe(connectedDevice => {
+                this.isHalvesPairingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.cdRef.detectChanges();
+            });
         this.keyboardLayoutSubscription = this.store.select(getKeyboardLayout)
             .subscribe(layout => {
                 this.keyboardLayout = layout;
@@ -94,5 +112,9 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     onToggleI2cDebugRingBell(): void {
         this.store.dispatch(new ToggleI2cDebuggingRingBellAction());
+    }
+
+    startLeftHalfPairing(): void {
+        this.store.dispatch(new StartLeftHalfPairingAction());
     }
 }

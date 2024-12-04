@@ -1,17 +1,24 @@
 import { ipcMain } from 'electron';
+import { emptyDir } from 'fs-extra';
 import { cloneDeep, isEqual } from 'lodash';
+import os from 'os';
 import {
+    ALL_UHK_DEVICES,
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
     CommandLineArgs,
     ConfigurationReply,
+    convertBleAddressArrayToString,
+    convertBleStringToNumberArray,
     DeviceConnectionState,
     disableAgentUpgradeProtection,
     findUhkModuleById,
+    FIRMWARE_UPGRADE_METHODS,
     FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
+    HardwareConfiguration,
     HardwareModules,
     IpcEvents,
     IpcResponse,
@@ -32,6 +39,9 @@ import {
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
     simulateInvalidUserConfigError,
+    UHK_80_DEVICE_LEFT,
+    UHK_DEVICE_IDS,
+    UHK_DONGLE,
     UHK_MODULES,
     UpdateFirmwareData,
     UploadFileData,
@@ -42,24 +52,26 @@ import {
     ConfigBufferId,
     convertBufferToIntArray,
     DevicePropertyIds,
+    EnumerationModes,
     getCurrentUhkDeviceProduct,
-    getCurrentUhkDeviceProductByBootloaderId,
+    getCurrentUhkDongleHID,
+    getCurrenUhk80LeftHID,
     getDeviceFirmwarePath,
     getFirmwarePackageJson,
     getModuleFirmwarePath,
+    isUhkDeviceConnected,
+    isUkhKeyboardConnected,
     readUhkResponseAs0EndString,
     snooze,
     TmpFirmware,
     UhkHidDevice,
     UhkOperations,
-    UsbVariables,
     usbDeviceJsonFormatter,
-    waitForDevice
+    UsbVariables,
+    waitForDevices,
+    waitForUhkDeviceConnected,
+    waitUntil,
 } from 'uhk-usb';
-import { emptyDir } from 'fs-extra';
-import os from 'os';
-
-import { QueueManager } from './queue-manager';
 import {
     backupUserConfiguration,
     copySmartMacroDocToWebserver,
@@ -72,6 +84,8 @@ import {
     saveTmpFirmware,
     saveUserConfigHistoryAsync
 } from '../util';
+
+import { QueueManager } from './queue-manager';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -87,6 +101,8 @@ export class DeviceService {
     private wasCalledSaveUserConfiguration = false;
     private isI2cDebuggingEnabled = false;
     private i2cWatchdogRecoveryCounter = -1;
+    private savedState: DeviceConnectionState;
+
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
@@ -111,6 +127,15 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.changeKeyboardLayout, (...args: any[]) => {
             this.queueManager.add({
                 method: this.changeKeyboardLayout,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.deleteHostConnection, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.deleteHostConnection,
                 bind: this,
                 params: args,
                 asynchronous: true
@@ -147,6 +172,25 @@ export class DeviceService {
         });
 
         ipcMain.on(IpcEvents.device.startConnectionPoller, this.startPollUhkDevice.bind(this));
+
+        ipcMain.on(IpcEvents.device.startDonglePairing, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.startDonglePairing,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.startLeftHalfPairing, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.startLeftHalfPairing,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
 
         ipcMain.on(IpcEvents.device.recoveryDevice, (...args: any[]) => {
             this.queueManager.add({
@@ -248,9 +292,14 @@ export class DeviceService {
         try {
             await this.operations.waitUntilKeyboardBusy();
 
+            const deviceVersionInformation = await this.operations.getDeviceVersionInfo();
+
             const hardwareModules: HardwareModules = {
                 moduleInfos: [],
-                rightModuleInfo: await this.operations.getRightModuleVersionInfo()
+                rightModuleInfo: {
+                    ...deviceVersionInformation,
+                    modules: {},
+                }
             };
 
             const isGitInfoSupported = isDeviceProtocolSupportGitInfo(hardwareModules.rightModuleInfo.deviceProtocolVersion);
@@ -321,13 +370,18 @@ export class DeviceService {
     }
 
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
-        const response = new FirmwareUpgradeIpcResponse();
+        const response: FirmwareUpgradeIpcResponse = {
+            success: false,
+        };
+
         response.userConfigSaved = false;
         response.firmwareDowngraded = false;
         const data: UpdateFirmwareData = JSON.parse(args[0]);
         let firmwarePathData: TmpFirmware;
 
         try {
+            await this.stopPollUhkDevice();
+
             firmwarePathData = data.uploadFile
                 ? await saveTmpFirmware(data.uploadFile)
                 : getDefaultFirmwarePath(this.rootDir);
@@ -340,7 +394,7 @@ export class DeviceService {
 
             event.sender.send(IpcEvents.device.updateFirmwareJson, packageJson);
 
-            const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
+            const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
             const disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
             if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade, data.versionInformation?.userConfigVersion)) {
@@ -349,7 +403,47 @@ export class DeviceService {
 
                 return event.sender.send(IpcEvents.device.updateFirmwareReply, response);
             }
-            await this.stopPollUhkDevice();
+
+            let dongleHid = await getCurrentUhkDongleHID();
+            if (dongleHid) {
+                this.logService.misc('[DeviceService] UHK Dongle firmware upgrade starts:',
+                    JSON.stringify(UHK_DONGLE, usbDeviceJsonFormatter));
+                const dongleFirmwarePath = getDeviceFirmwarePath(UHK_DONGLE, packageJson);
+                let dongleUhkDevice: UhkHidDevice;
+
+                try {
+                    dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
+                    let dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
+                    let versionInfo = await dongleOperations.getDeviceVersionInfo();
+                    this.logService.misc('[DeviceService] Dongle firmware version:',
+                        versionInfo.firmwareVersion);
+
+                    if (data.forceUpgrade || versionInfo.firmwareVersion !== packageJson.firmwareVersion) {
+                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, UHK_DONGLE.name);
+                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE);
+                        this.logService.misc('[DeviceService] Waiting for keyboard');
+                        await waitForDevices(UHK_DONGLE.keyboard);
+                        dongleUhkDevice.close();
+
+                        dongleHid = await getCurrentUhkDongleHID();
+                        if (dongleHid) {
+                            dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
+                            dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
+                            versionInfo = await dongleOperations.getDeviceVersionInfo();
+                            event.sender.send(IpcEvents.device.dongleVersionInfoLoaded, versionInfo);
+                        }
+                    }
+                    else {
+                        this.logService.misc('Skip dongle firmware upgrade.');
+                    }
+                }
+                finally {
+                    dongleUhkDevice?.close();
+                    this.device.close();
+                }
+
+                await snooze(1000);
+            }
 
             let hardwareModules = await this.getHardwareModules(false);
 
@@ -361,9 +455,9 @@ export class DeviceService {
                 hardwareModules.rightModuleInfo.firmwareVersion);
             if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareVersion !== packageJson.firmwareVersion) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
-                await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
+                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
-                await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
+                await waitForDevices(uhkDeviceProduct.keyboard);
                 hardwareModules = await this.getHardwareModules(false);
                 event.sender.send(IpcEvents.device.hardwareModulesLoaded, hardwareModules);
 
@@ -384,7 +478,7 @@ export class DeviceService {
 
             const leftModuleInfo: ModuleInfo = hardwareModules.moduleInfos
                 .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
-            const leftModuleFirmwareInfo =  hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
+            const leftModuleFirmwareInfo = hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
 
             this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
             this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
@@ -402,57 +496,77 @@ export class DeviceService {
 
             if (data.forceUpgrade || !isLeftModuleFirmwareSame) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
-                await this.operations
-                    .updateModuleWithKboot(
-                        getModuleFirmwarePath(leftModuleInfo.module, packageJson),
-                        uhkDeviceProduct,
-                        leftModuleInfo.module
-                    );
+
+                if(uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
+                    if (!(await isUhkDeviceConnected(UHK_80_DEVICE_LEFT))) {
+                        this.logService.misc('[DeviceService] To continue the firmware upgrade, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)');
+                    }
+
+                    await waitForUhkDeviceConnected(UHK_80_DEVICE_LEFT);
+                    await snooze(1000);
+                    const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
+                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT);
+
+                    if (!(await isUhkDeviceConnected(uhkDeviceProduct))) {
+                        this.logService.misc('[DeviceService] To finish the firmware upgrade, now connect the right half via USB. (You can disconnect the left half or use a second USB cable.)');
+                    }
+
+                    await waitForUhkDeviceConnected(uhkDeviceProduct);
+                }
+                else {
+                    await this.operations
+                        .updateModuleWithKboot(
+                            getModuleFirmwarePath(leftModuleInfo.module, packageJson),
+                            uhkDeviceProduct,
+                            leftModuleInfo.module
+                        );
+                }
             } else {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, leftModuleInfo.module.name);
                 this.logService.misc('[DeviceService] Skip left firmware upgrade.');
             }
 
-            for (const moduleInfo of hardwareModules.moduleInfos) {
-                if (moduleInfo.module.slotId === ModuleSlotToId.leftHalf) {
-                    // Left half upgrade mandatory, it is running before the other modules upgrade.
-                }
-                else if (moduleInfo.module.firmwareUpgradeSupported) {
-                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
-                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current firmware checksum:`, moduleInfo.info.firmwareChecksum);
+            // TODO: implement MCUBOOT version
+            if (uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.KBOOT) {
+                for (const moduleInfo of hardwareModules.moduleInfos) {
+                    if (moduleInfo.module.slotId === ModuleSlotToId.leftHalf) {
+                        // Left half upgrade mandatory, it is running before the other modules upgrade.
+                    } else if (moduleInfo.module.firmwareUpgradeSupported) {
+                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
+                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current firmware checksum:`, moduleInfo.info.firmwareChecksum);
 
-                    const moduleFirmwareInfo = hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
-                    if (moduleFirmwareInfo) {
-                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.md5);
-                    }
-
-                    const isModuleFirmwareSame = isSameFirmware(
-                        moduleInfo.info,
-                        {
-                            firmwareChecksum: moduleFirmwareInfo?.md5,
-                            firmwareVersion: packageJson.firmwareVersion
+                        const moduleFirmwareInfo = hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
+                        if (moduleFirmwareInfo) {
+                            this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.md5);
                         }
-                    );
 
-                    if (data.forceUpgrade || !isModuleFirmwareSame) {
-                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
-                        await this.operations
-                            .updateModuleWithKboot(
-                                getModuleFirmwarePath(moduleInfo.module, packageJson),
-                                uhkDeviceProduct,
-                                moduleInfo.module
-                            );
-                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
+                        const isModuleFirmwareSame = isSameFirmware(
+                            moduleInfo.info,
+                            {
+                                firmwareChecksum: moduleFirmwareInfo?.md5,
+                                firmwareVersion: packageJson.firmwareVersion
+                            }
+                        );
+
+                        if (data.forceUpgrade || !isModuleFirmwareSame) {
+                            event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
+                            await this.operations
+                                .updateModuleWithKboot(
+                                    getModuleFirmwarePath(moduleInfo.module, packageJson),
+                                    uhkDeviceProduct,
+                                    moduleInfo.module
+                                );
+                            this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
+                        } else {
+                            event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, moduleInfo.module.name);
+                            this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade.`);
+                        }
                     } else {
-                        event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, moduleInfo.module.name);
-                        this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade.`);
+                        this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade. Currently not supported`);
                     }
-                } else {
-                    this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade. Currently not supported`);
                 }
             }
 
-            response.modules = await this.getHardwareModules(false);
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
             response.success = true;
@@ -460,7 +574,6 @@ export class DeviceService {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
 
-            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 
@@ -470,21 +583,26 @@ export class DeviceService {
 
         await snooze(500);
 
+        this.savedState = undefined;
         this.startPollUhkDevice();
 
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
     public async recoveryDevice(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
-        const response = new FirmwareUpgradeIpcResponse();
+        const response: FirmwareUpgradeIpcResponse = {
+            success: false,
+        };
 
         try {
-            const userConfig = args[0];
+            await this.stopPollUhkDevice();
+            const arg = args[0];
+            const userConfig = arg.userConfig;
+            const deviceId = arg.deviceId;
             const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
-            await this.stopPollUhkDevice();
 
-            const uhkDeviceProduct = await getCurrentUhkDeviceProductByBootloaderId();
+            const uhkDeviceProduct = ALL_UHK_DEVICES.find(uhkProduct => uhkProduct.id === deviceId);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc(
@@ -492,52 +610,54 @@ export class DeviceService {
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-            await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
+            await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
 
             this.logService.misc('[DeviceService] Waiting for keyboard');
-            await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
+            await waitForDevices(uhkDeviceProduct.keyboard);
 
-            this.logService.config(
-                '[DeviceService] User configuration will be saved after right module recovery',
-                userConfig);
-            const buffer = mapObjectToUserConfigBinaryBuffer(userConfig);
-            await this.operations.saveUserConfiguration(buffer);
-            this._checkStatusBuffer = true;
+            if (deviceId === UHK_DEVICE_IDS.UHK_DONGLE || deviceId === UHK_DEVICE_IDS.UHK80_LEFT) {
+                this.logService.misc('[DeviceService] skip save user configuration');
+            }
+            else {
+                this.logService.config(
+                    '[DeviceService] User configuration will be saved after right module recovery',
+                    userConfig);
+                const buffer = mapObjectToUserConfigBinaryBuffer(userConfig);
+                await this.operations.saveUserConfiguration(buffer);
+                this._checkStatusBuffer = true;
+                response.userConfigSaved = true;
 
-            response.modules = await this.getHardwareModules(false);
-            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
-            await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
+                await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+                await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
+            }
             response.success = true;
-            response.userConfigSaved = true;
             response.firmwareDowngraded = false;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
-
-            response.modules = {
-                moduleInfos: [],
-                rightModuleInfo: {
-                    modules: {},
-                }
-            };
             response.error = err;
         }
 
-        this.startPollUhkDevice();
-        await snooze(500);
         event.sender.send(IpcEvents.device.recoveryDeviceReply, response);
+        await snooze(500);
+
+        this.savedState = undefined;
+        this.startPollUhkDevice();
     }
 
     public async recoveryModule(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
-        const response = new FirmwareUpgradeIpcResponse();
+        const response: FirmwareUpgradeIpcResponse = {
+            success: false,
+        };
         const moduleId: number = args[0];
 
         try {
-            const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
-            const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
-            const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
+            const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
+            const packageJson = await getFirmwarePackageJson(firmwarePathData);
+
+            const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc(
@@ -554,16 +674,15 @@ export class DeviceService {
                     uhkModule
                 );
 
-            response.modules = await this.getHardwareModules(false);
             response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] Module recovery error', err);
 
-            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 
+        this.savedState = undefined;
         this.startPollUhkDevice();
         await snooze(500);
         event.sender.send(IpcEvents.device.recoveryModuleReply, response);
@@ -584,6 +703,127 @@ export class DeviceService {
             const configSizes = await this.operations.getConfigSizesFromKeyboard();
             event.sender.send(IpcEvents.device.readConfigSizesReply, JSON.stringify(configSizes));
         } finally {
+            this.startPollUhkDevice();
+        }
+    }
+
+    public async deleteHostConnection(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        const {isConnectedDongleAddress, index, address} = args[0];
+        this.logService.misc('[DeviceService] delete host connection', { isConnectedDongleAddress, index, address });
+
+        try {
+            await this.stopPollUhkDevice();
+            let dongleUhkDevice: UhkHidDevice;
+            try {
+                if (isConnectedDongleAddress) {
+                    const dongleHid = await getCurrentUhkDongleHID();
+                    if (dongleHid) {
+                        dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
+                        await dongleUhkDevice.deleteAllBonds();
+                    }
+                }
+
+                await this.device.deleteBond(convertBleStringToNumberArray(address));
+                this.logService.misc('[DeviceService] delete host connection success', { address });
+                await snooze(1000);
+                event.sender.send(IpcEvents.device.deleteHostConnectionSuccess, {index, address});
+            }
+            finally {
+                if (dongleUhkDevice) {
+                    dongleUhkDevice.close();
+                }
+            }
+        } catch (error) {
+            if (isConnectedDongleAddress) {
+                await this.forceReenumerateDongle();
+            }
+            await this.forceReenumerateDevice();
+            this.logService.misc('[DeviceService] delete host connection failed', { address, error });
+            event.sender.send(IpcEvents.device.deleteHostConnectionFailed, error.message);
+        }
+        finally {
+            this.savedState = undefined;
+            this.startPollUhkDevice();
+        }
+    }
+
+    public async startDonglePairing(event: Electron.IpcMainEvent): Promise<void> {
+        this.logService.misc('[DeviceService] start Dongle pairing');
+        try {
+            await this.stopPollUhkDevice();
+            const dongleHid = await getCurrentUhkDongleHID();
+            if (!dongleHid) {
+                throw new Error('Cannot find dongle!');
+            }
+
+            let dongleUhkDevice: UhkHidDevice;
+            try {
+                dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
+                const result = await this.operations.pairToDongle(dongleUhkDevice);
+                this.logService.misc('[DeviceService] Dongle pairing success');
+                await snooze(1000);
+                event.sender.send(IpcEvents.device.donglePairingSuccess, result.pairAddress);
+            }
+            finally {
+                if(dongleUhkDevice) {
+                    dongleUhkDevice.close();
+                }
+            }
+        }
+        catch(error) {
+            this.logService.error('[DeviceService] Dongle pairing failed', error);
+            await this.forceReenumerateDongle();
+            await this.forceReenumerateDevice();
+            event.sender.send(IpcEvents.device.donglePairingFailed, error.message);
+        }
+        finally {
+            this.savedState = undefined;
+            this.startPollUhkDevice();
+        }
+    }
+
+    public async startLeftHalfPairing(event: Electron.IpcMainEvent): Promise<void> {
+        this.logService.misc('[DeviceService] start Left half pairing');
+
+        try {
+            await this.stopPollUhkDevice();
+            if (!(await isUkhKeyboardConnected(UHK_80_DEVICE_LEFT))) {
+                this.logService.misc('[DeviceService] Both keyboard halves must be connected via USB.');
+                this.logService.misc('[DeviceService] Please connect them and retry pairing the halves.');
+                event.sender.send(IpcEvents.device.leftHalfPairingFailed, '');
+
+                return;
+            }
+
+            await waitUntil({
+                shouldWait: async () => !(await isUkhKeyboardConnected(UHK_80_DEVICE_LEFT)),
+                wait: 250,
+            });
+
+            await snooze(1000);
+            const leftHalfHid = await getCurrenUhk80LeftHID();
+            let leftHalfDevice: UhkHidDevice;
+            try {
+                leftHalfDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, leftHalfHid);
+                const result = await this.operations.pairToLeftHalf(leftHalfDevice);
+                this.logService.misc('[DeviceService] Pairing the keyboard halves succeeded.');
+                await snooze(1000);
+                event.sender.send(IpcEvents.device.leftHalfPairingSuccess, result.pairAddress);
+            }
+            finally {
+                if (leftHalfDevice) {
+                    leftHalfDevice.close();
+                }
+            }
+
+        } catch(error) {
+            this.logService.error('[DeviceService] Left half pairing failed', error);
+            await this.forceReenumerateDevice();
+            await this.forceReenumerateLeftHalf();
+            event.sender.send(IpcEvents.device.leftHalfPairingFailed, error.message);
+        }
+        finally {
+            this.savedState = undefined;
             this.startPollUhkDevice();
         }
     }
@@ -609,7 +849,9 @@ export class DeviceService {
         });
     }
 
-    private async changeKeyboardLayout(event: Electron.IpcMainEvent, [layout, deviceId]): Promise<void> {
+    private async changeKeyboardLayout(event: Electron.IpcMainEvent, args): Promise<void> {
+        const layout: KeyboardLayout = args[0];
+        const hardwareConfiguration: HardwareConfiguration = new HardwareConfiguration().fromJsonObject(args[1]);
         const layoutName = layout === KeyboardLayout.ISO ? 'iso': 'ansi';
 
         this.logService.misc(`[DeviceService] Change keyboard layout to ${layoutName}`);
@@ -618,7 +860,7 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
-            await this.operations.saveHardwareConfiguration(layout === KeyboardLayout.ISO, deviceId);
+            await this.operations.saveHardwareConfiguration(layout === KeyboardLayout.ISO, hardwareConfiguration.deviceId, hardwareConfiguration.uniqueId);
 
             const hardwareInfo = await this.operations.loadConfiguration(ConfigBufferId.hardwareConfig);
             response.hardwareConfig = JSON.stringify(convertBufferToIntArray(hardwareInfo));
@@ -660,7 +902,6 @@ export class DeviceService {
      * @private
      */
     private async uhkDevicePoller(): Promise<void> {
-        let savedState: DeviceConnectionState;
         let deviceProtocolVersion: string;
         let iterationCount = 0;
 
@@ -671,12 +912,46 @@ export class DeviceService {
 
                 try {
                     const state = await this.device.getDeviceConnectionStateAsync();
-                    if (!isEqual(state, savedState)) {
+                    if (!isEqual(state, this.savedState)) {
                         const newState = cloneDeep(state);
 
                         if (state.hasPermission && state.communicationInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
                             deviceProtocolVersion = state.hardwareModules.rightModuleInfo.deviceProtocolVersion;
+                            const isDeviceSupportWirelessUSBCommands = await this.device.isDeviceSupportWirelessUSBCommands();
+                            let deviceBleAddress: number[];
+                            if (isDeviceSupportWirelessUSBCommands) {
+                                deviceBleAddress = await this.device.getBleAddress();
+                                state.bleAddress = convertBleAddressArrayToString(deviceBleAddress);
+                            }
+
+                            if (isDeviceSupportWirelessUSBCommands
+                                && !state.dongle.multiDevice
+                                && !state.dongle.bootloaderActive
+                                && state.dongle.serialNumber
+                                && state.dongle.serialNumber !== this.savedState?.dongle?.serialNumber) {
+
+                                const dongle = await getCurrentUhkDongleHID();
+                                let dongleUhkDevice: UhkHidDevice;
+                                try {
+                                    dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongle);
+                                    const dongleBleAddress = await dongleUhkDevice.getBleAddress();
+                                    state.dongle.bleAddress = convertBleAddressArrayToString(dongleBleAddress);
+                                    state.dongle.isPairedWithKeyboard = await dongleUhkDevice.isPairedWith(deviceBleAddress);
+                                    state.isPairedWithDongle = await this.device.isPairedWith(dongleBleAddress);
+                                    const dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
+                                    state.dongle.versionInfo = await dongleOperations.getDeviceVersionInfo();
+                                }
+                                catch (err) {
+                                    this.logService.error("Can't query Dongle BLE Addresses", err);
+                                }
+                                finally {
+                                    if (dongleUhkDevice) {
+                                        dongleUhkDevice.close();
+                                    }
+                                }
+                            }
+
                             this._checkStatusBuffer = true;
                         } else {
                             deviceProtocolVersion = undefined;
@@ -689,9 +964,9 @@ export class DeviceService {
                         }
                         this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
 
-                        savedState = newState;
+                        this.savedState = newState;
 
-                        this.logService.misc('[DeviceService] Device connection state changed to:', state);
+                        this.logService.misc('[DeviceService] Device connection state changed to:', JSON.stringify(state, null, 2));
                     }
 
                     if (state.isMacroStatusDirty) {
@@ -783,5 +1058,86 @@ export class DeviceService {
         const files = await loadUserConfigHistoryAsync();
 
         event.sender.send(IpcEvents.device.loadUserConfigHistoryReply, files);
+    }
+
+    private async forceReenumerateDongle(): Promise<void> {
+        this.logService.misc('[DeviceService] Dongle force reenumerate');
+
+        let uhkHidDevice: UhkHidDevice;
+        try {
+            await snooze(1000);
+            const uhkDeviceProduct = await getCurrentUhkDongleHID();
+
+            if (uhkDeviceProduct) {
+                this.logService.misc('[DeviceService] Dongle not found, skip reenumeration');
+                return;
+            }
+
+            uhkHidDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, uhkDeviceProduct);
+            await uhkHidDevice.reenumerate({
+                device: UHK_DONGLE,
+                enumerationMode: EnumerationModes.NormalKeyboard,
+                force: true,
+            });
+            this.logService.misc('[DeviceService] Dongle force reenumerate done');
+        }
+        catch(reenumerationError) {
+            this.logService.error("[DeviceService] Can't force reenumerate dongle", reenumerationError);
+        }
+        finally {
+            if (uhkHidDevice) {
+                uhkHidDevice.close();
+            }
+            await snooze(1000);
+        }
+    }
+
+    private async forceReenumerateLeftHalf(): Promise<void> {
+        this.logService.misc('[DeviceService] Left half force reenumerate');
+
+        let uhkHidDevice: UhkHidDevice;
+        try {
+            await snooze(1000);
+            const uhkDeviceProduct = await getCurrenUhk80LeftHID();
+            uhkHidDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, uhkDeviceProduct);
+            await uhkHidDevice.reenumerate({
+                device: UHK_80_DEVICE_LEFT,
+                enumerationMode: EnumerationModes.NormalKeyboard,
+                force: true,
+            });
+            this.logService.misc('[DeviceService] Left half force reenumerate done');
+        }
+        catch(reenumerationError) {
+            this.logService.error("[DeviceService] Can't force reenumerate left half", reenumerationError);
+        }
+        finally {
+            if (uhkHidDevice) {
+                uhkHidDevice.close();
+            }
+            await snooze(1000);
+        }
+    }
+
+    private async forceReenumerateDevice(): Promise<void> {
+        this.logService.misc('[DeviceService] Device force reenumerate');
+
+        try {
+            this.device.close();
+            await snooze(1000);
+            const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
+            await this.device.reenumerate({
+                device: uhkDeviceProduct,
+                enumerationMode: EnumerationModes.NormalKeyboard,
+                force: true,
+            });
+            this.logService.misc('[DeviceService] Device force reenumerate done');
+        }
+        catch(reenumerationError) {
+            this.logService.error("[DeviceService] Can't reenumerate force reenumerate device", reenumerationError);
+        }
+        finally {
+            this.device.close();
+            await snooze(1000);
+        }
     }
 }

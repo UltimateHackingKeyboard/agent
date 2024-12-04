@@ -19,17 +19,16 @@ import Uhk, {
             .argv;
 
         const i2cAddress = getI2cAddressFromArg(argv._[0] as string);
-        const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
 
         const { device, logger } = Uhk(argv);
-        await device.reenumerate({
+        const reenumerateResult = await device.reenumerate({
+            device: uhkDeviceProduct,
             enumerationMode: EnumerationModes.Buspal,
-            vendorId: uhkDeviceProduct.vendorId,
-            productId: uhkDeviceProduct.buspalPid
         });
         device.close();
-        await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.buspalPid);
-        const usbPeripheral = new UsbPeripheral({ productId: uhkDeviceProduct.buspalPid, vendorId: uhkDeviceProduct.vendorId });
+        await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
+        const usbPeripheral = new UsbPeripheral({ productId: reenumerateResult.vidPidPair.pid, vendorId: reenumerateResult.vidPidPair.vid });
         let kboot: KBoot;
         let bootloaderVersion: BootloaderVersion;
         const startTime = new Date();
@@ -51,9 +50,8 @@ import Uhk, {
         kboot.reset();
         kboot.close();
         await device.reenumerate({
+            device: uhkDeviceProduct,
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vendorId: uhkDeviceProduct.vendorId,
-            productId: uhkDeviceProduct.keyboardPid
         });
 
         if (bootloaderVersion) {
@@ -62,6 +60,6 @@ import Uhk, {
             console.error('Can not read module bootloader');
         }
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

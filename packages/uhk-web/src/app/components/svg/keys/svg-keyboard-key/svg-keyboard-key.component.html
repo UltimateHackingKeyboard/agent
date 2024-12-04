@@ -2,6 +2,9 @@
           *ngIf="svgKey.type === 'rec'"
           class="svg-rec"
           [id]="svgKey.id"
+          [attr.transform]="svgKey.transform"
+          [attr.x]="svgKey.x"
+          [attr.y]="svgKey.y"
           [attr.rx]="svgKey.rx"
           [attr.ry]="svgKey.ry"
           [attr.height]="svgKey.height"
@@ -35,6 +38,7 @@
 
 </svg:g>
 
+<svg:g [attr.transform]="calcTransform()">
 <ng-template [ngIf]="recording">
     <svg:circle
         [@recording]="recordAnimation"
@@ -43,7 +47,6 @@
         [attr.cy]="(svgKey.height / 2)"
         [attr.r]="10"
         [attr.fill]="'#c00'"
-        [attr.transform]="svgKey.textTransform"
     ></svg:circle>
 </ng-template>
 <ng-template [ngIf]="!recording && svgKey.width">
@@ -51,7 +54,6 @@
            [attr.font-size]="19"
            [attr.font-family]="'Helvetica'"
            [attr.fill]="textColor"
-           [attr.transform]="svgKey.textTransform"
     >
         <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
                [height]="svgKey.height"
@@ -115,3 +117,4 @@
         </svg>
     </svg:g>
 </ng-template>
+</svg:g>

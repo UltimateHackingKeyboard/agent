@@ -31,9 +31,10 @@ const noop = (_: any) => {
     styleUrls: ['./auto-grow-input.component.scss']
 })
 export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewInit, OnChanges {
-    @Input() maxParentWidthPercent;
-    @Input() maxParentWidthOffset;
-    @Input() minWidth: number = 100;
+    @Input() alignToParentWidth = true; // If false then element can be wider than the parent
+    @Input() maxParentWidthPercent: number;
+    @Input() maxParentWidthOffset: number;
+    @Input() minWidth: number = 10;
     @Input() css: string;
     @Input() selectAfterInit = false;
 
@@ -147,7 +148,9 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
 
     calculateTextWidth(text: string): void {
         const htmlInput = this.inputControl.nativeElement as HTMLInputElement;
-        let maxWidth = htmlInput.parentElement.parentElement.offsetWidth;
+        let maxWidth = this.alignToParentWidth
+            ? htmlInput.parentElement.parentElement.offsetWidth
+            : Number.MAX_SAFE_INTEGER;
 
         if (this.maxParentWidthPercent) {
             maxWidth *= this.maxParentWidthPercent;
@@ -162,6 +165,6 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
             textWidth += util.getContentWidth(window.getComputedStyle(htmlInput), 'W') * 1.1;
         }
 
-        this._renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
+        this._renderer.setStyle(htmlInput, 'width', Math.max(this.minWidth, Math.min(maxWidth, textWidth)) + 'px');
     }
 }

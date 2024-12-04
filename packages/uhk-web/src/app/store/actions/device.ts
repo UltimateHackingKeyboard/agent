@@ -4,12 +4,14 @@ import {
     ChangeKeyboardLayoutIpcResponse,
     ConfigSizesInfo,
     DeviceConnectionState,
+    DeviceVersionInformation,
     FirmwareJson,
     FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     HardwareModules,
     IpcResponse,
-    KeyboardLayout
+    KeyboardLayout,
+    UHK_DEVICE_IDS_TYPE,
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 import { UpdateFirmwareWithPayload } from '../../models';
@@ -18,6 +20,7 @@ import { UpdateFirmwareSuccessPayload } from '../../models/update-firmware-succe
 export enum ActionTypes {
     ChangeKeyboardLayout = '[device] change keyboard layout',
     ChangeKeyboardLayoutReply = '[device] change keyboard layout reply',
+    DongleVersionInfoLoaded = '[device] dongle version info loaded',
     SetPrivilegeOnLinux = '[device] set privilege on linux',
     SetPrivilegeOnLinuxReply = '[device] set privilege on linux reply',
     ConnectionStateChanged = '[device] connection state changed',
@@ -60,6 +63,12 @@ export class ChangeKeyboardLayoutAction implements Action {
     type = ActionTypes.ChangeKeyboardLayout;
 
     constructor(public layout: KeyboardLayout) {}
+}
+
+export class DongleVersionInfoLoadedAction implements Action {
+    type = ActionTypes.DongleVersionInfoLoaded;
+
+    constructor(public payload: DeviceVersionInformation) {}
 }
 
 export class ChangeKeyboardLayoutReplyAction implements Action {
@@ -219,6 +228,8 @@ export class RestoreUserConfigurationFromBackupSuccessAction implements Action {
 
 export class RecoveryDeviceAction implements Action {
     type = ActionTypes.RecoveryDevice;
+
+    constructor(public payload: UHK_DEVICE_IDS_TYPE) {}
 }
 
 export class RecoveryDeviceReplyAction implements Action {
@@ -277,6 +288,7 @@ export class SkipFirmwareUpgradeAction implements Action {
 export type Actions
     = ChangeKeyboardLayoutAction
     | ChangeKeyboardLayoutReplyAction
+    | DongleVersionInfoLoadedAction
     | SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction

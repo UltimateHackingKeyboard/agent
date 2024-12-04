@@ -3,15 +3,19 @@ import {
     BackupUserConfiguration,
     BackupUserConfigurationInfo,
     ConfigSizesInfo,
+    Dongle,
     getDefaultHalvesInfo,
     HalvesInfo,
     HardwareModules,
     isVersionGtMinor,
     LeftSlotModules,
     RightSlotModules,
+    UdevRulesInfo,
+    UHK_DEVICE_IDS,
+    UHK_DEVICE_IDS_TYPE,
     UhkDeviceProduct
 } from 'uhk-common';
-import { DeviceUiStates } from '../../models';
+import { DeviceUiStates, RecoverPageState } from '../../models';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { getVersions } from '../../util';
@@ -22,12 +26,18 @@ import { ReadConfigSizesReplyAction } from '../actions/device';
 import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonState } from './progress-button-state';
 
 export interface State {
+    bleAddress?: string;
+    bleDeviceConnected: boolean;
+    dongle?: Dongle;
     isKeyboardLayoutChanging: boolean;
+    isPairedWithDongle?: boolean;
     connectedDevice?: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
     deviceConnectionStateLoaded: boolean;
     keyboardHalvesAlwaysJoined: boolean;
+    leftHalfBootloaderActive: boolean;
+    leftHalfDetected: boolean;
     multiDevice: boolean;
     communicationInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
@@ -42,14 +52,18 @@ export interface State {
     configSizes: ConfigSizesInfo;
     skipFirmwareUpgrade: boolean;
     statusBuffer: string;
+    udevRuleInfo: UdevRulesInfo;
 }
 
 export const initialState: State = {
+    bleDeviceConnected: false,
     isKeyboardLayoutChanging: false,
     hasPermission: true,
     bootloaderActive: false,
     deviceConnectionStateLoaded: false,
     keyboardHalvesAlwaysJoined: false,
+    leftHalfBootloaderActive: false,
+    leftHalfDetected: false,
     multiDevice: false,
     communicationInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
@@ -71,7 +85,8 @@ export const initialState: State = {
     readingConfigSizes: false,
     configSizes: { userConfig: 32704, hardwareConfig: 64 },
     skipFirmwareUpgrade: false,
-    statusBuffer: ''
+    statusBuffer: '',
+    udevRuleInfo: UdevRulesInfo.Ok,
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -112,14 +127,21 @@ export function reducer(state = initialState, action: Action): State {
             const data = (<Device.ConnectionStateChangedAction>action).payload;
             return {
                 ...state,
+                bleAddress: data.bleAddress,
+                bleDeviceConnected: data.bleDeviceConnected,
+                dongle: data.dongle,
+                isPairedWithDongle: data.isPairedWithDongle,
                 connectedDevice: data.connectedDevice,
                 deviceConnectionStateLoaded: true,
                 hasPermission: data.hasPermission,
                 communicationInterfaceAvailable: data.communicationInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
                 halvesInfo: data.halvesInfo,
+                leftHalfBootloaderActive: data.leftHalfBootloaderActive,
+                leftHalfDetected: data.leftHalfDetected,
                 modules: data.hardwareModules,
-                multiDevice: data.multiDevice
+                multiDevice: data.multiDevice,
+                udevRuleInfo: data.udevRulesInfo,
             };
         }
 
@@ -196,7 +218,6 @@ export function reducer(state = initialState, action: Action): State {
 
             const newState = {
                 ...state,
-                modules: payload.hardwareModules,
                 saveToKeyboard: state.modifiedConfigWhileSaved && !payload.userConfigSaved
                     ? getSaveToKeyboardButtonState()
                     : initProgressButtonState,
@@ -266,13 +287,38 @@ export function reducer(state = initialState, action: Action): State {
     }
 }
 
-export const hasDevicePermission = (state: State) => state.hasPermission;
+export const hasDevicePermission = (state: State) => state.hasPermission && state.udevRuleInfo === UdevRulesInfo.Ok;
+export const getDeviceBleAddress = (state: State): string => state.bleAddress;
+export const getDevicePairedWithDongle = (state: State): boolean => state.isPairedWithDongle;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (!state.deviceConnectionStateLoaded) {
         return {
             header: 'Searching for your UHK',
             subtitle: 'Hang tight!'
         };
+    }
+
+    if (!state.connectedDevice) {
+        if (state.bleDeviceConnected) {
+            return {
+                header: 'UHK 80 connected via BLE',
+                subtitle: 'Disconnect BLE and connect your UHK via its right USB port!'
+            };
+        }
+
+        if (state.dongle?.serialNumber) {
+            return {
+                header: 'Dongle connected',
+                subtitle: 'Please connect the UHK right half via USB cable!'
+            };
+        }
+
+        if (state.leftHalfDetected) {
+            return {
+                header: 'UHK 80 left half connected',
+                subtitle: 'Please connect the right half instead!'
+            };
+        }
     }
 
     if (state.connectedDevice && !state.communicationInterfaceAvailable) {
@@ -283,6 +329,7 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
     }
 
     return {
+        description: 'If you have a UHK 80, connect its right half via USB, and ensure it\'s not connected to a dongle or BLE host!',
         header: 'Cannot find your UHK',
         subtitle: 'Please plug it in!'
     };
@@ -301,7 +348,7 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
         backupUserConfiguration: state.backupUserConfiguration
     };
 };
-export const bootloaderActive = (state: State) => state.bootloaderActive;
+export const bootloaderActive = (state: State) => state.bootloaderActive  || state.leftHalfBootloaderActive || state.dongle?.bootloaderActive;
 export const halvesInfo = (state: State): HalvesInfo => {
     return {
         ...state.halvesInfo,
@@ -322,7 +369,7 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
         return DeviceUiStates.PermissionRequired;
     }
 
-    if (state.bootloaderActive) {
+    if (bootloaderActive(state)) {
         return DeviceUiStates.Recovery;
     }
 
@@ -341,3 +388,39 @@ export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrad
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
 export const getStatusBuffer = (state: State) => state.statusBuffer;
+export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
+export const getRecoveryPageState = (state: State): RecoverPageState => {
+    let deviceText = 'UHK Device';
+    let deviceId: UHK_DEVICE_IDS_TYPE;
+
+    if (state.dongle?.bootloaderActive) {
+        deviceText = 'UHK Dongle';
+        deviceId = UHK_DEVICE_IDS.UHK_DONGLE;
+    }
+    else if (state.bootloaderActive) {
+        deviceId = state.connectedDevice.id;
+
+        switch (deviceId) {
+            case UHK_DEVICE_IDS.UHK60V1_RIGHT:
+            case UHK_DEVICE_IDS.UHK60V2_RIGHT: {
+                deviceText = 'UHK 60';
+                break;
+            }
+
+            case UHK_DEVICE_IDS.UHK80_RIGHT: {
+                deviceText = 'UHK 80 right half';
+                break;
+            }
+        }
+    }
+    else if (state.leftHalfBootloaderActive) {
+        deviceText = 'UHK 80 left half';
+        deviceId = UHK_DEVICE_IDS.UHK80_LEFT;
+    }
+
+    return {
+        deviceId,
+        description: `Your  ${deviceText} seems to be broken. No worries, Agent can fix it.`,
+        title: `Fix ${deviceText}`,
+    };
+};

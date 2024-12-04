@@ -1,5 +1,3 @@
-/// <reference path="./custom_types/electron-is-dev.d.ts"/>
-
 import { app, BrowserWindow, systemPreferences } from 'electron';
 import * as process from 'process';
 import setElectronSettingsConfig from './set-electron-settings-config';
@@ -134,7 +132,12 @@ async function createWindow() {
         // when you should delete the corresponding element.
         logger.misc('[Electron Main] win closed');
         win = null;
-        await deviceService.close();
+        try {
+            await deviceService.close();
+        } catch (error) {
+            // TODO: Investigate it deeper. It happens on MacOs 15+ sometimes
+            logger.error('[Electron Main] Error while closing DeviceService when electron has been closed', error);
+        }
         deviceService = null;
         appUpdateService = null;
         appService = null;

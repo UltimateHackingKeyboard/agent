@@ -1,15 +1,21 @@
 <div class="main-div" [class.top-notification-panel-visible]="isTopNotificationPanelVisible()">
-    <firmware-upgrade-panel *ngIf="showFirmwareUpgradePanel"
-                            [@topNotificationPanelVisible]
-                            (updateFirmware)="updateFirmware()"
-    >
-    </firmware-upgrade-panel>
     <app-update-available *ngIf="showUpdateAvailable"
                           [@topNotificationPanelVisible]
                           [updateInfo]="updateInfo$ | async"
                           (updateApp)="updateApp()"
                           (doNotUpdateApp)="doNotUpdateApp()">
     </app-update-available>
+    <dongle-pairing-panel *ngIf="donglePairingState?.showDonglePairingPanel"
+                          [@topNotificationPanelVisible]
+                          [state]="donglePairingState.state"
+                          (pairDongle)="startDonglePairing()"
+    />
+    <firmware-upgrade-panel *ngIf="showFirmwareUpgradePanel"
+                            [@topNotificationPanelVisible]
+                            (updateFirmware)="updateFirmware()"
+    >
+    </firmware-upgrade-panel>
+
 
     <side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"
     ></side-menu>

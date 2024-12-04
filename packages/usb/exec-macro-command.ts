@@ -20,6 +20,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         const { operations } = Uhk(argv);
         await operations.execMacroCommand(cmd);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

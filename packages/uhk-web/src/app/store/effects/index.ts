@@ -2,6 +2,7 @@ import { AdvancedSettingsEffects } from './advanced-settings.effects';
 import { DefaultUserConfigurationEffect } from './default-user-configuration.effect';
 import { DeviceEffects } from './device';
 import { AutoUpdateSettingsEffects } from './auto-update-settings';
+import { DonglePairingEffect } from './dongle-pairing.effect';
 import { MacroEffects } from './macro';
 import { KeymapEffects } from './keymap';
 import { UserConfigEffects } from './user-config';
@@ -21,6 +22,7 @@ export const effects = [
     AdvancedSettingsEffects,
     ApplicationEffects,
     AppUpdateEffect,
+    DonglePairingEffect,
     DefaultUserConfigurationEffect,
     UserConfigEffects,
     KeymapEffects,

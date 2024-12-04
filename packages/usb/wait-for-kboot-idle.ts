@@ -13,6 +13,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         await operations.waitForKbootIdle();
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

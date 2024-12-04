@@ -2,11 +2,10 @@ import { Device, devicesAsync } from 'node-hid';
 import fse from 'fs-extra';
 import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
-import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
+import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct, VidPidPair } from 'uhk-common';
 
-import { Constants, UsbCommand } from './constants.js';
-
-export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+import { MAX_USB_PAYLOAD_SIZE, UsbCommand } from './constants.js';
+import { snooze } from './utils/index.js';
 
 /**
  * Convert the Buffer to number[]
@@ -28,7 +27,7 @@ export function convertBufferToIntArray(buffer: Buffer): number[] {
  */
 export function getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer): Buffer[] {
     const fragments: Buffer[] = [];
-    const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
+    const MAX_SENDING_PAYLOAD_SIZE = MAX_USB_PAYLOAD_SIZE - 4;
     for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
         const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
             ? MAX_SENDING_PAYLOAD_SIZE
@@ -38,20 +37,6 @@ export function getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer)
     }
 
     return fragments;
-}
-
-/**
- * Create the communication package that will send over USB and
- * @param {Buffer} buffer
- * @returns {number[]}
- * @private
- * @static
- */
-export function getTransferData(buffer: Buffer): number[] {
-    const data = convertBufferToIntArray(buffer);
-    data.unshift(0);
-
-    return data;
 }
 
 /**
@@ -101,23 +86,28 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
     }
 }
 
+export const isUhkCommunicationUsage = (dev: Device): boolean => {
+    return (dev.usagePage === 128 && dev.usage === 129) || // Old firmware
+            (dev.usagePage === 65280 && dev.usage === 1); // New firmware
+};
+
 export const isUhkCommunicationInterface = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vendorId &&
-        dev.productId === device.keyboardPid &&
-        ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
-            (dev.usagePage === 65280 && dev.usage === 1) // New firmware
-        )
+    return UHK_DEVICES.some(device => device.keyboard.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId) &&
+        isUhkCommunicationUsage(dev)
     );
 };
 
 export const getUhkDevice = (dev: Device): UhkDeviceProduct => {
-    return UHK_DEVICES.find(device => dev.vendorId === device.vendorId &&
-        (dev.productId === device.keyboardPid || dev.productId === device.bootloaderPid)
-    );
+    return UHK_DEVICES.find(device => {
+        return device.keyboard.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId) ||
+            device.bootloader.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId);
+    });
 };
 
 export const isBootloader = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vendorId && dev.productId === device.bootloaderPid);
+    return UHK_DEVICES.some(device => {
+        return device.bootloader.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId);
+    });
 };
 
 export const getFileContentAsync = async (filePath: string): Promise<Array<string>> => {
@@ -155,4 +145,25 @@ export const waitForDevice = async (vendorId: number, productId: number): Promis
     }
 
     throw new Error(`Cannot find device with vendorId: ${vendorId}, productId: ${productId}`);
+};
+
+export const waitForDevices = async (vidPidPairs: VidPidPair[]): Promise<void> => {
+    const startTime = new Date().getTime() + 15000;
+
+    while (startTime > new Date().getTime()) {
+
+        const isAvailable = (await devicesAsync())
+            .some(dev => vidPidPairs.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId));
+
+        if (isAvailable) {
+            await snooze(1000);
+
+            return;
+        }
+
+        await snooze(250);
+    }
+
+    const errorMessage = vidPidPairs.map(vidPid => `vendorId: ${vidPid.vid}, productId: ${vidPid.pid}`).join(' or ');
+    throw new Error(`Cannot find device with vendorId: ${errorMessage}`);
 };

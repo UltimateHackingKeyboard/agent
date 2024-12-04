@@ -14,6 +14,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         console.log(`hardwareConfigMaxSize: ${configs.hardwareConfig}`);
         console.log(`userConfigMaxSize: ${configs.userConfig}`);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

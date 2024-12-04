@@ -1,7 +1,9 @@
 export * from './apply-user-configuration-from-file-payload';
 export * from './backlighting-option';
 export * from './config-size-state';
+export * from './delete-host-connection-payload';
 export * from './device-ui-states';
+export * from './dongle-pairing-state';
 export * from './duplicate-macro-action-payload';
 export * from './exchange-keys-action.model';
 export * from './firmware-upgrade-state';
@@ -14,6 +16,7 @@ export * from './modify-color-of-backlighting-color-palette-payload';
 export * from './navigation-payload';
 export * from './open-popover.model';
 export * from './out-of-space-warning-data';
+export * from './recover-page-state';
 export * from './selected-macro-action';
 export * from './selected-key.model';
 export * from './side-menu-page-state';

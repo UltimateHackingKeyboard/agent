@@ -26,6 +26,6 @@ You're free to use any value in between and test the results.`)
         const { operations } = Uhk(argv);
         await operations.setI2CBaudRate(baudRate);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

@@ -1,8 +1,14 @@
+import { McuManager, SerialPeripheral } from '@uhk/mcumgr';
 import * as fs from 'fs';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 import {
+    ALL_UHK_DEVICES,
+    BleAddressPair,
     Buffer,
     ConfigSizesInfo,
+    convertBleAddressArrayToString,
+    DeviceVersionInformation,
+    FIRMWARE_UPGRADE_METHODS,
     FirmwareRepoInfo,
     getSlotIdName,
     HardwareConfiguration,
@@ -12,10 +18,10 @@ import {
     LogService,
     ModuleSlotToId,
     ModuleVersionInfo,
-    RightModuleInfo,
     UhkBuffer,
     UhkDeviceProduct,
-    UhkModule
+    UhkModule,
+    UNKNOWN_DEVICE,
 } from 'uhk-common';
 import { promisify } from 'util';
 import {
@@ -24,21 +30,30 @@ import {
     EepromOperation,
     EnumerationModes,
     KbootCommands,
+    MAX_USB_PAYLOAD_SIZE,
     ModulePropertyId,
+    PAIRING_STATUS_TEXT,
+    PairIds,
+    PairingStatuses,
     UsbCommand,
     UsbVariables
 } from './constants.js';
-import { DebugInfo, Duration, I2cBaudRate, I2cErrorBuffer, LoadConfigurationsResult } from './models/index.js';
+import {
+    DebugInfo,
+    Duration,
+    I2cBaudRate,
+    I2cErrorBuffer,
+    LoadConfigurationsResult,
+} from './models/index.js';
 
 import { UhkHidDevice } from './uhk-hid-device.js';
 import {
     convertBufferToIntArray,
     getTransferBuffers,
     readBootloaderFirmwareFromHexFileAsync,
-    snooze,
     waitForDevice
 } from './util.js';
-import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils/index.js';
+import { convertMsToDuration, convertSlaveI2cErrorBuffer, snooze, waitUntil} from './utils/index.js';
 import { normalizeStatusBuffer } from './utils/normalize-status-buffer.js';
 import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
 
@@ -60,23 +75,37 @@ export class UhkOperations {
         await this.device.write(transfer);
     }
 
+    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+        this.logService.misc(`[UhkOperations] Start flashing device firmware with ${device.firmwareUpgradeMethod}`);
+
+        switch (device.firmwareUpgradeMethod) {
+            case FIRMWARE_UPGRADE_METHODS.KBOOT:
+                return this.updateRightFirmwareWithKboot(firmwarePath, device);
+
+            case FIRMWARE_UPGRADE_METHODS.MCUBOOT:
+                return this.updateFirmwareWithMcuManager(firmwarePath, device);
+
+            default:
+                throw new Error(`Firmware upgrade method not implemented: ${device.firmwareUpgradeMethod}`);
+        }
+    }
+
     public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
 
-        this.logService.misc('[UhkOperations] Start flashing right firmware');
+        this.logService.misc('[UhkOperations] Start flashing right firmware with kboot');
 
         this.logService.misc('[UhkOperations] Reenumerate bootloader');
-        await this.device.reenumerate({
+        const reenumerateResult = await this.device.reenumerate({
+            device,
             enumerationMode: EnumerationModes.Bootloader,
-            vendorId: device.vendorId,
-            productId: device.bootloaderPid
         });
         this.device.close();
-        const kboot = new KBoot(new UsbPeripheral({ productId: device.bootloaderPid, vendorId: device.vendorId }));
+        const kboot = new KBoot(new UsbPeripheral({ productId: reenumerateResult.vidPidPair.pid, vendorId: reenumerateResult.vidPidPair.vid }));
         this.logService.misc('[UhkOperations] Waiting for bootloader');
-        await waitForDevice(device.vendorId, device.bootloaderPid);
+        await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
         this.logService.misc('[UhkOperations] Flash security disable');
         await kboot.flashSecurityDisable([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
         this.logService.misc('[UhkOperations] Flash erase region');
@@ -101,6 +130,35 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
+    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct) {
+        if (!(await existsAsync(firmwarePath))) {
+            throw new Error(`Firmware path not found: ${firmwarePath}`);
+        }
+
+        this.logService.misc(`[UhkOperations] Start flashing ${device.logName} firmware with mcumgr`);
+
+        this.logService.misc('[UhkOperations] Reenumerate bootloader');
+        const reenumerateResult = await this.device.reenumerate({
+            device,
+            enumerationMode: EnumerationModes.Bootloader,
+        });
+        this.device.close();
+        // Give 1 sec to windows to install driver when first time appearing the mcu bootloader
+        await snooze(1000);
+        this.logService.misc(`[UhkOperations] Init SerialPeripheral: ${reenumerateResult.serialPath}`);
+        const peripheral = new SerialPeripheral(reenumerateResult.serialPath);
+        const mcuManager = new McuManager(peripheral);
+        this.logService.misc(`[UhkOperations] Read ${device.logName} firmware from file`);
+        const configData = fs.readFileSync(firmwarePath);
+        this.logService.misc('[UhkOperations] Write memory with mcumgr');
+        await mcuManager.imageUpload(configData);
+        this.logService.misc('[UhkOperations] Reset mcu bootloader');
+        await mcuManager.reset();
+        this.logService.misc('[UhkOperations] Close mcu communication channels');
+        await mcuManager.close();
+        this.logService.misc(`[UhkOperations] ${device.logName} firmware successfully flashed`);
+    }
+
     public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
         return this.updateModuleWithKboot(firmwarePath, device, LEFT_HALF_MODULE);
     }
@@ -112,9 +170,8 @@ export class UhkOperations {
     ): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
+            device,
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vendorId: device.vendorId,
-            productId: device.keyboardPid
         });
         this.device.close();
         await snooze(1000);
@@ -130,15 +187,14 @@ export class UhkOperations {
             throw new Error(msg);
         }
 
-        await this.device.reenumerate({
+        const reenumerateResult = await this.device.reenumerate({
+            device,
             enumerationMode: EnumerationModes.Buspal,
-            vendorId: device.vendorId,
-            productId: device.buspalPid
         });
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for buspal');
-        await waitForDevice(device.vendorId, device.buspalPid);
-        const usbPeripheral = new UsbPeripheral({ productId: device.buspalPid, vendorId: device.vendorId });
+        await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
+        const usbPeripheral = new UsbPeripheral({ productId: reenumerateResult.vidPidPair.pid, vendorId: reenumerateResult.vidPidPair.vid });
         let kboot: KBoot;
 
         const startTime = new Date();
@@ -184,14 +240,13 @@ export class UhkOperations {
         kboot.close();
 
         await snooze(1000);
-        await this.device.reenumerate({
+        const reenumerateResult1 = await this.device.reenumerate({
+            device,
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vendorId: device.vendorId,
-            productId: device.keyboardPid
         });
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
-        await waitForDevice(device.vendorId, device.keyboardPid);
+        await waitForDevice(reenumerateResult1.vidPidPair.vid, reenumerateResult1.vidPidPair.pid);
         await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.reset, 100);
         this.device.close();
         await snooze(1000);
@@ -233,7 +288,7 @@ export class UhkOperations {
             let configSize = await this.getConfigSizeFromKeyboard(configBufferId);
             const originalConfigSize = configSize;
             this.logService.usb(`[DeviceOperation] getConfigSize() configSize: ${configSize}`);
-            const chunkSize = 63;
+            const chunkSize = MAX_USB_PAYLOAD_SIZE - 1;
             let offset = 0;
             let configBuffer = Buffer.alloc(0);
             let firstRead = true;
@@ -297,6 +352,7 @@ export class UhkOperations {
             await this.applyConfiguration();
             this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
+            await this.waitUntilKeyboardBusy();
         } catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
@@ -305,7 +361,9 @@ export class UhkOperations {
         }
     }
 
-    public async saveHardwareConfiguration(isIso: boolean, deviceId: number): Promise<void> {
+    public async saveHardwareConfiguration(isIso: boolean, deviceId: number, uniqueId: number = Math.floor(2 ** 32 * Math.random())): Promise<void> {
+        const uhkProduct = ALL_UHK_DEVICES.find(product => product.id === deviceId) || UNKNOWN_DEVICE;
+        this.logService.misc(`[DeviceOperation] save hardware configuration: layout: ${isIso ? 'iso' : 'ansi'}, deviceId: ${deviceId} (${uhkProduct.name}), uniqueId: ${uniqueId}`);
         const hardwareConfig = new HardwareConfiguration();
 
         hardwareConfig.signature = 'UHK';
@@ -314,7 +372,7 @@ export class UhkOperations {
         hardwareConfig.patchVersion = 0;
         hardwareConfig.brandId = 0;
         hardwareConfig.deviceId = deviceId;
-        hardwareConfig.uniqueId = Math.floor(2 ** 32 * Math.random());
+        hardwareConfig.uniqueId = uniqueId;
         hardwareConfig.isVendorModeOn = false;
         hardwareConfig.isIso = isIso;
 
@@ -324,6 +382,7 @@ export class UhkOperations {
 
         await this.sendConfigToKeyboard(buffer, false);
         await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+        await this.waitUntilKeyboardBusy();
     }
 
     public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
@@ -360,7 +419,7 @@ export class UhkOperations {
                 return true;
             }
 
-            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you see this message.`);
+            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
 
             await snooze(1000);
         }
@@ -446,7 +505,7 @@ export class UhkOperations {
     }
 
     public async getRightModuleProperty(property: DevicePropertyIds, args: Array<number> = []): Promise<UhkBuffer> {
-        this.logService.usb(`[DeviceOperation] USB[T]: Read right module "${DevicePropertyIds[property]}" property information`);
+        this.logService.usb(`[DeviceOperation] USB[T]: Device module "${DevicePropertyIds[property]}" property information`);
         const command = Buffer.from([UsbCommand.GetProperty, property, ...args]);
         const buffer = await this.device.write(command);
 
@@ -454,7 +513,7 @@ export class UhkOperations {
     }
 
     public async getRightModuleFirmwareRepoInfo(): Promise<FirmwareRepoInfo> {
-        this.logService.usb('[DeviceOperation] USB[T]: Read right module firmware repo information');
+        this.logService.usb('[DeviceOperation] USB[T]: Read device firmware repo information');
 
         return {
             firmwareGitRepo: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.GitRepo)),
@@ -462,41 +521,30 @@ export class UhkOperations {
         };
     }
 
-    public async getRightModuleVersionInfo(): Promise<RightModuleInfo> {
-        this.logService.usb('[DeviceOperation] USB[T]: Read right module version information');
+    public async getDeviceVersionInfo(): Promise<DeviceVersionInformation> {
+        // TODO: read device name from UHK Device
+        this.logService.usb('[DeviceOperation] USB[T]: Device information');
 
-        const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
-        const buffer = await this.device.write(command);
-        const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
-        // skip the first byte
-        uhkBuffer.readUInt8();
+        const protocolVersions = await this.device.getProtocolVersions();
 
-        let rightModuleInfo: RightModuleInfo = {
-            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            deviceProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            modules: {},
-            userConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            hardwareConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+        let deviceVersionInformation: DeviceVersionInformation = {
+            ...protocolVersions,
         };
 
-        this.logService.misc(`[DeviceOperation] right module deviceProtocolVersion: ${rightModuleInfo.deviceProtocolVersion}`);
-
-        if (isDeviceProtocolSupportGitInfo(rightModuleInfo.deviceProtocolVersion))
-            rightModuleInfo = {
-                ...rightModuleInfo,
+        if (isDeviceProtocolSupportGitInfo(deviceVersionInformation.deviceProtocolVersion))
+            deviceVersionInformation = {
+                ...deviceVersionInformation,
                 ...await this.getRightModuleFirmwareRepoInfo(),
             };
 
-        if (isDeviceProtocolSupportFirmwareChecksum(rightModuleInfo.deviceProtocolVersion)) {
-            rightModuleInfo = {
-                ...rightModuleInfo,
+        if (isDeviceProtocolSupportFirmwareChecksum(deviceVersionInformation.deviceProtocolVersion)) {
+            deviceVersionInformation = {
+                ...deviceVersionInformation,
                 firmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum, [0])),
             };
         }
 
-        return rightModuleInfo;
+        return deviceVersionInformation;
     }
 
     public async setLedPwmBrightness(percent: number): Promise<void> {
@@ -612,6 +660,7 @@ export class UhkOperations {
 
         if (variableId === UsbVariables.statusBuffer) {
             let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
+            this.logService.misc(`[DeviceOperation] status buffer segment: ${message}`);
             if (message.length === responseBuffer.length - 1 && iteration < 20) {
                 message += await this.getVariable(variableId, iteration + 1);
             }
@@ -624,6 +673,140 @@ export class UhkOperations {
         }
 
         return responseBuffer[1];
+    }
+
+    public async pairToDongle(dongle: UhkHidDevice) : Promise<BleAddressPair> {
+        const deviceBleAddress = await this.device.getBleAddress();
+        this.logService.misc('[DeviceOperation] Device BLE address: ', convertBleAddressArrayToString(deviceBleAddress));
+        const dongleBleAddress = await dongle.getBleAddress();
+        this.logService.misc('[DeviceOperation] Dongle BLE address: ', convertBleAddressArrayToString(dongleBleAddress));
+
+        this.logService.misc('[DeviceOperation] Device switching to pairing mode');
+        await this.device.switchToPairingMode();
+        this.logService.misc('[DeviceOperation] Dongle switching to pairing mode');
+        await dongle.switchToPairingMode();
+
+        this.logService.misc('[DeviceOperation] Device delete dongle bond');
+        await this.device.deleteBond(dongleBleAddress);
+        this.logService.misc('[DeviceOperation] Dongle delete all bonds');
+        await dongle.deleteAllBonds();
+
+        this.logService.misc('[DeviceOperation] Device read pairing info');
+        const devicePairInfo = await this.device.getPairingInfo();
+        this.logService.misc('[DeviceOperation] Dongle read pairing info');
+        const donglePairInfo = await dongle.getPairingInfo();
+
+        this.logService.misc('[DeviceOperation] Device set pairing info');
+        await this.device.setPairingInfo(PairIds.Dongle, donglePairInfo);
+        this.logService.misc('[DeviceOperation] Dongle set pairing info');
+        await dongle.setPairingInfo(PairIds.Right, devicePairInfo);
+
+        this.logService.misc('[DeviceOperation] Device pair peripheral');
+        await this.device.pairPeripheral();
+        this.logService.misc('[DeviceOperation] Dongle pair central');
+        await dongle.pairCentral();
+
+        this.logService.misc('[DeviceOperation] Device waiting for pairing finished');
+        let deviceParingStatus: PairingStatuses;
+        await waitUntil({
+            shouldWait: async () => {
+                deviceParingStatus = await this.device.getPairingStatus();
+
+                return deviceParingStatus === PairingStatuses.InProgress;
+            },
+            timeout: 5000,
+            timeoutErrorMessage: '[DeviceOperation] Device pairing timeout',
+            wait: 100,
+        });
+        this.logService.misc(`[DeviceOperation] Device pairing result: ${PAIRING_STATUS_TEXT[deviceParingStatus]}`);
+
+        this.logService.misc('[DeviceOperation] Dongle waiting for pairing finished');
+        let dongleParingStatus: PairingStatuses;
+        await waitUntil({
+            shouldWait: async () => {
+                dongleParingStatus = await dongle.getPairingStatus();
+
+                return dongleParingStatus === PairingStatuses.InProgress;
+            },
+            timeout: 5000,
+            timeoutErrorMessage: '[DeviceOperation] Dongle pairing timeout',
+            wait: 100,
+        });
+        this.logService.misc(`[DeviceOperation] Dongle pairing result: ${PAIRING_STATUS_TEXT[dongleParingStatus]}`);
+
+        this.logService.misc('[DeviceOperation] Device to Dongle pairing finished');
+
+        return {
+            address: convertBleAddressArrayToString(deviceBleAddress),
+            pairAddress: convertBleAddressArrayToString(dongleBleAddress),
+        };
+    }
+
+    public async pairToLeftHalf(leftHalf: UhkHidDevice): Promise<BleAddressPair> {
+        const deviceBleAddress = await this.device.getBleAddress();
+        this.logService.misc('[DeviceOperation] Device BLE address: ', convertBleAddressArrayToString(deviceBleAddress));
+        const leftHalfAddress = await leftHalf.getBleAddress();
+        this.logService.misc('[DeviceOperation] Left half BLE address: ', convertBleAddressArrayToString(leftHalfAddress));
+
+        this.logService.misc('[DeviceOperation] Device switching to pairing mode');
+        await this.device.switchToPairingMode();
+        this.logService.misc('[DeviceOperation] Left half switching to pairing mode');
+        await leftHalf.switchToPairingMode();
+
+        this.logService.misc('[DeviceOperation] Device delete left half bond');
+        await this.device.deleteBond(leftHalfAddress);
+        this.logService.misc('[DeviceOperation] Left half delete all bonds');
+        await leftHalf.deleteAllBonds();
+
+        this.logService.misc('[DeviceOperation] Device read pairing info');
+        const devicePairInfo = await this.device.getPairingInfo();
+        this.logService.misc('[DeviceOperation] Left half read pairing info');
+        const leftHalfPairInfo = await leftHalf.getPairingInfo();
+
+        this.logService.misc('[DeviceOperation] Left half set pairing info');
+        await leftHalf.setPairingInfo(PairIds.Right, devicePairInfo);
+        this.logService.misc('[DeviceOperation] Device set pairing info');
+        await this.device.setPairingInfo(PairIds.left, leftHalfPairInfo);
+
+        this.logService.misc('[DeviceOperation] Left half pair peripheral');
+        await leftHalf.pairPeripheral();
+        this.logService.misc('[DeviceOperation] Device pair central');
+        await this.device.pairCentral();
+
+        this.logService.misc('[DeviceOperation] Left half waiting for pairing finished');
+        let leftHalfParingStatus: PairingStatuses;
+        await waitUntil({
+            shouldWait: async () => {
+                leftHalfParingStatus = await leftHalf.getPairingStatus();
+
+                return leftHalfParingStatus === PairingStatuses.InProgress;
+            },
+            timeout: 15000,
+            timeoutErrorMessage: '[DeviceOperation] Left half pairing timeout',
+            wait: 100,
+        });
+        this.logService.misc(`[DeviceOperation] Left half pairing result: ${PAIRING_STATUS_TEXT[leftHalfParingStatus]}`);
+
+        this.logService.misc('[DeviceOperation] Device waiting for pairing finished');
+        let deviceParingStatus: PairingStatuses;
+        await waitUntil({
+            shouldWait: async () => {
+                deviceParingStatus = await this.device.getPairingStatus();
+
+                return deviceParingStatus === PairingStatuses.InProgress;
+            },
+            timeout: 15000,
+            timeoutErrorMessage: '[DeviceOperation] Device pairing timeout',
+            wait: 100,
+        });
+        this.logService.misc(`[DeviceOperation] Device pairing result: ${PAIRING_STATUS_TEXT[deviceParingStatus]}`);
+
+        this.logService.misc('[DeviceOperation] Device to Left half pairing finished');
+
+        return {
+            address: convertBleAddressArrayToString(deviceBleAddress),
+            pairAddress: convertBleAddressArrayToString(leftHalfAddress),
+        };
     }
 
     public async setVariable(variable: UsbVariables, value: number): Promise<void> {

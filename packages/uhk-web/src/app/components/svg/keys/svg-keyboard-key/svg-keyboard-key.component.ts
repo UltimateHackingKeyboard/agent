@@ -321,6 +321,28 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         this.blinkAnimation = 'end';
     }
 
+    calcTransform(): string {
+        let transform;
+
+        if (this.svgKey.x && this.svgKey.y) {
+            transform = `translate(${this.svgKey.x} ${this.svgKey.y})`;
+        }
+
+        if (this.svgKey.transform) {
+            if (transform) {
+                transform = `${this.svgKey.transform} ${transform}`;
+            } else {
+                transform = `${this.svgKey.transform}`;
+            }
+        }
+
+        if (this.svgKey.textTransform) {
+            transform += this.svgKey.textTransform;
+        }
+
+        return transform;
+    }
+
     onRecordingAnimationDone() {
         if (this.recording && this.recordAnimation === 'inactive') {
             this.recordAnimation = 'active';

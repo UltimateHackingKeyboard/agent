@@ -1,0 +1,72 @@
+<h1>
+    <fa-icon [icon]="faCircleNodes"></fa-icon>
+    <span>Connections</span>
+</h1>
+
+<table class="table mt-4">
+    <thead>
+    <tr>
+        <th>
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Address
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Switchover
+        </th>
+        <th>
+        </th>
+    </tr>
+    </thead>
+    <tbody [dragula]="dragAndDropGroup" [dragulaModel]="hostConnections" (dragulaModelChange)="hostConnectionsReordered($event)">
+    <ng-container *ngFor="let hostConnection of hostConnections; let index = index">
+    <tr *ngIf="hostConnection.type !== 0">
+        <td>
+            <i
+               class="uhk-icon uhk-icon-vertical-grip-icon movable"
+               aria-hidden="true"></i>
+        </td>
+        <td>
+            {{hostConnection.type | hostConnectionTypeLabelPipe}}
+        </td>
+        <td>
+            {{ hostConnection.address || '—' }}
+        </td>
+        <td>
+            <auto-grow-input [alignToParentWidth]="false"
+                             [ngModel]="hostConnection.name"
+                             (ngModelChange)="renameHostConnection(index, $event)"
+           />
+        </td>
+        <td class="text-center">
+            <input type="checkbox"
+                   class="form-check-input"
+                   [ngModel]="hostConnection.switchover"
+                   (ngModelChange)="setHostConnectionSwitchover(index, $event)"
+            >
+        </td>
+        <td>
+            <button *ngIf="hostConnection.hasAddress()"
+                    [disabled]="isDonglePairing"
+                    (confirm)="deleteHostConnection(index, hostConnection)"
+                    type="button"
+                    class="btn"
+                    mwlConfirmationPopover
+                    popoverTitle="Do you really want to delete this connection?"
+                    placement="bottom"
+                    confirmText="Yes"
+                    cancelText="No"
+            >
+                <fa-icon [icon]="faTrash" />
+            </button>
+        </td>
+    </tr>
+    </ng-container>
+    </tbody>
+</table>

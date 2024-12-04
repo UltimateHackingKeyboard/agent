@@ -41,6 +41,6 @@ setInterval(async function () {
         prevSystem = debugInfo.usbSystemKeyboardActionCounter;
         prevMouse = debugInfo.usbMouseActionCounter;
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 }, 500);

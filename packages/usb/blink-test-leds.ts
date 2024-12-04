@@ -15,6 +15,6 @@ setInterval(async function () {
 
         await operations.setTestLedsState(areLedsEnabled);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 }, 500);
