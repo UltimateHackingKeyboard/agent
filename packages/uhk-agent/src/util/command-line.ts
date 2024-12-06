@@ -7,6 +7,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'devtools', type: Boolean },
     { name: 'disable-agent-update-protection', type: Boolean },
     { name: 'error-simulation', type: String },
+    { name: 'ignore-firmware-checksums', type: Boolean },
     { name: 'log', type: String },
     { name: 'help', type: Boolean },
     { name: 'pid', type: Number },
@@ -47,6 +48,11 @@ const sections: commandLineUsage.Section[] = [
                 name: 'error-simulation',
                 description: 'Simulate an error',
                 typeLabel: 'invalid-user-config'
+            },
+            {
+                name: 'ignore-firmware-checksums',
+                description: 'Always upgrade firmware of devices and modules even the checksums are same',
+                type: Boolean
             },
             {
                 name: 'log',
