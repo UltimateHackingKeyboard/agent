@@ -53,6 +53,7 @@ import {
     convertBufferToIntArray,
     DevicePropertyIds,
     EnumerationModes,
+    findDeviceConfigInFirmwareJson,
     getCurrentUhkDeviceProduct,
     getCurrentUhkDongleHID,
     getCurrenUhk80LeftHID,
@@ -377,6 +378,11 @@ export class DeviceService {
         response.userConfigSaved = false;
         response.firmwareDowngraded = false;
         const data: UpdateFirmwareData = JSON.parse(args[0]);
+
+        if (this.options['ignore-firmware-checksums']) {
+            data.forceUpgrade = true;
+        }
+
         let firmwarePathData: TmpFirmware;
 
         try {
@@ -415,10 +421,15 @@ export class DeviceService {
                     dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
                     let dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
                     let versionInfo = await dongleOperations.getDeviceVersionInfo();
-                    this.logService.misc('[DeviceService] Dongle firmware version:',
-                        versionInfo.firmwareVersion);
+                    this.logService.misc('[DeviceService] Current Dongle firmware checksum:',
+                        versionInfo.firmwareChecksum);
 
-                    if (data.forceUpgrade || versionInfo.firmwareVersion !== packageJson.firmwareVersion) {
+                    const deviceConfig = findDeviceConfigInFirmwareJson(UHK_DONGLE, packageJson);
+
+                    this.logService.misc('[DeviceService] New Dongle firmware checksum:',
+                        deviceConfig.md5);
+
+                    if (data.forceUpgrade || versionInfo.firmwareChecksum !== deviceConfig.md5) {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, UHK_DONGLE.name);
                         await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE);
                         this.logService.misc('[DeviceService] Waiting for keyboard');
@@ -451,9 +462,14 @@ export class DeviceService {
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-            this.logService.misc('[DeviceService] Device right firmware version:',
-                hardwareModules.rightModuleInfo.firmwareVersion);
-            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareVersion !== packageJson.firmwareVersion) {
+            this.logService.misc('[DeviceService] Current Device right firmware checksum:',
+                hardwareModules.rightModuleInfo.firmwareChecksum);
+
+            const deviceConfig = findDeviceConfigInFirmwareJson(uhkDeviceProduct, packageJson);
+            this.logService.misc('[DeviceService] New Device right firmware checksum:',
+                deviceConfig.md5);
+
+            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareChecksum !== deviceConfig.md5) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
                 await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');

@@ -37,6 +37,11 @@ export interface CommandLineArgs extends DeviceIdentifier {
     'error-simulation'?: string;
 
     /**
+     * Always upgrade firmware of devices and modules even the checksums are same
+     */
+    'ignore-firmware-checksums'?: boolean;
+
+    /**
      * logging categories
      */
     log?: string;
