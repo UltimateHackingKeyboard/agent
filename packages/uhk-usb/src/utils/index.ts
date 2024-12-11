@@ -6,6 +6,7 @@ export * from './convert-slave-i2c-error-buffer.js';
 export * from './device-vid-pid-interface-filter.js';
 export * from './find-device-by-device-identifier.js';
 export * from './find-device-config-in-firmware-json.js';
+export * from './generate-device-serial-number.js';
 export * from './get-current-uhk-device-product.js';
 export * from './get-current-uhk-dongle-HID.js';
 export * from './get-current-uhk-80-left-HID.js';
