@@ -83,6 +83,7 @@ extraResources.push({ from: extractedFirmwareDir, to: 'packages/' });
 extraResources.push({ from: path.join(__dirname, '../tmp/smart-macro-docs'), to: 'smart-macro-docs/' });
 
 const APPLE_TEAM_ID = 'CMXCBCFHDG'
+process.env.APPLE_TEAM_ID = APPLE_TEAM_ID
 
 builder.build({
     targets: target,
@@ -103,9 +104,6 @@ builder.build({
             gatekeeperAssess: false,
             entitlements: path.join(__dirname, 'entitlements.mac.plist'),
             entitlementsInherit: path.join(__dirname, 'entitlements.mac.plist'),
-            notarize: {
-                teamId: APPLE_TEAM_ID,
-            },
         },
         win: {
             extraResources,
