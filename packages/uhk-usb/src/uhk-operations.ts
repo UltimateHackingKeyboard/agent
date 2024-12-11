@@ -53,6 +53,7 @@ import {
     readBootloaderFirmwareFromHexFileAsync,
     waitForDevice
 } from './util.js';
+import { generateDeviceSerialNumber } from './utils/generate-device-serial-number.js';
 import { convertMsToDuration, convertSlaveI2cErrorBuffer, snooze, waitUntil} from './utils/index.js';
 import { normalizeStatusBuffer } from './utils/normalize-status-buffer.js';
 import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
@@ -361,7 +362,7 @@ export class UhkOperations {
         }
     }
 
-    public async saveHardwareConfiguration(isIso: boolean, deviceId: number, uniqueId: number = Math.floor(2 ** 32 * Math.random())): Promise<void> {
+    public async saveHardwareConfiguration(isIso: boolean, deviceId: number, uniqueId: number = generateDeviceSerialNumber()): Promise<void> {
         const uhkProduct = ALL_UHK_DEVICES.find(product => product.id === deviceId) || UNKNOWN_DEVICE;
         this.logService.misc(`[DeviceOperation] save hardware configuration: layout: ${isIso ? 'iso' : 'ansi'}, deviceId: ${deviceId} (${uhkProduct.name}), uniqueId: ${uniqueId}`);
         const hardwareConfig = new HardwareConfiguration();

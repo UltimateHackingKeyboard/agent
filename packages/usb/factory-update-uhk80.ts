@@ -10,6 +10,7 @@ import {
     UhkDeviceProduct,
 } from 'uhk-common';
 import {
+    generateDeviceSerialNumber,
     getCurrenUhk80LeftHID,
     getCurrenUhk80RightHID,
     getDeviceUserConfigPath,
@@ -42,6 +43,17 @@ const { logger, rootDir } = Uhk(argv);
 
 try {
     let connectedDevices = await getHidDevices();
+    let serialNumber = argv.setSerialNumber ? argv.setSerialNumber : generateDeviceSerialNumber();
+
+
+    const writeHardwareConfigResults = await Promise.all([
+        writeHardwareConfig(UHK_80_DEVICE, connectedDevices.rightHidDevice, layout, serialNumber),
+        writeHardwareConfig(UHK_80_DEVICE_LEFT, connectedDevices.leftHidDevice, layout, serialNumber),
+    ]);
+
+    assertOperationResults(writeHardwareConfigResults, 'Hardware configuration write failed: ');
+
+    connectedDevices = await getHidDevices();
 
     const firmwareDirectoryInfo: TmpFirmware = {
         packageJsonPath: path.join(firmwarePath, 'package.json'),
@@ -62,18 +74,6 @@ try {
     await snooze(5000);
 
     // Need to reload hid devices because after the reenumeration maybe the HID device path changed
-    connectedDevices = await getHidDevices();
-
-    const writeHardwareConfigResults = await Promise.all([
-        writeHardwareConfig(UHK_80_DEVICE, connectedDevices.rightHidDevice, layout),
-        writeHardwareConfig(UHK_80_DEVICE_LEFT, connectedDevices.leftHidDevice, layout),
-    ]);
-
-    assertOperationResults(writeHardwareConfigResults, 'Hardware configuration write failed: ');
-
-    await snooze(5000); // just wait until devices be ready
-
-    // re-read hid devices just to be sure
     connectedDevices = await getHidDevices();
 
     let leftUhkDevice: UhkHidDevice;
@@ -167,7 +167,7 @@ async function upgradeFirmware(uhkDeviceProduct: UhkDeviceProduct, hidDevice: De
     return result;
 }
 
-async function writeHardwareConfig(uhkDeviceProduct: UhkDeviceProduct, hidDevice: Device, layout: string ): Promise<OperationResult> {
+async function writeHardwareConfig(uhkDeviceProduct: UhkDeviceProduct, hidDevice: Device, layout: string, serialNumber: number ): Promise<OperationResult> {
     const result: OperationResult = {
         uhkDeviceProduct
     };
@@ -177,7 +177,7 @@ async function writeHardwareConfig(uhkDeviceProduct: UhkDeviceProduct, hidDevice
     try {
         uhkHidDevice = new UhkHidDevice(logger, {}, rootDir, hidDevice);
         const uhkOperations = new UhkOperations(logger, uhkHidDevice);
-        await uhkOperations.saveHardwareConfiguration(layout === 'iso', uhkDeviceProduct.id, argv.setSerialNumber);
+        await uhkOperations.saveHardwareConfiguration(layout === 'iso', uhkDeviceProduct.id, serialNumber);
     }
     catch (error) {
         result.error = error;
