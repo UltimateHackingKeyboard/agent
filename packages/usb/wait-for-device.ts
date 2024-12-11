@@ -12,11 +12,11 @@ import {
     snooze,
 } from 'uhk-usb';
 
-import { yargs } from './src/index.js';
+import { getDevicesOptions, getUhkDeviceProductFromArg, yargs } from './src/index.js';
 
 const REENUMERATION_MODES = ['device', 'bootloader', 'buspal'];
 const reenumerationOptions = REENUMERATION_MODES.join('|');
-const devicesOptions = ALL_UHK_DEVICES.map(uhkDevice => uhkDevice.asCliArg).join('|');
+const devicesOptions = getDevicesOptions(ALL_UHK_DEVICES);
 
 const argv = yargs
     .scriptName('./wait-for-device.ts')
@@ -28,12 +28,7 @@ const deviceArg = argv._[0] as string;
 const enumerationModeArg = argv._[1] as string;
 const timeoutArg = argv._[2] as string;
 
-const uhkDeviceProduct = ALL_UHK_DEVICES.find(uhkDevice => uhkDevice.asCliArg === deviceArg);
-
-if (!uhkDeviceProduct) {
-    console.error(`Invalid device: ${deviceArg}. Available options: ${devicesOptions}`);
-    process.exit(1);
-}
+const uhkDeviceProduct = getUhkDeviceProductFromArg(ALL_UHK_DEVICES, deviceArg);
 
 const reenumerationMode = REENUMERATION_MODES.find(value => value === enumerationModeArg);
 

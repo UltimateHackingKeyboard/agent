@@ -5,25 +5,33 @@ import * as fs from 'fs';
 import {
     FIRMWARE_UPGRADE_METHODS,
     LEFT_HALF_MODULE,
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
     UHK_80_DEVICE_LEFT,
 } from 'uhk-common';
-import { waitForUhkDeviceConnected } from 'uhk-usb';
-import { isUhkDeviceConnected } from 'uhk-usb';
 import {
     getCurrentUhkDeviceProduct,
     getDeviceFirmwarePath,
     getDeviceUserConfigPath,
     getFirmwarePackageJson,
-    getModuleFirmwarePath
+    getModuleFirmwarePath,
+    isUhkDeviceConnected,
+    waitForUhkDeviceConnected,
 } from 'uhk-usb';
 
-import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
+import Uhk, { errorHandler, getUhkDeviceProductFromArg, getDevicesOptions, yargs } from './src/index.js';
+
+const DEVICES = [
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
+];
+const devicesOptions = getDevicesOptions(DEVICES);
 
 (async () => {
     try {
         const argv = yargs
             .scriptName('./update-firmwares-and-configs.ts')
-            .usage('Usage: $0 <firmware directory> {uhk60v1|uhk60v2} {iso|ansi}')
+            .usage(`Usage: $0 <firmware directory> {${devicesOptions}} {iso|ansi}`)
             .demandCommand(2, 'Both firmwarePath and layout must be specified.')
             .option('set-serial-number', {
                 description: 'Use the given serial number instead of randomly generated one.',
@@ -32,7 +40,7 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
             .argv;
 
         const firmwarePath = argv._[0];
-        const deviceId = getDeviceIdFromArg(argv._[1] as string);
+        const deviceId = getUhkDeviceProductFromArg(DEVICES, argv._[1] as string).id;
         const layout = argv._[2];
 
         if (!fs.existsSync(firmwarePath)) {
