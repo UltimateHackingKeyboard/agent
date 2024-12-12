@@ -5,25 +5,33 @@ import * as fs from 'fs';
 import {
     FIRMWARE_UPGRADE_METHODS,
     LEFT_HALF_MODULE,
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
     UHK_80_DEVICE_LEFT,
 } from 'uhk-common';
-import { waitForUhkDeviceConnected } from 'uhk-usb';
-import { isUhkDeviceConnected } from 'uhk-usb';
 import {
     getCurrentUhkDeviceProduct,
     getDeviceFirmwarePath,
     getDeviceUserConfigPath,
     getFirmwarePackageJson,
     getModuleFirmwarePath,
+    isUhkDeviceConnected,
+    waitForUhkDeviceConnected,
 } from 'uhk-usb';
 
-import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
+import Uhk, { errorHandler, getUhkDeviceProductFromArg, getDevicesOptions, yargs } from './src/index.js';
+
+const DEVICES = [
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
+];
+const devicesOptions = getDevicesOptions(DEVICES);
 
 (async function () {
     try {
         const argv = yargs
             .scriptName('./factory-update.ts')
-            .usage('Usage: $0 <firmwarePath> {uhk60v1|uhk60v2} {iso|ansi}')
+            .usage(`Usage: $0 <firmwarePath> {${devicesOptions} {iso|ansi}`)
             .demandCommand(3)
             .option('set-serial-number', {
                 description: 'Use the given serial number instead of randomly generated one.',
@@ -32,7 +40,7 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
             .argv;
 
         const firmwarePath = argv._[0] as string;
-        const deviceId = getDeviceIdFromArg(argv._[1] as string);
+        const deviceId = getUhkDeviceProductFromArg(DEVICES, argv._[1] as string).id;
         const layout = argv._[2] as string;
 
         const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
