@@ -17,10 +17,10 @@ import {
     getDeviceFirmwarePath,
     getFirmwarePackageJson,
     TmpFirmware,
-    snooze,
     UhkHidDevice,
     UhkOperations,
     UsbVariables,
+    waitForDevices,
     waitForUhkDeviceConnected,
 } from 'uhk-usb';
 
@@ -71,7 +71,10 @@ try {
 
     // just wait until devices be ready. After the reenumeration the halves start to communicate with each other
     // give them some time to finish
-    await snooze(5000);
+    await Promise.all([
+        waitForDevices(UHK_80_DEVICE.keyboard),
+        waitForDevices(UHK_80_DEVICE_LEFT.keyboard),
+    ]);
 
     // Need to reload hid devices because after the reenumeration maybe the HID device path changed
     connectedDevices = await getHidDevices();
