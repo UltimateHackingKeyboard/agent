@@ -105,6 +105,7 @@ while (new Date().getTime() - startTime.getTime() < timeout && !found) {
 }
 
 if (found) {
+    await snooze(1000);
     process.exit(0);
 }
 else {

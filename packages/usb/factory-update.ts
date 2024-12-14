@@ -16,6 +16,7 @@ import {
     getFirmwarePackageJson,
     getModuleFirmwarePath,
     isUhkDeviceConnected,
+    waitForDevices,
     waitForUhkDeviceConnected,
 } from 'uhk-usb';
 
@@ -80,6 +81,7 @@ const devicesOptions = getDevicesOptions(DEVICES);
 
         const { operations } = Uhk(argv);
         await operations.updateDeviceFirmware(rightFirmwarePath, uhkDeviceProduct);
+        await waitForDevices(uhkDeviceProduct.keyboard);
         if (uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
             if (!(await isUhkDeviceConnected(UHK_80_DEVICE_LEFT))) {
                 console.log(`[DeviceService] Please connect your ${UHK_80_DEVICE_LEFT.logName} keyboard with USB cable.`);
