@@ -1,17 +1,25 @@
+import { ALL_UHK_DEVICES } from 'uhk-common';
 import { assertCommandLineOptions } from 'uhk-usb';
 import Yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
+import { getDevicesOptions } from './util/index.js';
+
+const deviceOptions = getDevicesOptions(ALL_UHK_DEVICES);
+
 export const yargs = Yargs(hideBin(process.argv))
     .showHelpOnFail(true)
+    .option('device', {
+        description: `Run the command on the specified device(s) --device=uhk80-left,uhk80-right. Options: {${deviceOptions}}`,
+        type: 'string',
+    })
     .option('help', {
         description: 'Display help message'
     })
     .option('log', {
-        description: 'Set logging categories. --log=misc,usb. Default is "none"',
+        description: 'Set logging categories. --log=misc,usb. Options: {all|config|misc|none|usb} Default is "none"',
         type: 'string',
         default: 'none',
-        choices: ['all', 'config', 'misc', 'none', 'usb']
     })
     .option('no-report-id', {
         description: "Don't use report id for USB communication. The default value depends on the UHK device. You can not set --report-id and --no-report-id at the same time.",
