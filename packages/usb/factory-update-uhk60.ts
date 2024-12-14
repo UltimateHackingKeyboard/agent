@@ -83,7 +83,6 @@ const devicesOptions = getDevicesOptions(DEVICES);
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await operations.saveUserConfiguration(configBuffer);
         await operations.saveHardwareConfiguration(layout === 'iso', deviceId, argv.setSerialNumber);
-        await operations.switchKeymap('TES');
         console.log('All done!');
     } catch (error) {
         await errorHandler(error);
