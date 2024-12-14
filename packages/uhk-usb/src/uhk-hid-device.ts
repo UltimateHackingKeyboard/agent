@@ -9,10 +9,10 @@ import {
     BLE_ADDRESS_LENGTH,
     Buffer,
     CommandLineArgs,
+    convertBleAddressArrayToString,
     DeviceConnectionState,
     FIRMWARE_UPGRADE_METHODS,
     HalvesInfo,
-    HOST_CONNECTION_COUNT_MAX,
     isBitSet,
     isEqualArray,
     LeftSlotModules,
@@ -84,6 +84,8 @@ interface UsvDeviceConnectionState {
 }
 
 export const UHK_HID_DEVICE_NOT_CONNECTED = '[UhkHidDevice] Device is not connected';
+
+const MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE = 10;
 /**
  * HID API wrapper to support unified logging and async write
  */
@@ -339,7 +341,7 @@ export class UhkHidDevice {
             isMacroStatusDirty: false,
             leftHalfDetected: false,
             multiDevice: await getNumberOfConnectedDevices(this.options) > 1,
-            pairedDevices: [],
+            newPairedDevices: [],
             udevRulesInfo: await this.getUdevInfoAsync(),
         };
 
@@ -419,7 +421,7 @@ export class UhkHidDevice {
             result.isMacroStatusDirty = deviceState.isMacroStatusDirty;
 
             if (deviceState.newPairedDevice) {
-                result.pairedDevices = await this.getPairedDevices();
+                result.newPairedDevices = await this.getPairedDevices();
             }
         } else if (!result.connectedDevice) {
             this._device = undefined;
@@ -681,13 +683,39 @@ export class UhkHidDevice {
         }
     }
 
-    async getPairedDevices(): Promise<number[]> {
-        this.logService.usb('[UhkHidDevice] USB[T]: Read paired devices');
-        const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.NewPairings]);
-        const buffer = await this.write(command);
-        const pairedDevices = convertBufferToIntArray(buffer);
+    async getPairedDevices(): Promise<string[]> {
+        this.logService.misc('[UhkHidDevice] Read paired devices');
+        let iteration = 0;
+        const result: string[] = [];
 
-        return pairedDevices.slice(0, HOST_CONNECTION_COUNT_MAX + 1);
+        while (true) {
+            this.logService.usb('[UhkHidDevice] USB[T]: Read paired devices');
+            const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.NewPairings, iteration]);
+            const buffer = await this.write(command);
+            const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+            // skip the first byte
+            uhkBuffer.readUInt8();
+
+            const remainingNewConnections = uhkBuffer.readUInt8();
+
+            const count = Math.min(remainingNewConnections, MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE);
+
+            for (let i = 0; i < count; i++) {
+                const address = [];
+                for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
+                    address.push(uhkBuffer.readUInt8());
+                }
+                result.push(convertBleAddressArrayToString(address));
+            }
+
+            if (remainingNewConnections <= MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE) {
+                break;
+            }
+
+            iteration += 1;
+        }
+
+        return result;
     }
 
     async getProtocolVersions(): Promise<ProtocolVersions> {

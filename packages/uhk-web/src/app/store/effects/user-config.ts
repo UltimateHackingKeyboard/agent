@@ -21,6 +21,7 @@ import {
 } from 'uhk-common';
 
 import { EmptyAction } from '../actions/app';
+import { SaveConfigurationAction } from '../actions/device';
 import {
     ActionTypes,
     ApplyUserConfigurationFromFileAction,
@@ -71,6 +72,12 @@ export class UserConfigEffects {
         )
     );
 
+    addNewPairedDevives$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.AddNewPairedDevicesToHostConnections),
+            map(() => new SaveConfigurationAction(true))
+        ));
+
     saveUserConfig$ = createEffect(() => this.actions$
         .pipe(
             ofType(
@@ -84,6 +91,7 @@ export class UserConfigEffects {
                 ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue, ActionTypes.SetUserConfigurationRgbValue,
                 ActionTypes.RecoverLEDSpaces, ActionTypes.SetModuleConfigurationValue,
                 ActionTypes.ReorderHostConnections, ActionTypes.RenameHostConnection, ActionTypes.SetHostConnectionSwitchover,
+                ActionTypes.AddNewPairedDevicesToHostConnections,
             ),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {

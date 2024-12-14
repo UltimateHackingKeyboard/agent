@@ -1,3 +1,4 @@
+import { HOST_CONNECTION_COUNT_MAX } from 'uhk-common';
 import {
     BacklightingMode,
     Constants,
@@ -29,7 +30,8 @@ import {
     SwitchLayerAction,
     UserConfiguration
 } from 'uhk-common';
-
+import { BleAddingStates } from '../../models';
+import { BleAddingState } from '../../models';
 import {
     BacklightingOption,
     defaultLastEditKey,
@@ -70,6 +72,8 @@ export interface State {
     lastEditedKey: LastEditedKey;
     layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
+    newPairedDevices: string[];
+    newPairedDevicesAdding: boolean;
     selectedLayerOption: LayerOption;
     theme: string;
 }
@@ -82,6 +86,8 @@ export const initialState: State = {
     lastEditedKey: defaultLastEditKey(),
     layerOptions: initLayerOptions(),
     halvesInfo: getDefaultHalvesInfo(),
+    newPairedDevices: [],
+    newPairedDevicesAdding: false,
     selectedLayerOption: getBaseLayerOption(),
     theme: ''
 };
@@ -112,6 +118,25 @@ export function reducer(
             return {
                 ...state,
                 backlightingColorPalette: applicationSettings.backlightingColorPalette
+            };
+        }
+
+        case UserConfig.ActionTypes.AddNewPairedDevicesToHostConnections: {
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.hostConnections = state.userConfiguration.hostConnections.filter(hostConnection => hostConnection.type !== HostConnections.Empty);
+            for (const bleAddress of state.newPairedDevices) {
+                const hostConnection = new HostConnection();
+                hostConnection.type = HostConnections.BLE;
+                hostConnection.address = bleAddress;
+                hostConnection.name = 'Bluetooth device';
+
+                userConfiguration.hostConnections.push(hostConnection);
+            }
+
+            return {
+                ...state,
+                userConfiguration,
+                newPairedDevicesAdding: true,
             };
         }
 
@@ -187,9 +212,12 @@ export function reducer(
         }
 
         case Device.ActionTypes.ConnectionStateChanged: {
+            const payload = (action as Device.ConnectionStateChangedAction).payload;
+
             const newState: State = {
                 ...state,
-                halvesInfo: (action as DeviceActions.ConnectionStateChangedAction).payload.halvesInfo
+                halvesInfo: payload.halvesInfo,
+                newPairedDevices: payload.newPairedDevices,
             };
 
             return assignUserConfiguration(newState, state.userConfiguration);
@@ -218,6 +246,14 @@ export function reducer(
                     }
                 )
             };
+
+        case DeviceActions.ActionTypes.SaveToKeyboardFailed:
+        case DeviceActions.ActionTypes.SaveToKeyboardSuccess: {
+            return {
+                ...state,
+                newPairedDevicesAdding: false,
+            };
+        }
 
         case KeymapActions.ActionTypes.Add:
         case KeymapActions.ActionTypes.Duplicate: {
@@ -1026,13 +1062,9 @@ export function reducer(
         case DonglePairing.ActionTypes.DeleteHostConnectionSuccess: {
             const {index} = (action as DonglePairing.DeleteHostConnectionSuccessAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            userConfiguration.hostConnections = state.userConfiguration.hostConnections.map((hostConnection, idx) => {
-                if (idx === index) {
-                    return emptyHostConnection();
-                }
-
-                return hostConnection;
-            });
+            userConfiguration.hostConnections = [...state.userConfiguration.hostConnections];
+            userConfiguration.hostConnections.splice(index, 1);
+            userConfiguration.hostConnections.push(emptyHostConnection());
 
             return  {
                 ...state,
@@ -1078,6 +1110,22 @@ export function reducer(
     }
 }
 
+export const getNewPairedDevicesState = (state: State): BleAddingState => {
+    let addingState = BleAddingStates.Idle;
+    if (state.newPairedDevicesAdding) {
+        addingState = BleAddingStates.Adding;
+    }
+    else if (state.userConfiguration.hostConnections.length > HOST_CONNECTION_COUNT_MAX) {
+        addingState = BleAddingStates.TooMuchHostConnections;
+    }
+
+    return {
+        state: addingState,
+        nrOfNewBleAddresses: state.newPairedDevices.length,
+        nrOfHostConnections: state.userConfiguration.hostConnections.length,
+        showNewPairedDevicesPanel: state.newPairedDevices.length > 0 || state.userConfiguration.hostConnections.length > HOST_CONNECTION_COUNT_MAX || state.newPairedDevicesAdding
+    };
+};
 export const getUserConfiguration = (state: State): UserConfiguration => state.userConfiguration;
 export const getKeymaps = (state: State): Keymap[] => state.userConfiguration.keymaps;
 export const getDefaultKeymap = (state: State): Keymap => state.userConfiguration.keymaps.find(keymap => keymap.isDefault);
