@@ -21,6 +21,7 @@ import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { AddOnComponent } from './components/add-on';
 import { BackToComponent } from './components/back-to/back-to.component';
 import CircleTooltipComponent from './components/circle-tooltip/circle-tooltip.component';
+import { BlePairingPanelComponent } from './components/device/ble-pairing-panel/ble-pairing-panel.component';
 import { FadeTimeoutSliderComponent } from './components/device/led-settings/fade-timeout-slider.component';
 import { DonglePairingPanelComponent } from './components/device/dongle-pairing-panel/dongle-pairing-panel.component';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
@@ -172,6 +173,7 @@ import appInitFactory from './services/app-init-factory';
         AdvancedSettingsPageComponent,
         AsHexColorPipe,
         BackToComponent,
+        BlePairingPanelComponent,
         HostConnectionTypeLabelPipePipe,
         NewLineToBrPipe,
         SafeHtmlPipe,

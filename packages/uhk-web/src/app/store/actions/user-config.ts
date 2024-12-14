@@ -14,6 +14,7 @@ import { NavigateToModuleSettingsPayload } from '../../models/navigate-to-module
 
 export enum ActionTypes {
     AddColorToBacklightingColorPalette = '[user-config] Add color to the backlighting color palette',
+    AddNewPairedDevicesToHostConnections = '[user-config] Add new paired devices to host connections',
     DeleteColorFromBacklightingColorPalette = '[user-config] delete color from the backlighting color palette',
     LoadUserConfig = '[user-config] Load User Config',
     LoadConfigFromDevice = '[user-config] Load User Config from Device',
@@ -45,6 +46,10 @@ export class AddColorToBacklightingColorPaletteAction implements Action {
 
     constructor(public payload: RgbColor) {
     }
+}
+
+export class AddNewPairedDevicesToHostConnectionsAction implements Action {
+    type = ActionTypes.AddNewPairedDevicesToHostConnections;
 }
 
 export class DeleteColorFromBacklightingColorPaletteAction implements Action {
@@ -203,6 +208,7 @@ export class RecoverLEDSpacesAction implements Action {
 
 export type Actions
     = AddColorToBacklightingColorPaletteAction
+    | AddNewPairedDevicesToHostConnectionsAction
     | DeleteColorFromBacklightingColorPaletteAction
     | LoadUserConfigAction
     | LoadUserConfigSuccessAction

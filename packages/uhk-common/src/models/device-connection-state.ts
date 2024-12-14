@@ -24,9 +24,8 @@ export interface DeviceConnectionState {
     halvesInfo: HalvesInfo;
     hardwareModules?: HardwareModules;
     /**
-     * Each element describe the hostConnection is the user-config are paired to the keyboard or not.
-     * If the value is 1 then paired.
+     * The BLE addresses of the devices that paired with the keyboard but not is the hostConnections of the user configuration.
      */
-    pairedDevices: number[];
+    newPairedDevices: string[];
     udevRulesInfo: UdevRulesInfo;
 }

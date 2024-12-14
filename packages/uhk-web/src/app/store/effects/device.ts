@@ -10,6 +10,7 @@ import {
     FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
     HardwareConfiguration,
+    HOST_CONNECTION_COUNT_MAX,
     IpcResponse,
     NotificationType,
     shouldUpgradeAgent,
@@ -223,6 +224,10 @@ export class DeviceEffects {
             tap(([action, state, shouldUpgradeFirmware]) => {
                 if (shouldUpgradeFirmware)
                     return this.router.navigate(['/update-firmware']);
+
+                if (state.userConfiguration.userConfiguration.hostConnections.length > HOST_CONNECTION_COUNT_MAX) {
+                    return;
+                }
 
                 setTimeout(() => this.sendUserConfigToKeyboard(
                     state.userConfiguration.userConfiguration,
