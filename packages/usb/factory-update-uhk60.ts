@@ -49,15 +49,12 @@ const devicesOptions = getDevicesOptions(DEVICES);
         });
         const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-        console.log('Right firmware path', rightFirmwarePath);
         if (!fs.existsSync(rightFirmwarePath)) {
             console.error('Right firmware path not found!');
             process.exit(1);
         }
 
-
         const leftFirmwarePath = getModuleFirmwarePath(LEFT_HALF_MODULE, packageJson);
-        console.log('Left firmware path', leftFirmwarePath);
 
         if (!fs.existsSync(leftFirmwarePath)) {
             console.error('Left firmware path not found!');
@@ -65,7 +62,6 @@ const devicesOptions = getDevicesOptions(DEVICES);
         }
 
         const userConfigPath = getDeviceUserConfigPath(uhkDeviceProduct, packageJson);
-        console.log('User config path', userConfigPath);
         if (!fs.existsSync(userConfigPath)) {
             console.error('User configuration path not found!');
             process.exit(1);
