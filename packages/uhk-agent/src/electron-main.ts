@@ -13,7 +13,7 @@ systemPreferences.getAnimationSettings().prefersReducedMotion = false;
 import * as path from 'path';
 import * as url from 'url';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
-// import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
+
 import { getLogOptions } from 'uhk-common';
 import { DeviceService } from './services/device.service';
 import { ElectronLogService } from './services/logger.service';
@@ -26,8 +26,6 @@ import { setMenu } from './electron-menu';
 import { printUsbDevices } from './util';
 import { loadWindowState, saveWindowState } from './util/window';
 import { getWindowBackgroundColor, options, cliUsage, reenumerateAndExit } from './util';
-// import './dev-extension';
-// require('electron-debug')({ showDevTools: true, enabled: true });
 
 if (options.help) {
     console.log(cliUsage);
