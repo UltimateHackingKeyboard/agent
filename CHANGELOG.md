@@ -6,6 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [5.0.0] - 2024-12-15
+
+Firmware: 12.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v12.0.0)] | Device Protocol: 4.**11.0** | User Config: **8.3.0** | Hardware Config: 1.0.0
+
+- Add support for the UHK 80.
+- Support dongle pairing and firmware updates.
+- On the "LED settings" page, show the Battery-powered column if the UHK 80 is connected.
+- In the configuration history, show per-device history records.
+- Fix "Back to keymap" link which disappeared when saving or cancelling macro action items.
+- Remove Return alias in the scancode selector.
+
 ## [4.2.1] - 2024-10-10
 
 Firmware: 11.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.2.0)] | Device Protocol: 4.10.0 | User Config: 7.1.0 | Hardware Config: 1.0.0
