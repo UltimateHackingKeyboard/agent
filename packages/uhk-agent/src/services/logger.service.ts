@@ -52,11 +52,17 @@ export class ElectronLogService extends LogService {
             } else {
                 this.log('%c' + args.join(' '), 'color:red');
             }
-        } else if (LogRegExps.transferRegExp.test(args[0])) {
-            this.log('%c' + args.join(' '), 'color:orange');
         } else {
             this.log(...args);
         }
+    }
+
+    usbOps(...args) {
+        if (!this._options.usbOps) {
+            return;
+        }
+
+        this.log('%c' + args.join(' '), 'color:orange');
     }
 
     protected log(...args: any[]): void {

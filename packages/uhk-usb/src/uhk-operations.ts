@@ -71,7 +71,7 @@ export class UhkOperations {
     }
 
     public async jumpToBootloaderModule(module: ModuleSlotToId): Promise<void> {
-        this.logService.usb(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
+        this.logService.usbOps(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
         const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
         await this.device.write(transfer);
     }
@@ -285,7 +285,7 @@ export class UhkOperations {
         const configName = configBufferIdToName[configBufferId];
 
         try {
-            this.logService.usb(`[DeviceOperation] USB[T]: Read ${configName} size from keyboard`);
+            this.logService.usbOps(`[DeviceOperation] USB[T]: Read ${configName} size from keyboard`);
             let configSize = await this.getConfigSizeFromKeyboard(configBufferId);
             const originalConfigSize = configSize;
             this.logService.usb(`[DeviceOperation] getConfigSize() configSize: ${configSize}`);
@@ -294,7 +294,7 @@ export class UhkOperations {
             let configBuffer = Buffer.alloc(0);
             let firstRead = true;
 
-            this.logService.usb(`[DeviceOperation] USB[T]: Read ${configName} from keyboard`);
+            this.logService.usbOps(`[DeviceOperation] USB[T]: Read ${configName} from keyboard`);
             while (offset < configSize) {
                 const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
                 const writeBuffer = Buffer.from(
@@ -348,10 +348,10 @@ export class UhkOperations {
 
     public async saveUserConfiguration(buffer: Buffer): Promise<void> {
         try {
-            this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to keyboard');
+            this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to keyboard');
             await this.sendConfigToKeyboard(buffer, true);
             await this.applyConfiguration();
-            this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
+            this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
             await this.waitUntilKeyboardBusy();
         } catch (error) {
@@ -387,13 +387,13 @@ export class UhkOperations {
     }
 
     public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Write Config to Eeprom');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Write Config to Eeprom');
         await this.device.write(Buffer.from([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
         await this.waitUntilKeyboardBusy();
     }
 
     public async enableUsbStackTest(): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Enable USB Stack test');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Enable USB Stack test');
         await this.device.write(Buffer.from([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
         await this.waitUntilKeyboardBusy();
     }
@@ -431,7 +431,7 @@ export class UhkOperations {
     public async getModuleProperty({ module, property } : GetModulePropertyArguments): Promise<UhkBuffer> {
         const moduleSlotName = getSlotIdName(module);
 
-        this.logService.usb(`[DeviceOperation] USB[T]: Read "${moduleSlotName}" module "${ModulePropertyId[property]}" property information as string`);
+        this.logService.usbOps(`[DeviceOperation] USB[T]: Read "${moduleSlotName}" module "${ModulePropertyId[property]}" property information as string`);
 
         const command = Buffer.from([
             UsbCommand.GetModuleProperty,
@@ -469,7 +469,7 @@ export class UhkOperations {
         const moduleSlotName = getSlotIdName(module);
         try {
             this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" version information`);
-            this.logService.usb('[DeviceOperation] USB[T]: Read module version information');
+            this.logService.usbOps('[DeviceOperation] USB[T]: Read module version information');
 
             const uhkBuffer = await this.getModuleProperty({ module, property: ModulePropertyId.protocolVersions });
             // skip the first 2 byte
@@ -506,7 +506,7 @@ export class UhkOperations {
     }
 
     public async getRightModuleProperty(property: DevicePropertyIds, args: Array<number> = []): Promise<UhkBuffer> {
-        this.logService.usb(`[DeviceOperation] USB[T]: Device module "${DevicePropertyIds[property]}" property information`);
+        this.logService.usbOps(`[DeviceOperation] USB[T]: Device module "${DevicePropertyIds[property]}" property information`);
         const command = Buffer.from([UsbCommand.GetProperty, property, ...args]);
         const buffer = await this.device.write(command);
 
@@ -514,7 +514,7 @@ export class UhkOperations {
     }
 
     public async getRightModuleFirmwareRepoInfo(): Promise<FirmwareRepoInfo> {
-        this.logService.usb('[DeviceOperation] USB[T]: Read device firmware repo information');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Read device firmware repo information');
 
         return {
             firmwareGitRepo: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.GitRepo)),
@@ -524,7 +524,7 @@ export class UhkOperations {
 
     public async getDeviceVersionInfo(): Promise<DeviceVersionInformation> {
         // TODO: read device name from UHK Device
-        this.logService.usb('[DeviceOperation] USB[T]: Device information');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Device information');
 
         const protocolVersions = await this.device.getProtocolVersions();
 
@@ -549,47 +549,47 @@ export class UhkOperations {
     }
 
     public async setLedPwmBrightness(percent: number): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Set LED PWM Brightness');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Set LED PWM Brightness');
 
         const command = Buffer.from([UsbCommand.SetLedPwmBrightness, percent]);
         await this.device.write(command);
     }
 
     public async applyConfiguration(): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Apply user configuration to keyboard');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = Buffer.from([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
     }
 
     public async setTestLedsState(on: boolean): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Set test LEDs state');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Set test LEDs state');
         const buffer = Buffer.from([UsbCommand.SetTestLed, on ? 1 : 0]);
         await this.device.write(buffer);
     }
 
     public async launchEepromTransfer(operation: EepromOperation, bufferId: ConfigBufferId): Promise<Buffer> {
-        this.logService.usb('[DeviceOperation] USB[T]: Launch EEPORM transfer');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Launch EEPORM transfer');
         const buffer = Buffer.from([UsbCommand.LaunchEepromTransfer, operation, bufferId]);
 
         return this.device.write(buffer);
     }
 
     public async eraseHardwareConfig(): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Erase hardware configuration');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Erase hardware configuration');
         const buffer = Buffer.from(Array(64).fill(0xff));
         await this.sendConfigToKeyboard(buffer, false);
         await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
     }
 
     public async eraseUserConfig(): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Erase user configuration');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Erase user configuration');
         const buffer = Buffer.from(Array(2 ** 15 - 64).fill(0xff));
         await this.sendConfigToKeyboard(buffer, false);
         await this.writeConfigToEeprom(ConfigBufferId.stagingUserConfig);
     }
 
     public async switchKeymap(keymapAbbreviation: string): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Switch keymap');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Switch keymap');
         const keymapAbbreviationAscii = keymapAbbreviation.split('').map(char => char.charCodeAt(0));
         const buffer = Buffer.from([UsbCommand.SwitchKeymap, keymapAbbreviationAscii.length, ...keymapAbbreviationAscii]);
 
@@ -597,14 +597,14 @@ export class UhkOperations {
     }
 
     public async getAdcValue(): Promise<Buffer> {
-        this.logService.usb('[DeviceOperation] USB[T]: get ADC Value');
+        this.logService.usbOps('[DeviceOperation] USB[T]: get ADC Value');
         const buffer = Buffer.from([UsbCommand.GetAdcValue]);
 
         return this.device.write(buffer);
     }
 
     public async getDebugInfo(): Promise<DebugInfo> {
-        this.logService.usb('[DeviceOperation] USB[T]: get Debug info');
+        this.logService.usbOps('[DeviceOperation] USB[T]: get Debug info');
         const buffer = Buffer.from([UsbCommand.GetDebugBuffer]);
 
         const responseBuffer = await this.device.write(buffer);
@@ -626,7 +626,7 @@ export class UhkOperations {
     }
 
     public async getI2CBaudRate(): Promise<I2cBaudRate> {
-        this.logService.usb('[DeviceOperation] USB[T]: get I2C Baud rate');
+        this.logService.usbOps('[DeviceOperation] USB[T]: get I2C Baud rate');
         const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.I2cBaudRate]);
 
         const responseBuffer = await this.device.write(buffer);
@@ -639,7 +639,7 @@ export class UhkOperations {
     }
 
     public async getUptime(): Promise<Duration> {
-        this.logService.usb('[DeviceOperation] USB[T]: get uptime');
+        this.logService.usbOps('[DeviceOperation] USB[T]: get uptime');
         const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.Uptime]);
         const responseBuffer = await this.device.write(buffer);
 
@@ -647,7 +647,7 @@ export class UhkOperations {
     }
 
     public async getI2cSlaveErrors(slaveId: number): Promise<I2cErrorBuffer> {
-        this.logService.usb('[DeviceOperation] USB[T]: get I2C Slave errors');
+        this.logService.usbOps('[DeviceOperation] USB[T]: get I2C Slave errors');
         const buffer = Buffer.from([UsbCommand.GetSlaveI2cErrors, slaveId]);
         const responseBuffer = await this.device.write(buffer);
 
@@ -655,7 +655,7 @@ export class UhkOperations {
     }
 
     public async getVariable(variableId: UsbVariables, iteration: number = 0): Promise<number | string> {
-        this.logService.usb(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
+        this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
         const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
         const responseBuffer = await this.device.write(buffer);
 
@@ -811,13 +811,13 @@ export class UhkOperations {
     }
 
     public async setVariable(variable: UsbVariables, value: number): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Set Variable');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Set Variable');
         await this.device.write(Buffer.from([UsbCommand.SetVariable, variable, value]));
         await this.waitUntilKeyboardBusy();
     }
 
     public async setI2CBaudRate(rate: number): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Set I2C Baud Rate');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Set I2C Baud Rate');
         const buffer = Buffer.alloc(5);
         buffer.writeUInt8(UsbCommand.SetI2cBaudRate, 0);
         buffer.writeUInt32LE(rate, 1);
@@ -843,7 +843,7 @@ export class UhkOperations {
     }
 
     public async execMacroCommand(cmd: string): Promise<void> {
-        this.logService.usb('[DeviceOperation] USB[T]: Execute Macro Command');
+        this.logService.usbOps('[DeviceOperation] USB[T]: Execute Macro Command');
         if (cmd.length <= 63) {
             const b1 = Buffer.from([UsbCommand.ExecMacroCommand]);
             const b2 = Buffer.from(cmd);

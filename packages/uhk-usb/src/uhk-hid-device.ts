@@ -148,7 +148,7 @@ export class UhkHidDevice {
     public async deleteBond(address: number[]): Promise<void> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: Delete all bonds');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: Delete all bonds');
         const buffer = Buffer.from([UsbCommand.UnpairAll, ...address]);
         await this.write(buffer);
     }
@@ -156,7 +156,7 @@ export class UhkHidDevice {
     public async deleteAllBonds(): Promise<void> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: Delete all bonds');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: Delete all bonds');
         const buffer = Buffer.from([UsbCommand.UnpairAll, 0, 0, 0, 0, 0, 0]);
         await this.write(buffer);
     }
@@ -164,7 +164,7 @@ export class UhkHidDevice {
     public async getBleAddress(): Promise<number[]> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: get BLE address');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: get BLE address');
         const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.BleAddress]);
         const responseBuffer = await this.write(buffer);
 
@@ -180,7 +180,7 @@ export class UhkHidDevice {
     public async getPairedRightPairBleAddress(): Promise<number[]> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: get paired right pair BLE address');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: get paired right pair BLE address');
         const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.PairedRightPeerBleAddress]);
         const responseBuffer = await this.write(buffer);
 
@@ -196,7 +196,7 @@ export class UhkHidDevice {
     public async getPairingInfo(): Promise<PairingInfo> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: read pairing info');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: read pairing info');
         const buffer = Buffer.from([UsbCommand.GetPairingData]);
         const responseBuffer = await this.write(buffer);
         const numbers = convertBufferToIntArray(responseBuffer);
@@ -216,7 +216,7 @@ export class UhkHidDevice {
     public async getPairingStatus(): Promise<PairingStatuses> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: read pairing info');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: read pairing info');
         const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.PairingStatus]);
         const responseBuffer = await this.write(buffer);
 
@@ -237,7 +237,7 @@ export class UhkHidDevice {
     public async isPairedWith(address: number[]): Promise<boolean> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: is paired with');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: is paired with');
         const buffer = Buffer.from([
             UsbCommand.IsPaired,
             ...address,
@@ -252,7 +252,7 @@ export class UhkHidDevice {
     public async pairCentral(): Promise<void> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: pair central');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: pair central');
         const buffer = Buffer.from([UsbCommand.PairCentral]);
         await this.write(buffer);
     }
@@ -260,7 +260,7 @@ export class UhkHidDevice {
     public async pairPeripheral(): Promise<void> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: pair peripheral');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: pair peripheral');
         const buffer = Buffer.from([UsbCommand.PairPeripheral]);
         await this.write(buffer);
     }
@@ -268,7 +268,7 @@ export class UhkHidDevice {
     public async setPairingInfo(pairId: PairIds, info: PairingInfo): Promise<void> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: set pairing info');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: set pairing info');
         const buffer = Buffer.from([
             UsbCommand.SetPairingData,
             pairId,
@@ -283,7 +283,7 @@ export class UhkHidDevice {
     public async switchToPairingMode(): Promise<void> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
-        this.logService.usb('[UhkHidDevice] USB[T]: switch to pairing mode');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: switch to pairing mode');
         const buffer = Buffer.from([UsbCommand.EnterPairingMode]);
         await this.write(buffer);
     }
@@ -558,7 +558,7 @@ export class UhkHidDevice {
                         (timeout & 0xff << 24) >> 24
                     ]);
                     const data = this.getTransferData(message, reportId);
-                    this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
+                    this.logService.usbOps(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
                     this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     try {
                         keyboardDevice.write(data);
@@ -576,7 +576,7 @@ export class UhkHidDevice {
                     }
                     jumped = true;
                 } else {
-                    this.logService.usb('[UhkHidDevice] USB[T]: Enumerated device is not ready yet');
+                    this.logService.usbOps('[UhkHidDevice] USB[T]: Enumerated device is not ready yet');
                 }
             }
             else {
@@ -592,7 +592,7 @@ export class UhkHidDevice {
 
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
         let transfer;
-        this.logService.usb(`[UhkHidDevice] USB[T]: Send KbootCommand ${mapI2cAddressToModuleName(module)} ${KbootCommands[command].toString()}`);
+        this.logService.usbOps(`[UhkHidDevice] USB[T]: Send KbootCommand ${mapI2cAddressToModuleName(module)} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
             transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
         } else {
@@ -678,7 +678,7 @@ export class UhkHidDevice {
             return this._protocolVersions;
         }
 
-        this.logService.usb('[UhkHidDevice] USB[T]: Read device protocol version information');
+        this.logService.usbOps('[UhkHidDevice] USB[T]: Read device protocol version information');
         const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
         const buffer = await this.write(command);
         const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));

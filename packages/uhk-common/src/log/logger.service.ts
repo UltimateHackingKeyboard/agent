@@ -44,6 +44,14 @@ export class LogService {
         this.log(...args);
     }
 
+    usbOps(...args: any[]): void {
+        if (!this._options.usbOps) {
+            return;
+        }
+
+        this.log(...args);
+    }
+
     protected log(...args: any[]): void {
         console.log(...args);
     }
