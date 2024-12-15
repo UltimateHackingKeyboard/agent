@@ -23,5 +23,9 @@ export interface DeviceConnectionState {
     communicationInterfaceAvailable: boolean;
     halvesInfo: HalvesInfo;
     hardwareModules?: HardwareModules;
+    /**
+     * The BLE addresses of the devices that paired with the keyboard but not is the hostConnections of the user configuration.
+     */
+    newPairedDevices: string[];
     udevRulesInfo: UdevRulesInfo;
 }

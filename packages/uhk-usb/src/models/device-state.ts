@@ -8,5 +8,6 @@ export interface DeviceState {
     activeLayerToggled: boolean;
     leftKeyboardHalfSlot: string;
     leftModuleSlot: string;
+    newPairedDevice: boolean;
     rightModuleSlot: string;
 }

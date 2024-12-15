@@ -121,6 +121,7 @@ export const isI2cDebuggingRingBellEnabled = createSelector(advanceSettingsState
 export const userConfigState = (state: AppState) => state.userConfiguration;
 export const getRouterState = (state: AppState) => state.router;
 
+export const getNewPairedDevicesState = createSelector(userConfigState, fromUserConfig.getNewPairedDevicesState);
 export const getUserConfiguration = createSelector(userConfigState, fromUserConfig.getUserConfiguration);
 export const getKeymaps = createSelector(userConfigState, fromUserConfig.getKeymaps);
 export const getHostConnections = createSelector(userConfigState, fromUserConfig.getHostConnections);

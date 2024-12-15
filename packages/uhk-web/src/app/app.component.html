@@ -5,6 +5,11 @@
                           (updateApp)="updateApp()"
                           (doNotUpdateApp)="doNotUpdateApp()">
     </app-update-available>
+    <ble-pairing-panel *ngIf="newPairedDevicesState?.showNewPairedDevicesPanel"
+                       [@topNotificationPanelVisible]
+                       [state]="newPairedDevicesState"
+                       (addNewPairedDevices)="addPairedDevicesToHostConnections()"
+    />
     <dongle-pairing-panel *ngIf="donglePairingState?.showDonglePairingPanel"
                           [@topNotificationPanelVisible]
                           [state]="donglePairingState.state"
