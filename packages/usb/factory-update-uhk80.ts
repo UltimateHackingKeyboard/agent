@@ -17,6 +17,7 @@ import {
     getDeviceFirmwarePath,
     getFirmwarePackageJson,
     TmpFirmware,
+    snooze,
     UhkHidDevice,
     UhkOperations,
     UsbVariables,
@@ -91,6 +92,10 @@ try {
         const userConfigPath = getDeviceUserConfigPath(UHK_80_DEVICE, firmwarePackageJson);
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await rightUhkOperations.saveUserConfiguration(configBuffer);
+
+        // we don't know why, but it makes more reliable the next operations
+        // maybe we overhaul the keyboard resources.
+        await snooze(1000);
 
         // pair left and right half
         await rightUhkOperations.pairToLeftHalf(leftUhkDevice);
