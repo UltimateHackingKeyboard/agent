@@ -493,7 +493,6 @@ export class UhkHidDevice {
             for (const vidPid of vidPidPairs) {
 
                 if (enumerationMode === EnumerationModes.Bootloader && device.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
-                    this.logService.misc('[UhkHidDevice] try to find MCU Bootloader');
                     const serialDevices = await SerialPort.list();
                     // TODO: Implement the listAvailableDevices for serial devices too
                     for (const serialDevice of serialDevices) {
