@@ -7,6 +7,10 @@ export function getLogOptions(options: CommandLineArgs): LogOptions {
         return DEFAULT_LOG_OPTIONS;
     }
 
+    if (options.log === 'none') {
+        return {};
+    }
+
     return options.log
         .split(',')
         .reduce((logOptions, category) => {
