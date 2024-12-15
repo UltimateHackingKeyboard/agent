@@ -57,7 +57,7 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'log',
                 description: 'Set logging categories. --log=misc,usb. Default is "misc"',
-                typeLabel: 'config | misc | usb | all'
+                typeLabel: 'config | misc | usb | usbOps | all'
             },
             {
                 name: 'no-report-id',

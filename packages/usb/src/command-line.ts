@@ -17,7 +17,7 @@ export const yargs = Yargs(hideBin(process.argv))
         description: 'Display help message'
     })
     .option('log', {
-        description: 'Set logging categories. --log=misc,usb. Options: {all|config|misc|none|usb} Default is "none"',
+        description: 'Set logging categories. --log=misc,usb. Options: {all|config|misc|none|usb|usbOps} Default is "none"',
         type: 'string',
         default: 'none',
     })

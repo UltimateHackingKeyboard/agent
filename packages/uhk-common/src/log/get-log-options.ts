@@ -15,6 +15,7 @@ export function getLogOptions(options: CommandLineArgs): LogOptions {
                     logOptions.config = true;
                     logOptions.misc = true;
                     logOptions.usb = true;
+                    logOptions.usbOps = true;
                     break;
 
                 case 'config':
@@ -27,6 +28,11 @@ export function getLogOptions(options: CommandLineArgs): LogOptions {
 
                 case 'usb':
                     logOptions.usb = true;
+                    logOptions.usbOps = true;
+                    break;
+
+                case 'usbOps':
+                    logOptions.usbOps = true;
                     break;
 
                 default:
