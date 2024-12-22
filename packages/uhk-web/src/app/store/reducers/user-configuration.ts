@@ -133,6 +133,10 @@ export function reducer(
                 userConfiguration.hostConnections.push(hostConnection);
             }
 
+            for (let i = userConfiguration.hostConnections.length; i < HOST_CONNECTION_COUNT_MAX; i++) {
+                userConfiguration.hostConnections.push(emptyHostConnection());
+            }
+
             return {
                 ...state,
                 userConfiguration,
@@ -252,6 +256,7 @@ export function reducer(
             return {
                 ...state,
                 newPairedDevicesAdding: false,
+                newPairedDevices: [],
             };
         }
 

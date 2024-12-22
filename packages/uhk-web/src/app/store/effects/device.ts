@@ -226,7 +226,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/update-firmware']);
 
                 if (state.userConfiguration.userConfiguration.hostConnections.length > HOST_CONNECTION_COUNT_MAX) {
-                    return;
+                    return this.router.navigate(['/host-connections']);
                 }
 
                 setTimeout(() => this.sendUserConfigToKeyboard(
