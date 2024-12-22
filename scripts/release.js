@@ -86,6 +86,7 @@ const APPLE_TEAM_ID = 'CMXCBCFHDG'
 process.env.APPLE_TEAM_ID = APPLE_TEAM_ID
 
 builder.build({
+    publish: "onTag",
     targets: target,
     config: {
         afterPack,
