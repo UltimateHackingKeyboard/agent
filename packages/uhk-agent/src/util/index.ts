@@ -1,4 +1,4 @@
-export * from './backup-user-confoguration';
+export * from './backup-user-configuration';
 export * from './command-line';
 export * from './copy-smart-macro-doc-to-webserver';
 export * from './copy-smart-macro-loading-html';
