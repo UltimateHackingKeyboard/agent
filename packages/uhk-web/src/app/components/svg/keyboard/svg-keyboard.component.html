@@ -17,7 +17,7 @@
            [moduleNavCircle]="module.moduleNavCircle"
            [moduleNavPath]="module.moduleNavPath"
            [selectedKey]="selectedKey"
-           [@fadeKeyboard]="{value:'', params: { animationTime: modulesState[module.id].animationTime } }"
+           [@fadeKeyboard]="{value:'', params: { animationTime: modulesState[module.id]?.animationTime || '0ms' } }"
            [selected]="selectedKey?.moduleId === module.id"
            [uhkThemeColors]="uhkThemeColors"
            [lastEdited]="lastEditedKey?.moduleId === module.id"
