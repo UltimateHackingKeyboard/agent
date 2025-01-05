@@ -52,7 +52,7 @@
     "@ngrx/router-store": "17.2.0",
     "@ngrx/store": "17.2.0",
     "@ngrx/store-devtools": "17.2.0",
-    "@perfectmemory/ngx-contextmenu": "17.0.2",
+    "@perfectmemory/ngx-contextmenu": "17.0.3",
     "angular-confirmation-popover": "7.0.0",
     "@ert78gb/angular-notifier": "15.0.0",
     "@ert78gb/ng2-dragula": "5.0.3",
