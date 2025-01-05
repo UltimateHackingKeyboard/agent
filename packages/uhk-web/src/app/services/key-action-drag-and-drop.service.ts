@@ -203,10 +203,10 @@ export class KeyActionDragAndDropService implements OnDestroy {
         const clonedElement = this.lefButtonDownOptions.element.cloneNode(true) as SVGElement;
         clonedElement.setAttribute('dragging', 'true');
         if (box.width < 63) {
-            const translateX = translateKey + Math.abs(box.x) + 31.5 - box.width / 2;
-            clonedElement.setAttribute('transform', `translate(${translateX},${translateKey + Math.abs(box.y)})`);
+            const translateX = translateKey + (box.x * -1) + 31.5 - box.width / 2;
+            clonedElement.setAttribute('transform', `translate(${translateX},${translateKey + (box.y * -1)})`);
         } else {
-            clonedElement.setAttribute('transform', `translate(${translateKey + Math.abs(box.x)},${translateKey + Math.abs(box.y)})`);
+            clonedElement.setAttribute('transform', `translate(${translateKey + (box.x * -1)},${translateKey + (box.y * -1)})`);
         }
 
         this.lefButtonDownOptions.element.style.visibility = 'hidden';
@@ -380,7 +380,7 @@ function getLayerId(element: Element): number | undefined {
 }
 
 function convertKeyIdToNumber(keyId: string): number {
-    return parseInt(keyId.split('-').pop()) - 1;
+    return parseInt(keyId.split('-').pop());
 }
 
 function isDropElement(element: Element): boolean {
