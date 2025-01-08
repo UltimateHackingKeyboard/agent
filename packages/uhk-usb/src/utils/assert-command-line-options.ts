@@ -1,21 +1,26 @@
 import { CommandLineArgs } from 'uhk-common';
 
-const USB_PROPERTIES = ['vid', 'pid', 'usb-interface'];
-
 export function assertCommandLineOptions (options: CommandLineArgs) {
-    let anyUsbOption = false;
-    let allUsbOptions = true;
+    if (options['usb-interface'] !== null && options['usb-interface'] !== undefined) {
+        if (!options.vid && !options.pid) {
+            throw new Error('You have to set the vid, pid commandline options too');
+        }
 
-    for (const usbProperty of USB_PROPERTIES) {
-        if (options.hasOwnProperty(usbProperty)) {
-            anyUsbOption = true;
-        } else {
-            allUsbOptions = false;
+        if (!options.vid) {
+            throw new Error('You have to set the vid commandline options too');
+        }
+
+        if (!options.pid) {
+            throw new Error('You have to set the pid commandline options too');
         }
     }
 
-    if (anyUsbOption && !allUsbOptions) {
-        throw new Error('You have to set all of the following options: vid, pid, usb-interface');
+    if (options.vid && !options.pid) {
+        throw new Error('You have to set the pid commandline options too');
+    }
+
+    if (!options.vid && options.pid) {
+        throw new Error('You have to set the vid commandline options too');
     }
 
     if (options['report-id'] !== null && options['report-id'] !== undefined && options['no-report-id'] === true) {
