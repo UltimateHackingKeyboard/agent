@@ -584,7 +584,7 @@ export class UhkOperations {
     public async eraseUserConfig(): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Erase user configuration');
         const buffer = Buffer.from(Array(2 ** 15 - 64).fill(0xff));
-        await this.sendConfigToKeyboard(buffer, false);
+        await this.sendConfigToKeyboard(buffer, true);
         await this.writeConfigToEeprom(ConfigBufferId.stagingUserConfig);
     }
 
