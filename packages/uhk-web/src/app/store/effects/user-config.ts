@@ -21,6 +21,7 @@ import {
 } from 'uhk-common';
 
 import { EmptyAction } from '../actions/app';
+import { SaveConfigurationAction } from '../actions/device';
 import {
     ActionTypes,
     ApplyUserConfigurationFromFileAction,
@@ -70,6 +71,12 @@ export class UserConfigEffects {
             )
         )
     );
+
+    addNewPairedDevives$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.AddNewPairedDevicesToHostConnections),
+            map(() => new SaveConfigurationAction(true))
+        ));
 
     saveUserConfig$ = createEffect(() => this.actions$
         .pipe(

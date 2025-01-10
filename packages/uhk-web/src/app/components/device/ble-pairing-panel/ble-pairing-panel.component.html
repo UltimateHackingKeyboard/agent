@@ -1,0 +1,23 @@
+<div class="ble-pairing-panel-wrapper" role="alert">
+    <span *ngIf="state.state === BlePairingStates.Idle">
+        <ng-container *ngIf="state.nrOfNewBleAddresses === 1">
+            A new Bluetooth device has been paired to this UHK. <a routerLink="/device/host-connections" (click)="addNewPairedDevices.emit()">Add it to connections</a> so that you can switch to it.
+        </ng-container>
+
+        <ng-container *ngIf="state.nrOfNewBleAddresses > 1">
+            New Bluetooth devices have been paired to this UHK. <a routerLink="/device/host-connections" (click)="addNewPairedDevices.emit()">Add them to connections</a> so that you can switch to them.
+        </ng-container>
+    </span>
+
+    <span *ngIf="state.state === BlePairingStates.Adding || state.state === BlePairingStates.SavingToKeyboard">
+        Adding Bluetooth device(s)... <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+    </span>
+
+    <span *ngIf="state.state === BlePairingStates.AddingSuccess">
+        Bluetooth device(s) added.
+    </span>
+
+    <span *ngIf="state.state === BlePairingStates.TooMuchHostConnections">
+        Can't save the configuration because there are too many connections. You must delete {{ state.nrOfHostConnections - hostConnectionsMaxCount }} connections.
+    </span>
+</div>
