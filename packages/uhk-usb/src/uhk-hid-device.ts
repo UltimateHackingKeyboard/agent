@@ -437,36 +437,33 @@ export class UhkHidDevice {
      * @returns {Promise<Buffer>}
      */
     public async write(buffer: Buffer): Promise<Buffer> {
-        return new Promise<Buffer>(async (resolve, reject) => {
-            try {
-                const device = await this.getDevice();
-                const reportId = this.getReportId();
+        try {
+            const device = await this.getDevice();
+            const reportId = this.getReportId();
 
-                this.logService.setUsbReportId(reportId);
-                const sendData = this.getTransferData(buffer, reportId);
-                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData));
-                device.write(sendData);
-                await snooze(1);
-                const receivedData = device.readTimeout(1000);
-                const logString = bufferToString(receivedData);
-                this.logService.usb('[UhkHidDevice] USB[R]:', logString);
+            this.logService.setUsbReportId(reportId);
+            const sendData = this.getTransferData(buffer, reportId);
+            this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData));
+            device.write(sendData);
+            await snooze(1);
+            const receivedData = device.readTimeout(1000);
+            const logString = bufferToString(receivedData);
+            this.logService.usb('[UhkHidDevice] USB[R]:', logString);
 
-                if (reportId) {
-                    receivedData.shift();
-                }
-
-                if (receivedData[0] !== 0) {
-                    return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
-                }
-
-                return resolve(Buffer.from(receivedData));
-            } catch (err) {
-                this.logService.error('[UhkHidDevice] Transfer error: ', err);
-                this.close();
-                return reject(err);
+            if (reportId) {
+                receivedData.shift();
             }
 
-        });
+            if (receivedData[0] !== 0) {
+                throw new Error(`Communications error with UHK. Response code: ${receivedData[0]}`);
+            }
+
+            return Buffer.from(receivedData);
+        } catch (err) {
+            this.logService.error('[UhkHidDevice] Transfer error: ', err);
+            this.close();
+            throw err;
+        }
     }
 
     /**
