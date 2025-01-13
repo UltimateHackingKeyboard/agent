@@ -16,3 +16,7 @@ export class FirmwareUpgradeIpcResponse extends IpcResponse {
     userConfigSaved?: boolean;
     firmwareDowngraded?: boolean;
 }
+
+export interface AreBleAddressesPairedIpcResponse extends IpcResponse {
+    addresses: Record<string, boolean>;
+}

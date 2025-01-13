@@ -33,6 +33,7 @@ export enum UsbCommand {
     UnpairAll                = 0x1a,
     IsPaired                 = 0x1b,
     EnterPairingMode         = 0x1c,
+    EraseBleSettings         = 0x1d,
 }
 
 export enum EepromOperation {
