@@ -128,7 +128,7 @@ export function reducer(
                 const hostConnection = new HostConnection();
                 hostConnection.type = HostConnections.BLE;
                 hostConnection.address = bleAddress;
-                hostConnection.name = 'Bluetooth device';
+                hostConnection.name = generateHostConnectionName(userConfiguration.hostConnections, 'Bluetooth device');
 
                 userConfiguration.hostConnections.push(hostConnection);
             }
@@ -876,11 +876,14 @@ export function reducer(
         case UserConfig.ActionTypes.RenameHostConnection: {
             const payload = (action as UserConfig.RenameHostConnectionAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            const isDuplicated = state.userConfiguration.hostConnections.some((hostConnection, index) => {
+                return index !== payload.index && hostConnection.name === payload.newName;
+            });
 
             userConfiguration.hostConnections = userConfiguration.hostConnections.map((hostConnection, index) => {
                 if (index === payload.index) {
                     const connection = new HostConnection(hostConnection);
-                    connection.name = payload.newName;
+                    connection.name = isDuplicated ? connection.name : payload.newName;
 
                     return connection;
                 }
@@ -1097,7 +1100,7 @@ export function reducer(
                     const newHostConnection = new HostConnection();
                     newHostConnection.type = HostConnections.Dongle;
                     newHostConnection.address = bleAddress;
-                    newHostConnection.name = 'Dongle';
+                    newHostConnection.name = generateHostConnectionName(userConfiguration.hostConnections, 'Dongle');
 
                     userConfiguration.hostConnections[i] = newHostConnection;
                     break;
@@ -1467,4 +1470,23 @@ function addNewMacroToState(state: State): State {
         selectedMacroId: newMacro.id,
         isSelectedMacroNew: true
     };
+}
+
+function generateHostConnectionName(hostConnections: HostConnection[], baseName: string): string {
+    let iter: number = 1;
+    let name = baseName;
+
+    while (true) {
+        if (iter !== 1) {
+            name = `${baseName} ${iter}`;
+        }
+
+        const exists = hostConnections.find(host => host.name === name);
+
+        if (!exists) {
+            return name;
+        }
+
+        iter++;
+    }
 }
