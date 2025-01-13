@@ -21,7 +21,6 @@ import {
 } from 'uhk-common';
 
 import { EmptyAction } from '../actions/app';
-import { SaveConfigurationAction } from '../actions/device';
 import {
     ActionTypes,
     ApplyUserConfigurationFromFileAction,
@@ -49,9 +48,11 @@ import {
     NavigateTo
 } from '../actions/app';
 import {
+    BackupUserConfigurationAction,
+    CheckAreHostConnectionsPairedAction,
     HardwareModulesLoadedAction,
     ShowSaveToKeyboardButtonAction,
-    BackupUserConfigurationAction
+    SaveConfigurationAction,
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
@@ -175,6 +176,7 @@ export class UserConfigEffects {
                     const userConfig = getUserConfigFromDeviceResponse(data.userConfiguration);
                     this.logService.config('[UserConfigEffect] Loaded user configuration', userConfig);
                     result.push(new LoadUserConfigSuccessAction(userConfig));
+                    result.push(new CheckAreHostConnectionsPairedAction());
 
                     if (route.state
                         && !route.state.url.startsWith('/device/firmware')

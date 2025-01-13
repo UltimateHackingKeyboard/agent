@@ -3,6 +3,7 @@ import { emptyDir } from 'fs-extra';
 import { cloneDeep, isEqual } from 'lodash';
 import os from 'os';
 import {
+    AreBleAddressesPairedIpcResponse,
     ALL_UHK_DEVICES,
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
@@ -126,6 +127,15 @@ export class DeviceService {
                 this.logService.misc('[DeviceService] Cannot query udev info:', error);
             });
 
+        ipcMain.on(IpcEvents.device.areBleAddressesPaired, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.areBleAddressesPaired,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
         ipcMain.on(IpcEvents.device.changeKeyboardLayout, (...args: any[]) => {
             this.queueManager.add({
                 method: this.changeKeyboardLayout,
@@ -138,6 +148,15 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.deleteHostConnection, (...args: any[]) => {
             this.queueManager.add({
                 method: this.deleteHostConnection,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.eraseBleSettings, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.eraseBleSettings,
                 bind: this,
                 params: args,
                 asynchronous: true
@@ -234,6 +253,37 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.loadUserConfigHistory, this.loadUserConfigFromHistory.bind(this));
 
         logService.misc('[DeviceService] init success');
+    }
+
+    public async areBleAddressesPaired(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        this.logService.misc('[DeviceService] Check BLE Addresses are paired');
+
+        const response: AreBleAddressesPairedIpcResponse = {
+            success: true,
+            addresses: {},
+        };
+
+        try {
+            await this.stopPollUhkDevice();
+
+            const addresses: string[] = args[0];
+            for (const address of addresses) {
+                response.addresses[address] = await this.device.isPairedWith(convertBleStringToNumberArray(address));
+            }
+        }
+        catch (error) {
+            this.logService.error('[DeviceService] Check BLE Addresses pairing failed');
+            response.success = false;
+            response.error = {
+                message: error.message,
+            };
+        }
+        finally {
+            this.savedState = undefined;
+            this.startPollUhkDevice();
+        }
+
+        event.sender.send(IpcEvents.device.areBleAddressesPairedReply, response);
     }
 
     /**
@@ -768,6 +818,30 @@ export class DeviceService {
             this.savedState = undefined;
             this.startPollUhkDevice();
         }
+    }
+
+    public async eraseBleSettings(event: Electron.IpcMainEvent): Promise<void> {
+        this.logService.misc('[DeviceService] erase BLE Settings');
+        const response: IpcResponse = {
+            success: true,
+        };
+        try {
+            await this.stopPollUhkDevice();
+            await this.operations.eraseBleSettings();
+            this.logService.misc('[DeviceService] erase BLE settings success');
+        }
+        catch(error) {
+            this.logService.error('[DeviceService] erase BLE settings failed', error);
+            response.success = false;
+            response.error = {
+                message: error.message,
+            };
+        }
+        finally {
+            this.startPollUhkDevice();
+        }
+
+        event.sender.send(IpcEvents.device.eraseBleSettingsReply, response);
     }
 
     public async startDonglePairing(event: Electron.IpcMainEvent): Promise<void> {

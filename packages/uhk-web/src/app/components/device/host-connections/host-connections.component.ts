@@ -1,18 +1,20 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DragulaService } from '@ert78gb/ng2-dragula';
-import { faCircleNodes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faCircleNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { HostConnection } from 'uhk-common';
 
+import { EraseBleSettingsButtonState } from '../../../models';
+import { CheckAreHostConnectionsPairedAction, EraseBleSettingAction } from '../../../store/actions/device';
 import { DeleteHostConnectionAction } from '../../../store/actions/dongle-pairing.action';
 import {
     RenameHostConnectionAction,
     ReorderHostConnectionsAction,
     SetHostConnectionSwitchoverAction,
 } from '../../../store/actions/user-config';
-import { AppState, getHostConnections, isDonglePairing } from '../../../store/index';
+import { AppState, getEraseBleSettingsButtonState, getHostConnections, getHostConnectionPairState } from '../../../store/index';
 
 @Component({
     selector: 'host-connections',
@@ -24,18 +26,24 @@ import { AppState, getHostConnections, isDonglePairing } from '../../../store/in
 })
 export class HostConnectionsComponent implements OnInit, OnDestroy {
     faCircleNodes = faCircleNodes;
+    faSpinner = faSpinner;
     faTrash = faTrash;
+    faCircleExclamation = faCircleExclamation;
 
+    hostConnectionPairState: Record<string, boolean> = {};
+    eraseBleSettingsButtonState: EraseBleSettingsButtonState;
     hostConnections: HostConnection[] = [] as HostConnection[];
-    isDonglePairing: boolean;
     dragAndDropGroup = 'HOST_CONNECTION';
 
+    private hostConnectionPairStateSubscription: Subscription;
+    private eraseBleSettingsSubscription: Subscription;
     private hostConnectionsSubscription: Subscription;
-    private isDonglePairingSubscription: Subscription;
 
     constructor(private dragulaService: DragulaService,
                 private cdRef: ChangeDetectorRef,
                 private store: Store<AppState>) {
+
+        this.store.dispatch(new CheckAreHostConnectionsPairedAction());
 
         dragulaService.createGroup(this.dragAndDropGroup, {
             moves: (el, container, handle) => {
@@ -57,28 +65,36 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.eraseBleSettingsSubscription = this.store.select(getEraseBleSettingsButtonState)
+            .subscribe(eraseBleSettingsButtonState => {
+                this.eraseBleSettingsButtonState = eraseBleSettingsButtonState;
+                this.cdRef.markForCheck();
+            });
+        this.hostConnectionPairStateSubscription = this.store.select(getHostConnectionPairState)
+            .subscribe(hostConnectionPairState => {
+                this.hostConnectionPairState = hostConnectionPairState;
+                this.cdRef.markForCheck();
+            });
         this.hostConnectionsSubscription = this.store.select(getHostConnections)
             .subscribe(hostConnections => {
                 this.hostConnections = hostConnections;
-                this.cdRef.markForCheck();
-            });
-        this.isDonglePairingSubscription = this.store.select(isDonglePairing)
-            .subscribe(isDonglePairing => {
-                this.isDonglePairing = isDonglePairing;
                 this.cdRef.markForCheck();
             });
     }
 
     ngOnDestroy(): void {
         this.dragulaService.destroy(this.dragAndDropGroup);
-        if(this.hostConnectionsSubscription) {
-            this.hostConnectionsSubscription.unsubscribe();
-        }
-        this.isDonglePairingSubscription?.unsubscribe();
+        this.eraseBleSettingsSubscription?.unsubscribe();
+        this.hostConnectionPairStateSubscription?.unsubscribe();
+        this.hostConnectionsSubscription?.unsubscribe();
     }
 
     deleteHostConnection(index: number, hostConnection: HostConnection): void {
         this.store.dispatch(new DeleteHostConnectionAction({index, hostConnection}));
+    }
+
+    eraseBleSettings(): void {
+        this.store.dispatch(new EraseBleSettingAction());
     }
 
     renameHostConnection(index: number, newName: string): void {
@@ -94,5 +110,9 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
 
     setHostConnectionSwitchover(index: number, checked: boolean): void {
         this.store.dispatch(new SetHostConnectionSwitchoverAction({index, checked}));
+    }
+
+    showNotPairedTooltip(hostConnection: HostConnection): boolean {
+        return hostConnection.hasAddress() && !this.hostConnectionPairState[hostConnection.address];
     }
 }

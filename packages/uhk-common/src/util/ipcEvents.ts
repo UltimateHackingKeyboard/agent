@@ -22,9 +22,13 @@ export class AutoUpdate {
 }
 
 export class Device {
+    public static readonly areBleAddressesPaired = 'device-are-ble-addresses-paired';
+    public static readonly areBleAddressesPairedReply = 'device-are-ble-addresses-paired-reply';
     public static readonly changeKeyboardLayout = 'device-change-keyboard-layout';
     public static readonly changeKeyboardLayoutReply = 'device-change-keyboard-layout-reply';
     public static readonly dongleVersionInfoLoaded = 'device-dongle-version-info-loaded';
+    public static readonly eraseBleSettings = 'device-erase-ble-settings';
+    public static readonly eraseBleSettingsReply = 'device-erase-ble-settings-reply';
     public static readonly hardwareModulesLoaded = 'device-hardware-modules-loaded';
     public static readonly setPrivilegeOnLinux = 'set-privilege-on-linux';
     public static readonly setPrivilegeOnLinuxReply = 'set-privilege-on-linux-reply';

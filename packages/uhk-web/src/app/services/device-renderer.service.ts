@@ -2,6 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
 import {
+    AreBleAddressesPairedIpcResponse,
     ChangeKeyboardLayoutIpcResponse,
     DeviceConnectionState,
     DeviceVersionInformation,
@@ -33,8 +34,10 @@ import {
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ChangeKeyboardLayoutReplyAction,
+    CheckAreHostConnectionsPairedReplyAction,
     ConnectionStateChangedAction,
     DongleVersionInfoLoadedAction,
+    EraseBleSettingReplyAction,
     CurrentlyUpdateSkipModuleAction,
     CurrentlyUpdatingModuleAction,
     HardwareModulesLoadedAction,
@@ -65,6 +68,10 @@ export class DeviceRendererService {
         this.logService.misc('[DeviceRendererService] init success ');
     }
 
+    areBleAddressesPaired(addresses: string[]): void {
+        this.ipcRenderer.send(IpcEvents.device.areBleAddressesPaired, addresses);
+    }
+
     changeKeyboardLayout(layout: KeyboardLayout, hardwareConfiguration: HardwareConfiguration): void {
         this.ipcRenderer.send(IpcEvents.device.changeKeyboardLayout, layout, hardwareConfiguration.toJsonObject());
     }
@@ -75,6 +82,10 @@ export class DeviceRendererService {
             index: data.index,
             address: data.hostConnection.address,
         });
+    }
+
+    eraseBleSettings(): void {
+        this.ipcRenderer.send(IpcEvents.device.eraseBleSettings);
     }
 
     setPrivilegeOnLinux(): void {
@@ -137,6 +148,10 @@ export class DeviceRendererService {
     }
 
     private registerEvents(): void {
+        this.ipcRenderer.on(IpcEvents.device.areBleAddressesPairedReply, (event: string, response: AreBleAddressesPairedIpcResponse) => {
+            this.dispachStoreAction(new CheckAreHostConnectionsPairedReplyAction(response));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.changeKeyboardLayoutReply, (event: string, response: ChangeKeyboardLayoutIpcResponse) => {
             this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));
         });
@@ -151,6 +166,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.deleteHostConnectionFailed, (event: string, message: string) => {
             this.dispachStoreAction(new DeleteHostConnectionFailedAction(message));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.eraseBleSettingsReply, (event: string, response: IpcResponse) => {
+            this.dispachStoreAction(new EraseBleSettingReplyAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.hardwareModulesLoaded, (event: string, response: HardwareModules) => {
