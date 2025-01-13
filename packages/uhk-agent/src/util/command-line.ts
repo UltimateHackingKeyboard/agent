@@ -66,7 +66,7 @@ const sections: commandLineUsage.Section[] = [
             },
             {
                 name: 'pid',
-                description: 'Use the specified USB product id. If you set it you have to set the vid and usb-interface too.',
+                description: 'Use the specified USB product id. If you set it you have to set the vid too.',
                 type: Number
             },
             {
@@ -112,7 +112,7 @@ const sections: commandLineUsage.Section[] = [
             },
             {
                 name: 'vid',
-                description: 'Use the specified USB vendor id. If you set it you have to set the pid and usb-interface too.',
+                description: 'Use the specified USB vendor id. If you set it you have to set the pid too.',
                 type: Number
             }
         ]
