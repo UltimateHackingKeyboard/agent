@@ -6,6 +6,7 @@ export * from './delete-host-connection-payload';
 export * from './device-ui-states';
 export * from './dongle-pairing-state';
 export * from './duplicate-macro-action-payload';
+export * from './erase-ble-settings-button-state';
 export * from './exchange-keys-action.model';
 export * from './firmware-upgrade-state';
 export * from './firmware-upgrade-steps';
