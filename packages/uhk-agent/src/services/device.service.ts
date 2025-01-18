@@ -851,18 +851,16 @@ export class DeviceService {
 
     public async stopPollUhkDevice(): Promise<void> {
         this.logService.misc('[DeviceService] stop poll UHK Device');
-        return new Promise<void>(async resolve => {
-            this._pollerAllowed = false;
+        this._pollerAllowed = false;
 
-            while (true) {
-                if (!this._uhkDevicePolling) {
-                    this.logService.misc('[DeviceService] stopped poll UHK Device');
-                    return resolve();
-                }
-
-                await snooze(100);
+        while (true) {
+            if (!this._uhkDevicePolling) {
+                this.logService.misc('[DeviceService] stopped poll UHK Device');
+                return;
             }
-        });
+
+            await snooze(100);
+        }
     }
 
     private async changeKeyboardLayout(event: Electron.IpcMainEvent, args): Promise<void> {
