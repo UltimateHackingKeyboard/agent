@@ -3,6 +3,7 @@ import {
     BackupUserConfiguration,
     BackupUserConfigurationInfo,
     ConfigSizesInfo,
+    defaultHardwareModules,
     Dongle,
     getDefaultHalvesInfo,
     HalvesInfo,
@@ -69,13 +70,7 @@ export const initialState: State = {
     saveToKeyboard: initProgressButtonState,
     modifiedConfigWhileSaved: false,
     savingToKeyboard: false,
-    modules: {
-        moduleInfos: [],
-        rightModuleInfo: {
-            firmwareVersion: '',
-            modules: {}
-        }
-    },
+    modules: defaultHardwareModules(),
     restoringUserConfiguration: false,
     backupUserConfiguration: {
         info: BackupUserConfigurationInfo.Unknown
@@ -139,7 +134,7 @@ export function reducer(state = initialState, action: Action): State {
                 halvesInfo: data.halvesInfo,
                 leftHalfBootloaderActive: data.leftHalfBootloaderActive,
                 leftHalfDetected: data.leftHalfDetected,
-                modules: data.hardwareModules,
+                modules: data.hardwareModules || defaultHardwareModules(),
                 multiDevice: data.multiDevice,
                 udevRuleInfo: data.udevRulesInfo,
             };
@@ -234,13 +229,13 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.UpdateFirmwareFailed:
             return {
                 ...state,
-                modules: (action as Device.UpdateFirmwareFailedAction).payload.modules
+                modules: (action as Device.UpdateFirmwareFailedAction).payload.modules || defaultHardwareModules(),
             };
 
         case Device.ActionTypes.ModulesInfoLoaded:
             return {
                 ...state,
-                modules: (action as Device.HardwareModulesLoadedAction).payload
+                modules: (action as Device.HardwareModulesLoadedAction).payload || defaultHardwareModules(),
             };
 
         case Device.ActionTypes.ResetUserConfiguration:

@@ -11,3 +11,13 @@ export interface HardwareModules {
     moduleInfos?: ModuleInfo[];
     rightModuleInfo?: RightModuleInfo;
 }
+
+export function defaultHardwareModules() {
+    return {
+        moduleInfos: [],
+        rightModuleInfo: {
+            firmwareVersion: '',
+            modules: {}
+        }
+    };
+}
