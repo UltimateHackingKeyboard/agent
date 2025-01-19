@@ -67,7 +67,8 @@ import {
     LayerTabComponent,
     MacroTabComponent,
     MouseTabComponent,
-    NoneTabComponent
+    NoneTabComponent,
+    SpecialTabComponent,
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
@@ -223,6 +224,7 @@ import appInitFactory from './services/app-init-factory';
         MacroTabComponent,
         MouseTabComponent,
         NoneTabComponent,
+        SpecialTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
         MacroEditComponent,

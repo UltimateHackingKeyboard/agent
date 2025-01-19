@@ -50,6 +50,7 @@ enum TabName {
     Keypress,
     Layer,
     Mouse,
+    Special,
     Macro,
     Keymap,
     None
@@ -109,6 +110,11 @@ export class PopoverComponent implements OnChanges {
             tabName: TabName.Mouse,
             icon: faMousePointer,
             text: 'Mouse'
+        },
+        {
+            tabName: TabName.Special,
+            icon: faMousePointer,
+            text: 'Special'
         },
         {
             tabName: TabName.Macro,
