@@ -66,26 +66,26 @@
 
             <div *ngIf="firmwareUpgradeFailed" class="alert alert-danger" role="alert">
                 <p>
-                    {{ upgradeType }} update failed. Reconnect your UHK over USB and retry.
+                    {{ upgradeType }} update failed. Please try the following steps:
                 </p>
 
                 <ul>
                     <li>
-                        Reconnect your UHK over USB and retry.
+                        Disconnect and reconnect your UHK cable directly to a USB port on your computer and retry the update
                     </li>
                     <li>
-                        If your UHK is connected via a USB hub, docking station, or KVM switch, connect it directly to your computer.
+                        If using a USB hub, docking station, or KVM switch, connect the keyboard directly to your computer instead
                     </li>
                     <li>
-                        It might help to join the keyboard halves during the update.
+                        Close any virtual machine software like VMware or VirtualBox that might interfere with USB devices
                     </li>
                     <li>
-                        If you're running any application that might capture USB devices, such as VMware or VirtualBox, please stop them.
+                        If your UHK got bricked during the update, <a class="link-github" href="https://ultimatehackingkeyboard.com/knowledgebase?q=unbrick" externalUrl>unbrick it</a>
                     </li>
                     <li>
-                        If you've tried the above and the update still keeps failing, please
-                        <a class="link-github" [href]="firmwareGithubIssueUrl" externalUrl>create a GitHub issue</a>,
-                        and attach the update log.
+                        If the issue persists after trying these steps, please
+                        <a class="link-github" href="https://github.com/UltimateHackingKeyboard/agent/issues/new" externalUrl>submit a GitHub issue</a>,
+                        with your update log attached
                     </li>
                 </ul>
             </div>
