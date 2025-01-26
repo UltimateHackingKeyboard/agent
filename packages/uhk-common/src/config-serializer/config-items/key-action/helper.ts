@@ -1,9 +1,11 @@
 import { UhkBuffer } from '../../uhk-buffer.js';
 
+import { ConnectionsAction } from './connections-action.js';
 import { Macro } from '../macro.js';
 import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { KeystrokeAction } from './keystroke-action.js';
+import { OtherAction } from './other-action.js';
 import { SwitchLayerAction } from './switch-layer-action.js';
 import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action.js';
 import { MouseAction } from './mouse-action.js';
@@ -33,6 +35,7 @@ export class Helper {
             case 6:
             case 7:
             case 8:
+            case 9:
                 return this.fromUhkBufferV1(buffer, macros, serialisationInfo);
 
             default:
@@ -54,6 +57,8 @@ export class Helper {
         }
 
         switch (keyActionFirstByte) {
+            case KeyActionId.ConnectionsAction:
+                return new ConnectionsAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.NoneAction:
                 return new NoneAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.SwitchLayerAction:
@@ -62,6 +67,8 @@ export class Helper {
                 return new UnresolvedSwitchKeymapAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.MouseAction:
                 return new MouseAction().fromBinary(buffer, serialisationInfo);
+            case KeyActionId.OtherAction:
+                return new OtherAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.PlayMacroAction:
                 return new PlayMacroAction().fromBinary(buffer, serialisationInfo, macros);
             default:
@@ -71,7 +78,9 @@ export class Helper {
 
     static fromKeyAction(keyAction: KeyAction): KeyAction {
         let newKeyAction: KeyAction;
-        if (keyAction instanceof KeystrokeAction) {
+        if (keyAction instanceof ConnectionsAction) {
+            newKeyAction = new ConnectionsAction(keyAction);
+        } else if (keyAction instanceof KeystrokeAction) {
             newKeyAction = new KeystrokeAction(keyAction);
         } else if (keyAction instanceof SwitchLayerAction) {
             newKeyAction = new SwitchLayerAction(keyAction);
@@ -83,6 +92,8 @@ export class Helper {
             newKeyAction = new PlayMacroAction(keyAction);
         } else if (keyAction instanceof NoneAction) {
             newKeyAction = new NoneAction(keyAction);
+        } else if (keyAction instanceof OtherAction) {
+            newKeyAction = new OtherAction(keyAction);
         }
 
         return newKeyAction;
@@ -98,6 +109,7 @@ export class Helper {
             case 6:
             case 7:
             case 8:
+            case 9:
                 return this.fromJSONObjectV1(keyAction, macros, serialisationInfo);
 
             default:
@@ -111,6 +123,8 @@ export class Helper {
         }
 
         switch (keyAction.keyActionType) {
+            case keyActionType.ConnectionsAction:
+                return new ConnectionsAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.KeystrokeAction: {
                 const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction, serialisationInfo);
                 if (isValidKeystrokeAction(keystrokeAction)) {
@@ -127,6 +141,8 @@ export class Helper {
                 return new MouseAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.PlayMacroAction:
                 return new PlayMacroAction().fromJsonObject(keyAction, serialisationInfo, macros);
+            case keyActionType.OtherAction:
+                return new OtherAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.NoneAction:
                 return new NoneAction().fromJsonObject(keyAction, serialisationInfo);
             default:

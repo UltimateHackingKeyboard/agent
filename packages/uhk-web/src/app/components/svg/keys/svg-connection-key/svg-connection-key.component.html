@@ -1,0 +1,18 @@
+<svg:use [attr.xlink:href]="icon" [attr.width]="iconWidth" [attr.height]="iconWidth" [attr.x]="iconX" y="20">
+</svg:use>
+<svg:text
+    [attr.x]="iconX + iconWidth + firstTextOffset"
+    [attr.y]="0"
+    [attr.text-anchor]="'middle'"
+    [attr.font-size]="25"
+    stroke="none">
+    <tspan dy="40"> {{ firstText }} </tspan>
+</svg:text>
+<svg:text
+    [attr.x]="50"
+    [attr.y]="0"
+    [attr.text-anchor]="'middle'"
+    [attr.font-size]="fontSize"
+    stroke="none">
+    <tspan dy="80"> {{ secondText }} </tspan>
+</svg:text>

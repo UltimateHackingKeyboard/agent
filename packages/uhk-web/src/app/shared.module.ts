@@ -76,6 +76,7 @@ import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './
 import { SecondSideMenuContainerComponent, SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
+    SvgConnectionKeyComponent,
     SvgIconTextKeyComponent,
     SvgKeyboardKeyComponent,
     SvgKeystrokeKeyComponent,
@@ -194,6 +195,7 @@ import appInitFactory from './services/app-init-factory';
         KeymapHeaderComponent,
         NotificationComponent,
         DonglePairingPanelComponent,
+        SvgConnectionKeyComponent,
         SvgIconTextKeyComponent,
         SvgKeyboardKeyComponent,
         SvgKeystrokeKeyComponent,

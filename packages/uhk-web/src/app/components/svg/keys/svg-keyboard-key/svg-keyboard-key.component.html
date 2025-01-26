@@ -55,6 +55,16 @@
            [attr.font-family]="'Helvetica'"
            [attr.fill]="textColor"
     >
+        <svg  *ngSwitchCase="enumLabelTypes.ConnectionKey" [attr.viewBox]="'0 0 100 100'"
+             [attr.width]="svgKey.width"
+             [attr.height]="svgKey.height">
+            <svg:g svg-connection-key
+                   [height]="svgKey.height"
+                   [width]="svgKey.width"
+                   [keyAction]="labelSource"
+            >
+            </svg:g>
+        </svg>
         <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
                [height]="svgKey.height"
                [width]="svgKey.width"

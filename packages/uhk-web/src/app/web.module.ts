@@ -20,7 +20,7 @@ import { CustomRouterStateSerializer } from './store/router-util';
             serializer: CustomRouterStateSerializer
         }),
         StoreDevtoolsModule.instrument({
-            maxAge: 10
+            maxAge: 25
         }),
         EffectsModule.forRoot(effects)
     ],
