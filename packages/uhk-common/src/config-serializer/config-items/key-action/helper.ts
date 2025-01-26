@@ -4,6 +4,7 @@ import { Macro } from '../macro.js';
 import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { KeystrokeAction } from './keystroke-action.js';
+import { SpecialAction } from './special-action.js';
 import { SwitchLayerAction } from './switch-layer-action.js';
 import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action.js';
 import { MouseAction } from './mouse-action.js';
@@ -64,6 +65,8 @@ export class Helper {
                 return new MouseAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.PlayMacroAction:
                 return new PlayMacroAction().fromBinary(buffer, serialisationInfo, macros);
+            case KeyActionId.SpecialAction:
+                return new SpecialAction().fromBinary(buffer, serialisationInfo);
             default:
                 throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
         }
@@ -83,6 +86,8 @@ export class Helper {
             newKeyAction = new PlayMacroAction(keyAction);
         } else if (keyAction instanceof NoneAction) {
             newKeyAction = new NoneAction(keyAction);
+        } else if (keyAction instanceof SpecialAction) {
+            newKeyAction = new SpecialAction(keyAction);
         }
 
         return newKeyAction;
@@ -127,6 +132,8 @@ export class Helper {
                 return new MouseAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.PlayMacroAction:
                 return new PlayMacroAction().fromJsonObject(keyAction, serialisationInfo, macros);
+            case keyActionType.SpecialAction:
+                return new SpecialAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.NoneAction:
                 return new NoneAction().fromJsonObject(keyAction, serialisationInfo);
             default:

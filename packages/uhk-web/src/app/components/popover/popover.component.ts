@@ -43,7 +43,7 @@ import {
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
 import { SelectOptionData } from '../../models/select-option-data';
-import { faSquareA } from '../../custom-fa-icons';
+import { faSquareA, faSparkle } from '../../custom-fa-icons';
 import { LayerOption } from '../../models';
 
 enum TabName {
@@ -113,7 +113,7 @@ export class PopoverComponent implements OnChanges {
         },
         {
             tabName: TabName.Special,
-            icon: faMousePointer,
+            icon: faSparkle,
             text: 'Special'
         },
         {

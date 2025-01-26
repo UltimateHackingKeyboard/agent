@@ -1,6 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { KeyAction } from 'uhk-common';
+import {
+    ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+} from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { HostConnection, KeyAction, SpecialAction } from 'uhk-common';
 
+import { AppState, getHostConnections } from '../../../../store/index';
 import { Tab } from '../tab';
 
 @Component({
@@ -9,11 +21,34 @@ import { Tab } from '../tab';
     styleUrls: ['./special-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SpecialTabComponent extends Tab implements OnChanges {
+export class SpecialTabComponent extends Tab implements OnChanges, OnDestroy, OnInit {
     @Input() defaultKeyAction: KeyAction;
 
-    ngOnChanges(changes: SimpleChanges): void {
+    pages = ['Connections', 'Sleep mode'];
+    selectedPageIndex = 0;
+    hostConnections: HostConnection[] = [];
 
+    private hostConnectionsSubscription: Subscription;
+
+    constructor(private store: Store<AppState>, private cdRef: ChangeDetectorRef) {
+        super();
+    }
+
+    ngOnInit(): void {
+        this. hostConnectionsSubscription = this.store.select(getHostConnections)
+            .subscribe((connections: HostConnection[]) => {
+                this.hostConnections = connections;
+                this.cdRef.detectChanges();
+            });
+    }
+
+    ngOnDestroy(): void {
+        this.hostConnectionsSubscription?.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.fromKeyAction(this.defaultKeyAction);
+        this.validAction.emit(this.keyActionValid());
     }
 
     keyActionValid(): boolean {
@@ -21,10 +56,22 @@ export class SpecialTabComponent extends Tab implements OnChanges {
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
-        return true;
+        if (!(keyAction instanceof SpecialAction)) {
+            return false;
+        }
     }
 
     toKeyAction(): KeyAction {
         return this.defaultKeyAction;
+    }
+
+    changePage(index: number) {
+        if (index < -1 || index > 3) {
+            console.error(`Invalid index error: ${index}`);
+            return;
+        }
+
+        this.selectedPageIndex = index;
+        this.validAction.emit(false);
     }
 }
