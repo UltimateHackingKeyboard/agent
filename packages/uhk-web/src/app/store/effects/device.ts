@@ -165,16 +165,14 @@ export class DeviceEffects {
 
                 return prevConnected === currConnected &&
                     prevAction.payload.hasPermission === currAction.payload.hasPermission &&
-                    prevAction.payload.communicationInterfaceAvailable === currAction.payload.communicationInterfaceAvailable &&
-                    prevAction.payload.udevRulesInfo === currAction.payload.udevRulesInfo;
+                    prevAction.payload.communicationInterfaceAvailable === currAction.payload.communicationInterfaceAvailable;
             }),
             mergeMap(([action, route, connected]) => {
                 const payload = action.payload;
 
                 if (connected
                     && payload.hasPermission
-                    && payload.communicationInterfaceAvailable
-                    && (payload.udevRulesInfo === UdevRulesInfo.Ok || payload.udevRulesInfo === UdevRulesInfo.UdevDirNotExists)) {
+                    && payload.communicationInterfaceAvailable) {
 
                     const result: Array<Action> = [
                         new ReadConfigSizesAction(),
