@@ -55,7 +55,7 @@ export enum DevicePropertyIds {
     Uptime = 5,
     GitTag = 6,
     GitRepo = 7,
-    FirmwareChecksum = 8,
+    BuiltFirmwareChecksumByModuleId = 8,
     BleAddress = 9,
     PairedRightPeerBleAddress = 10,
     PairingStatus = 11,
@@ -79,7 +79,7 @@ export enum ModulePropertyId {
     protocolVersions = 0,
     GitTag = 1,
     GitRepo = 2,
-    FirmwareChecksum = 3
+    RemoteFirmwareChecksumBySlotId = 3
 }
 
 export enum PairIds {

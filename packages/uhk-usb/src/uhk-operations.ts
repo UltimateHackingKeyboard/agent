@@ -21,9 +21,12 @@ import {
     UhkBuffer,
     UhkDeviceProduct,
     UhkModule,
+    UHK_MODULE_IDS_TYPE,
+    UHK_MODULE_IDS,
     UNKNOWN_DEVICE,
 } from 'uhk-common';
 import { promisify } from 'util';
+import semver from 'semver';
 import {
     ConfigBufferId,
     DevicePropertyIds,
@@ -448,11 +451,11 @@ export class UhkOperations {
         return this.getModuleProperty(arg).then(readUhkResponseAs0EndString);
     }
 
-    public async getModuleFirmwareChecksum(module: ModuleSlotToId): Promise<string> {
+    public async getModuleRemoteFirmwareChecksum(module: ModuleSlotToId): Promise<string> {
         const moduleSlotName = getSlotIdName(module);
         this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" firmware checksum`);
 
-        return this.getModulePropertyAsString({ module, property: ModulePropertyId.FirmwareChecksum });
+        return this.getModulePropertyAsString({ module, property: ModulePropertyId.RemoteFirmwareChecksumBySlotId });
     }
 
     public async getModuleFirmwareRepoInfo(module: ModuleSlotToId): Promise<FirmwareRepoInfo> {
@@ -490,7 +493,7 @@ export class UhkOperations {
             if (includeFirmwareChecksum) {
                 moduleVersionInfo = {
                     ...moduleVersionInfo,
-                    firmwareChecksum: await this.getModuleFirmwareChecksum(module),
+                    remoteFirmwareChecksum: await this.getModuleRemoteFirmwareChecksum(module),
                 };
             }
 
@@ -522,7 +525,7 @@ export class UhkOperations {
         };
     }
 
-    public async getDeviceVersionInfo(): Promise<DeviceVersionInformation> {
+    public async getDeviceVersionInfo(moduleId: UHK_MODULE_IDS_TYPE = UHK_MODULE_IDS.RIGHT_HALF): Promise<DeviceVersionInformation> {
         // TODO: read device name from UHK Device
         this.logService.usbOps('[DeviceOperation] USB[T]: Device information');
 
@@ -539,9 +542,13 @@ export class UhkOperations {
             };
 
         if (isDeviceProtocolSupportFirmwareChecksum(deviceVersionInformation.deviceProtocolVersion)) {
+            if (semver.lt(deviceVersionInformation.deviceProtocolVersion, '4.14.1')) {
+                moduleId = UHK_MODULE_IDS.RIGHT_HALF;
+            }
+
             deviceVersionInformation = {
                 ...deviceVersionInformation,
-                firmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum, [0])),
+                builtFirmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.BuiltFirmwareChecksumByModuleId, [moduleId])),
             };
         }
 

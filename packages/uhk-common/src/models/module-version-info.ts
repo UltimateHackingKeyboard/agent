@@ -1,6 +1,7 @@
 import { FirmwareRepoInfo } from './firmware-repo-info.js';
-import { FirmwareVersionInfo } from './firmware-version-info.js';
+import { FirmwareVersion } from './firmware-version.js';
 
-export interface ModuleVersionInfo extends FirmwareRepoInfo, FirmwareVersionInfo {
+export interface ModuleVersionInfo extends FirmwareRepoInfo, FirmwareVersion {
     moduleProtocolVersion?: string;
+    remoteFirmwareChecksum?: string;
 }

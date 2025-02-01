@@ -42,6 +42,7 @@ import {
     UHK_80_DEVICE_LEFT,
     UHK_DEVICE_IDS,
     UHK_DONGLE,
+    UHK_MODULE_IDS,
     UHK_MODULES,
     UpdateFirmwareData,
     UploadFileData,
@@ -342,9 +343,9 @@ export class DeviceService {
             if (isFirmwareChecksumSupported) {
                 for (const moduleInfo of hardwareModules.moduleInfos) {
                     const moduleId = moduleInfo.module.id;
-                    const md5 = readUhkResponseAs0EndString(await this.operations.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum, [moduleId]));
+                    const builtFirmwareChecksum = readUhkResponseAs0EndString(await this.operations.getRightModuleProperty(DevicePropertyIds.BuiltFirmwareChecksumByModuleId, [moduleId]));
                     hardwareModules.rightModuleInfo.modules[moduleId] = {
-                        md5
+                        builtFirmwareChecksum
                     };
                 }
             }
@@ -420,16 +421,16 @@ export class DeviceService {
                 try {
                     dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
                     let dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
-                    let versionInfo = await dongleOperations.getDeviceVersionInfo();
-                    this.logService.misc('[DeviceService] Current Dongle firmware checksum:',
-                        versionInfo.firmwareChecksum);
+                    let versionInfo = await dongleOperations.getDeviceVersionInfo(UHK_MODULE_IDS.DONGLE);
+                    this.logService.misc('[DeviceService] Current Dongle built firmware checksum:',
+                        versionInfo.builtFirmwareChecksum);
 
                     const deviceConfig = findDeviceConfigInFirmwareJson(UHK_DONGLE, packageJson);
 
                     this.logService.misc('[DeviceService] New Dongle firmware checksum:',
                         deviceConfig.md5);
 
-                    if (data.forceUpgrade || versionInfo.firmwareChecksum !== deviceConfig.md5) {
+                    if (data.forceUpgrade || versionInfo.builtFirmwareChecksum !== deviceConfig.md5) {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, UHK_DONGLE.name);
                         await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE);
                         this.logService.misc('[DeviceService] Waiting for keyboard');
@@ -440,7 +441,7 @@ export class DeviceService {
                         if (dongleHid) {
                             dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
                             dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
-                            versionInfo = await dongleOperations.getDeviceVersionInfo();
+                            versionInfo = await dongleOperations.getDeviceVersionInfo(UHK_MODULE_IDS.DONGLE);
                             event.sender.send(IpcEvents.device.dongleVersionInfoLoaded, versionInfo);
                         }
                     }
@@ -462,14 +463,14 @@ export class DeviceService {
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-            this.logService.misc('[DeviceService] Current Device right firmware checksum:',
-                hardwareModules.rightModuleInfo.firmwareChecksum);
+            this.logService.misc('[DeviceService] Current Device right built firmware checksum:',
+                hardwareModules.rightModuleInfo.builtFirmwareChecksum);
 
             const deviceConfig = findDeviceConfigInFirmwareJson(uhkDeviceProduct, packageJson);
             this.logService.misc('[DeviceService] New Device right firmware checksum:',
                 deviceConfig.md5);
 
-            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareChecksum !== deviceConfig.md5) {
+            if (data.forceUpgrade || hardwareModules.rightModuleInfo.builtFirmwareChecksum !== deviceConfig.md5) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
                 await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
@@ -497,15 +498,18 @@ export class DeviceService {
             const leftModuleFirmwareInfo = hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
 
             this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
-            this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
+            this.logService.misc('[DeviceService] Left module remote firmware checksum: ', leftModuleInfo.info.remoteFirmwareChecksum);
             if (leftModuleFirmwareInfo) {
-                this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.md5);
+                this.logService.misc('[DeviceService] Left module built firmware checksum: ', leftModuleFirmwareInfo.builtFirmwareChecksum);
             }
 
             const isLeftModuleFirmwareSame = isSameFirmware(
-                leftModuleInfo.info,
                 {
-                    firmwareChecksum: leftModuleFirmwareInfo?.md5,
+                    firmwareChecksum: leftModuleInfo.info.remoteFirmwareChecksum,
+                    firmwareVersion: leftModuleInfo.info.firmwareVersion
+                },
+                {
+                    firmwareChecksum: leftModuleFirmwareInfo?.builtFirmwareChecksum,
                     firmwareVersion: packageJson.firmwareVersion
                 }
             );
@@ -549,17 +553,20 @@ export class DeviceService {
                         // Left half upgrade mandatory, it is running before the other modules upgrade.
                     } else if (moduleInfo.module.firmwareUpgradeSupported) {
                         this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
-                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current firmware checksum:`, moduleInfo.info.firmwareChecksum);
+                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current remote firmware checksum:`, moduleInfo.info.remoteFirmwareChecksum);
 
                         const moduleFirmwareInfo = hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
                         if (moduleFirmwareInfo) {
-                            this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.md5);
+                            this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new built firmware checksum:`, moduleFirmwareInfo.builtFirmwareChecksum);
                         }
 
                         const isModuleFirmwareSame = isSameFirmware(
-                            moduleInfo.info,
                             {
-                                firmwareChecksum: moduleFirmwareInfo?.md5,
+                                firmwareChecksum: moduleInfo.info.remoteFirmwareChecksum,
+                                firmwareVersion: moduleInfo.info.firmwareVersion
+                            },
+                            {
+                                firmwareChecksum: moduleFirmwareInfo?.builtFirmwareChecksum,
                                 firmwareVersion: packageJson.firmwareVersion
                             }
                         );
@@ -942,8 +949,7 @@ export class DeviceService {
                             if (isDeviceSupportWirelessUSBCommands
                                 && !state.dongle.multiDevice
                                 && !state.dongle.bootloaderActive
-                                && state.dongle.serialNumber
-                                && state.dongle.serialNumber !== this.savedState?.dongle?.serialNumber) {
+                                && state.dongle.serialNumber) {
 
                                 const dongle = await getCurrentUhkDongleHID();
                                 let dongleUhkDevice: UhkHidDevice;
