@@ -1,9 +1,11 @@
 export const UHK_MODULE_IDS = Object.freeze({
+    RIGHT_HALF: 0,
     LEFT_HALF: 1,
     LEFT_KEY_CLUSTER: 2,
     RIGHT_TRACKBALL: 3,
     RIGHT_TRACKPOINT: 4,
     RIGHT_TOUCHPAD: 5,
+    DONGLE: 254
 });
 
 export type UHK_MODULE_IDS_KEY_TYPE = keyof typeof UHK_MODULE_IDS;

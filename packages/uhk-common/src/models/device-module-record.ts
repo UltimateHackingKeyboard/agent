@@ -1,5 +1,5 @@
 export interface DeviceModule {
-    md5: string;
+    builtFirmwareChecksum: string;
 }
 
 export interface DeviceModuleRecord extends Record<number, DeviceModule>{

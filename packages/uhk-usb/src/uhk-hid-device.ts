@@ -736,7 +736,7 @@ export class UhkHidDevice {
             smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
         };
 
-        this.logService.misc('[UhkHidDevice] protocol versions: ' + JSON.stringify(this._protocolVersions));
+        this.logService.misc(`[UhkHidDevice] productId: ${this._deviceInfo.productId} protocol versions: ${JSON.stringify(this._protocolVersions)}`);
 
         return this._protocolVersions;
     }

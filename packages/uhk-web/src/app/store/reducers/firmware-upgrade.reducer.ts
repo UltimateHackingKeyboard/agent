@@ -332,7 +332,7 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
             const firmwareModuleInfo =  hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
             const stateModule = findStateModule(moduleInfo.module.name);
 
-            if (!firmwareModuleInfo || moduleInfo.info.firmwareVersion === hardwareModules.rightModuleInfo?.firmwareVersion || firmwareModuleInfo.md5 !== moduleInfo.info.firmwareChecksum) {
+            if (!firmwareModuleInfo || moduleInfo.info.firmwareVersion === hardwareModules.rightModuleInfo?.firmwareVersion || firmwareModuleInfo.builtFirmwareChecksum !== moduleInfo.info.remoteFirmwareChecksum) {
                 modules.push({
                     moduleName: moduleInfo.module.name,
                     firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
