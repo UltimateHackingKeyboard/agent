@@ -74,7 +74,7 @@
     "ngrx-store-freeze": "0.2.4",
     "ngx-clipboard": "16.0.0",
     "ngx-color-picker": "16.0.0",
-    "nouislider": "15.7.1",
+    "nouislider": "15.8.1",
     "rxjs": "7.8.1",
     "ts-keycode-enum": "1.0.6",
     "uhk-common": "1.0.0",
