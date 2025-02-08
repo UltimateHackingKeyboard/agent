@@ -10,7 +10,6 @@ import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from '@ert78gb/ng2-dragula';
 import { ColorPickerModule } from 'ngx-color-picker';
-import { NgxResize } from '@ert78gb/ngx-resize';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -61,6 +60,7 @@ import {
 } from './components/macro';
 import { NotificationComponent } from './components/notification';
 import { PopoverComponent } from './components/popover';
+import { NgxResize } from './components/resize';
 import {
     KeymapTabComponent,
     KeypressTabComponent,
