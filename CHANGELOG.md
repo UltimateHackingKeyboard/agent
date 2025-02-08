@@ -6,6 +6,19 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [5.1.0] - 2025-02-08
+
+Firmware: 12.3.3 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v12.3.3)] | Device Protocol: 4.**14.1** | User Config: 8.3.0 | Hardware Config: 1.0.0
+
+- Display notification about newly paired BLE devices and add them to host connections.
+- Ensure unique host connection names.
+- Compare the checksum of the UHK 80 and dongle devices.
+- Add switchover tooltip on the Connections page.
+- Support custom udev file path on Linux.
+- Don't crash when can't read the hardware modules or when the module state is undefined.
+- Improve firmware failed instructions.
+- Make the `--usb-interface` command line argument optional.
+
 ## [5.0.2] - 2025-01-05
 
 Firmware: 12.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v12.2.0)] | Device Protocol: 4.11.0 | User Config: 8.3.0 | Hardware Config: 1.0.0
