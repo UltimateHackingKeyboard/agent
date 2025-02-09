@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { IOutputData } from 'angular-split';
+import { SplitGutterInteractionEvent } from 'angular-split';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 
@@ -235,7 +235,7 @@ export class MainAppComponent implements OnDestroy {
         this.store.dispatch(new KeyDownAction(event));
     }
 
-    errorPanelSizeDragEndHandler($event: IOutputData) {
+    errorPanelSizeDragEndHandler($event: SplitGutterInteractionEvent) {
         this.store.dispatch(new ErrorPanelSizeChangedAction($event.sizes[1] as number));
     }
 
