@@ -71,7 +71,7 @@ jobs:
           name: UHK.Agent-mac-installer
           path: dist/UHK.Agent-*-mac.dmg
           compression-level: 0
-          retention-days: 5
+          retention-days: 30
 
       - name: Upload Linux AppImage artifact
         if: runner.os == 'Linux'
@@ -80,7 +80,7 @@ jobs:
           name: UHK.Agent-linux-x86_64.AppImage
           path: dist/UHK.Agent-*-linux-x86_64.AppImage
           compression-level: 0
-          retention-days: 5
+          retention-days: 30
 
       - name: List dist folder on Windows
         if: runner.os == 'Windows'
@@ -93,4 +93,4 @@ jobs:
           name: UHK.Agent-windows-installers
           path: dist/UHK.Agent-*-win*.exe
           compression-level: 0
-          retention-days: 5
+          retention-days: 30
