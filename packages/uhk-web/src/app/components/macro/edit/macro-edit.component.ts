@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewC
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { SplitGutterInteractionEvent } from 'angular-split';
 import { isEqual } from 'lodash';
 import { Macro, MacroAction } from 'uhk-common';
 
@@ -27,7 +28,6 @@ import {
     maxMacroCountReached,
     selectSmartMacroDocUrl
 } from '../../../store';
-import { IOutputData, SplitComponent } from 'angular-split';
 
 import { DuplicateMacroActionPayload, SelectedMacroAction, SelectedMacroActionIdModel } from '../../../models';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
@@ -58,8 +58,6 @@ export class MacroEditComponent implements OnDestroy {
         left: 100,
         right: 0
     };
-
-    @ViewChild(SplitComponent) split: SplitComponent;
 
     private backUrl: string;
     private backUrlText: string;
@@ -162,16 +160,9 @@ export class MacroEditComponent implements OnDestroy {
         this.showIframeHider = true;
     }
 
-    dragEndHandler($event: IOutputData) {
+    dragEndHandler($event: SplitGutterInteractionEvent) {
         this.showIframeHider = false;
         this.store.dispatch(new PanelSizeChangedAction($event.sizes[1] as number));
-    }
-
-    splitGutterClick({ gutterNum }: IOutputData) {
-        // By default, clicking the gutter without changing position does not trigger the 'dragEnd' event
-        // This can be fixed by manually notifying the component
-        // See issue: https://github.com/angular-split/angular-split/issues/186
-        this.split.notify('end', gutterNum);
     }
 
     toggleSmartMacroDocPanel(): void {

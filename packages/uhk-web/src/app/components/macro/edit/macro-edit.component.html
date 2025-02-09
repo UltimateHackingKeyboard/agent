@@ -1,8 +1,7 @@
 <as-split direction="horizontal"
           [useTransition]="true"
           (dragStart)="dragStartHandler()"
-          (dragEnd)="dragEndHandler($event)"
-          (gutterClick)="splitGutterClick($event)">
+          (dragEnd)="dragEndHandler($event)">
     <as-split-area [size]="smartMacroPanelSizes.left">
         <div class="macro-container-wrapper">
             <div class="macro-container">
