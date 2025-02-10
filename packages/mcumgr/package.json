@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
     "clean": "rimraf ./node_modules ./dist",
-    "lint": "eslint --ext .ts .",
+    "lint": "eslint",
     "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json"
   },
   "keywords": [

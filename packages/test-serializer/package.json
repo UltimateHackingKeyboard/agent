@@ -19,6 +19,6 @@
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
     "clean": "rimraf ./node_modules",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint"
   }
 }
