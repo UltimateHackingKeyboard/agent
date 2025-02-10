@@ -25,7 +25,7 @@ export class KeymapTabComponent extends Tab implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.keymaps) {
             if (this.keymapOptions.length > 0) {
-                const firstNotDisabledKeyOption = this.keymapOptions.find(option => !option.disabled);
+                const firstNotDisabledKeyOption = this.keymapOptions.find(option => !option.disabled);
                 this.selectedKeymap = this.keymaps.find(keymap => keymap.abbreviation === firstNotDisabledKeyOption.id);
             }
         }
