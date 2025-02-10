@@ -343,7 +343,12 @@ export class DeviceService {
             if (isFirmwareChecksumSupported) {
                 for (const moduleInfo of hardwareModules.moduleInfos) {
                     const moduleId = moduleInfo.module.id;
-                    const builtFirmwareChecksum = readUhkResponseAs0EndString(await this.operations.getRightModuleProperty(DevicePropertyIds.BuiltFirmwareChecksumByModuleId, [moduleId]));
+                    let builtFirmwareChecksum: string = '';
+
+                    if (moduleId !== UHK_MODULE_IDS.RIGHT_TOUCHPAD) {
+                        builtFirmwareChecksum = readUhkResponseAs0EndString(await this.operations.getRightModuleProperty(DevicePropertyIds.BuiltFirmwareChecksumByModuleId, [moduleId]));
+                    }
+
                     hardwareModules.rightModuleInfo.modules[moduleId] = {
                         builtFirmwareChecksum
                     };
