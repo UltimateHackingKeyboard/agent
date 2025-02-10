@@ -19,7 +19,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         console.log(`smartMacrosVersion: ${version.smartMacrosVersion}`);
         console.log(`firmwareGitRepo: ${version.firmwareGitRepo}`);
         console.log(`firmwareGitTag: ${version.firmwareGitTag}`);
-        console.log(`firmwareChecksum: ${version.firmwareChecksum}`);
+        console.log(`builtFirmwareChecksum: ${version.builtFirmwareChecksum}`);
     } catch (error) {
         await errorHandler(error);
     }
