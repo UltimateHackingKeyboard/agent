@@ -73,6 +73,12 @@ export class UhkOperations {
                 private device: UhkHidDevice) {
     }
 
+    public async eraseBleSettings(): Promise<void> {
+        this.logService.usbOps('[UhkHidDevice] USB[T]: Erase BLE settings.');
+        const transfer = Buffer.from([UsbCommand.EraseBleSettings]);
+        await this.device.write(transfer);
+    }
+
     public async jumpToBootloaderModule(module: ModuleSlotToId): Promise<void> {
         this.logService.usbOps(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
         const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);

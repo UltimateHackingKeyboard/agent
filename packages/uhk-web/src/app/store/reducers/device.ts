@@ -8,6 +8,7 @@ import {
     getDefaultHalvesInfo,
     HalvesInfo,
     HardwareModules,
+    isVersionGte,
     isVersionGtMinor,
     LeftSlotModules,
     RightSlotModules,
@@ -16,7 +17,7 @@ import {
     UHK_DEVICE_IDS_TYPE,
     UhkDeviceProduct
 } from 'uhk-common';
-import { DeviceUiStates, RecoverPageState } from '../../models';
+import { DeviceUiStates, EraseBleSettingsButtonState, RecoverPageState } from '../../models';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { getVersions } from '../../util';
@@ -36,6 +37,8 @@ export interface State {
     hasPermission: boolean;
     bootloaderActive: boolean;
     deviceConnectionStateLoaded: boolean;
+    hostConnectionPairState: Record<string, boolean>;
+    isErasingBleSettings: boolean;
     keyboardHalvesAlwaysJoined: boolean;
     leftHalfBootloaderActive: boolean;
     leftHalfDetected: boolean;
@@ -62,6 +65,8 @@ export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
     deviceConnectionStateLoaded: false,
+    hostConnectionPairState: {},
+    isErasingBleSettings: false,
     keyboardHalvesAlwaysJoined: false,
     leftHalfBootloaderActive: false,
     leftHalfDetected: false,
@@ -137,6 +142,38 @@ export function reducer(state = initialState, action: Action): State {
                 modules: data.hardwareModules || defaultHardwareModules(),
                 multiDevice: data.multiDevice,
                 udevRuleInfo: data.udevRulesInfo,
+            };
+        }
+
+        case Device.ActionTypes.EraseBleSettings: {
+            return {
+                ...state,
+                isErasingBleSettings: true
+            };
+        }
+
+        case Device.ActionTypes.CheckAreHostConnectionsPairedReply: {
+            const response = (<Device.CheckAreHostConnectionsPairedReplyAction>action).payload;
+
+            return {
+                ...state,
+                hostConnectionPairState: response.addresses,
+                isErasingBleSettings: false,
+            };
+        }
+
+        case Device.ActionTypes.EraseBleSettingsReply: {
+            const response = (<Device.EraseBleSettingReplyAction>action).payload;
+
+            // After the deletion Agent queries the host connections,
+            // so the CheckAreHostConnectionsPairedReply action will set the isErasingBleSettings
+            if (response.success) {
+                return state;
+            }
+
+            return {
+                ...state,
+                isErasingBleSettings: false
             };
         }
 
@@ -330,6 +367,13 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
     };
 };
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
+export const getEraseBleSettingsButtonState = (state: State): EraseBleSettingsButtonState => {
+    return {
+        disabled: state.isErasingBleSettings,
+        erasing: state.isErasingBleSettings,
+        visible: isVersionGte(state.modules.rightModuleInfo.deviceProtocolVersion, '4.14.0')
+    };
+};
 export const getHardwareModules = (state: State) => state.modules;
 export const getHasBackupUserConfiguration = (state: State) => {
     return (state.backupUserConfiguration?.info === BackupUserConfigurationInfo.LastCompatible
@@ -379,6 +423,7 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 };
 
 export const getConnectedDevice = (state: State) => state.connectedDevice;
+export const getHostConnectionPairState = (state: State): Record<string, boolean> => state.hostConnectionPairState;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;

@@ -24,8 +24,11 @@ import {
     ActionTypes,
     ChangeKeyboardLayoutAction,
     ChangeKeyboardLayoutReplyAction,
+    CheckAreHostConnectionsPairedAction,
+    CheckAreHostConnectionsPairedReplyAction,
     ConnectionStateChangedAction,
     EnableUsbStackTestAction,
+    EraseBleSettingReplyAction,
     HideSaveToKeyboardButton,
     ReadConfigSizesAction,
     RecoveryDeviceAction,
@@ -54,11 +57,15 @@ import {
     ShowNotificationAction
 } from '../actions/app';
 import {
+    ActionTypes as DongleActions,
+} from '../actions/dongle-pairing.action';
+import {
     AppState,
     deviceConnected,
     disableUpdateAgentProtection,
     getConnectedDevice,
     getHardwareConfiguration,
+    getHostConnections,
     getRouterState,
     getShowFirmwareUpgradePanel,
     getUserConfiguration
@@ -102,6 +109,41 @@ export class DeviceEffects {
                     message: action.payload.error?.message,
                     type: NotificationType.Error,
                 });
+            })
+        )
+    );
+
+    checkAreHostConnectionsPaired$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.CheckAreHostConnectionsPaired, DongleActions.DonglePairingSuccess),
+            withLatestFrom(this.store.select(getHostConnections)),
+            tap(([_, hostConnections]) => {
+                const addresses = [];
+                for (const hostConnection of hostConnections) {
+                    if (hostConnection.hasAddress()) {
+                        addresses.push(hostConnection.address);
+                    }
+                }
+
+                this.deviceRendererService.areBleAddressesPaired(addresses);
+            }),
+        ),
+    { dispatch: false },
+    );
+
+    checkAreHostConnectionsPairedReply$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<CheckAreHostConnectionsPairedReplyAction>(ActionTypes.CheckAreHostConnectionsPairedReply),
+            map(action => action.payload),
+            switchMap(response => {
+                if (response.success) {
+                    return EMPTY;
+                }
+
+                return of(new ShowNotificationAction({
+                    message: response.error?.message,
+                    type: NotificationType.Error,
+                }));
             })
         )
     );
@@ -188,6 +230,33 @@ export class DeviceEffects {
                 return EMPTY;
             })
         )
+    );
+
+    eraseBleSettings$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.EraseBleSettings),
+            tap(() => {
+                this.deviceRendererService.eraseBleSettings();
+            }),
+        ),
+    { dispatch: false },
+    );
+
+    eraseBleSettingsReply$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<EraseBleSettingReplyAction>(ActionTypes.EraseBleSettingsReply),
+            map(action => action.payload),
+            switchMap(response => {
+                if (response.success) {
+                    return of(new CheckAreHostConnectionsPairedAction());
+                }
+
+                return of(new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: response.error.message
+                }));
+            })
+        ),
     );
 
     setPrivilegeOnLinux$ = createEffect(() => this.actions$
