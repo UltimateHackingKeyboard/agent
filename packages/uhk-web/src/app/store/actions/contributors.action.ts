@@ -33,8 +33,7 @@ export class AgentContributorsNotAvailableAction implements Action {
 }
 
 export type Actions
-    = FetchAgentContributorsAction
-    | AgentContributorsAvailableAction
+    = AgentContributorsAvailableAction
     | AgentContributorsNotAvailableAction
     | FetchAgentContributorsAction
     | GetAgentContributorsAction;

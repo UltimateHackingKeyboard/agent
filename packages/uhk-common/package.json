@@ -12,11 +12,11 @@
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
   "scripts": {
-    "build": "tsc --project ./src/tsconfig.json",
+    "build": "tsc --project src/tsconfig.build.json",
     "clean": "rimraf ./node_modules ./dist",
     "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
     "coverage": "nyc npm test",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint"
   },
   "dependencies": {
     "buffer": "6.0.3",

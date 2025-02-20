@@ -9,6 +9,7 @@ export class DefaultUserConfigurationService {
     getDefault60(): UserConfiguration {
         if (!this._defaultConfig60) {
             this._defaultConfig60 = new UserConfiguration()
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
                 .fromJsonObject(require('./user-config.json'));
         }
 
@@ -18,6 +19,7 @@ export class DefaultUserConfigurationService {
     getDefault80(): UserConfiguration {
         if (!this._defaultConfig80) {
             this._defaultConfig80 = new UserConfiguration()
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
                 .fromJsonObject(require('./user-config-80.json'));
         }
 

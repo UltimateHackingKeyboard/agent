@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf ./node_modules ./dist",
-    "lint": "eslint --ext .ts .",
+    "lint": "eslint",
     "test:skip": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json"
   },
   "devDependencies": {

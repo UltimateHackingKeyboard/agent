@@ -1,7 +1,7 @@
-import * as semver from 'semver/preload';
 import { VersionInformation } from 'uhk-common';
 
 const collectVersions = (): VersionInformation => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const pkgJson = require('../../../../../package.json');
     return {
         version: pkgJson['version'],
