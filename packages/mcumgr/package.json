@@ -22,6 +22,6 @@
     "debug": "^4.4.0"
   },
   "peerDependencies": {
-    "serialport": ">= 12.0.0"
+    "serialport": ">= 13.0.0"
   }
 }
