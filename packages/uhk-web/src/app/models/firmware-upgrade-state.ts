@@ -3,6 +3,7 @@ import { FirmwareUpgradeFailReason, UhkModule } from 'uhk-common';
 export enum ModuleFirmwareUpgradeStates {
     Idle = 'Idle',
     Upgrading = 'Upgrading',
+    Skipped = 'Skipped',
     Success = 'Success',
     Failed = 'Failed'
 }

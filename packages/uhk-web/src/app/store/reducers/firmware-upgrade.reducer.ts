@@ -110,7 +110,7 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.CurrentlyUpdatingModule: {
             return {
                 ...state,
-                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdatingModuleAction).payload),
+                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdatingModuleAction).payload, false),
                 upgradedModule: true
             };
         }
@@ -118,7 +118,7 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.CurrentlyUpdateSkipModule: {
             return {
                 ...state,
-                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdateSkipModuleAction).payload),
+                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdateSkipModuleAction).payload, true),
             };
         }
 
@@ -395,12 +395,12 @@ function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModu
     }, []);
 }
 
-function setUpdatingModuleState(state: State, moduleName: string): Array<ModuleFirmwareUpgradeState> {
+function setUpdatingModuleState(state: State, moduleName: string, skipped = false): Array<ModuleFirmwareUpgradeState> {
     return state.modules.map(module => {
         if (module.moduleName === moduleName) {
             return {
                 ...module,
-                state: ModuleFirmwareUpgradeStates.Upgrading
+                state: skipped ? ModuleFirmwareUpgradeStates.Skipped : ModuleFirmwareUpgradeStates.Upgrading
             };
         } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
             return {
