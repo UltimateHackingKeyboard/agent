@@ -413,9 +413,7 @@ export class UhkOperations {
     }
 
     public async waitForKbootIdle(moduleName: string): Promise<boolean> {
-        const timeoutTime = new Date(new Date().getTime() + 30000);
-
-        while (new Date() < timeoutTime) {
+        while (true) {
             const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
             this.device.close();
 
@@ -427,8 +425,6 @@ export class UhkOperations {
 
             await snooze(1000);
         }
-
-        return false;
     }
 
     public async getModuleProperty({ module, property } : GetModulePropertyArguments): Promise<UhkBuffer> {
