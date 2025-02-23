@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import {
+    CurrentlyUpdatingModuleInfo,
     Dongle,
     FirmwareJson,
     FirmwareUpgradeFailReason,
@@ -303,27 +304,36 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
     }
 
     if (dongle?.versionInfo) {
+        const stateModule = findStateModule(UHK_DONGLE.name)
+
         modules.push({
             moduleName: UHK_DONGLE.name,
             firmwareUpgradeSupported: true,
             gitRepo: dongle.versionInfo.firmwareGitRepo,
             gitTag: dongle.versionInfo.firmwareGitTag,
             isOfficialFirmware: isOfficialUhkFirmware(dongle.versionInfo.firmwareGitRepo),
+            currentFirmwareChecksum: dongle.versionInfo?.builtFirmwareChecksum,
             currentFirmwareVersion: dongle.versionInfo?.firmwareVersion,
             newFirmwareVersion: dongle.versionInfo?.firmwareVersion,
-            state: findStateModule(UHK_DONGLE.name)?.state ?? ModuleFirmwareUpgradeStates.Idle
+            newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+            forceUpgraded: stateModule?.forceUpgraded,
+            state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
         });
     }
 
+    const stateModule = findStateModule(RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME)
     modules.push({
         moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
         firmwareUpgradeSupported: true,
         gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
         gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
         isOfficialFirmware: isOfficialUhkFirmware(hardwareModules.rightModuleInfo.firmwareGitRepo),
+        currentFirmwareChecksum: hardwareModules.rightModuleInfo.builtFirmwareChecksum,
         currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
         newFirmwareVersion: firmwareJson?.firmwareVersion,
-        state: findStateModule(RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME)?.state ?? ModuleFirmwareUpgradeStates.Idle
+        newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+        forceUpgraded: stateModule?.forceUpgraded,
+        state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
     });
 
     if (hardwareModules.moduleInfos) {
@@ -339,10 +349,13 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
                     gitRepo: moduleInfo.info.firmwareGitRepo,
                     gitTag: moduleInfo.info.firmwareGitTag,
                     isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+                    currentFirmwareChecksum: moduleInfo.info.remoteFirmwareChecksum,
                     currentFirmwareVersion: moduleInfo.info.firmwareVersion,
                     newFirmwareVersion: firmwareJson?.firmwareVersion,
+                    newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+                    forceUpgraded: stateModule?.forceUpgraded,
                     state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
-                    tooltip: ''
+                    tooltip: '',
                 });
             } else {
                 modules.push({
@@ -351,10 +364,13 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
                     gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
                     gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
                     isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+                    currentFirmwareChecksum: moduleInfo.info.remoteFirmwareChecksum,
                     currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
                     newFirmwareVersion: '',
+                    newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+                    forceUpgraded: stateModule?.forceUpgraded,
                     state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
-                    tooltip: `This module runs firmware ${hardwareModules.rightModuleInfo?.firmwareVersion} (binary identical to previously installed firmware ${moduleInfo.info.firmwareVersion}); no update needed.`
+                    tooltip: `This module runs firmware ${hardwareModules.rightModuleInfo?.firmwareVersion} (binary identical to previously installed firmware ${moduleInfo.info.firmwareVersion}); no update needed.`,
                 });
             }
         }
@@ -395,17 +411,20 @@ function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModu
     }, []);
 }
 
-function setUpdatingModuleState(state: State, moduleName: string, skipped = false): Array<ModuleFirmwareUpgradeState> {
+function setUpdatingModuleState(state: State, payload: CurrentlyUpdatingModuleInfo, skipped = false): Array<ModuleFirmwareUpgradeState> {
     return state.modules.map(module => {
-        if (module.moduleName === moduleName) {
+        if (module.moduleName === payload.moduleName) {
             return {
                 ...module,
-                state: skipped ? ModuleFirmwareUpgradeStates.Skipped : ModuleFirmwareUpgradeStates.Upgrading
+                forceUpgraded: payload.forceUpgraded,
+                newFirmwareChecksum: payload.newFirmwareChecksum,
+                state: skipped ? ModuleFirmwareUpgradeStates.Skipped : ModuleFirmwareUpgradeStates.Upgrading,
             };
         } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
             return {
                 ...module,
                 state: ModuleFirmwareUpgradeStates.Success,
+                newFirmwareChecksum: payload.newFirmwareChecksum,
                 newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                 currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
                 gitRepo: state.firmwareJson?.gitInfo?.repo,

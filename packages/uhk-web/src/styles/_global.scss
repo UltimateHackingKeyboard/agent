@@ -264,6 +264,11 @@ kbd {
     max-width: 100%;
 }
 
+.tooltip-firmware-checksum .tooltip-inner {
+    width: 300px;
+    max-width: 300px;
+}
+
 .tooltip-firmware-version .tooltip-inner {
     width: 350px;
     max-width: 350px;

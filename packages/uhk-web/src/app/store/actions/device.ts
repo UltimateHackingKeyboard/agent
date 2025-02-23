@@ -3,6 +3,7 @@ import {
     BackupUserConfiguration,
     ChangeKeyboardLayoutIpcResponse,
     ConfigSizesInfo,
+    CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
     DeviceVersionInformation,
     FirmwareJson,
@@ -136,14 +137,14 @@ export class ResetUserConfigurationAction implements Action {
 export class CurrentlyUpdatingModuleAction implements Action {
     type = ActionTypes.CurrentlyUpdatingModule;
 
-    constructor(public payload: string) {
+    constructor(public payload: CurrentlyUpdatingModuleInfo) {
     }
 }
 
 export class CurrentlyUpdateSkipModuleAction implements Action {
     type = ActionTypes.CurrentlyUpdateSkipModule;
 
-    constructor(public payload: string) {
+    constructor(public payload: CurrentlyUpdatingModuleInfo) {
     }
 }
 

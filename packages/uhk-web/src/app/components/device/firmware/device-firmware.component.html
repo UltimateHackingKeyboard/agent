@@ -9,7 +9,13 @@
 
             <ul class="list-unstyled">
                 <li *ngFor="let state of firmwareUpgradeStates.modules; trackBy:firmwareUpgradeStateTrackByFn;">
-                    <span class="upgrading">
+                    <ng-template #htmlTooltipTemplate>
+                        <div [innerHTML]="checksumTooltip(state)"></div>
+                    </ng-template>
+                    <span class="upgrading"
+                          [ngbTooltip]="htmlTooltipTemplate"
+                          tooltipClass="tooltip-firmware-checksum"
+                    >
                         <fa-icon *ngIf="state.state === 'Upgrading'" [icon]="faSpinner" animation="spin" [fixedWidth]="true"></fa-icon>
                         <fa-icon *ngIf="state.state === 'Failed'" [icon]="faExclamation" class="text-danger" [fixedWidth]="true"></fa-icon>
                         <fa-icon *ngIf="state.state === 'Success'" [icon]="faCheck" [fixedWidth]="true"></fa-icon>

@@ -10,12 +10,15 @@ export enum ModuleFirmwareUpgradeStates {
 
 export interface ModuleFirmwareUpgradeState {
     firmwareUpgradeSupported: boolean;
+    forceUpgraded: boolean;
     isOfficialFirmware?: boolean;
     gitRepo?: string;
     gitTag?: string;
     moduleName: string;
+    currentFirmwareChecksum: string;
     currentFirmwareVersion: string;
     newFirmwareVersion?: string;
+    newFirmwareChecksum?: string;
     state: ModuleFirmwareUpgradeStates;
     tooltip?: string;
 }

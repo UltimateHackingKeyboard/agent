@@ -4,6 +4,7 @@ export * from './backup-user-configuration-info.js';
 export * from './ble-address-pair.js';
 export * from './command-line-args.js';
 export * from './config-sizes-info.js';
+export * from './currently-updating-module-info.js';
 export * from './device-module-record.js';
 export * from './device-version-information.js';
 export * from './dongle.js';
