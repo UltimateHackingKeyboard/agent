@@ -12,6 +12,7 @@ import {
     HardwareModules,
     IpcResponse,
     KeyboardLayout,
+    ModuleFirmwareUpgradeSkipInfo,
     UHK_DEVICE_IDS_TYPE,
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
@@ -144,7 +145,7 @@ export class CurrentlyUpdatingModuleAction implements Action {
 export class CurrentlyUpdateSkipModuleAction implements Action {
     type = ActionTypes.CurrentlyUpdateSkipModule;
 
-    constructor(public payload: CurrentlyUpdatingModuleInfo) {
+    constructor(public payload: ModuleFirmwareUpgradeSkipInfo) {
     }
 }
 

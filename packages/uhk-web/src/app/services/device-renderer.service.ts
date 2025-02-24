@@ -14,6 +14,7 @@ import {
     IpcResponse,
     KeyboardLayout,
     LogService,
+    ModuleFirmwareUpgradeSkipInfo,
     SaveUserConfigurationData,
     UHK_DEVICE_IDS_TYPE,
     UpdateFirmwareData,
@@ -194,7 +195,7 @@ export class DeviceRendererService {
             this.dispachStoreAction(new UpdateFirmwareJsonAction(data));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeSkip, (event: string, response: CurrentlyUpdatingModuleInfo) => {
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeSkip, (event: string, response: ModuleFirmwareUpgradeSkipInfo) => {
             this.dispachStoreAction(new CurrentlyUpdateSkipModuleAction(response));
         });
 

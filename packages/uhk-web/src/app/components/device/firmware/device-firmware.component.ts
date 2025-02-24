@@ -1,9 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import {
-    faCircleExclamation,
     faCheck,
     faExclamation,
     faLongArrowAltRight,
@@ -26,7 +24,7 @@ import {
 import { RecoveryModuleAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 import { XtermComponent } from '../../xterm/xterm.component';
-import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, ModuleFirmwareUpgradeStates, UpdateFirmwareWithPayload } from '../../../models';
+import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
 
 @Component({
     selector: 'device-firmware',
@@ -51,7 +49,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     @ViewChild(XtermComponent, { static: false }) xtermRef: XtermComponent;
 
-    faCircleExclamation = faCircleExclamation;
     faLongArrowAltRight = faLongArrowAltRight;
     faSlidersH = faSlidersH;
     faSpinner = faSpinner;
@@ -61,8 +58,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     private subscription = new Subscription();
 
     constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef,
-                private sanitizer: DomSanitizer) {
+                private cdRef: ChangeDetectorRef) {
         this.flashFirmwareButtonDisabled$ = store.select(flashFirmwareButtonDisabled);
         this.xtermLog$ = store.select(xtermLog);
         this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
@@ -125,42 +121,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
             return '';
 
         return '#' + gitTag;
-    }
-
-    checksumTooltip(upgradeState: ModuleFirmwareUpgradeState): SafeHtml {
-        return this.sanitizer.bypassSecurityTrustHtml(this.calculateChecksumTooltip(upgradeState));
-    }
-
-    private calculateChecksumTooltip(upgradeState: ModuleFirmwareUpgradeState): string {
-        if (upgradeState.state === ModuleFirmwareUpgradeStates.Upgrading) {
-            if (upgradeState.forceUpgraded) {
-                return `Force upgrading, even though expected checksum (${upgradeState.newFirmwareChecksum}) is equal with actual (${upgradeState.currentFirmwareChecksum})`
-            }
-            else {
-                return `Upgrading, because expected checksum (${upgradeState.newFirmwareChecksum}) is not equal with actual (${upgradeState.currentFirmwareChecksum})`
-            }
-        }
-        else if (upgradeState.state === ModuleFirmwareUpgradeStates.Skipped) {
-            return `Not upgraded, because expected checksum (${upgradeState.newFirmwareChecksum}) was equal with actual (${upgradeState.currentFirmwareChecksum})`
-        }
-        else if (upgradeState.state === ModuleFirmwareUpgradeStates.Success) {
-            if (upgradeState.forceUpgraded) {
-                return `Force upgraded, even though expected checksum (${upgradeState.newFirmwareChecksum}) was equal with actual (${upgradeState.currentFirmwareChecksum})`
-            }
-            else {
-                return `Upgraded, because expected checksum (${upgradeState.newFirmwareChecksum}) was not equal with actual (${upgradeState.currentFirmwareChecksum})`
-            }
-        }
-        else if (upgradeState.state === ModuleFirmwareUpgradeStates.Failed) {
-            if (upgradeState.forceUpgraded) {
-                return `Force upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is equal with actual (${upgradeState.currentFirmwareChecksum})`
-            }
-            else {
-                return `Upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is not equal with actual (${upgradeState.currentFirmwareChecksum})`
-            }
-        }
-
-        return ''
     }
 
     private scrollToTheEndOfTheLogs(): void {

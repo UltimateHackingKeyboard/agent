@@ -23,6 +23,7 @@ export * from './app-start-info.js';
 export * from './configuration-reply.js';
 export * from './version-information.js';
 export * from './device-connection-state.js';
+export * from './module-firmware-upgrade-skip-info.js';
 export * from './module-slot-to-i2c-adress.js';
 export * from './module-slot-id.js';
 export * from './module-version-info.js';

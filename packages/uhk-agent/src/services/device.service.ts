@@ -32,6 +32,8 @@ import {
     LeftSlotModules,
     LogService,
     mapObjectToUserConfigBinaryBuffer,
+    ModuleFirmwareUpgradeSkipInfo,
+    ModuleFirmwareUpgradeSkipReason,
     ModuleInfo,
     ModuleSlotToId,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
@@ -454,7 +456,8 @@ export class DeviceService {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
                             moduleName: UHK_DONGLE.name,
                             newFirmwareChecksum: deviceConfig?.md5,
-                        } as CurrentlyUpdatingModuleInfo);
+                            reason: ModuleFirmwareUpgradeSkipReason.DeviceChecksumMatches,
+                        } as ModuleFirmwareUpgradeSkipInfo);
                         this.logService.misc('Skip dongle firmware upgrade.');
                     }
                 }
@@ -506,7 +509,8 @@ export class DeviceService {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
                     moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
                     newFirmwareChecksum: deviceConfig?.md5,
-                } as CurrentlyUpdatingModuleInfo);
+                    reason: ModuleFirmwareUpgradeSkipReason.DeviceChecksumMatches,
+                } as ModuleFirmwareUpgradeSkipInfo);
                 this.logService.misc('Skip right firmware upgrade.');
             }
 
@@ -570,62 +574,77 @@ export class DeviceService {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
                     moduleName: leftModuleInfo.module.name,
                     newFirmwareChecksum: moduleConfig?.md5,
-                } as CurrentlyUpdatingModuleInfo);
+                    reason: ModuleFirmwareUpgradeSkipReason.ModuleChecksumMatches,
+                } as ModuleFirmwareUpgradeSkipInfo);
                 this.logService.misc('[DeviceService] Skip left firmware upgrade.');
             }
 
-            // TODO: implement MCUBOOT version
-            if (uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.KBOOT) {
-                for (const moduleInfo of hardwareModules.moduleInfos) {
-                    if (moduleInfo.module.slotId === ModuleSlotToId.leftHalf) {
-                        // Left half upgrade mandatory, it is running before the other modules upgrade.
-                    } else if (moduleInfo.module.firmwareUpgradeSupported) {
-                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
-                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current remote firmware checksum:`, moduleInfo.info.remoteFirmwareChecksum);
+            for (const moduleInfo of hardwareModules.moduleInfos) {
+                if (moduleInfo.module.slotId === ModuleSlotToId.leftHalf) {
+                    // Left half upgrade mandatory, it is running before the other modules upgrade.
+                    continue;
+                }
+                // TODO: implement MCUBOOT version
+                if (uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
+                    event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
+                        moduleName: moduleInfo.module.name,
+                        newFirmwareChecksum: '',
+                        reason: ModuleFirmwareUpgradeSkipReason.Uhk80Limitation,
+                    } as ModuleFirmwareUpgradeSkipInfo);
+                }
 
-                        const moduleFirmwareInfo = hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
-                        if (moduleFirmwareInfo) {
-                            this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new built firmware checksum:`, moduleFirmwareInfo.builtFirmwareChecksum);
-                        }
+                if (moduleInfo.module.firmwareUpgradeSupported) {
+                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
+                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current remote firmware checksum:`, moduleInfo.info.remoteFirmwareChecksum);
 
-                        const isModuleFirmwareSame = isSameFirmware(
-                            {
-                                firmwareChecksum: moduleInfo.info.remoteFirmwareChecksum,
-                                firmwareVersion: moduleInfo.info.firmwareVersion
-                            },
-                            {
-                                firmwareChecksum: moduleFirmwareInfo?.builtFirmwareChecksum,
-                                firmwareVersion: packageJson.firmwareVersion
-                            }
-                        );
-
-                        if (data.forceUpgrade || !isModuleFirmwareSame) {
-                            const moduleConfig = packageJson.modules.find(firmwareDevice => firmwareDevice.moduleId === moduleInfo.module.id);
-
-                            event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, {
-                                forceUpgraded: isModuleFirmwareSame,
-                                moduleName: moduleInfo.module.name,
-                                newFirmwareChecksum: moduleConfig.md5,
-                            } as CurrentlyUpdatingModuleInfo);
-                            await this.operations
-                                .updateModuleWithKboot(
-                                    getModuleFirmwarePath(moduleInfo.module, packageJson),
-                                    uhkDeviceProduct,
-                                    moduleInfo.module
-                                );
-                            this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
-                        } else {
-                            const moduleConfig = packageJson.modules.find(firmwareDevice => firmwareDevice.moduleId === moduleInfo.module.id);
-
-                            event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
-                                moduleName: moduleInfo.module.name,
-                                newFirmwareChecksum: moduleConfig?.md5,
-                            } as CurrentlyUpdatingModuleInfo);
-                            this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade.`);
-                        }
-                    } else {
-                        this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade. Currently not supported`);
+                    const moduleFirmwareInfo = hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
+                    if (moduleFirmwareInfo) {
+                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new built firmware checksum:`, moduleFirmwareInfo.builtFirmwareChecksum);
                     }
+
+                    const isModuleFirmwareSame = isSameFirmware(
+                        {
+                            firmwareChecksum: moduleInfo.info.remoteFirmwareChecksum,
+                            firmwareVersion: moduleInfo.info.firmwareVersion
+                        },
+                        {
+                            firmwareChecksum: moduleFirmwareInfo?.builtFirmwareChecksum,
+                            firmwareVersion: packageJson.firmwareVersion
+                        }
+                    );
+
+                    if (data.forceUpgrade || !isModuleFirmwareSame) {
+                        const moduleConfig = packageJson.modules.find(firmwareDevice => firmwareDevice.moduleId === moduleInfo.module.id);
+
+                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, {
+                            forceUpgraded: isModuleFirmwareSame,
+                            moduleName: moduleInfo.module.name,
+                            newFirmwareChecksum: moduleConfig.md5,
+                        } as CurrentlyUpdatingModuleInfo);
+                        await this.operations
+                            .updateModuleWithKboot(
+                                getModuleFirmwarePath(moduleInfo.module, packageJson),
+                                uhkDeviceProduct,
+                                moduleInfo.module
+                            );
+                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
+                    } else {
+                        const moduleConfig = packageJson.modules.find(firmwareDevice => firmwareDevice.moduleId === moduleInfo.module.id);
+
+                        event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
+                            moduleName: moduleInfo.module.name,
+                            newFirmwareChecksum: moduleConfig?.md5,
+                            reason: ModuleFirmwareUpgradeSkipReason.ModuleChecksumMatches,
+                        } as ModuleFirmwareUpgradeSkipInfo);
+                        this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade.`);
+                    }
+                } else {
+                    event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
+                        moduleName: moduleInfo.module.name,
+                        newFirmwareChecksum: '',
+                        reason: ModuleFirmwareUpgradeSkipReason.NotSupported,
+                    } as ModuleFirmwareUpgradeSkipInfo);
+                    this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade. Currently not supported`);
                 }
             }
 

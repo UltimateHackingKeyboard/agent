@@ -1,4 +1,4 @@
-import { FirmwareUpgradeFailReason, UhkModule } from 'uhk-common';
+import { FirmwareUpgradeFailReason, ModuleFirmwareUpgradeSkipReason, UhkModule } from 'uhk-common';
 
 export enum ModuleFirmwareUpgradeStates {
     Idle = 'Idle',
@@ -9,6 +9,7 @@ export enum ModuleFirmwareUpgradeStates {
 }
 
 export interface ModuleFirmwareUpgradeState {
+    beforeFirmwareUpgradeChecksum?: string;
     firmwareUpgradeSupported: boolean;
     forceUpgraded: boolean;
     isOfficialFirmware?: boolean;
@@ -20,7 +21,9 @@ export interface ModuleFirmwareUpgradeState {
     newFirmwareVersion?: string;
     newFirmwareChecksum?: string;
     state: ModuleFirmwareUpgradeStates;
+    skipReason?: ModuleFirmwareUpgradeSkipReason;
     tooltip?: string;
+    checksumTooltip?: string;
 }
 
 export interface FirmwareUpgradeState {
