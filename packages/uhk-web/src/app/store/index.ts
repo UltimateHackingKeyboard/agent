@@ -41,6 +41,7 @@ import {
     DongleOperations,
     DonglePairingState,
     DonglePairingStates,
+    EraseBleSettingsButtonState,
     FirmwareUpgradeState,
     HistoryFileInfo,
     MacroMenuItem,
@@ -226,6 +227,7 @@ export const deviceConnected = createSelector(
         return !!device.connectedDevice;
     });
 export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
+export const getHostConnectionPairState = createSelector(deviceState, fromDevice.getHostConnectionPairState);
 export const getDeviceBleAddress = createSelector(deviceState, fromDevice.getDeviceBleAddress);
 export const getDevicePairedWithDongle = createSelector(deviceState, fromDevice.getDevicePairedWithDongle);
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
@@ -417,6 +419,7 @@ export const saveToKeyboardState = createSelector(runningInElectron, saveToKeybo
             showButton: saveToKeyboard.showButton && !outOfSpaceWarning.show
         };
     });
+export const getEraseBleSettingsButtonStateSelector = createSelector(deviceState, fromDevice.getEraseBleSettingsButtonState);
 export const firstAttemptOfSaveToKeyboard = createSelector(
     runningInElectron,
     getEverAttemptedSavingToKeyboard,
@@ -526,6 +529,17 @@ export const getDonglePairingState = createSelector(
                 ? DonglePairingStates.Idle
                 : dongleState.state,
             showDonglePairingPanel: deviceConfigLoaded && (isDongleBleMissingFromHostConnections || isBleAddressMismatches || dongleState.operation === DongleOperations.Pairing),
+        };
+    }
+);
+
+export const getEraseBleSettingsButtonState = createSelector(
+    getEraseBleSettingsButtonStateSelector,
+    isDonglePairing,
+    (eraseBleSettings, donglePairing): EraseBleSettingsButtonState => {
+        return {
+            ...eraseBleSettings,
+            disabled: eraseBleSettings.disabled || donglePairing,
         };
     }
 );

@@ -53,21 +53,44 @@
             >
         </td>
         <td>
-            <button *ngIf="hostConnection.hasAddress()"
-                    [disabled]="isDonglePairing"
-                    (confirm)="deleteHostConnection(index, hostConnection)"
-                    type="button"
-                    class="btn"
-                    mwlConfirmationPopover
-                    popoverTitle="Do you really want to delete this connection?"
-                    placement="bottom"
-                    confirmText="Yes"
-                    cancelText="No"
-            >
-                <fa-icon [icon]="faTrash" />
-            </button>
+            <div class="d-inline-flex align-items-center gap-2">
+                <button *ngIf="hostConnection.hasAddress()"
+                        [disabled]="eraseBleSettingsButtonState.disabled"
+                        (confirm)="deleteHostConnection(index, hostConnection)"
+                        type="button"
+                        class="btn"
+                        mwlConfirmationPopover
+                        popoverTitle="Do you really want to delete this connection?"
+                        placement="bottom"
+                        confirmText="Yes"
+                        cancelText="No"
+                >
+                    <fa-icon [icon]="faTrash" />
+                </button>
+
+                <fa-icon *ngIf="showNotPairedTooltip(hostConnection)"
+                         [icon]="faCircleExclamation"
+                         ngbTooltip="This connection has been unpaired. You can re-pair this device."
+                />
+            </div>
         </td>
     </tr>
     </ng-container>
     </tbody>
 </table>
+
+<button *ngIf="eraseBleSettingsButtonState.visible"
+        class="btn btn-danger mt-3"
+        mwlConfirmationPopover
+        popoverTitle="Are you sure?"
+        placement="bottom"
+        confirmText="Yes"
+        cancelText="No"
+        [disabled]="eraseBleSettingsButtonState.disabled"
+        (confirm)="eraseBleSettings()"
+>
+    <fa-icon *ngIf="eraseBleSettingsButtonState.erasing"
+             [icon]="faSpinner"
+             animation="spin" />
+    Delete device pairings
+</button>

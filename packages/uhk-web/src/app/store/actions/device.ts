@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import {
+    AreBleAddressesPairedIpcResponse,
     BackupUserConfiguration,
     ChangeKeyboardLayoutIpcResponse,
     ConfigSizesInfo,
@@ -21,8 +22,12 @@ import { UpdateFirmwareSuccessPayload } from '../../models/update-firmware-succe
 
 export enum ActionTypes {
     ChangeKeyboardLayout = '[device] change keyboard layout',
+    CheckAreHostConnectionsPaired = '[device] check are host connections paired',
+    CheckAreHostConnectionsPairedReply = '[device] check are host connections paired reply',
     ChangeKeyboardLayoutReply = '[device] change keyboard layout reply',
     DongleVersionInfoLoaded = '[device] dongle version info loaded',
+    EraseBleSettings = '[device] erase ble settings',
+    EraseBleSettingsReply = '[device] erase ble settings reply',
     SetPrivilegeOnLinux = '[device] set privilege on linux',
     SetPrivilegeOnLinuxReply = '[device] set privilege on linux reply',
     ConnectionStateChanged = '[device] connection state changed',
@@ -67,6 +72,16 @@ export class ChangeKeyboardLayoutAction implements Action {
     constructor(public layout: KeyboardLayout) {}
 }
 
+export class CheckAreHostConnectionsPairedAction implements Action {
+    type = ActionTypes.CheckAreHostConnectionsPaired;
+}
+
+export class CheckAreHostConnectionsPairedReplyAction implements Action {
+    type = ActionTypes.CheckAreHostConnectionsPairedReply;
+
+    constructor(public payload: AreBleAddressesPairedIpcResponse) {}
+}
+
 export class DongleVersionInfoLoadedAction implements Action {
     type = ActionTypes.DongleVersionInfoLoaded;
 
@@ -79,6 +94,15 @@ export class ChangeKeyboardLayoutReplyAction implements Action {
     constructor(public payload: ChangeKeyboardLayoutIpcResponse) {}
 }
 
+export class EraseBleSettingAction implements Action {
+    type = ActionTypes.EraseBleSettings;
+}
+
+export class EraseBleSettingReplyAction implements Action {
+    type = ActionTypes.EraseBleSettingsReply;
+
+    constructor(public payload: IpcResponse) {}
+}
 
 export class SetPrivilegeOnLinuxAction implements Action {
     type = ActionTypes.SetPrivilegeOnLinux;
@@ -290,7 +314,11 @@ export class SkipFirmwareUpgradeAction implements Action {
 export type Actions
     = ChangeKeyboardLayoutAction
     | ChangeKeyboardLayoutReplyAction
+    | CheckAreHostConnectionsPairedAction
+    | CheckAreHostConnectionsPairedReplyAction
     | DongleVersionInfoLoadedAction
+    | EraseBleSettingAction
+    | EraseBleSettingReplyAction
     | SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction

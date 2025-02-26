@@ -36,6 +36,13 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
+        case Device.ActionTypes.EraseBleSettingsReply: {
+            return {
+                ...state,
+                state: DonglePairingStates.Idle,
+            }
+        }
+
         case Device.ActionTypes.SaveToKeyboardFailed: {
             if (state.state !== DonglePairingStates.SavingToKeyboard) {
                 return state;
