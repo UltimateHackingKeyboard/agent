@@ -1,13 +1,16 @@
 import { Action } from '@ngrx/store';
 import {
+    CurrentlyUpdatingModuleInfo,
     Dongle,
     FirmwareJson,
     FirmwareUpgradeFailReason,
     HardwareModules,
     isOfficialUhkFirmware,
+    ModuleFirmwareUpgradeSkipReason,
     ModuleInfo,
     ModuleSlotToId,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+    UhkDeviceProduct,
     UHK_DONGLE,
     UHK_MODULES,
     UhkModule
@@ -46,6 +49,7 @@ const FIRMWARE_NOT_FORCE_UPGRADING = [
 ];
 
 export interface State {
+    connectedDevice?: UhkDeviceProduct;
     dongle?: Dongle;
     firmwareJson?: FirmwareJson;
     hardwareModules: HardwareModules;
@@ -83,6 +87,7 @@ export function reducer(state = initialState, action: Action): State {
             newState.modules = newState.modules.map(module => {
                 return {
                     ...module,
+                    checksumTooltip: '',
                     newFirmwareVersion: firmwareJson?.firmwareVersion,
                     state: firmwareJson?.firmwareVersion === module.currentFirmwareVersion
                     && FIRMWARE_NOT_FORCE_UPGRADING.includes(state.upgradeState)
@@ -100,9 +105,10 @@ export function reducer(state = initialState, action: Action): State {
 
             return {
                 ...state,
+                connectedDevice: payload.connectedDevice,
                 dongle: payload.dongle,
                 hardwareModules,
-                modules: mapModules(state.firmwareJson, hardwareModules, state.modules, payload.dongle),
+                modules: mapModules(state.firmwareJson, hardwareModules, state.modules, payload.dongle, state.connectedDevice),
                 recoveryModules: calculateRecoveryModules(hardwareModules.moduleInfos)
             };
         }
@@ -116,9 +122,30 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case Device.ActionTypes.CurrentlyUpdateSkipModule: {
+            const payload = (action as Device.CurrentlyUpdateSkipModuleAction).payload;
+
             return {
                 ...state,
-                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdateSkipModuleAction).payload),
+                modules: state.modules.map(module => {
+                    if (module.moduleName === payload.moduleName) {
+                        const newState = {
+                            ...module,
+                            beforeFirmwareUpgradeChecksum: module.currentFirmwareChecksum,
+                            newFirmwareChecksum: payload.newFirmwareChecksum,
+                            state: ModuleFirmwareUpgradeStates.Skipped,
+                            skipReason: payload.reason,
+                        }
+                        newState.checksumTooltip = calculateChecksumTooltip(newState)
+
+                        return newState;
+                    }
+
+                    if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
+                        return updateUpgradingModuleState(state, module, payload);
+                    }
+
+                    return module;
+                }),
             };
         }
 
@@ -133,7 +160,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 dongle,
-                modules: mapModules(state.firmwareJson, state.hardwareModules, state.modules, state.dongle),
+                modules: mapModules(state.firmwareJson, state.hardwareModules, state.modules, state.dongle, state.connectedDevice),
             };
         }
 
@@ -143,7 +170,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 hardwareModules,
-                modules: mapModules(state.firmwareJson, hardwareModules, state.modules, state.dongle),
+                modules: mapModules(state.firmwareJson, hardwareModules, state.modules, state.dongle, state.connectedDevice),
             };
         }
 
@@ -295,7 +322,7 @@ export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
     recoveryModules: state.recoveryModules
 });
 
-function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules, stateModules: Array<ModuleFirmwareUpgradeState> = [], dongle: Dongle): Array<ModuleFirmwareUpgradeState> {
+function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules, stateModules: Array<ModuleFirmwareUpgradeState> = [], dongle: Dongle, connectedDevice: UhkDeviceProduct): Array<ModuleFirmwareUpgradeState> {
     const modules: Array<ModuleFirmwareUpgradeState> = [];
 
     function findStateModule(name: string): ModuleFirmwareUpgradeState {
@@ -303,60 +330,98 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
     }
 
     if (dongle?.versionInfo) {
-        modules.push({
+        const stateModule = findStateModule(UHK_DONGLE.name)
+        const dongleState: ModuleFirmwareUpgradeState = {
             moduleName: UHK_DONGLE.name,
             firmwareUpgradeSupported: true,
             gitRepo: dongle.versionInfo.firmwareGitRepo,
             gitTag: dongle.versionInfo.firmwareGitTag,
             isOfficialFirmware: isOfficialUhkFirmware(dongle.versionInfo.firmwareGitRepo),
+            currentFirmwareChecksum: dongle.versionInfo?.builtFirmwareChecksum,
             currentFirmwareVersion: dongle.versionInfo?.firmwareVersion,
             newFirmwareVersion: dongle.versionInfo?.firmwareVersion,
-            state: findStateModule(UHK_DONGLE.name)?.state ?? ModuleFirmwareUpgradeStates.Idle
-        });
+            beforeFirmwareUpgradeChecksum: stateModule?.beforeFirmwareUpgradeChecksum,
+            newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+            forceUpgraded: stateModule?.forceUpgraded,
+            skipReason: stateModule?.skipReason,
+            state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
+        }
+        dongleState.checksumTooltip = calculateChecksumTooltip(dongleState)
+
+        modules.push(dongleState);
     }
 
-    modules.push({
-        moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
-        firmwareUpgradeSupported: true,
-        gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
-        gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
-        isOfficialFirmware: isOfficialUhkFirmware(hardwareModules.rightModuleInfo.firmwareGitRepo),
-        currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
-        newFirmwareVersion: firmwareJson?.firmwareVersion,
-        state: findStateModule(RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME)?.state ?? ModuleFirmwareUpgradeStates.Idle
-    });
+    if (connectedDevice) {
+        const stateModule = findStateModule(RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME)
+        const rightDeviceState: ModuleFirmwareUpgradeState = {
+            moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+            firmwareUpgradeSupported: true,
+            gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
+            gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
+            isOfficialFirmware: isOfficialUhkFirmware(hardwareModules.rightModuleInfo.firmwareGitRepo),
+            currentFirmwareChecksum: hardwareModules.rightModuleInfo.builtFirmwareChecksum,
+            currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
+            beforeFirmwareUpgradeChecksum: stateModule?.beforeFirmwareUpgradeChecksum,
+            newFirmwareVersion: firmwareJson?.firmwareVersion,
+            newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+            forceUpgraded: stateModule?.forceUpgraded,
+            skipReason: stateModule?.skipReason,
+            state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
+        }
+        rightDeviceState.checksumTooltip = calculateChecksumTooltip(rightDeviceState)
+
+        modules.push(rightDeviceState);
+    }
 
     if (hardwareModules.moduleInfos) {
         for (let i = 0; i < hardwareModules.moduleInfos?.length; i++) {
             const moduleInfo = hardwareModules.moduleInfos[i];
             const firmwareModuleInfo =  hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
             const stateModule = findStateModule(moduleInfo.module.name);
+            let moduleState: ModuleFirmwareUpgradeState;
+
 
             if (!firmwareModuleInfo || moduleInfo.info.firmwareVersion === hardwareModules.rightModuleInfo?.firmwareVersion || firmwareModuleInfo.builtFirmwareChecksum !== moduleInfo.info.remoteFirmwareChecksum) {
-                modules.push({
+                moduleState = {
                     moduleName: moduleInfo.module.name,
                     firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
                     gitRepo: moduleInfo.info.firmwareGitRepo,
                     gitTag: moduleInfo.info.firmwareGitTag,
                     isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+                    currentFirmwareChecksum: moduleInfo.info.remoteFirmwareChecksum,
                     currentFirmwareVersion: moduleInfo.info.firmwareVersion,
                     newFirmwareVersion: firmwareJson?.firmwareVersion,
+                    beforeFirmwareUpgradeChecksum: stateModule?.beforeFirmwareUpgradeChecksum,
+                    newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+                    forceUpgraded: stateModule?.forceUpgraded,
+                    skipReason: stateModule?.skipReason,
                     state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
-                    tooltip: ''
-                });
+                    tooltip: '',
+                }
+
+                modules.push(moduleState);
             } else {
-                modules.push({
+                moduleState = {
                     moduleName: moduleInfo.module.name,
                     firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
                     gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
                     gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
                     isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+                    currentFirmwareChecksum: moduleInfo.info.remoteFirmwareChecksum,
                     currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
                     newFirmwareVersion: '',
+                    beforeFirmwareUpgradeChecksum: stateModule?.beforeFirmwareUpgradeChecksum,
+                    newFirmwareChecksum: stateModule?.newFirmwareChecksum,
+                    forceUpgraded: stateModule?.forceUpgraded,
+                    skipReason: stateModule?.skipReason,
                     state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
-                    tooltip: `This module runs firmware ${hardwareModules.rightModuleInfo?.firmwareVersion} (binary identical to previously installed firmware ${moduleInfo.info.firmwareVersion}); no update needed.`
-                });
+                    tooltip: `This module runs firmware ${hardwareModules.rightModuleInfo?.firmwareVersion} (binary identical to previously installed firmware ${moduleInfo.info.firmwareVersion}); no update needed.`,
+                }
+
+                modules.push(moduleState);
             }
+
+            moduleState.checksumTooltip = calculateChecksumTooltip(moduleState);
         }
     }
 
@@ -395,24 +460,78 @@ function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModu
     }, []);
 }
 
-function setUpdatingModuleState(state: State, moduleName: string): Array<ModuleFirmwareUpgradeState> {
+function setUpdatingModuleState(state: State, payload: CurrentlyUpdatingModuleInfo): Array<ModuleFirmwareUpgradeState> {
     return state.modules.map(module => {
-        if (module.moduleName === moduleName) {
-            return {
+        if (module.moduleName === payload.moduleName) {
+            const newState = {
                 ...module,
-                state: ModuleFirmwareUpgradeStates.Upgrading
+                beforeFirmwareUpgradeChecksum: module.currentFirmwareChecksum,
+                forceUpgraded: payload.forceUpgraded,
+                newFirmwareChecksum: payload.newFirmwareChecksum,
+                state: ModuleFirmwareUpgradeStates.Upgrading,
             };
-        } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
-            return {
-                ...module,
-                state: ModuleFirmwareUpgradeStates.Success,
-                newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                gitRepo: state.firmwareJson?.gitInfo?.repo,
-                gitTag: state.firmwareJson?.gitInfo?.tag,
-            };
+            newState.checksumTooltip = calculateChecksumTooltip(newState);
+
+            return newState;
+        }
+
+        if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
+            return updateUpgradingModuleState(state, module, payload);
         }
 
         return module;
     });
+}
+
+function updateUpgradingModuleState(state: State, module: ModuleFirmwareUpgradeState, payload: {newFirmwareChecksum: string}): ModuleFirmwareUpgradeState {
+    const newState = {
+        ...module,
+        state: ModuleFirmwareUpgradeStates.Success,
+        newFirmwareChecksum: payload.newFirmwareChecksum,
+        newFirmwareVersion: state.firmwareJson?.firmwareVersion,
+        currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
+        gitRepo: state.firmwareJson?.gitInfo?.repo,
+        gitTag: state.firmwareJson?.gitInfo?.tag,
+    };
+    newState.checksumTooltip = calculateChecksumTooltip(newState);
+
+    return newState;
+}
+
+function calculateChecksumTooltip(upgradeState: ModuleFirmwareUpgradeState): string {
+    if (upgradeState.state === ModuleFirmwareUpgradeStates.Upgrading) {
+        if (upgradeState.forceUpgraded) {
+            return `Force upgrading, even though expected checksum (${upgradeState.newFirmwareChecksum}) is equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+        }
+        else {
+            return `Upgrading, because expected checksum (${upgradeState.newFirmwareChecksum}) is not equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+        }
+    }
+    else if (upgradeState.state === ModuleFirmwareUpgradeStates.Skipped) {
+        if (upgradeState.skipReason === ModuleFirmwareUpgradeSkipReason.ModuleChecksumMatches || upgradeState.skipReason === ModuleFirmwareUpgradeSkipReason.DeviceChecksumMatches) {
+            return `Not upgraded, because expected checksum (${upgradeState.newFirmwareChecksum}) was equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+        }
+
+        if (upgradeState.skipReason === ModuleFirmwareUpgradeSkipReason.Uhk80Limitation) {
+            return 'The UHK 80 firmware can\'t update module firmwares yet, but it\'s not a problem because module firmwares haven\'t changed.';
+        }
+    }
+    else if (upgradeState.state === ModuleFirmwareUpgradeStates.Success) {
+        if (upgradeState.forceUpgraded) {
+            return `Force upgraded, even though expected checksum (${upgradeState.newFirmwareChecksum}) was equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+        }
+        else {
+            return `Upgraded, because expected checksum (${upgradeState.newFirmwareChecksum}) was not equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+        }
+    }
+    else if (upgradeState.state === ModuleFirmwareUpgradeStates.Failed) {
+        if (upgradeState.forceUpgraded) {
+            return `Force upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+        }
+        else {
+            return `Upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is not equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+        }
+    }
+
+    return;
 }

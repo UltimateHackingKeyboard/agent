@@ -1,7 +1,13 @@
 import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { faCheck, faExclamation, faLongArrowAltRight, faSlidersH, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCheck,
+    faExclamation,
+    faLongArrowAltRight,
+    faSlidersH,
+    faSpinner,
+} from '@fortawesome/free-solid-svg-icons';
 import { FirmwareUpgradeFailReason, UhkModule, VersionInformation } from 'uhk-common';
 
 import {
@@ -18,7 +24,7 @@ import {
 import { RecoveryModuleAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 import { XtermComponent } from '../../xterm/xterm.component';
-import { FirmwareUpgradeState, HistoryFileInfo, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
+import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
 
 @Component({
     selector: 'device-firmware',
@@ -36,7 +42,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
     runningOnNotSupportedWindows$: Observable<boolean>;
     firmwareUpgradeAllowed$: Observable<boolean>;
 
-    firmwareGithubIssueUrl: string;
     firmwareUpgradeFailed: boolean;
     firmwareUpgradeFailReasons = FirmwareUpgradeFailReason;
     firmwareUpgradeSuccess: boolean;

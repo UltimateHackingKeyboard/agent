@@ -3,6 +3,7 @@ import { Action, Store } from '@ngrx/store';
 
 import {
     ChangeKeyboardLayoutIpcResponse,
+    CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
     DeviceVersionInformation,
     FirmwareJson,
@@ -13,6 +14,7 @@ import {
     IpcResponse,
     KeyboardLayout,
     LogService,
+    ModuleFirmwareUpgradeSkipInfo,
     SaveUserConfigurationData,
     UHK_DEVICE_IDS_TYPE,
     UpdateFirmwareData,
@@ -193,11 +195,11 @@ export class DeviceRendererService {
             this.dispachStoreAction(new UpdateFirmwareJsonAction(data));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeSkip, (event: string, response: string) => {
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeSkip, (event: string, response: ModuleFirmwareUpgradeSkipInfo) => {
             this.dispachStoreAction(new CurrentlyUpdateSkipModuleAction(response));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgrading, (event: string, response: string) => {
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgrading, (event: string, response: CurrentlyUpdatingModuleInfo) => {
             this.dispachStoreAction(new CurrentlyUpdatingModuleAction(response));
         });
 

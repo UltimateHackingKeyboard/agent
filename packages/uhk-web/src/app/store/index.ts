@@ -711,7 +711,9 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                     firmwareUpgradeSupported: true,
                     gitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
                     isOfficialFirmware: true,
+                    currentFirmwareChecksum: '',
                     currentFirmwareVersion: agentVersionInfo.firmwareVersion,
+                    forceUpgraded: false,
                     newFirmwareVersion: undefined,
                     state: ModuleFirmwareUpgradeStates.Idle
                 },
@@ -720,7 +722,9 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                     firmwareUpgradeSupported: true,
                     gitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
                     isOfficialFirmware: true,
+                    currentFirmwareChecksum: '',
                     currentFirmwareVersion: agentVersionInfo.firmwareVersion,
+                    forceUpgraded: false,
                     newFirmwareVersion: undefined,
                     state: ModuleFirmwareUpgradeStates.Idle
                 }
