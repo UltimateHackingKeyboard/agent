@@ -501,15 +501,15 @@ function updateUpgradingModuleState(state: State, module: ModuleFirmwareUpgradeS
 function calculateChecksumTooltip(upgradeState: ModuleFirmwareUpgradeState): string {
     if (upgradeState.state === ModuleFirmwareUpgradeStates.Upgrading) {
         if (upgradeState.forceUpgraded) {
-            return `Force upgrading, even though expected checksum (${upgradeState.newFirmwareChecksum}) is equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+            return `Force upgrading, even though expected checksum (${upgradeState.newFirmwareChecksum}) is equal to actual checksum (${upgradeState.beforeFirmwareUpgradeChecksum})`;
         }
         else {
-            return `Upgrading, because expected checksum (${upgradeState.newFirmwareChecksum}) is not equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+            return `Upgrading because expected checksum (${upgradeState.newFirmwareChecksum}) is not equal to actual checksum (${upgradeState.beforeFirmwareUpgradeChecksum})`;
         }
     }
     else if (upgradeState.state === ModuleFirmwareUpgradeStates.Skipped) {
         if (upgradeState.skipReason === ModuleFirmwareUpgradeSkipReason.ModuleChecksumMatches || upgradeState.skipReason === ModuleFirmwareUpgradeSkipReason.DeviceChecksumMatches) {
-            return `Not upgraded, because expected checksum (${upgradeState.newFirmwareChecksum}) was equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+            return `Not upgraded because expected checksum (${upgradeState.newFirmwareChecksum}) was equal to actual checksum (${upgradeState.beforeFirmwareUpgradeChecksum})`;
         }
 
         if (upgradeState.skipReason === ModuleFirmwareUpgradeSkipReason.Uhk80Limitation) {
@@ -518,18 +518,18 @@ function calculateChecksumTooltip(upgradeState: ModuleFirmwareUpgradeState): str
     }
     else if (upgradeState.state === ModuleFirmwareUpgradeStates.Success) {
         if (upgradeState.forceUpgraded) {
-            return `Force upgraded, even though expected checksum (${upgradeState.newFirmwareChecksum}) was equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+            return `Force upgraded, even though expected checksum (${upgradeState.newFirmwareChecksum}) was equal to actual checksum (${upgradeState.beforeFirmwareUpgradeChecksum})`;
         }
         else {
-            return `Upgraded, because expected checksum (${upgradeState.newFirmwareChecksum}) was not equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+            return `Upgraded because expected checksum (${upgradeState.newFirmwareChecksum}) was not equal to actual checksum (${upgradeState.beforeFirmwareUpgradeChecksum})`;
         }
     }
     else if (upgradeState.state === ModuleFirmwareUpgradeStates.Failed) {
         if (upgradeState.forceUpgraded) {
-            return `Force upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+            return `Force upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is equal to actual checksum (${upgradeState.beforeFirmwareUpgradeChecksum})`;
         }
         else {
-            return `Upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is not equal with actual (${upgradeState.beforeFirmwareUpgradeChecksum})`;
+            return `Upgrade failed, expected checksum (${upgradeState.newFirmwareChecksum}) is not equal to actual checksum (${upgradeState.beforeFirmwareUpgradeChecksum})`;
         }
     }
 
