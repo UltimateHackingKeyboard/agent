@@ -13,7 +13,6 @@
                         <div [innerHTML]="state.checksumTooltip | safeHtml"></div>
                     </ng-template>
                     <span class="upgrading"
-                          [class.icon-dotted]="state.checksumTooltip"
                           [ngbTooltip]="htmlTooltipTemplate"
                           [disableTooltip]="!state.checksumTooltip"
                           tooltipClass="tooltip-firmware-checksum"

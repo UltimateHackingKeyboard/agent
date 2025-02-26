@@ -591,6 +591,8 @@ export class DeviceService {
                         newFirmwareChecksum: '',
                         reason: ModuleFirmwareUpgradeSkipReason.Uhk80Limitation,
                     } as ModuleFirmwareUpgradeSkipInfo);
+
+                    continue;
                 }
 
                 if (moduleInfo.module.firmwareUpgradeSupported) {
