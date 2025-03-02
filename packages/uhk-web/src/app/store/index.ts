@@ -786,11 +786,11 @@ export const getSelectedLayerOptionAddKeymap = createSelector(
 
 export const smartMacroDocState = (state: AppState) => state.smartMacroDoc;
 export const selectSmartMacroDocUrl = createSelector(
-    runningInElectron, smartMacroDocState, getRightModuleFirmwareRepoInfo,
-    (isRunningInElectron, smartMacroState, firmwareRepoInfo) => {
+    runningInElectron, smartMacroDocState,
+    (isRunningInElectron, smartMacroState) => {
         if (isRunningInElectron) {
             if (smartMacroState.firmwareDocState === fromSmartMacroDoc.FirmwareDocState.Loaded)
-                return `http://127.0.0.1:${smartMacroState.port}/${firmwareRepoInfo.firmwareGitRepo}/${firmwareRepoInfo.firmwareGitTag}/index.html`;
+                return `http://127.0.0.1:${smartMacroState.port}/${smartMacroState.firmwareDocRepoInfo.firmwareGitRepo}/${smartMacroState.firmwareDocRepoInfo.firmwareGitTag}/index.html`;
 
             return `http://127.0.0.1:${smartMacroState.port}/loading.html`;
         }

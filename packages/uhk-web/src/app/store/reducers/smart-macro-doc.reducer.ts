@@ -1,6 +1,9 @@
+import { FirmwareRepoInfo } from 'uhk-common';
+
 import * as fromApp from '../actions/app';
 import {
     ActionTypes,
+    DownloadDocumentationSuccessAction,
     PanelSizeChangedAction,
     SmartMacroDocActions
 } from '../actions/smart-macro-doc.action';
@@ -16,6 +19,7 @@ export enum FirmwareDocState {
 
 export interface State {
     firmwareDocState: FirmwareDocState;
+    firmwareDocRepoInfo: FirmwareRepoInfo;
     panelSize: number;
     panelVisible: boolean;
     port?: number;
@@ -23,11 +27,15 @@ export interface State {
 
 export const initialState: State = {
     firmwareDocState: FirmwareDocState.Unknown,
+    firmwareDocRepoInfo: {
+        firmwareGitRepo: '',
+        firmwareGitTag: '',
+    },
     panelSize: DEFAULT_PANEL_SIZE,
     panelVisible: false
 };
 
-export function reducer(state = initialState, action: SmartMacroDocActions | fromApp.Actions) {
+export function reducer(state = initialState, action: SmartMacroDocActions | fromApp.Actions): State {
     switch (action.type) {
 
         case fromApp.ActionTypes.LoadApplicationSettingsSuccess:
@@ -45,7 +53,8 @@ export function reducer(state = initialState, action: SmartMacroDocActions | fro
         case ActionTypes.DownloadDocumentationSuccess:
             return {
                 ...state,
-                firmwareDocState: FirmwareDocState.Loaded
+                firmwareDocState: FirmwareDocState.Loaded,
+                firmwareDocRepoInfo: (action as DownloadDocumentationSuccessAction).payload,
             };
 
         case ActionTypes.PanelSizeChanged:
