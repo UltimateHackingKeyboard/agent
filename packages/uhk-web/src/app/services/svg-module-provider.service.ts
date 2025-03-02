@@ -64,15 +64,6 @@ export class SvgModuleProviderService implements OnDestroy {
     getDescriptionAnimationParams(halvesInfo: HalvesInfo): DescriptionAnimationParams {
         switch (this.connectedDeviceId) {
             case UHK_80_DEVICE.id: {
-                if (halvesInfo?.areHalvesMerged) {
-                    return {
-                        down: '-4em',
-                        up: '-5.5%',
-                        upLeftKeyCluster: '-4.5%',
-                        upRightModule: '-5.5%',
-                    };
-                }
-
                 return {
                     down: '-0.5em',
                     up: '-5.5%',
@@ -126,7 +117,7 @@ export class SvgModuleProviderService implements OnDestroy {
             case UHK_80_DEVICE.id: {
                 if (halvesInfo?.areHalvesMerged) {
 
-                    return '-520 660 1250 600';
+                    return '-520 660 1250 560';
                 }
 
                 return'-550 610 1250 600';
