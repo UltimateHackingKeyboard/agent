@@ -1,9 +1,9 @@
 import { Action } from "@ngrx/store";
+import { FirmwareRepoInfo } from 'uhk-common';
 
 export enum ActionTypes {
     DownloadDocumentation = '[smart-macro-doc] download documentation',
     DownloadDocumentationSuccess = '[smart-macro-doc] download documentation success',
-    DownloadDocumentationFailed = '[smart-macro-doc] download documentation failed',
     PanelSizeChanged = '[smart-macro-doc] panel size changed',
     ReferenceManualChanged = '[smart-macro-doc] reference manual changed',
     ServiceListening = '[smart-macro-doc] service listening',
@@ -17,6 +17,8 @@ export class DownloadDocumentationAction implements Action {
 
 export class DownloadDocumentationSuccessAction implements Action {
     type = ActionTypes.DownloadDocumentationSuccess;
+
+    constructor(public payload: FirmwareRepoInfo) {}
 }
 
 export class PanelSizeChangedAction implements Action {

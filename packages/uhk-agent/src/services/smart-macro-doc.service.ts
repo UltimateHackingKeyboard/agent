@@ -5,6 +5,7 @@ import getPort from 'get-port';
 import { join } from 'path';
 import fastify, { FastifyInstance } from 'fastify';
 import { FirmwareRepoInfo, IpcEvents, LogService } from 'uhk-common';
+import { getPackageJsonFromPathAsync } from 'uhk-usb';
 import { downloadSmartMacroDoc, downloadSmartMacroReferenceManual, REFERENCE_MANUAL_FILE_NAME } from 'uhk-smart-macro';
 
 import {
@@ -87,6 +88,68 @@ export class SmartMacroDocService {
         this.logService.misc(serviceLogMessage('stopped.'));
     }
 
+    private async downloadDocumentation(event: Electron.IpcMainEvent, firmwareRepoInfo: FirmwareRepoInfo): Promise<void> {
+        this.logService.misc(serviceLogMessage('start downloading firmware documentation'), firmwareRepoInfo);
+        const [owner, repo] = firmwareRepoInfo.firmwareGitRepo.split('/');
+        const downloadDirectory = join(this.rootPath, owner, repo, firmwareRepoInfo.firmwareGitTag);
+        const indexHtmlPath = join(downloadDirectory, 'index.html');
+
+        if (!await fse.pathExists(indexHtmlPath)) {
+            this.logService.misc(serviceLogMessage('firmware documentation downloading'));
+
+            await downloadSmartMacroDoc({
+                owner,
+                repo,
+                ref: firmwareRepoInfo.firmwareGitTag,
+                directory: downloadDirectory
+            });
+
+            this.logService.misc(serviceLogMessage('firmware documentation downloaded'));
+        }
+        else {
+            this.logService.misc(serviceLogMessage('firmware documentation downloaded earlier'));
+        }
+
+        event.sender.send(IpcEvents.smartMacroDoc.downloadDocumentationReply, firmwareRepoInfo);
+
+        const docDevDirectory = join(downloadDirectory, 'doc-dev');
+        if (!await fse.pathExists(docDevDirectory)) {
+            this.logService.misc(serviceLogMessage('reference manual downloading'));
+
+            await downloadSmartMacroReferenceManual({
+                owner,
+                repo,
+                ref: firmwareRepoInfo.firmwareGitTag,
+                directory: docDevDirectory,
+            });
+
+            this.logService.misc(serviceLogMessage('reference manual downloaded'));
+        }
+        else {
+            this.logService.misc(serviceLogMessage('reference manual downloaded earlier'));
+        }
+
+        const referenceManualPath = join(docDevDirectory, REFERENCE_MANUAL_FILE_NAME);
+        const referenceManual = await fse.readFile(referenceManualPath, 'utf8');
+        event.sender.send(IpcEvents.smartMacroDoc.referenceManualReply, referenceManual);
+    }
+
+    private async fallbackToBundledFirmware(event: Electron.IpcMainEvent): Promise<void> {
+        this.logService.misc(serviceLogMessage('fallback to bundled firmware documentation'));
+        try {
+            const { packageJsonPath } = getDefaultFirmwarePath(this.rootDir);
+            const { gitInfo } = await getPackageJsonFromPathAsync(packageJsonPath);
+            const firmwareRepoInfo: FirmwareRepoInfo = {
+                firmwareGitRepo: gitInfo.repo,
+                firmwareGitTag: gitInfo.tag,
+            }
+            await this.downloadDocumentation(event, firmwareRepoInfo)
+        }
+        catch (error) {
+            this.logService.error(serviceLogMessage('failed to fallback to bundled documentation'), error);
+        }
+    }
+
     private async handleAppStartInfo(event: Electron.IpcMainEvent): Promise<void> {
         this.logService.misc(serviceLogMessage('getAppStartInfo'));
 
@@ -97,48 +160,14 @@ export class SmartMacroDocService {
         try {
             const firmwareRepoInfo: FirmwareRepoInfo = args[0];
             if (!firmwareRepoInfo.firmwareGitRepo || !firmwareRepoInfo.firmwareGitTag) {
-                this.logService.misc(serviceLogMessage('skip download firmware documentation because git repo or tag missing'), firmwareRepoInfo);
-                return;
+                this.logService.misc(serviceLogMessage('fallback to bundled firmware documentation because git repo or tag missing'), firmwareRepoInfo);
+                return this.fallbackToBundledFirmware(event);
             }
 
-            this.logService.misc(serviceLogMessage('start download firmware documentation'), firmwareRepoInfo);
-            const [owner, repo] = firmwareRepoInfo.firmwareGitRepo.split('/');
-            const downloadDirectory = join(this.rootPath, owner, repo, firmwareRepoInfo.firmwareGitTag);
-            const indexHtmlPath = join(downloadDirectory, 'index.html');
-
-            if (!await fse.pathExists(indexHtmlPath)) {
-                this.logService.misc(serviceLogMessage('firmware documentation downloading'));
-
-                await downloadSmartMacroDoc({
-                    owner,
-                    repo,
-                    ref: firmwareRepoInfo.firmwareGitTag,
-                    directory: downloadDirectory
-                });
-            }
-
-            this.logService.misc(serviceLogMessage('firmware documentation downloaded'));
-            event.sender.send(IpcEvents.smartMacroDoc.downloadDocumentationReply);
-
-            const docDevDirectory = join(downloadDirectory, 'doc-dev');
-            if (!await fse.pathExists(docDevDirectory)) {
-                this.logService.misc(serviceLogMessage('reference manual downloading'));
-
-                await downloadSmartMacroReferenceManual({
-                    owner,
-                    repo,
-                    ref: firmwareRepoInfo.firmwareGitTag,
-                    directory: docDevDirectory
-                });
-            }
-
-            this.logService.misc(serviceLogMessage('reference manual downloaded'));
-
-            const referenceManualPath = join(docDevDirectory, REFERENCE_MANUAL_FILE_NAME);
-            const referenceManual = await fse.readFile(referenceManualPath, 'utf8');
-            event.sender.send(IpcEvents.smartMacroDoc.referenceManualReply, referenceManual);
+            return this.downloadDocumentation(event, firmwareRepoInfo);
         } catch (error) {
-            this.logService.error(serviceLogMessage('download documentation failed'), error);
+            this.logService.error(serviceLogMessage('download running firmware documentation failed'), error);
+            return this.fallbackToBundledFirmware(event);
         }
     }
 }

@@ -27,8 +27,8 @@ export class SmartMacroDocRendererService {
             this.dispatchStoreAction(new ServiceListeningAction(arg));
         });
 
-        this.ipcRenderer.on(IpcEvents.smartMacroDoc.downloadDocumentationReply, () => {
-            this.dispatchStoreAction(new DownloadDocumentationSuccessAction());
+        this.ipcRenderer.on(IpcEvents.smartMacroDoc.downloadDocumentationReply, (event : string, firmwareRepoInfo: FirmwareRepoInfo) => {
+            this.dispatchStoreAction(new DownloadDocumentationSuccessAction(firmwareRepoInfo));
         });
 
         this.ipcRenderer.on(IpcEvents.smartMacroDoc.referenceManualReply, (event: string, arg: string) => {
