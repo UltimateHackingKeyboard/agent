@@ -5,3 +5,4 @@ export { LayerTabComponent } from './layer';
 export { MacroTabComponent } from './macro';
 export { MouseTabComponent } from './mouse';
 export { NoneTabComponent } from './none';
+export { SpecialTabComponent } from './special/special-tab.component';

@@ -20,7 +20,8 @@ export enum KeyActionId {
     SwitchLayerAction            = 32,
     SwitchKeymapAction           = 33,
     MouseAction                  = 34,
-    PlayMacroAction              = 35
+    PlayMacroAction              = 35,
+    SpecialAction                = 36,
 }
 
 export let keyActionType = {
@@ -29,7 +30,8 @@ export let keyActionType = {
     SwitchLayerAction            : 'switchLayer',
     SwitchKeymapAction           : 'switchKeymap',
     MouseAction                  : 'mouse',
-    PlayMacroAction              : 'playMacro'
+    PlayMacroAction              : 'playMacro',
+    SpecialAction                : 'specialMacro',
 };
 
 export abstract class KeyAction implements RgbColorInterface {

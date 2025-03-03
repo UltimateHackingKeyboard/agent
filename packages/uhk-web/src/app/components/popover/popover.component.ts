@@ -43,13 +43,14 @@ import {
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
 import { SelectOptionData } from '../../models/select-option-data';
-import { faSquareA } from '../../custom-fa-icons';
+import { faSquareA, faSparkle } from '../../custom-fa-icons';
 import { LayerOption } from '../../models';
 
 enum TabName {
     Keypress,
     Layer,
     Mouse,
+    Special,
     Macro,
     Keymap,
     None
@@ -109,6 +110,11 @@ export class PopoverComponent implements OnChanges {
             tabName: TabName.Mouse,
             icon: faMousePointer,
             text: 'Mouse'
+        },
+        {
+            tabName: TabName.Special,
+            icon: faSparkle,
+            text: 'Special'
         },
         {
             tabName: TabName.Macro,
