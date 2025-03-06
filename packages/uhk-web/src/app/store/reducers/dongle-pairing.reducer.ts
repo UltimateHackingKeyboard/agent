@@ -33,6 +33,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 dongle: (<Device.ConnectionStateChangedAction>action).payload.dongle,
+                state: state.operation === DongleOperations.None ? DonglePairingStates.Idle : state.state,
             };
         }
 

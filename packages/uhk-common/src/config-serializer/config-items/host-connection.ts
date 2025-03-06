@@ -1,5 +1,6 @@
 import { assertEnum } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
+import { isSerialisationInfoLt } from './serialisation-info.js';
 import { SerialisationInfo } from './serialisation-info.js';
 
 export enum HostConnections {
@@ -23,14 +24,17 @@ export const BLE_ADDRESS_LENGTH = 6;
 const BLE_ADDRESS_SEPARATOR = ':';
 
 export function convertBleAddressArrayToString(address: number[]): string {
-    return address.map(x => x.toString(16)).join(BLE_ADDRESS_SEPARATOR);
+    return [...address]
+        .reverse()
+        .map(x => x.toString(16).padStart(2, '0'))
+        .join(BLE_ADDRESS_SEPARATOR);
 }
 
 export function convertBleStringToNumberArray(address: string): number[] {
     const split = address.split(BLE_ADDRESS_SEPARATOR);
     const result: number[] = [];
 
-    for(let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
+    for (let i = BLE_ADDRESS_LENGTH - 1; i >= 0 ; i--) {
         const segment = Number.parseInt(split[i], 16) || 0;
         result.push(segment);
     }
@@ -99,7 +103,7 @@ export class HostConnection {
         if (this.hasAddress()) {
             const address = this.address.split(BLE_ADDRESS_SEPARATOR);
 
-            for(let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
+            for (let i = BLE_ADDRESS_LENGTH - 1; i >= 0 ; i--) {
                 const segment = Number.parseInt(address[i], 16) || 0;
                 buffer.writeUInt8(segment);
             }
@@ -121,7 +125,7 @@ export class HostConnection {
         if (this.hasAddress()) {
             const address = [];
 
-            for(let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
+            for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                 address.push(buffer.readUInt8());
             }
 
@@ -144,6 +148,14 @@ export class HostConnection {
         this.type = HostConnections[<string>jsonObject.type];
         if (this.hasAddress()) {
             this.address = jsonObject.address;
+
+            if (isSerialisationInfoLt(serialisationInfo, '8.3.1')) {
+                const bytes = this.address.split(BLE_ADDRESS_SEPARATOR)
+                    .map(x => Number.parseInt(x, 16))
+                    .reverse()
+
+                this.address = convertBleAddressArrayToString(bytes)
+            }
         }
 
         if (this.type === HostConnections.Empty) {

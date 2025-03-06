@@ -274,6 +274,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             this.userConfigurationLength = 0;
         }
 
+        if (this.migrateToV8_3_1()) {
+            this.userConfigurationLength = 0;
+        }
+
         if (this.userConfigurationLength === 0) {
             this.recalculateConfigurationLength();
         }
@@ -1088,11 +1092,30 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         return true;
     }
 
+    private migrateToV8_3_1(): boolean {
+        if (this.userConfigMajorVersion > 8) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion > 3) {
+            return false;
+        }
+
+        if (this.userConfigPatchVersion >= 1) {
+            return false;
+        }
+
+        this.userConfigPatchVersion = 1;
+
+        return true;
+    }
+
     private getSerialisationInfo(): SerialisationInfo {
         return {
             isUserConfigContainsRgbColors: this.perKeyRgbPresent,
             userConfigMajorVersion: this.userConfigMajorVersion,
             userConfigMinorVersion: this.userConfigMinorVersion,
+            userConfigPatchVersion: this.userConfigPatchVersion,
         };
     }
 }
