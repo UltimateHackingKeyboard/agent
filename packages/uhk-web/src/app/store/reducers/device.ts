@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { UHK_80_DEVICE } from 'uhk-common';
 import {
     BackupUserConfiguration,
     BackupUserConfigurationInfo,
@@ -62,6 +63,7 @@ export interface State {
 export const initialState: State = {
     bleDeviceConnected: false,
     isKeyboardLayoutChanging: false,
+    connectedDevice: UHK_80_DEVICE,
     hasPermission: true,
     bootloaderActive: false,
     deviceConnectionStateLoaded: false,

@@ -67,7 +67,8 @@ import {
     LayerTabComponent,
     MacroTabComponent,
     MouseTabComponent,
-    NoneTabComponent
+    NoneTabComponent,
+    SpecialTabComponent,
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
@@ -75,6 +76,7 @@ import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './
 import { SecondSideMenuContainerComponent, SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
+    SvgConnectionKeyComponent,
     SvgIconTextKeyComponent,
     SvgKeyboardKeyComponent,
     SvgKeystrokeKeyComponent,
@@ -193,6 +195,7 @@ import appInitFactory from './services/app-init-factory';
         KeymapHeaderComponent,
         NotificationComponent,
         DonglePairingPanelComponent,
+        SvgConnectionKeyComponent,
         SvgIconTextKeyComponent,
         SvgKeyboardKeyComponent,
         SvgKeystrokeKeyComponent,
@@ -223,6 +226,7 @@ import appInitFactory from './services/app-init-factory';
         MacroTabComponent,
         MouseTabComponent,
         NoneTabComponent,
+        SpecialTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
         MacroEditComponent,

@@ -24,11 +24,13 @@ import labPlugin from 'colord/plugins/lab';
 
 import {
     BacklightingMode,
+    ConnectionsAction,
     KeyAction,
     KeyModifiers,
     KeystrokeAction,
     Macro,
     MouseAction,
+    OtherAction,
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
@@ -54,6 +56,7 @@ import { SvgKeyboardKey } from './svg-keyboard-key.model';
 extend([labPlugin]);
 
 enum LabelTypes {
+    ConnectionKey,
     KeystrokeKey,
     MouseKey,
     OneLineText,
@@ -493,6 +496,12 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             };
         } else if (this.keyAction instanceof MouseAction) {
             this.labelType = LabelTypes.MouseKey;
+            this.labelSource = this.keyAction;
+        } else if (this.keyAction instanceof OtherAction) {
+            this.labelType = LabelTypes.SingleIcon;
+            this.labelSource = this.mapper.getIcon('sleep');
+        }  else if (this.keyAction instanceof ConnectionsAction) {
+            this.labelType = LabelTypes.ConnectionKey;
             this.labelSource = this.keyAction;
         } else {
             this.labelSource = undefined;

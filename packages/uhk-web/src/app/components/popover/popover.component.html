@@ -39,6 +39,10 @@
                    [defaultKeyAction]="defaultKeyAction"
                    (validAction)="setKeyActionValidState($event)"
         ></mouse-tab>
+        <special-tab #tab *ngSwitchCase="tabName.Special" class="popover-content"
+                   [defaultKeyAction]="defaultKeyAction"
+                   (validAction)="setKeyActionValidState($event)"
+        ></special-tab>
         <macro-tab #tab *ngSwitchCase="tabName.Macro" class="popover-content"
                    [currentKeymap]="currentKeymap"
                    [selectedKey]="selectedKey"

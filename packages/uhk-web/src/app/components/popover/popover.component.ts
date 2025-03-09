@@ -17,11 +17,13 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import {
+    ConnectionsAction,
     KeyAction,
     Keymap,
     KeystrokeAction,
     LayerName,
     MouseAction,
+    OtherAction,
     PlayMacroAction,
     SecondaryRoleAction,
     UhkThemeColors,
@@ -43,13 +45,14 @@ import {
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
 import { SelectOptionData } from '../../models/select-option-data';
-import { faSquareA } from '../../custom-fa-icons';
+import { faSquareA, faSparkle } from '../../custom-fa-icons';
 import { LayerOption } from '../../models';
 
 enum TabName {
     Keypress,
     Layer,
     Mouse,
+    Special,
     Macro,
     Keymap,
     None
@@ -111,6 +114,11 @@ export class PopoverComponent implements OnChanges {
             text: 'Mouse'
         },
         {
+            tabName: TabName.Special,
+            icon: faSparkle,
+            text: 'Special'
+        },
+        {
             tabName: TabName.Macro,
             icon: faPlay,
             text: 'Macro'
@@ -139,7 +147,7 @@ export class PopoverComponent implements OnChanges {
     }
 
     ngOnChanges(change: SimpleChanges) {
-        let tab: TabHeader = this.tabHeaders[5];
+        let tab: TabHeader = this.tabHeaders[6];
 
         if (change.remapInfo) {
             this.internalRemapInfo = {
@@ -157,12 +165,16 @@ export class PopoverComponent implements OnChanges {
                 tab = this.tabHeaders[1];
             } else if (this.defaultKeyAction instanceof MouseAction) {
                 tab = this.tabHeaders[2];
-            } else if (this.defaultKeyAction instanceof PlayMacroAction) {
+            } else if (this.defaultKeyAction instanceof ConnectionsAction) {
                 tab = this.tabHeaders[3];
-            } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
+            } else if (this.defaultKeyAction instanceof OtherAction) {
+                tab = this.tabHeaders[3];
+            } else if (this.defaultKeyAction instanceof PlayMacroAction) {
                 tab = this.tabHeaders[4];
-            } else {
+            } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
                 tab = this.tabHeaders[5];
+            } else {
+                tab = this.tabHeaders[6];
             }
 
             for (const tabHeader of this.tabHeaders) {
