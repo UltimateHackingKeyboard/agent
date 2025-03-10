@@ -9,7 +9,7 @@ import { AppState, getHostConnections } from '../../../../store/index';
 import { getContentWidth } from '../../../../util/index';
 
 const MAX_FONT_SIZE = 25;
-const MIN_FONT_SIZE = 20;
+const MIN_FONT_SIZE = 15;
 
 @Component({
     selector: 'g[svg-connection-key]',
@@ -86,7 +86,7 @@ export class SvgConnectionKeyComponent implements OnChanges, OnDestroy, OnInit {
         }
 
         // the svg element uses 100 x 100 viewBox, so we can hardcode the 96 because it is 100 - 2px left and 2 px right padding.
-        const reducedWidth = 96;
+        const reducedWidth = 94;
 
         for (let fontSize = MAX_FONT_SIZE; fontSize >= MIN_FONT_SIZE; fontSize = fontSize - 0.5) {
             const style = {
@@ -106,7 +106,7 @@ export class SvgConnectionKeyComponent implements OnChanges, OnDestroy, OnInit {
 
     private calculateIconPosition(): void {
         if (!this.firstText) {
-            this.iconX = (96 - this.iconWidth) / 2;
+            this.iconX = (94 - this.iconWidth) / 2;
         }
         else {
             const style = {
