@@ -4,7 +4,11 @@
     &.popover-content {
         padding: 10px;
         display: flex;
-        align-items: center;
+    }
+
+    .select-toggle-container {
+        display: inline-block;
+        width: 20em;
     }
 
     .mouse-action {
@@ -54,35 +58,5 @@
     .details {
         padding-right: 30px;
         padding-left: 30px;
-
-        .host-connections-table-wrapper {
-            max-height: 250px;
-            overflow-y: auto;
-
-            table {
-                thead tr th {
-                    background-color: var(--color-popover-bg-light);
-                    position: sticky;
-                    top: 0;
-                }
-
-                th,
-                td {
-                    padding: 0.5rem;
-                    border-bottom: 1px solid var(--color-sidemenu-border);
-
-                    button.btn {
-                        border: none;
-                        padding: 0;
-                    }
-
-                    .movable {
-                        &:hover {
-                            cursor: move;
-                        }
-                    }
-                }
-            }
-        }
     }
 }

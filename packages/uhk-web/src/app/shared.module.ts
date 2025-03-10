@@ -62,13 +62,13 @@ import { NotificationComponent } from './components/notification';
 import { PopoverComponent } from './components/popover';
 import { NgxResize } from './components/resize';
 import {
+    DeviceTabComponent,
     KeymapTabComponent,
     KeypressTabComponent,
     LayerTabComponent,
     MacroTabComponent,
     MouseTabComponent,
     NoneTabComponent,
-    SpecialTabComponent,
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
@@ -220,13 +220,13 @@ import appInitFactory from './services/app-init-factory';
         KeymapAddEmptyComponent,
         KeymapAddSecondaryMenuComponent,
         SideMenuComponent,
+        DeviceTabComponent,
         KeypressTabComponent,
         KeymapTabComponent,
         LayerTabComponent,
         MacroTabComponent,
         MouseTabComponent,
         NoneTabComponent,
-        SpecialTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
         MacroEditComponent,

@@ -571,7 +571,7 @@ export const getSideMenuPageState = createSelector(
 
         return {
             advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
-            connectedDevice: runningInElectronValue ? connectedDevice : UHK_80_DEVICE,
+            connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
             runInElectron: runningInElectronValue,
             updatingFirmware: updatingFirmwareValue || donglePairingState.operation !== DongleOperations.None || leftHalfPairing,
             deviceName: userConfiguration.deviceName,

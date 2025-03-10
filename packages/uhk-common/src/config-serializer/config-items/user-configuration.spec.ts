@@ -23,7 +23,7 @@ describe('user-configuration', () => {
             backlightingSwitchKeymapColor: {r:255, g:0, b:0},
             backlightingMouseColor: {r:0, g:255, b:0},
             backlightingMacroColor: {r:255, g:0, b:255},
-            backlightingSpecialColor: {r:255, g:136, b:68},
+            backlightingDeviceColor: {r:255, g:136, b:68},
             mouseMoveInitialSpeed: 5,
             mouseMoveAcceleration: 35,
             mouseMoveDeceleratedSpeed: 10,

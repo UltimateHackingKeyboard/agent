@@ -52,9 +52,9 @@ enum TabName {
     Keypress,
     Layer,
     Mouse,
-    Special,
     Macro,
     Keymap,
+    Device,
     None
 }
 
@@ -114,11 +114,6 @@ export class PopoverComponent implements OnChanges {
             text: 'Mouse'
         },
         {
-            tabName: TabName.Special,
-            icon: faSparkle,
-            text: 'Special'
-        },
-        {
             tabName: TabName.Macro,
             icon: faPlay,
             text: 'Macro'
@@ -127,6 +122,11 @@ export class PopoverComponent implements OnChanges {
             tabName: TabName.Keymap,
             icon: faKeyboard,
             text: 'Keymap'
+        },
+        {
+            tabName: TabName.Device,
+            icon: faSparkle,
+            text: 'Device'
         },
         {
             tabName: TabName.None,
@@ -166,13 +166,13 @@ export class PopoverComponent implements OnChanges {
             } else if (this.defaultKeyAction instanceof MouseAction) {
                 tab = this.tabHeaders[2];
             } else if (this.defaultKeyAction instanceof ConnectionsAction) {
-                tab = this.tabHeaders[3];
-            } else if (this.defaultKeyAction instanceof OtherAction) {
-                tab = this.tabHeaders[3];
-            } else if (this.defaultKeyAction instanceof PlayMacroAction) {
-                tab = this.tabHeaders[4];
-            } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
                 tab = this.tabHeaders[5];
+            } else if (this.defaultKeyAction instanceof OtherAction) {
+                tab = this.tabHeaders[5];
+            } else if (this.defaultKeyAction instanceof PlayMacroAction) {
+                tab = this.tabHeaders[3];
+            } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
+                tab = this.tabHeaders[4];
             } else {
                 tab = this.tabHeaders[6];
             }

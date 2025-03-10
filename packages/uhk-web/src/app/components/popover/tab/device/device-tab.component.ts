@@ -33,20 +33,23 @@ interface HostConnectionListItem {
 }
 
 @Component({
-    selector: 'special-tab',
-    templateUrl: './special-tab.component.html',
-    styleUrls: ['./special-tab.component.scss'],
+    selector: 'device-tab',
+    templateUrl: './device-tab.component.html',
+    styleUrls: ['./device-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SpecialTabComponent extends Tab implements OnChanges, OnDestroy, OnInit {
+export class DeviceTabComponent extends Tab implements OnChanges, OnDestroy, OnInit {
     @Input() defaultKeyAction: KeyAction;
 
     hostConnections: HostConnection[] = [];
     hostConnectionItems: HostConnectionListItem[] = []
     pages = ['Connections', 'Sleep mode'];
     selectedPageIndex = 0;
-    selectedConnectionCommand: ConnectionCommands;
-    selectedHostConnectionId: number = -1
+    selectedHostConnection: HostConnectionListItem = {
+        name: 'Next connection',
+        command: ConnectionCommands.next,
+        connectionId: undefined,
+    };
 
     private hostConnectionsSubscription: Subscription;
 
@@ -68,18 +71,20 @@ export class SpecialTabComponent extends Tab implements OnChanges, OnDestroy, On
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.fromKeyAction(this.defaultKeyAction);
-        this.validAction.emit(this.keyActionValid());
+        if (changes.defaultKeyAction) {
+            this.fromKeyAction(this.defaultKeyAction);
+            this.validAction.emit(this.keyActionValid());
+        }
     }
 
-    isConnectionSelected(connection: HostConnectionListItem): boolean {
-        return connection.command === this.selectedConnectionCommand
-            && connection.connectionId === this.selectedHostConnectionId
+    isConnectionSelected(option: HostConnectionListItem, value: HostConnectionListItem): boolean {
+        return option.command === value.command
+            && option.connectionId === value.connectionId;
     }
 
     keyActionValid(): boolean {
         if (this.selectedPageIndex === CONNECTIONS_TAB) {
-            return this.selectedConnectionCommand !== undefined;
+            return this.selectedHostConnection !== undefined;
         }
         else if (this.selectedPageIndex === SLEEP_TAB) {
             return true;
@@ -91,12 +96,12 @@ export class SpecialTabComponent extends Tab implements OnChanges, OnDestroy, On
     fromKeyAction(keyAction: KeyAction): boolean {
         if (keyAction instanceof ConnectionsAction) {
             this.selectedPageIndex = CONNECTIONS_TAB;
-            this.selectedConnectionCommand = keyAction.command;
-            if (this.selectedConnectionCommand === ConnectionCommands.switchByHostConnectionId) {
-                this.selectedHostConnectionId = keyAction.hostConnectionId;
-            }
-            else {
-                this.selectedHostConnectionId = undefined
+            this.selectedHostConnection = {
+                command: keyAction.command,
+                name: '',
+                connectionId: keyAction.command === ConnectionCommands.switchByHostConnectionId
+                    ? keyAction.hostConnectionId
+                    : undefined,
             }
 
             return true
@@ -116,11 +121,12 @@ export class SpecialTabComponent extends Tab implements OnChanges, OnDestroy, On
         if (this.selectedPageIndex === CONNECTIONS_TAB) {
             const action = new ConnectionsAction()
             copyRgbColor(this.defaultKeyAction, action);
-            action.command = this.selectedConnectionCommand;
-            if (this.selectedConnectionCommand === ConnectionCommands.switchByHostConnectionId) {
-                action.hostConnectionId = this.selectedHostConnectionId;
+            if (this.selectedHostConnection) {
+                action.command = this.selectedHostConnection.command;
+                if (this.selectedHostConnection.command === ConnectionCommands.switchByHostConnectionId) {
+                    action.hostConnectionId = this.selectedHostConnection.connectionId;
+                }
             }
-
             return action
         }
 
@@ -146,8 +152,7 @@ export class SpecialTabComponent extends Tab implements OnChanges, OnDestroy, On
     }
 
     selectHostConnection(connection: HostConnectionListItem) {
-        this.selectedConnectionCommand = connection.command;
-        this.selectedHostConnectionId = connection.connectionId;
+        this.selectedHostConnection = connection;
         this.validAction.emit(this.keyActionValid());
     }
 
@@ -169,8 +174,10 @@ export class SpecialTabComponent extends Tab implements OnChanges, OnDestroy, On
                 connectionId: undefined,
             },
             ...this.hostConnections.map((hostConnection, index) => {
+                const name = hostConnection.name || 'unassigned';
+
                 return {
-                    name: hostConnection.name,
+                    name: `${index}: ${name}`,
                     command: ConnectionCommands.switchByHostConnectionId,
                     connectionId: index,
                 }

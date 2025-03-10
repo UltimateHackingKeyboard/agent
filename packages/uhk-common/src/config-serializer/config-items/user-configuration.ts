@@ -98,7 +98,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     backlightingMacroColor: RgbColor;
 
-    backlightingSpecialColor: RgbColor;
+    backlightingDeviceColor: RgbColor;
 
     @assertUInt8 mouseMoveInitialSpeed: number;
 
@@ -316,7 +316,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             backlightingSwitchKeymapColor: this.backlightingSwitchKeymapColor.toJsonObject(),
             backlightingMouseColor: this.backlightingMouseColor.toJsonObject(),
             backlightingMacroColor: this.backlightingMacroColor.toJsonObject(),
-            backlightingSpecialColor: this.backlightingSpecialColor.toJsonObject(),
+            backlightingDeviceColor: this.backlightingDeviceColor.toJsonObject(),
             mouseMoveInitialSpeed: this.mouseMoveInitialSpeed,
             mouseMoveAcceleration: this.mouseMoveAcceleration,
             mouseMoveDeceleratedSpeed: this.mouseMoveDeceleratedSpeed,
@@ -373,7 +373,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.backlightingSwitchKeymapColor.toBinary(buffer);
         this.backlightingMouseColor.toBinary(buffer);
         this.backlightingMacroColor.toBinary(buffer);
-        this.backlightingSpecialColor.toBinary(buffer);
+        this.backlightingDeviceColor.toBinary(buffer);
         buffer.writeUInt8(this.mouseMoveInitialSpeed);
         buffer.writeUInt8(this.mouseMoveAcceleration);
         buffer.writeUInt8(this.mouseMoveDeceleratedSpeed);
@@ -694,7 +694,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.backlightingSwitchKeymapColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
         this.backlightingMouseColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
         this.backlightingMacroColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
-        this.backlightingSpecialColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingDeviceColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
         this.mouseMoveInitialSpeed = buffer.readUInt8();
         this.mouseMoveAcceleration = buffer.readUInt8();
         this.mouseMoveDeceleratedSpeed = buffer.readUInt8();
@@ -959,7 +959,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.backlightingSwitchKeymapColor = new RgbColor().fromJsonObject(jsonObject.backlightingSwitchKeymapColor, this.userConfigMajorVersion);
         this.backlightingMouseColor = new RgbColor().fromJsonObject(jsonObject.backlightingMouseColor, this.userConfigMajorVersion);
         this.backlightingMacroColor = new RgbColor().fromJsonObject(jsonObject.backlightingMacroColor, this.userConfigMajorVersion);
-        this.backlightingSpecialColor = new RgbColor().fromJsonObject(jsonObject.backlightingSpecialColor, this.userConfigMajorVersion);
+        this.backlightingDeviceColor = new RgbColor().fromJsonObject(jsonObject.backlightingDeviceColor, this.userConfigMajorVersion);
         this.mouseMoveInitialSpeed = jsonObject.mouseMoveInitialSpeed;
         this.mouseMoveAcceleration = jsonObject.mouseMoveAcceleration;
         this.mouseMoveDeceleratedSpeed = jsonObject.mouseMoveDeceleratedSpeed;
@@ -1270,7 +1270,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMajorVersion = 9;
         this.userConfigMinorVersion = 0;
         this.userConfigPatchVersion = 0;
-        this.backlightingSpecialColor = new RgbColor({r:255, g:136, b:68});
+        this.backlightingDeviceColor = new RgbColor({r:255, g:136, b:68});
     }
 
     private getSerialisationInfo(): SerialisationInfo {
