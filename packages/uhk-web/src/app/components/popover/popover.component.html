@@ -55,6 +55,10 @@
                     [uhkThemeColors]="uhkThemeColors$ | async"
                     (validAction)="setKeyActionValidState($event)"
         ></keymap-tab>
+        <device-tab #tab *ngSwitchCase="tabName.Device" class="popover-content"
+                     [defaultKeyAction]="defaultKeyAction"
+                     (validAction)="setKeyActionValidState($event)"
+        ></device-tab>
         <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"
                   [defaultKeyAction]="defaultKeyAction"
                   (validAction)="setKeyActionValidState($event)"

@@ -389,6 +389,7 @@ export class MapperService implements OnDestroy {
 
     private initNameToFileNames(): void {
         this.nameToFileName = new Map<string, string>();
+        this.nameToFileName.set('host-connection', 'icon-kbd__circle-nodes');
         this.nameToFileName.set('toggle', 'icon-kbd__fn--toggle');
         this.nameToFileName.set('double-tap', 'icon-kbd__fn--double-tap');
         this.nameToFileName.set('switch-keymap', 'icon-kbd__mod--switch-keymap');
@@ -413,6 +414,7 @@ export class MapperService implements OnDestroy {
         this.nameToFileName.set('scroll-right', 'icon-kbd__mouse--scroll-right');
         this.nameToFileName.set('scroll-down', 'icon-kbd__mouse--scroll-down');
         this.nameToFileName.set('scroll-up', 'icon-kbd__mouse--scroll-up');
+        this.nameToFileName.set('sleep', 'icon-kbd__sleep');
     }
 
     private initSecondaryRoleTexts(): void {

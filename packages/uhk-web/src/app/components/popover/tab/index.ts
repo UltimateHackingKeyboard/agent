@@ -1,4 +1,5 @@
 export * from './tab';
+export { DeviceTabComponent } from './device';
 export { KeymapTabComponent } from './keymap';
 export { KeypressTabComponent } from './keypress';
 export { LayerTabComponent } from './layer';

@@ -8,8 +8,8 @@ describe('user-configuration', () => {
 
     it('should transform an empty config', () => {
         jsonTester({
-            userConfigMajorVersion: 8,
-            userConfigMinorVersion: 3,
+            userConfigMajorVersion: 9,
+            userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
@@ -23,6 +23,7 @@ describe('user-configuration', () => {
             backlightingSwitchKeymapColor: {r:255, g:0, b:0},
             backlightingMouseColor: {r:0, g:255, b:0},
             backlightingMacroColor: {r:255, g:0, b:255},
+            backlightingDeviceColor: {r:255, g:136, b:68},
             mouseMoveInitialSpeed: 5,
             mouseMoveAcceleration: 35,
             mouseMoveDeceleratedSpeed: 10,
