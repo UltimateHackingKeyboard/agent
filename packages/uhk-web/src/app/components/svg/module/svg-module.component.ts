@@ -7,7 +7,7 @@ import {
     ChangeDetectionStrategy
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BacklightingMode, KeyAction, Macro, UhkThemeColors } from 'uhk-common';
+import { BacklightingMode, HostConnection, KeyAction, Macro, UhkThemeColors } from 'uhk-common';
 import { Subscription } from 'rxjs';
 
 import { SvgKeyboardKey } from '../keys';
@@ -17,7 +17,7 @@ import {
     SvgModuleCaptureEvent,
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
-import { AppState, getMacroMap } from '../../../store';
+import { AppState, getHostConnections, getMacroMap } from '../../../store';
 
 @Component({
     selector: 'g[svg-module]',
@@ -44,17 +44,24 @@ export class SvgModuleComponent implements OnDestroy {
     @Output() capture = new EventEmitter<SvgModuleCaptureEvent>();
     @Output() navigateToModuleSettings = new EventEmitter<void>();
 
-    private macroMap: Map<number, Macro>;
+    hostConnections: HostConnection[] = []
+    macroMap: Map<number, Macro>;
     private macroMapSubscription: Subscription;
+    private hostConnectionsSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
         this.keyboardKeys = [];
         this.macroMapSubscription = store.select(getMacroMap)
             .subscribe(map => this.macroMap = map);
+        this.hostConnectionsSubscription = this.store.select(getHostConnections)
+            .subscribe((connections: HostConnection[]) => {
+                this.hostConnections = connections;
+            });
     }
 
     ngOnDestroy(): void {
         this.macroMapSubscription.unsubscribe();
+        this.hostConnectionsSubscription?.unsubscribe();
     }
 
     onKeyClick(keyId: number, event: SvgKeyClickEvent): void {

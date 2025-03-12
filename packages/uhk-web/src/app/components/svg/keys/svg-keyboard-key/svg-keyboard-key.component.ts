@@ -25,6 +25,8 @@ import labPlugin from 'colord/plugins/lab';
 import {
     BacklightingMode,
     ConnectionsAction,
+    ConnectionCommands,
+    HostConnection,
     KeyAction,
     KeyModifiers,
     KeystrokeAction,
@@ -96,6 +98,7 @@ enum LabelTypes {
 export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() backlightingMode: BacklightingMode;
     @Input() isActive = false;
+    @Input() hostConnections: HostConnection[] = [];
     @Input() keyAction: KeyAction;
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
@@ -118,6 +121,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     labelSource: any;
     secondaryText: string;
     textColor: string;
+    viewBox: string;
     private scanCodePressed = false;
     private pressedShiftLocation = -1;
     private pressedAltLocation = -1;
@@ -501,8 +505,30 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             this.labelType = LabelTypes.SingleIcon;
             this.labelSource = this.mapper.getIcon('sleep');
         }  else if (this.keyAction instanceof ConnectionsAction) {
-            this.labelType = LabelTypes.ConnectionKey;
-            this.labelSource = this.keyAction;
+            this.labelType = LabelTypes.IconText;
+            let text: string;
+            let iconText: string;
+
+            if (this.keyAction.command === ConnectionCommands.last) {
+                text = 'Last'
+            }
+            else if (this.keyAction.command === ConnectionCommands.next) {
+                text = 'Next'
+            }
+            else if (this.keyAction.command === ConnectionCommands.previous) {
+                text = 'Previous'
+            }
+            else {
+                iconText = this.keyAction.hostConnectionId.toString(10);
+                const hostConnection = this.hostConnections[this.keyAction.hostConnectionId];
+                text = hostConnection?.name || 'unassigned'
+            }
+
+            this.labelSource = {
+                icon: this.mapper.getIcon('host-connection'),
+                iconText,
+                text,
+            };
         } else {
             this.labelSource = undefined;
         }

@@ -1,4 +1,3 @@
-export { SvgConnectionKeyComponent } from './svg-connection-key';
 export { SvgIconTextKeyComponent } from './svg-icon-text-key';
 export { SvgKeyboardKeyComponent, SvgKeyboardKey } from './svg-keyboard-key';
 export { SvgKeystrokeKeyComponent } from './svg-keystroke-key';

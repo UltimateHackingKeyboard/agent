@@ -13,10 +13,14 @@ export class SvgIconTextKeyComponent implements OnChanges {
     @Input() width: number;
     @Input() height: number;
     @Input() icon: string;
+    @Input() iconText: string;
     @Input() text: string;
     @Input() secondaryText: string;
     @Input() textColor: string;
 
+    iconTextFontSize: number = 23;
+    iconTextX: number;
+    iconTextY: number;
     useWidth: number;
     useHeight: number;
     useX: number;
@@ -41,26 +45,38 @@ export class SvgIconTextKeyComponent implements OnChanges {
 
     private calculatePositions(): void {
         let secondaryYModifier = 0;
+        let iconTextWidth = 0;
 
         if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
             secondaryYModifier = 5;
+        }
+
+        if (this.iconText) {
+            const style: CSSStyleDeclaration = {
+                font: `${this.iconTextFontSize}px Helvetica`
+            } as any;
+
+            iconTextWidth = getContentWidth(style, this.iconText);
         }
 
         const isRectangle = this.width > this.height * 1.8;
 
         this.useWidth = this.width / 3;
         this.useHeight = this.height / 3;
-
         if (isRectangle) {
-            this.textWidth = this.width * 0.65;
-            this.useX = 0;
+            this.textWidth = this.width * 0.65 - iconTextWidth;
+            this.useX = 10;
             this.useY = this.height / 3;
-            this.spanX = this.width * 0.6;
+            this.spanX = this.width * 0.6 + iconTextWidth * 0.6;
+            this.iconTextX = this.useX + this.useHeight;
+            this.iconTextY = this.useHeight * 1.88;
         } else {
             this.textWidth = this.width * 0.95;
-            this.useX = this.width / 3;
+            this.useX = this.width / 3 - iconTextWidth / 2;
             this.useY = this.height / 10;
             this.spanX = this.width / 2;
+            this.iconTextX = this.useX + this.useHeight;
+            this.iconTextY = this.useHeight * 1.18;
         }
 
         if (this.secondaryText) {
