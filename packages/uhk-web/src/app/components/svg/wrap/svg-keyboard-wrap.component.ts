@@ -485,7 +485,7 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     private calculatePosition() {
-        const popoverWidth = 600;
+        const popoverWidth = 700;
         const offsetLeft: number = this.wrapPosition.left + 249; // 265 is a width of the side menu with a margin
         let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
 

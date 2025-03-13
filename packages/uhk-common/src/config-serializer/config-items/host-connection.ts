@@ -65,6 +65,9 @@ export class HostConnection {
             case 8:
                 return this.fromJsonObjectV8(jsonObject, serialisationInfo);
 
+            case 9:
+                return this.fromJsonObjectV9(jsonObject, serialisationInfo);
+
             default:
                 throw new Error(`HostConnection configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
@@ -74,6 +77,9 @@ export class HostConnection {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 8:
                 return this.fromJsonBinaryV8(buffer, serialisationInfo);
+
+            case 9:
+                return this.fromJsonBinaryV9(buffer, serialisationInfo);
 
             default:
                 throw new Error(`HostConnection configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
@@ -144,6 +150,29 @@ export class HostConnection {
         return this;
     }
 
+    private fromJsonBinaryV9(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): HostConnection {
+        this.type = buffer.readUInt8();
+
+        if (this.hasAddress()) {
+            const address = [];
+
+            for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
+                address.push(buffer.readUInt8());
+            }
+
+            this.address = convertBleAddressArrayToString(address);
+        }
+
+        if (this.type !== HostConnections.Empty) {
+            this.switchover = false;
+            this.switchover = buffer.readBoolean();
+
+            this.name = buffer.readString();
+        }
+
+        return this;
+    }
+
     private fromJsonObjectV8(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
         this.type = HostConnections[<string>jsonObject.type];
         if (this.hasAddress()) {
@@ -156,6 +185,24 @@ export class HostConnection {
 
                 this.address = convertBleAddressArrayToString(bytes)
             }
+        }
+
+        if (this.type === HostConnections.Empty) {
+            this.name = '';
+            this.switchover = false;
+        }
+        else {
+            this.name = jsonObject.name;
+            this.switchover = jsonObject.switchover ?? false;
+        }
+
+        return this;
+    }
+
+    private fromJsonObjectV9(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
+        this.type = HostConnections[<string>jsonObject.type];
+        if (this.hasAddress()) {
+            this.address = jsonObject.address;
         }
 
         if (this.type === HostConnections.Empty) {

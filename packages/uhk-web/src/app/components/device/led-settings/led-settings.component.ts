@@ -28,6 +28,7 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     backlightingSwitchKeymapColor: RgbColorInterface;
     backlightingMouseColor: RgbColorInterface;
     backlightingMacroColor: RgbColorInterface;
+    backlightingDeviceColor: RgbColorInterface;
 
     backlightingOptions: Array<BacklightingOption>;
 
@@ -72,6 +73,7 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
             this.backlightingSwitchKeymapColor = config.backlightingSwitchKeymapColor.toJsonObject();
             this.backlightingMouseColor = config.backlightingMouseColor.toJsonObject();
             this.backlightingMacroColor = config.backlightingMacroColor.toJsonObject();
+            this.backlightingDeviceColor = config.backlightingDeviceColor.toJsonObject();
             this.cdRef.detectChanges();
         });
         this.backlightingOptionsSubscription = this.store.select(getBacklightingOptions)

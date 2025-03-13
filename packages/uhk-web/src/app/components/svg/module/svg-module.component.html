@@ -30,6 +30,7 @@
             tabindex="-1"
             [keyAction]="keyActions && keyActions[i]"
             [capturingEnabled]="capturingEnabled"
+            [hostConnections]="hostConnections"
             [macroMap]="macroMap"
             [blink]="lastEdited && lastEditedKeyId === key.id"
             (keyClick)="onKeyClick(i, $event)"

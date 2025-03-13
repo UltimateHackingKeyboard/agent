@@ -1,0 +1,30 @@
+<div class="mouse-action col-4">
+    <ul class="nav nav-pills flex-column">
+        <li *ngFor="let page of pages; let i = index"
+            class="nav-item"
+            [class.active]="selectedPageIndex === i"
+            (click)="changePage(i)">
+            <a class="nav-link" [class.active]="selectedPageIndex === i"> {{ page }}</a>
+        </li>
+    </ul>
+</div>
+
+<div class="details col-8" [ngSwitch]="selectedPageIndex">
+    <div *ngSwitchCase="0" class="d-flex gap-2 align-items-center">
+        <b>Connection:</b>
+        <div class="select-toggle-container">
+            <ng-select
+                [items]="hostConnectionItems"
+                [clearable]="false"
+                [compareWith]="isConnectionSelected"
+                [ngModel]="selectedHostConnection"
+                (ngModelChange)="selectHostConnection($event)"
+                bindLabel="name"
+            />
+        </div>
+
+    </div>
+    <div *ngSwitchCase="1">
+        Puts your UHK to sleep, minimizing power consumption and locking its keys. You can wake up the halves separately by holding the S+F and J+L keys.
+    </div>
+</div>

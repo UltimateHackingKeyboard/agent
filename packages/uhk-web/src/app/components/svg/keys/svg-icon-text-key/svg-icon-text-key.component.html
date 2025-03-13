@@ -1,11 +1,20 @@
 <svg:use [attr.xlink:href]="icon"
-        [attr.width]="useWidth"
+        [attr.width]="useHeight"
         [attr.height]="useHeight"
         [attr.x]="useX"
         [attr.y]="useY"
          stroke-width="0"
 >
 </svg:use>
+
+<svg:text
+    [attr.x]="iconTextX"
+    [attr.y]="iconTextY"
+    [attr.font-size]="iconTextFontSize"
+    stroke="none">
+    {{ iconText }}
+</svg:text>
+
 <svg:text
     [attr.x]="0"
     [attr.y]="textY"
