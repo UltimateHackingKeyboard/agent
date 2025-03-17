@@ -43,7 +43,7 @@ export class DeviceTabComponent extends Tab implements OnChanges, OnDestroy, OnI
 
     hostConnections: HostConnection[] = [];
     hostConnectionItems: HostConnectionListItem[] = []
-    pages = ['Connections', 'Sleep mode'];
+    pages = ['Connections', /*'Sleep mode'*/];
     selectedPageIndex = 0;
     selectedHostConnection: HostConnectionListItem = {
         name: 'Next connection',
