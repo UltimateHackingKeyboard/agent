@@ -662,7 +662,9 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         if (this.userConfigMinorVersion >= 1) {
             this.hostConnections = [];
             for(let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
-                this.hostConnections.push(new HostConnection().fromBinary(buffer, serialisationInfo));
+                const hostConnection = new HostConnection().fromBinary(buffer, serialisationInfo);
+                hostConnection.index = i;
+                this.hostConnections.push(hostConnection);
             }
         }
 
@@ -732,7 +734,9 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
         this.hostConnections = [];
         for (let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
-            this.hostConnections.push(new HostConnection().fromBinary(buffer, serialisationInfo));
+            const hostConnection = new HostConnection().fromBinary(buffer, serialisationInfo);
+            hostConnection.index = i;
+            this.hostConnections.push(hostConnection);
         }
 
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
@@ -927,8 +931,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         const serialisationInfo = this.getSerialisationInfo();
 
         if (this.userConfigMinorVersion >= 1) {
-            this.hostConnections = jsonObject.hostConnections.map((hostConnection: any) => {
-                return new HostConnection().fromJsonObject(hostConnection, serialisationInfo);
+            this.hostConnections = jsonObject.hostConnections.map((hostConnection: any, index: number) => {
+                const connection = new HostConnection().fromJsonObject(hostConnection, serialisationInfo)
+                connection.index = index;
+
+                return connection;
             });
         }
 
@@ -995,8 +1002,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
         const serialisationInfo = this.getSerialisationInfo();
 
-        this.hostConnections = jsonObject.hostConnections.map((hostConnection: any) => {
-            return new HostConnection().fromJsonObject(hostConnection, serialisationInfo);
+        this.hostConnections = jsonObject.hostConnections.map((hostConnection: any, index: number) => {
+            const connection = new HostConnection().fromJsonObject(hostConnection, serialisationInfo);
+            connection.index = index;
+
+            return connection;
         });
 
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {

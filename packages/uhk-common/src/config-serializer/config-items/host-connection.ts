@@ -46,6 +46,11 @@ export class HostConnection {
     @assertEnum(HostConnections) type: HostConnections;
 
     address: string;
+    /**
+     * Position in the host connections array.
+     * It is not serialised used to track the reordering.
+     */
+    index: number;
     name: string;
     switchover: boolean;
 
@@ -55,6 +60,7 @@ export class HostConnection {
         if (other) {
             this.type = other.type;
             this.address = other.address;
+            this.index = other.index;
             this.name = other.name;
             this.switchover = other.switchover;
         }

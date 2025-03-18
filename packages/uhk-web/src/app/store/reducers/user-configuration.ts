@@ -1,10 +1,11 @@
-import { HOST_CONNECTION_COUNT_MAX } from 'uhk-common';
 import {
     BacklightingMode,
+    ConnectionsAction,
     Constants,
     emptyHostConnection,
     getDefaultHalvesInfo,
     HalvesInfo,
+    HOST_CONNECTION_COUNT_MAX,
     HostConnection,
     HostConnections,
     initBacklightingColorPalette,
@@ -30,9 +31,9 @@ import {
     SwitchLayerAction,
     UserConfiguration
 } from 'uhk-common';
-import { BleAddingStates } from '../../models';
-import { BleAddingState } from '../../models';
 import {
+    BleAddingStates,
+    BleAddingState,
     BacklightingOption,
     defaultLastEditKey,
     ExchangeKey,
@@ -900,7 +901,46 @@ export function reducer(
         case UserConfig.ActionTypes.ReorderHostConnections: {
             const payload = (action as UserConfig.ReorderHostConnectionsAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            userConfiguration.hostConnections = payload;
+            const processedConnectionActions = new WeakSet<ConnectionsAction>()
+            userConfiguration.hostConnections = payload.map((reorderedConnection, index) => {
+                if (reorderedConnection.index === index) {
+                    return reorderedConnection;
+                }
+
+                userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
+                    keymap = Object.assign(new Keymap(), keymap)
+                    keymap.layers = keymap.layers.map(layer => {
+                        layer = Object.assign(new Layer(), layer);
+                        layer.modules = layer.modules.map(module => {
+                            module = Object.assign(new Module(), module);
+                            module.keyActions = module.keyActions.map(keyAction => {
+                                if (keyAction instanceof ConnectionsAction
+                                    && keyAction.hostConnectionId === reorderedConnection.index
+                                    && !processedConnectionActions.has(keyAction)) {
+                                    const newKeyAction = new ConnectionsAction(keyAction);
+                                    newKeyAction.hostConnectionId = index;
+                                    processedConnectionActions.add(newKeyAction);
+
+                                    return newKeyAction;
+                                }
+
+                                return keyAction;
+                            })
+
+                            return module;
+                        })
+
+                        return layer;
+                    })
+
+                    return keymap;
+                })
+
+                const newConnection = new HostConnection(reorderedConnection);
+                newConnection.index = index;
+
+                return newConnection;
+            })
 
             return {
                 ...state,
