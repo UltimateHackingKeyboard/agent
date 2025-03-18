@@ -901,6 +901,7 @@ export function reducer(
         case UserConfig.ActionTypes.ReorderHostConnections: {
             const payload = (action as UserConfig.ReorderHostConnectionsAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            const processedConnectionActions = new WeakSet<ConnectionsAction>()
             userConfiguration.hostConnections = payload.map((reorderedConnection, index) => {
                 if (reorderedConnection.index === index) {
                     return reorderedConnection;
@@ -913,9 +914,12 @@ export function reducer(
                         layer.modules = layer.modules.map(module => {
                             module = Object.assign(new Module(), module);
                             module.keyActions = module.keyActions.map(keyAction => {
-                                if (keyAction instanceof ConnectionsAction && keyAction.hostConnectionId === reorderedConnection.index) {
+                                if (keyAction instanceof ConnectionsAction
+                                    && keyAction.hostConnectionId === reorderedConnection.index
+                                    && !processedConnectionActions.has(keyAction)) {
                                     const newKeyAction = new ConnectionsAction(keyAction);
                                     newKeyAction.hostConnectionId = index;
+                                    processedConnectionActions.add(newKeyAction);
 
                                     return newKeyAction;
                                 }
