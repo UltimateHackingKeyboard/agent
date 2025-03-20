@@ -17,7 +17,9 @@ describe('Test Serializer', () => {
         console.log();
         const config2Ts = new UserConfiguration().fromBinary(config1Buffer);
         console.log('\n');
-        const config2Js = config2Ts.toJsonObject();
+        // Serialize and de-serialize the user config to drop the undefined values
+        // otherwise jasmine toEqual matcher will complain
+        const config2Js = JSON.parse(JSON.stringify(config2Ts.toJsonObject()));
         const config2Buffer = new UhkBuffer();
         config2Ts.toBinary(config2Buffer);
         fs.writeFileSync('user-config-serialized.json', JSON.stringify(config2Js, undefined, 4));
@@ -33,7 +35,9 @@ describe('Test Serializer', () => {
 
     it('check json serializer', () => {
         const config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(userConfig);
-        const jsonObject = config1Ts.toJsonObject();
+        // Serialize and de-serialize the user config to drop the undefined values
+        // otherwise jasmine toEqual matcher will complain
+        const jsonObject = JSON.parse(JSON.stringify(config1Ts.toJsonObject()));
 
         expect(jsonObject).toEqual(userConfig);
     });
