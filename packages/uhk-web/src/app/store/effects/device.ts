@@ -16,6 +16,8 @@ import {
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
     UdevRulesInfo,
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
     UHK_80_DEVICE,
     UserConfiguration
 } from 'uhk-common';
@@ -116,8 +118,12 @@ export class DeviceEffects {
     checkAreHostConnectionsPaired$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.CheckAreHostConnectionsPaired, DongleActions.DonglePairingSuccess),
-            withLatestFrom(this.store.select(getHostConnections)),
-            tap(([_, hostConnections]) => {
+            withLatestFrom(this.store.select(getConnectedDevice), this.store.select(getHostConnections)),
+            tap(([_, connectedDevice, hostConnections]) => {
+                if (connectedDevice?.id === UHK_60_DEVICE.id || connectedDevice?.id === UHK_60_V2_DEVICE.id) {
+                    return
+                }
+
                 const addresses = [];
                 for (const hostConnection of hostConnections) {
                     if (hostConnection.hasAddress()) {
