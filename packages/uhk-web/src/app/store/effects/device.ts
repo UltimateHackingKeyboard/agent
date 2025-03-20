@@ -116,8 +116,12 @@ export class DeviceEffects {
     checkAreHostConnectionsPaired$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.CheckAreHostConnectionsPaired, DongleActions.DonglePairingSuccess),
-            withLatestFrom(this.store.select(getHostConnections)),
-            tap(([_, hostConnections]) => {
+            withLatestFrom(this.store.select(getConnectedDevice), this.store.select(getHostConnections)),
+            tap(([_, connectedDevice, hostConnections]) => {
+                if (connectedDevice?.id !== UHK_80_DEVICE.id) {
+                    return
+                }
+
                 const addresses = [];
                 for (const hostConnection of hostConnections) {
                     if (hostConnection.hasAddress()) {
