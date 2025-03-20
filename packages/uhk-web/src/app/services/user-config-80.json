@@ -1863,40 +1863,59 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 0
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 1
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 2
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 3
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 4
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 5
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 6
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 7
                 },
                 {
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "previous"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "last"
                 },
                 {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "next"
                 },
                 {
                   "keyActionType": "none"
@@ -1982,10 +2001,14 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 8
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 9
                 },
                 {
                   "keyActionType": "none"
@@ -3765,40 +3788,59 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 0
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 1
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 2
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 3
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 4
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 5
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 6
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 7
                 },
                 {
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "previous"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "last"
                 },
                 {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "next"
                 },
                 {
                   "keyActionType": "none"
@@ -3884,10 +3926,14 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 8
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 9
                 },
                 {
                   "keyActionType": "none"
@@ -5662,40 +5708,59 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 0
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 1
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 2
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 3
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 4
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 5
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 6
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 7
                 },
                 {
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "previous"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "last"
                 },
                 {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "next"
                 },
                 {
                   "keyActionType": "none"
@@ -5781,10 +5846,14 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 8
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 9
                 },
                 {
                   "keyActionType": "none"
@@ -7564,40 +7633,59 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 0
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 1
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 2
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 3
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 4
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 5
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 6
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 7
                 },
                 {
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "previous"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "last"
                 },
                 {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "next"
                 },
                 {
                   "keyActionType": "none"
@@ -7683,10 +7771,14 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 8
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 9
                 },
                 {
                   "keyActionType": "none"
@@ -9461,40 +9553,59 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 0
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 1
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 2
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 3
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 4
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 5
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 6
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 7
                 },
                 {
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "previous"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "last"
                 },
                 {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "next"
                 },
                 {
                   "keyActionType": "none"
@@ -9580,10 +9691,14 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 8
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 9
                 },
                 {
                   "keyActionType": "none"
@@ -11363,40 +11478,59 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 0
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 1
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 2
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 3
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 4
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 5
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 6
+                },
+                {
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 7
                 },
                 {
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "previous"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "last"
                 },
                 {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
-                },
-                {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "next"
                 },
                 {
                   "keyActionType": "none"
@@ -11482,10 +11616,14 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 8
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "connections",
+                  "command": "switchByHostConnectionId",
+                  "hostConnectionId": 9
                 },
                 {
                   "keyActionType": "none"
