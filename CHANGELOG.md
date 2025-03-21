@@ -6,6 +6,21 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [6.0.0] - 2025-03-21
+
+Firmware: 13.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v13.0.0)] | Device Protocol: 4.14.1 | User Config: **9.0.0** | Hardware Config: 1.0.0
+
+- Add device actions to the key action popover, allowing to easily switch between connected devices.
+- Add connection switch actions to the Fn2 layers of the default keymaps.
+- Add "Delete device pairings" button to the Connections page.
+- Allow reordering connections.
+- Fix BLE address display: Don't reverse the order of the address bytes and prefix single-digit bytes with a 0.
+- Keep reconnecting upon UHK 60 firmware update failures instead of timing out and having the user restart the update.
+- Ensure that the keymap description is always visible, even when the keyboard halves are joined together.
+- Improve firmware update tooltip content.
+- Always show status icons during firmware updates.
+- Fall back to the bundled firmware documentation if a development firmware is used.
+
 ## [5.1.0] - 2025-02-08
 
 Firmware: 12.3.3 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v12.3.3)] | Device Protocol: 4.**14.1** | User Config: 8.3.0 | Hardware Config: 1.0.0
