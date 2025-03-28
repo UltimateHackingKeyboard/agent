@@ -18,6 +18,7 @@ export interface HistoryFileInfo {
 }
 
 export interface Tab {
+    deviceUniqueId: number;
     displayText: string;
     files: HistoryFileInfo[];
     isCurrentDevice: boolean;
@@ -25,6 +26,7 @@ export interface Tab {
 }
 
 export interface UserConfigHistoryComponentState {
+    deleting: boolean;
     selectedTabIndex: number | null;
     commonFiles: HistoryFileInfo[];
     tabs: Tab[];

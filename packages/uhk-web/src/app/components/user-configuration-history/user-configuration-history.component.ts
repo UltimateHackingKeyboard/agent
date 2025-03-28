@@ -13,6 +13,19 @@ export class UserConfigurationHistoryComponent {
 
     @Output() getUserConfigFromHistory = new EventEmitter<string>();
     @Output() changeTab = new EventEmitter<number>();
+    @Output() deleteUserConfigHistory = new EventEmitter<number>();
+
+    showDeleteUserConfigHistoryPopoverIndex: number
+
+    onDeletePopoverOpenChange(isOpen: boolean, tabIndex: number): void {
+        if (!isOpen && this.showDeleteUserConfigHistoryPopoverIndex === tabIndex) {
+            this.showDeleteUserConfigHistoryPopoverIndex = -1
+        }
+    }
+
+    onTabContextmenuClick(tabIndex: number): void {
+        this.showDeleteUserConfigHistoryPopoverIndex = tabIndex;
+    }
 
     trackByFn(index: number, key: HistoryFileInfo): string {
         return key.file;

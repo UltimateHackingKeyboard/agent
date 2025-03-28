@@ -26,6 +26,8 @@ export class Device {
     public static readonly areBleAddressesPairedReply = 'device-are-ble-addresses-paired-reply';
     public static readonly changeKeyboardLayout = 'device-change-keyboard-layout';
     public static readonly changeKeyboardLayoutReply = 'device-change-keyboard-layout-reply';
+    public static readonly deleteUserConfigHistory = 'device-delete-user-config-history';
+    public static readonly deleteUserConfigHistoryReply = 'device-delete-user-config-history-reply';
     public static readonly dongleVersionInfoLoaded = 'device-dongle-version-info-loaded';
     public static readonly eraseBleSettings = 'device-erase-ble-settings';
     public static readonly eraseBleSettingsReply = 'device-erase-ble-settings-reply';

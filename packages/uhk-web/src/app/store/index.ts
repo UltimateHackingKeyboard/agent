@@ -654,11 +654,13 @@ export const getUserConfigHistoryComponentState = createSelector(
         }
 
         const result: UserConfigHistoryComponentState = {
+            deleting: inElectron && state.deleting,
             selectedTabIndex: state.activeTabIndex || 0,
             commonFiles: state.userConfigHistory.commonFiles.map(fileMapper),
             loading: inElectron && state.loading,
             tabs: state.userConfigHistory.devices.map(device => {
                 return {
+                    deviceUniqueId: device.uniqueId,
                     displayText: `${device.deviceName} (${device.device.name})`,
                     files: device.files.map(fileMapper),
                     isCurrentDevice: device.uniqueId === hardwareConfig?.uniqueId,
@@ -681,6 +683,7 @@ export const getUserConfigHistoryComponentState = createSelector(
             }
 
             result.tabs.push({
+                deviceUniqueId: -1,
                 displayText: `${userConfig.deviceName} (${deviceName})`,
                 files: [],
                 isCurrentDevice: true,

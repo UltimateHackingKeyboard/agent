@@ -2,6 +2,7 @@ export * from './backup-user-configuration';
 export * from './command-line';
 export * from './copy-smart-macro-doc-to-webserver';
 export * from './copy-smart-macro-loading-html';
+export * from './delete-user-config-history';
 export * from './get-default-firmware-path';
 export * from './get-smart-macro-doc-root-path';
 export * from './get-udev-file-content-async';
