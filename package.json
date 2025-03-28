@@ -19,7 +19,7 @@
     "npm": ">=10.8.2 <11.0.0"
   },
   "devDependencies": {
-    "@lerna/legacy-package-management": "8.2.0",
+    "@lerna/legacy-package-management": "8.2.1",
     "@types/command-line-args": "5.2.3",
     "@types/command-line-usage": "5.0.4",
     "@types/decompress": "4.2.7",
@@ -43,7 +43,7 @@
     "eslint": "9.20.1",
     "fs-extra": "11.3.0",
     "jasmine": "5.6.0",
-    "lerna": "8.2.0",
+    "lerna": "8.2.1",
     "lodash": "4.17.21",
     "node-hid": "3.1.2",
     "npm-run-all": "4.1.5",
