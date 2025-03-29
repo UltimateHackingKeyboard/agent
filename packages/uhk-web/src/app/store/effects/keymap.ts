@@ -24,7 +24,7 @@ export class KeymapEffects {
             map(([action, latest]) => latest),
             tap(([prevKeymaps, newKeymaps]) => {
                 const newKeymap = findNewItem(prevKeymaps, newKeymaps);
-                this.router.navigate(['/keymap', newKeymap.abbreviation]);
+                this.router.navigate(['/keymap', newKeymap.abbreviation], { queryParamsHandling: 'merge' });
             })
         ),
     { dispatch: false }
@@ -40,7 +40,7 @@ export class KeymapEffects {
                     this.router.navigate(['/keymap/add']);
                 } else {
                     const favourite: Keymap = keymaps.find(keymap => keymap.isDefault);
-                    this.router.navigate(['/keymap', favourite.abbreviation]);
+                    this.router.navigate(['/keymap', favourite.abbreviation], { queryParamsHandling: 'merge' });
                 }
             })
         ),
@@ -54,7 +54,7 @@ export class KeymapEffects {
             tap(([action, keymaps]: [Keymaps.EditKeymapAbbreviationAction, Keymap[]]) => {
                 for (const keymap of keymaps) {
                     if (keymap.name === action.payload.name && keymap.abbreviation === action.payload.newAbbr) {
-                        this.router.navigate(['/keymap', action.payload.newAbbr]);
+                        this.router.navigate(['/keymap', action.payload.newAbbr], { queryParamsHandling: 'merge' });
                         return;
                     }
                 }
