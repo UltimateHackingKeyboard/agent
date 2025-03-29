@@ -257,7 +257,7 @@ export class MapperService implements OnDestroy {
         this.basicScanCodeTextMap.set(47, ['[', '{']);
         this.basicScanCodeTextMap.set(48, [']', '}']);
         this.basicScanCodeTextMap.set(49, ['\\', '|']);
-        this.basicScanCodeTextMap.set(50, ['NON_US_HASHMARK_AND_TILDE']);
+        this.basicScanCodeTextMap.set(50, ['ISO key', '#']);
         this.basicScanCodeTextMap.set(51, [';', ':']);
         this.basicScanCodeTextMap.set(52, ['\'', '"']);
         this.basicScanCodeTextMap.set(53, ['`', '~']);

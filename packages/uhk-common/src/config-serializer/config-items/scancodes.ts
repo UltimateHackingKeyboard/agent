@@ -107,8 +107,12 @@ const SCANCODES = [
                 "text": "Z"
             },
             {
+                "id": "50",
+                "text": "ISO #"
+            },
+            {
                 "id": "100",
-                "text": "| ISO"
+                "text": "ISO |"
             }
         ]
     },
