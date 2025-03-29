@@ -20,6 +20,8 @@ export interface ModuleFirmwareUpgradeState {
     currentFirmwareVersion: string;
     newFirmwareVersion?: string;
     newFirmwareChecksum?: string;
+    newGitRepo?: string;
+    newGitTag?: string;
     state: ModuleFirmwareUpgradeStates;
     skipReason?: ModuleFirmwareUpgradeSkipReason;
     tooltip?: string;
