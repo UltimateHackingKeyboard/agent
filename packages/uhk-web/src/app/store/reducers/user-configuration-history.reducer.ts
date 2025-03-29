@@ -48,6 +48,7 @@ export function reducer(state = initialState, action: Actions) {
         case ActionTypes.DeleteUserConfigHistoryReply:
             return {
                 ...state,
+                activeTabIndex: null,
                 deleting: false,
             };
 
@@ -58,12 +59,19 @@ export function reducer(state = initialState, action: Actions) {
                 userConfigHistory: defaultUserConfigHistory()
             };
 
-        case ActionTypes.LoadUserConfigurationHistorySuccess:
-            return {
+        case ActionTypes.LoadUserConfigurationHistorySuccess: {
+            const newState = {
                 ...state,
                 loading: false,
                 userConfigHistory: (action as LoadUserConfigurationHistorySuccessAction).payload
-            };
+            }
+
+            if (newState.activeTabIndex !== null && newState.userConfigHistory.devices.length <= newState.activeTabIndex) {
+                newState.activeTabIndex = null;
+            }
+
+            return newState;
+        }
 
         default:
             return state;
