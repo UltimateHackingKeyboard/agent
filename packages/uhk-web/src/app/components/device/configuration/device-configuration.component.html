@@ -64,7 +64,8 @@
             <user-configuration-history [state]="userConfigHistoryState$ | async"
                                         (getUserConfigFromHistory)="getUserConfigFromHistory($event)"
                                         (changeTab)="changeConfigHistoryTab($event)"
-            ></user-configuration-history>
+                                        (deleteUserConfigHistory)="deleteUserConfigHistory($event)"
+            />
         </div>
     </div>
 </div>

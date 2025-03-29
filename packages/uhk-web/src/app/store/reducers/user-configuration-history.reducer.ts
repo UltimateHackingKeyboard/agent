@@ -11,6 +11,7 @@ import {
 
 export interface State {
     activeTabIndex: number | null;
+    deleting: boolean;
     userConfigHistory: UserConfigHistory;
     loading: boolean;
 }
@@ -24,6 +25,7 @@ function defaultUserConfigHistory(): UserConfigHistory {
 
 export const initialState: State = {
     activeTabIndex: null,
+    deleting: false,
     userConfigHistory: defaultUserConfigHistory(),
     loading: false
 };
@@ -37,6 +39,19 @@ export function reducer(state = initialState, action: Actions) {
                 activeTabIndex: (action as ChangeUserConfigurationHistoryTabAction).payload,
             };
 
+        case ActionTypes.DeleteUserConfigHistory:
+            return {
+                ...state,
+                deleting: true,
+            };
+
+        case ActionTypes.DeleteUserConfigHistoryReply:
+            return {
+                ...state,
+                activeTabIndex: null,
+                deleting: false,
+            };
+
         case ActionTypes.LoadUserConfigurationHistory:
             return {
                 ...state,
@@ -44,12 +59,19 @@ export function reducer(state = initialState, action: Actions) {
                 userConfigHistory: defaultUserConfigHistory()
             };
 
-        case ActionTypes.LoadUserConfigurationHistorySuccess:
-            return {
+        case ActionTypes.LoadUserConfigurationHistorySuccess: {
+            const newState = {
                 ...state,
                 loading: false,
                 userConfigHistory: (action as LoadUserConfigurationHistorySuccessAction).payload
-            };
+            }
+
+            if (newState.activeTabIndex !== null && newState.userConfigHistory.devices.length <= newState.activeTabIndex) {
+                newState.activeTabIndex = null;
+            }
+
+            return newState;
+        }
 
         default:
             return state;

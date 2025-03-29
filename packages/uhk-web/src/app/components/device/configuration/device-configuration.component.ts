@@ -21,6 +21,7 @@ import {
 import { UhkProgressBarState, UserConfigHistoryComponentState } from '../../../models';
 import {
     ChangeUserConfigurationHistoryTabAction,
+    DeleteUserConfigHistoryAction,
     GetUserConfigurationFromHistoryAction,
     LoadUserConfigurationHistoryAction
 } from '../../../store/actions/user-configuration-history.actions';
@@ -92,6 +93,10 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
             },
             autoSave: false
         }));
+    }
+
+    deleteUserConfigHistory(deviceUniqueId: number): void {
+        this.store.dispatch(new DeleteUserConfigHistoryAction(deviceUniqueId));
     }
 
     getUserConfigFromHistory(fileName: string): void {

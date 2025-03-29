@@ -58,7 +58,10 @@ import {
     I2cWatchdogCounterChangedAction,
 } from '../store/actions/advance-settings.action';
 import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
-import { LoadUserConfigurationHistorySuccessAction } from '../store/actions/user-configuration-history.actions';
+import {
+    DeleteUserConfigHistoryReplyAction,
+    LoadUserConfigurationHistorySuccessAction,
+} from '../store/actions/user-configuration-history.actions';
 
 @Injectable()
 export class DeviceRendererService {
@@ -84,6 +87,10 @@ export class DeviceRendererService {
             index: data.index,
             address: data.hostConnection.address,
         });
+    }
+
+    deleteUserConfigHistory(deviceUniqueId: number): void {
+        this.ipcRenderer.send(IpcEvents.device.deleteUserConfigHistory, deviceUniqueId);
     }
 
     eraseBleSettings(): void {
@@ -156,6 +163,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.changeKeyboardLayoutReply, (event: string, response: ChangeKeyboardLayoutIpcResponse) => {
             this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.deleteUserConfigHistoryReply, (event: string, response: IpcResponse) => {
+            this.dispachStoreAction(new DeleteUserConfigHistoryReplyAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.dongleVersionInfoLoaded, (event: string, response: DeviceVersionInformation) => {

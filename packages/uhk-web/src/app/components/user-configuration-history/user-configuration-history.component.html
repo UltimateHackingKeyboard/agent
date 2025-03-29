@@ -17,12 +17,20 @@
         <ul class="nav nav-tabs">
             <li *ngFor="let tab of state.tabs; let index = index"
                 class="nav-item"
-                [class.disabled]="tab.disabled"
-                (click)="onSelectTab(index)">
+                mwlConfirmationPopover
+                popoverTitle="Do you want to delete device history?"
+                placement="bottom"
+                confirmText="Yes"
+                cancelText="No"
+                [isOpen]="showDeleteUserConfigHistoryPopoverIndex === index"
+                (click)="onSelectTab(index)"
+                (contextmenu)="onTabContextmenuClick(index)"
+                (confirm)="deleteUserConfigHistory.emit(tab.deviceUniqueId)"
+                (isOpenChange)="onDeletePopoverOpenChange($event, index)"
+            >
                 <a class="nav-link"
                    [class.active]="state.selectedTabIndex === index"
                    [class.fw-bold]="tab.isCurrentDevice"
-                   [class.disabled]="tab.disabled"
                    [attr.title]="tab.tooltip"
                 >
                     <span>{{ tab.displayText }}</span>
@@ -30,25 +38,26 @@
            </li>
         </ul>
 
-        <ul class="list-unstyled mb-0 mt-2"
-            *ngIf="!state.loading && state.selectedTabIndex !== null && state.tabs[state.selectedTabIndex].files.length">
-            <li *ngFor="let fileInfo of state.tabs[state.selectedTabIndex].files; trackBy:trackByFn">
-                <span class="btn btn-link btn-padding-0 current">
-                    {{ fileInfo.timestamp }}
-                </span>
+        <ul class="list-unstyled mb-0 mt-2">
+            <ng-container *ngIf="!state.deleting && !state.loading && state.selectedTabIndex !== null && state.tabs[state.selectedTabIndex].files.length">
+                <li *ngFor="let fileInfo of state.tabs[state.selectedTabIndex].files; trackBy:trackByFn">
+                    <span class="btn btn-link btn-padding-0 current">
+                        {{ fileInfo.timestamp }}
+                    </span>
 
-                <span class="btn btn-link btn-padding-0"
-                      *ngIf="fileInfo.showRestore"
-                      (click)="getUserConfigFromHistory.emit(fileInfo.file)"
-                      [class.disabled]="state.disabled">
-                            {{ fileInfo.displayText }}
-                </span>
+                    <span class="btn btn-link btn-padding-0"
+                          *ngIf="fileInfo.showRestore"
+                          (click)="getUserConfigFromHistory.emit(fileInfo.file)"
+                          [class.disabled]="state.disabled">
+                                {{ fileInfo.displayText }}
+                    </span>
 
-                <span class="btn btn-link btn-padding-0 current"
-                      *ngIf="!fileInfo.showRestore">
-                            {{ fileInfo.displayText }}
-                </span>
-            </li>
+                    <span class="btn btn-link btn-padding-0 current"
+                          *ngIf="!fileInfo.showRestore">
+                                {{ fileInfo.displayText }}
+                    </span>
+                </li>
+            </ng-container>
 
             <li class="mt-2">
                 The following records were created before the grouping feature was introduced, and hence, they're displayed for every device.

@@ -81,6 +81,7 @@ import {
 import {
     backupUserConfiguration,
     copySmartMacroDocToWebserver,
+    deleteUserConfigHistory,
     getBackupUserConfigurationContent,
     getDefaultFirmwarePath,
     getSmartMacroDocRootPath,
@@ -253,6 +254,7 @@ export class DeviceService {
         });
 
         ipcMain.on(IpcEvents.device.getUserConfigFromHistory, this.getUserConfigFromHistory.bind(this));
+        ipcMain.on(IpcEvents.device.deleteUserConfigHistory, this.deleteUserConfigHistory.bind(this));
         ipcMain.on(IpcEvents.device.loadUserConfigHistory, this.loadUserConfigFromHistory.bind(this));
 
         logService.misc('[DeviceService] init success');
@@ -1200,6 +1202,12 @@ export class DeviceService {
         };
 
         event.sender.send(IpcEvents.device.getUserConfigFromHistoryReply, response);
+    }
+
+    private async deleteUserConfigHistory(event: Electron.IpcMainEvent, [deviceUniqueId]): Promise<void> {
+        const response = await deleteUserConfigHistory(deviceUniqueId);
+
+        event.sender.send(IpcEvents.device.deleteUserConfigHistoryReply, response);
     }
 
     private async toggleI2cDebugging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
