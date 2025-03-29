@@ -29,8 +29,8 @@
                               tooltipClass="tooltip-firmware-version"
                         >{{ state.currentFirmwareVersion }}</span>
                         <span *ngIf="state.gitTag" [class.text-body-secondary]="state.isOfficialFirmware">{{ gitTagText(state.currentFirmwareVersion, state.gitTag) }}</span>
-                        <span *ngIf="state.newFirmwareVersion && state.currentFirmwareVersion !== state.newFirmwareVersion">
-                            <fa-icon [icon]="faLongArrowAltRight"></fa-icon> {{ state.newFirmwareVersion }}
+                        <span *ngIf="state.newFirmwareVersion && (state.currentFirmwareVersion !== state.newFirmwareVersion || state.gitTag !== state.newGitTag)">
+                            <fa-icon [icon]="faLongArrowAltRight"></fa-icon> {{ state.newFirmwareVersion }} <span *ngIf="state.newGitTag">{{ gitTagText(state.newFirmwareVersion, state.newGitTag) }}</span>
                         </span>
                     </span>
                     <span *ngIf="!state.firmwareUpgradeSupported"> is detected, and its firmware is implemented by the right keyboard half.</span>
