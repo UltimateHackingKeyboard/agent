@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
-    "target": "es6",
+    "target": "ES2021",
     "types": [
       "node"
     ]
