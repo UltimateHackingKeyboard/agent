@@ -5,11 +5,9 @@
     "declaration": false,
     "module": "es2015",
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "ES2021",
     "lib": [
-      "es2015.iterable",
       "dom",
-      "es2016"
     ]
   },
   "angularCompilerOptions": {
