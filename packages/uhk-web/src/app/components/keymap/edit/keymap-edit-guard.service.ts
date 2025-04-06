@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { Keymap } from 'uhk-common';
+import { Keymap, LayerName } from 'uhk-common';
 
 import { Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class KeymapEditGuard implements CanActivate {
             .pipe(
                 tap((defaultKeymap: Keymap) => {
                     if (defaultKeymap) {
-                        this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
+                        this.router.navigate(['/keymap', defaultKeymap.abbreviation], { queryParams: { layer: LayerName.base } });
                     }
                 }),
                 switchMap(() => of(false))
