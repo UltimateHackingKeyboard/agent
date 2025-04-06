@@ -41,7 +41,7 @@ export class AppRendererService {
             this.dispatchStoreAction(new ProcessAppStartInfoAction(arg));
         });
 
-        this.ipcRenderer.on('__ELECTRON_LOG_IPC_default__', (event: string, { level, data }) => {
+        this.ipcRenderer.on('__ELECTRON_LOG_IPC__', (event: string, { level, data }) => {
             const message = [];
 
             if (data.length > 0
