@@ -5,11 +5,11 @@
 
 @mixin left-position() {
     left: 0;
-    transform: translateX(-101%);
+    transform: translateX(-110%);
 }
 
 @mixin right-position() {
-    left: 101%;
+    left: 110%;
     transform: translateX(0);
 }
 
@@ -17,7 +17,6 @@ svg-keyboard {
     width: 99%;
     position: absolute;
     left: 0;
-    transform: translateX(-101%);
     user-select: none;
 
     &.center {
