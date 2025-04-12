@@ -1,6 +1,6 @@
 import {
     CANT_FIND_CONNECTED_DEVICE_ERROR_MESSAGE,
-    getUhkDevices,
+    getUhkHidDevices,
     isUhkCommunicationInterface,
     MULTIPLE_DEVICE_CONNECTED_ERROR_MESSAGE,
     UHK_HID_DEVICE_NOT_CONNECTED,
@@ -18,7 +18,7 @@ export async function errorHandler(error) {
         console.error(error.message);
 
         console.log('Available UHK devices:');
-        const devices = await getUhkDevices();
+        const devices = await getUhkHidDevices();
         for(const device of devices) {
             if (isUhkCommunicationInterface(device)) {
                 const selector = device.serialNumber

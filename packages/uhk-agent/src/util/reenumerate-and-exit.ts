@@ -2,7 +2,8 @@ import {
     UhkHidDevice,
     EnumerationModes,
     getCurrentUhkDeviceProduct,
-    getUhkDevices
+    getUhkHidDevices,
+    listAvailableDevices,
 } from 'uhk-usb';
 import { CommandLineArgs } from 'uhk-common';
 
@@ -19,7 +20,10 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     options.logger.misc(`[reenumerateAndExit] Command line argument: ${arg}`);
 
     options.logger.misc('[reenumerateAndExit] list available devices');
-    options.uhkHidDevice.listAvailableDevices(await getUhkDevices());
+    await listAvailableDevices({
+        hidDevices: await getUhkHidDevices(),
+        logService: options.logger,
+    });
 
     const startTime = new Date();
     const reenumerationOption = parseReenumerateAndExitArg(arg);
@@ -36,7 +40,10 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     const waitTime = reenumerationOption.timeout + 10000;
 
     while (new Date().getTime() - startTime.getTime() < waitTime) {
-        options.uhkHidDevice.listAvailableDevices(await getUhkDevices());
+        await listAvailableDevices({
+            hidDevices: await getUhkHidDevices(),
+            logService: options.logger,
+        });
     }
 }
 
