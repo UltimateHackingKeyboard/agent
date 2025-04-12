@@ -60,28 +60,16 @@ import {
     findDeviceByDeviceIdentifier,
     getDeviceEnumerateVidPidPairs,
     getNumberOfConnectedDevices,
-    getUhkDevices,
+    getUhkHidDevices,
     isDongleCommunicationDevice,
     isSerialPortInVidPids,
+    listAvailableDevices,
     snooze,
     usbDeviceJsonFormatter,
     validateConnectedDevices,
 } from './utils/index.js';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
-
-enum UsbDeviceConnectionStates {
-    Unknown,
-    Added,
-    Removed,
-    AlreadyExisted
-}
-
-interface UsvDeviceConnectionState {
-    id: string;
-    device: Device;
-    state: UsbDeviceConnectionStates;
-}
 
 export const UHK_HID_DEVICE_NOT_CONNECTED = '[UhkHidDevice] Device is not connected';
 
@@ -90,11 +78,6 @@ const MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE = 10;
  * HID API wrapper to support unified logging and async write
  */
 export class UhkHidDevice {
-    /**
-     * Internal variable that represent the USB UHK device
-     * @private
-     */
-    private _prevDevices = new Map<string, UsvDeviceConnectionState>();
     private _device: HID;
     private _deviceInfo: Device;
     private _hasPermission = false;
@@ -125,8 +108,11 @@ export class UhkHidDevice {
             }
 
             this.logService.misc('[UhkHidDevice] Devices before checking permission:');
-            const devs = await getUhkDevices();
-            this.listAvailableDevices(devs);
+            const devs = await getUhkHidDevices();
+            await listAvailableDevices({
+                hidDevices: devs,
+                logService: this.logService,
+            });
 
             const dev = this.options.vid || this.options['serial-number']
                 ? devs.find(findDeviceByDeviceIdentifier(this.options))
@@ -500,7 +486,10 @@ export class UhkHidDevice {
 
                 if (enumerationMode === EnumerationModes.Bootloader && device.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
                     const serialDevices = await SerialPort.list();
-                    // TODO: Implement the listAvailableDevices for serial devices too
+                    await listAvailableDevices({
+                        serialDevices,
+                        logService: this.logService,
+                    })
                     for (const serialDevice of serialDevices) {
                         if (Number.parseInt(serialDevice.vendorId, 16) === vidPid.vid && Number.parseInt(serialDevice.productId, 16) === vidPid.pid) {
                             return {
@@ -511,7 +500,7 @@ export class UhkHidDevice {
                         }
                     }
                 } else {
-                    const devs = await getUhkDevices([vidPid.vid]);
+                    const devs = await getUhkHidDevices([vidPid.vid]);
                     allDevice.push(...devs);
 
                     const reenumeratedDevice = force && iteration === 1
@@ -537,7 +526,7 @@ export class UhkHidDevice {
             if (!jumped) {
                 let keyboardDevice: HID;
                 for (const vidPid of device.keyboard) {
-                    const devs = await getUhkDevices([vidPid.vid]);
+                    const devs = await getUhkHidDevices([vidPid.vid]);
                     const foundDevice = devs.find((dev: Device) => {
                         return dev.vendorId === vidPid.vid
                             && dev.productId === vidPid.pid
@@ -586,7 +575,11 @@ export class UhkHidDevice {
             }
             else {
                 this.logService.misc(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
-                this.listAvailableDevices(allDevice, false);
+                await listAvailableDevices({
+                    hidDevices: allDevice,
+                    logService: this.logService,
+                    showUnchangedMsg: false,
+                });
             }
         }
 
@@ -630,54 +623,6 @@ export class UhkHidDevice {
             newPairedDevice: isBitSet(buffer[2], 2),
             rightModuleSlot: MODULE_ID_TO_STRING[buffer[5]]
         };
-    }
-
-    public listAvailableDevices(devs: Device[], showUnchangedMsg = true): void {
-        let hasDeviceChanges = false;
-        const compareDevices = devs.map(x => ({
-            id: `${x.vendorId}-${x.productId}-${x.interface}`,
-            device: x
-        }));
-
-        for (const prevDevice of this._prevDevices.values()) {
-            prevDevice.state = UsbDeviceConnectionStates.Unknown;
-        }
-
-        for (const compareDevice of compareDevices) {
-            const existingPrevDevice = this._prevDevices.get(compareDevice.id);
-
-            if (existingPrevDevice) {
-                existingPrevDevice.state = UsbDeviceConnectionStates.AlreadyExisted;
-            } else {
-                this._prevDevices.set(compareDevice.id, {
-                    id: compareDevice.id,
-                    device: compareDevice.device,
-                    state: UsbDeviceConnectionStates.Added
-                });
-                hasDeviceChanges = true;
-            }
-        }
-
-        for (const prevDevice of this._prevDevices.values()) {
-            if (prevDevice.state === UsbDeviceConnectionStates.Unknown) {
-                prevDevice.state = UsbDeviceConnectionStates.Removed;
-                hasDeviceChanges = true;
-            }
-        }
-
-        if (hasDeviceChanges) {
-            this.logService.misc('[UhkHidDevice] Available devices changed.');
-            for (const prevDevice of Array.from(this._prevDevices.values())) {
-                if (prevDevice.state === UsbDeviceConnectionStates.Added) {
-                    this.logService.misc(`[UhkHidDevice] Added: ${JSON.stringify(prevDevice.device, usbDeviceJsonFormatter)}`);
-                } else if (prevDevice.state === UsbDeviceConnectionStates.Removed) {
-                    this.logService.misc(`[UhkHidDevice] Removed: ${JSON.stringify(prevDevice.device, usbDeviceJsonFormatter)}`);
-                    this._prevDevices.delete(prevDevice.id);
-                }
-            }
-        } else if (showUnchangedMsg) {
-            this.logService.misc('[UhkHidDevice] Available devices unchanged');
-        }
     }
 
     async getPairedDevices(): Promise<string[]> {
@@ -803,7 +748,10 @@ export class UhkHidDevice {
     private async connectToDevice(): Promise<HID> {
         try {
             const devs = await this.getUhkDevices();
-            this.listAvailableDevices(devs);
+            await listAvailableDevices({
+                hidDevices: devs,
+                logService: this.logService,
+            });
 
             if (this.hidDevice) {
                 const device = devs.find(dev => dev.path === this.hidDevice.path);
@@ -883,8 +831,8 @@ export class UhkHidDevice {
 
     private async getUhkDevices(): Promise<Array<Device>> {
         return this.options.vid
-            ? getUhkDevices([this.options.vid])
-            : getUhkDevices();
+            ? getUhkHidDevices([this.options.vid])
+            : getUhkHidDevices();
     }
 
     private setDeviceInfo(device:Device | undefined): void {

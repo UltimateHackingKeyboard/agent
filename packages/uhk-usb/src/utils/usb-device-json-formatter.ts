@@ -1,6 +1,10 @@
 import { toHexString } from 'uhk-common';
 
 export function usbDeviceJsonFormatter(key: any, value: any): any {
+    if (value === undefined || value === null) {
+        return value
+    }
+
     switch (key) {
         case 'vendorId':
         case 'productId':
