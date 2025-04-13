@@ -87,6 +87,15 @@
                         Close any virtual machine software like VMware or VirtualBox that might interfere with USB devices
                     </li>
                     <li>
+                        Try all USB port on the computer
+                    </li>
+                    <li>
+                        Try other computer or other Opertion System on the same computer.
+                    </li>
+                    <li *ngIf="platform === 'linux'">
+                        Check your user in the `dialout` group. Don't forget to reboot the computer after you added you user to the group
+                    </li>
+                    <li>
                         If your UHK got bricked during the update, <a class="link-github" href="https://ultimatehackingkeyboard.com/knowledgebase?q=unbrick" externalUrl>unbrick it</a>
                     </li>
                     <li>
