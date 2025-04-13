@@ -46,7 +46,7 @@ export function getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer)
  * @private
  * @static
  */
-export function bufferToString(buffer: Array<number> | Buffer): string {
+export function bufferToString(buffer: Array<number> | Buffer | globalThis.Buffer): string {
     let str = '';
     for (let i = 0; i < buffer.length; i++) {
         let hex = buffer[i].toString(16) + ' ';

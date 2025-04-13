@@ -338,7 +338,7 @@ export class DeviceService {
                 error: error.message
             };
         } finally {
-            this.device.close();
+            await this.device.close();
             this.startPollUhkDevice();
         }
 
@@ -494,7 +494,7 @@ export class DeviceService {
                         await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE);
                         this.logService.misc('[DeviceService] Waiting for keyboard');
                         await waitForDevices(UHK_DONGLE.keyboard);
-                        dongleUhkDevice.close();
+                        await dongleUhkDevice.close();
 
                         dongleHid = await getCurrentUhkDongleHID();
                         if (dongleHid) {
@@ -514,8 +514,8 @@ export class DeviceService {
                     }
                 }
                 finally {
-                    dongleUhkDevice?.close();
-                    this.device.close();
+                    await dongleUhkDevice?.close();
+                    await this.device.close();
                 }
 
                 await snooze(1000);
@@ -865,7 +865,7 @@ export class DeviceService {
             }
             finally {
                 if (dongleUhkDevice) {
-                    dongleUhkDevice.close();
+                    await dongleUhkDevice.close();
                 }
             }
         } catch (error) {
@@ -925,7 +925,7 @@ export class DeviceService {
             }
             finally {
                 if(dongleUhkDevice) {
-                    dongleUhkDevice.close();
+                    await dongleUhkDevice.close();
                 }
             }
         }
@@ -971,7 +971,7 @@ export class DeviceService {
             }
             finally {
                 if (leftHalfDevice) {
-                    leftHalfDevice.close();
+                    await leftHalfDevice.close();
                 }
             }
 
@@ -1103,7 +1103,7 @@ export class DeviceService {
                                 }
                                 finally {
                                     if (dongleUhkDevice) {
-                                        dongleUhkDevice.close();
+                                        await dongleUhkDevice.close();
                                     }
                                 }
                             }
@@ -1185,7 +1185,7 @@ export class DeviceService {
             response.error = { message: error.message };
         } finally {
             this.wasCalledSaveUserConfiguration = true;
-            this.device.close();
+            await this.device.close();
             this.startPollUhkDevice();
         }
 
@@ -1248,7 +1248,7 @@ export class DeviceService {
         }
         finally {
             if (uhkHidDevice) {
-                uhkHidDevice.close();
+                await uhkHidDevice.close();
             }
             await snooze(1000);
         }
@@ -1274,7 +1274,7 @@ export class DeviceService {
         }
         finally {
             if (uhkHidDevice) {
-                uhkHidDevice.close();
+                await uhkHidDevice.close();
             }
             await snooze(1000);
         }
@@ -1284,7 +1284,7 @@ export class DeviceService {
         this.logService.misc('[DeviceService] Device force reenumerate');
 
         try {
-            this.device.close();
+            await this.device.close();
             await snooze(1000);
             const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             await this.device.reenumerate({
@@ -1298,7 +1298,7 @@ export class DeviceService {
             this.logService.error("[DeviceService] Can't reenumerate force reenumerate device", reenumerationError);
         }
         finally {
-            this.device.close();
+            await this.device.close();
             await snooze(1000);
         }
     }

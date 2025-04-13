@@ -12,28 +12,28 @@ Based on the [Kinetis Bootloader v2.0.0 Reference Manual](https://github.com/Ult
 
 ## Supported Commands
 We implemented only the commands that is used in UHK software.
-If someone needs other commands, (s)he can easily implement it based on existing. 
+If someone needs other commands, (s)he can easily implement it based on existing.
 
 - [x] GetProperty
 - [ ] SetProperty
-- [ ] FlashEraseAll 
-- [x] FlashEraseRegion 
-- [x] FlashEraseAllUnsecure 
-- [x] ReadMemory 
-- [x] WriteMemory 
-- [ ] FillMemory 
-- [x] FlashSecurityDisable 
-- [ ] Execute 
-- [ ] Call 
-- [x] Reset 
-- [ ] FlashProgramOnce 
-- [ ] FlashReadOnce 
-- [ ] FlashReadResource 
-- [ ] ConfigureQuadSpi 
-- [ ] ReliableUpdate 
-- [x] ConfigureI2c 
-- [ ] ConfigureSpi 
-- [ ] ConfigureCan 
+- [ ] FlashEraseAll
+- [x] FlashEraseRegion
+- [x] FlashEraseAllUnsecure
+- [x] ReadMemory
+- [x] WriteMemory
+- [ ] FillMemory
+- [x] FlashSecurityDisable
+- [ ] Execute
+- [ ] Call
+- [x] Reset
+- [ ] FlashProgramOnce
+- [ ] FlashReadOnce
+- [ ] FlashReadResource
+- [ ] ConfigureQuadSpi
+- [ ] ReliableUpdate
+- [x] ConfigureI2c
+- [ ] ConfigureSpi
+- [ ] ConfigureCan
 
 ## How to use
 
@@ -45,9 +45,9 @@ If someone needs other commands, (s)he can easily implement it based on existing
   // Call the command
   const version = await kboot.getBootloaderVersion();
   // ... more commands
-  
+
   // Close the communication channel. Release resources
-  kboot.close();
+  await kboot.close();
 ```
 
 If you have to communicate other I2C device over USB call `kboot.configureI2c(i2cId)` before the command.
@@ -55,7 +55,7 @@ If you have to communicate other I2C device over USB call `kboot.configureI2c(i2
 ```Typescript
   const usbPeripheral = new UsbPeripheral({ productId: 1, vendorId: 1 });
   const kboot = new KBoot(usbPeripheral);
-  
+
   // Get the bootloader version of I2C device
   await kboot.configureI2c(i2cId);
   const version = await kboot.getBootloaderVersion();

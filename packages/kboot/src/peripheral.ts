@@ -3,7 +3,7 @@ import { CommandOption, CommandResponse, DataOption } from './models/index.js';
 export interface Peripheral {
     open(): Promise<void>;
 
-    close(): void;
+    close(): Promise<void>;
 
     sendCommand(options: CommandOption): Promise<CommandResponse>;
 
