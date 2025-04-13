@@ -139,7 +139,7 @@ async function createWindow() {
         deviceService = null;
         appUpdateService = null;
         appService = null;
-        uhkHidDeviceService.close();
+        await uhkHidDeviceService.close();
         uhkHidDeviceService = null;
         sudoService = null;
         await smartMacroDocService.stop();

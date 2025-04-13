@@ -112,7 +112,7 @@ export class UhkOperations {
             device,
             enumerationMode: EnumerationModes.Bootloader,
         });
-        this.device.close();
+        await this.device.close();
         const kboot = new KBoot(new UsbPeripheral({ productId: reenumerateResult.vidPidPair.pid, vendorId: reenumerateResult.vidPidPair.vid }));
         this.logService.misc('[UhkOperations] Waiting for bootloader');
         await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
@@ -136,7 +136,7 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Reset bootloader');
         await kboot.reset();
         this.logService.misc('[UhkOperations] Close communication channels');
-        kboot.close();
+        await kboot.close();
         this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
@@ -152,7 +152,7 @@ export class UhkOperations {
             device,
             enumerationMode: EnumerationModes.Bootloader,
         });
-        this.device.close();
+        await this.device.close();
         // Give 1 sec to windows to install driver when first time appearing the mcu bootloader
         await snooze(1000);
         this.logService.misc(`[UhkOperations] Init SerialPeripheral: ${reenumerateResult.serialPath}`);
@@ -183,12 +183,12 @@ export class UhkOperations {
             device,
             enumerationMode: EnumerationModes.NormalKeyboard,
         });
-        this.device.close();
+        await this.device.close();
         await snooze(1000);
         await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.ping, 100);
         await snooze(1000);
         await this.jumpToBootloaderModule(module.slotId);
-        this.device.close();
+        await this.device.close();
 
         const moduleBricked = await this.waitForKbootIdle(module.name);
         if (!moduleBricked) {
@@ -201,7 +201,7 @@ export class UhkOperations {
             device,
             enumerationMode: EnumerationModes.Buspal,
         });
-        this.device.close();
+        await this.device.close();
         this.logService.misc('[UhkOperations] Waiting for buspal');
         await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
         const usbPeripheral = new UsbPeripheral({ productId: reenumerateResult.vidPidPair.pid, vendorId: reenumerateResult.vidPidPair.vid });
@@ -219,7 +219,7 @@ export class UhkOperations {
                 break;
             } catch {
                 if (kboot) {
-                    kboot.close();
+                    await kboot.close();
                 }
                 await snooze(2000);
             }
@@ -247,21 +247,21 @@ export class UhkOperations {
         await kboot.reset();
 
         this.logService.misc('[UhkOperations] Close communication channels');
-        kboot.close();
+        await kboot.close();
 
         await snooze(1000);
         const reenumerateResult1 = await this.device.reenumerate({
             device,
             enumerationMode: EnumerationModes.NormalKeyboard,
         });
-        this.device.close();
+        await this.device.close();
         this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
         await waitForDevice(reenumerateResult1.vidPidPair.vid, reenumerateResult1.vidPidPair.pid);
         await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.reset, 100);
-        this.device.close();
+        await this.device.close();
         await snooze(1000);
         await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.idle);
-        this.device.close();
+        await this.device.close();
 
         this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
     }
@@ -281,7 +281,7 @@ export class UhkOperations {
                 hardwareConfiguration: JSON.stringify(convertBufferToIntArray(hardwareConfiguration))
             };
         } finally {
-            this.device.close();
+            await this.device.close();
         }
     }
 
@@ -347,7 +347,7 @@ export class UhkOperations {
 
     public async getConfigSizesFromKeyboard(): Promise<ConfigSizesInfo> {
         const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ConfigSizes]));
-        this.device.close();
+        await this.device.close();
 
         return {
             hardwareConfig: buffer[1] + (buffer[2] << 8),
@@ -367,7 +367,7 @@ export class UhkOperations {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
         } finally {
-            this.device.close();
+            await this.device.close();
         }
     }
 
@@ -421,7 +421,7 @@ export class UhkOperations {
     public async waitForKbootIdle(moduleName: string): Promise<boolean> {
         while (true) {
             const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
-            this.device.close();
+            await this.device.close();
 
             if (buffer[1] === 0) {
                 return true;

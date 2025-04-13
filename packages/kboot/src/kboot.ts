@@ -22,9 +22,9 @@ export class KBoot {
         await this.peripheral.open();
     }
 
-    close(): void {
+    async close(): Promise<void> {
         logger('Close peripheral');
-        this.peripheral.close();
+        await this.peripheral.close();
     }
 
     // ================= Read properties ==================
@@ -175,7 +175,8 @@ export class KBoot {
             if (RESET_IGNORED_ERRORS.includes(error.message)) {
                 logger('Ignoring missing response from reset command.');
 
-                this.close();
+                await this.close()
+                    .catch(error => logger(`Reset close error "${error.message}"`));
 
                 return;
             }

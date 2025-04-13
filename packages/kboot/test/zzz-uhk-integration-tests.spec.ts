@@ -11,13 +11,13 @@ xdescribe('UHK Integration tests', () => {
             kboot = new KBoot(usb);
         });
 
-        afterEach(() => {
+        afterEach(async () => {
             if (usb) {
-                usb.close();
+                await usb.close();
             }
 
             if (kboot) {
-                kboot.close();
+                await kboot.close();
             }
         });
 

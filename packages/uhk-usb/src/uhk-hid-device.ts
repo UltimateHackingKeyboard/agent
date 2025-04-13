@@ -1,6 +1,6 @@
 import fse from 'fs-extra';
 import isRoot from 'is-root';
-import { Device, HID } from 'node-hid';
+import { Device, HIDAsync } from 'node-hid';
 import * as path from 'path';
 import semver from 'semver';
 import { SerialPort } from 'serialport';
@@ -78,7 +78,7 @@ const MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE = 10;
  * HID API wrapper to support unified logging and async write
  */
 export class UhkHidDevice {
-    private _device: HID;
+    private _device: HIDAsync;
     private _deviceInfo: Device;
     private _hasPermission = false;
     private _protocolVersions: ProtocolVersions | undefined;
@@ -122,8 +122,8 @@ export class UhkHidDevice {
                 return true;
             }
 
-            const device = new HID(dev.path);
-            device.close();
+            const device = await HIDAsync.open(dev.path);
+            await device.close();
 
             this._hasPermission = true;
 
@@ -430,14 +430,14 @@ export class UhkHidDevice {
             this.logService.setUsbReportId(reportId);
             const sendData = this.getTransferData(buffer, reportId);
             this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData));
-            device.write(sendData);
+            await device.write(sendData);
             await snooze(1);
-            const receivedData = device.readTimeout(1000);
+            let receivedData = await device.read(1000);
             const logString = bufferToString(receivedData);
             this.logService.usb('[UhkHidDevice] USB[R]:', logString);
 
             if (reportId) {
-                receivedData.shift();
+                receivedData = receivedData.subarray(1);
             }
 
             if (receivedData[0] !== 0) {
@@ -447,7 +447,7 @@ export class UhkHidDevice {
             return Buffer.from(receivedData);
         } catch (err) {
             this.logService.error('[UhkHidDevice] Transfer error: ', err);
-            this.close();
+            await this.close();
             throw err;
         }
     }
@@ -455,12 +455,12 @@ export class UhkHidDevice {
     /**
      * Close the communication chanel with UHK Device
      */
-    public close(): void {
+    public async close(): Promise<void> {
         this.logService.misc('[UhkHidDevice] Device communication closing.');
         if (!this._device) {
             return;
         }
-        this._device.close();
+        await this._device.close();
         this._device = null;
         this.setDeviceInfo(undefined);
         this.logService.misc('[UhkHidDevice] Device communication closed.');
@@ -469,7 +469,7 @@ export class UhkHidDevice {
     async reenumerate(
         { enumerationMode, force, device, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
     ): Promise<ReenumerateResult> {
-        this.close();
+        await this.close();
         const reenumMode = EnumerationModes[enumerationMode].toString();
         this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}, timeout: ${timeout}ms`);
         const vidPidPairs = getDeviceEnumerateVidPidPairs(device, enumerationMode);
@@ -524,7 +524,7 @@ export class UhkHidDevice {
             await snooze(100);
 
             if (!jumped) {
-                let keyboardDevice: HID;
+                let keyboardDevice: HIDAsync;
                 for (const vidPid of device.keyboard) {
                     const devs = await getUhkHidDevices([vidPid.vid]);
                     const foundDevice = devs.find((dev: Device) => {
@@ -535,7 +535,7 @@ export class UhkHidDevice {
                     });
 
                     if (foundDevice) {
-                        keyboardDevice = new HID(foundDevice.path);
+                        keyboardDevice = await HIDAsync.open(foundDevice.path);
                         this.setDeviceInfo(foundDevice);
                     }
                 }
@@ -555,14 +555,14 @@ export class UhkHidDevice {
                     this.logService.usbOps(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
                     this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     try {
-                        keyboardDevice.write(data);
+                       await keyboardDevice.write(data);
                     } catch (error) {
                         this.logService.misc('[UhkHidDevice] Reenumeration error. We hope it would not break the process', error);
                     } finally {
                         if (keyboardDevice) {
                             try {
                                 this.logService.misc('[UhkHidDevice] closing normal keyboard after reenumeration');
-                                keyboardDevice.close();
+                                await keyboardDevice.close();
                             } catch (error) {
                                 this.logService.misc("[UhkHidDevice] can't normal keyboard after reenumeration", error);
                             }
@@ -727,10 +727,10 @@ export class UhkHidDevice {
 
     /**
      * Return the stored version of HID device. If not exist try to initialize.
-     * @returns {HID}
+     * @returns {HIDAsync}
      * @private
      */
-    private async getDevice(): Promise<HID> {
+    private async getDevice(): Promise<HIDAsync> {
         if (!this._device) {
             this._device = await this.connectToDevice();
 
@@ -745,7 +745,7 @@ export class UhkHidDevice {
     /**
      * Initialize new UHK HID device.
      */
-    private async connectToDevice(): Promise<HID> {
+    private async connectToDevice(): Promise<HIDAsync> {
         try {
             const devs = await this.getUhkDevices();
             await listAvailableDevices({
@@ -775,10 +775,10 @@ export class UhkHidDevice {
                 this.logService.misc('[UhkHidDevice] UHK Device not found:');
                 return null;
             }
-            const device = new HID(this._deviceInfo.path);
+            const device = await HIDAsync.open(this._deviceInfo.path);
             if (this.options['usb-non-blocking']) {
                 this.logService.misc('[UhkHidDevice] set non blocking communication mode');
-                this._device.setNonBlocking(1 as any);
+                await this._device.setNonBlocking(1 as any);
             }
             this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(this._deviceInfo, usbDeviceJsonFormatter));
             return device;
