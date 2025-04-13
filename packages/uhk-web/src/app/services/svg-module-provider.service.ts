@@ -23,7 +23,7 @@ export interface DescriptionAnimationParams {
 }
 
 export const UHK_60_DESCRIPTION_ANIMATION_PARAMS: DescriptionAnimationParams = Object.freeze({
-    down: '-5.5em',
+    down: '-5%',
     up: '-11.5%',
     upLeftKeyCluster: '-8%',
     upRightModule: '-10.5%',
