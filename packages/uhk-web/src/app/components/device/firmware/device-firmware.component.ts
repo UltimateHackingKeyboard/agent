@@ -18,6 +18,7 @@ import {
     flashFirmwareButtonDisabled,
     getAgentVersionInfo,
     getFirmwareUpgradeState,
+    getPlatform,
     runningOnNotSupportedWindows,
     xtermLog
 } from '../../../store';
@@ -46,6 +47,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     firmwareUpgradeFailReasons = FirmwareUpgradeFailReason;
     firmwareUpgradeSuccess: boolean;
     upgradeType = 'Firmware';
+    platform: string;
 
     @ViewChild(XtermComponent, { static: false }) xtermRef: XtermComponent;
 
@@ -76,6 +78,10 @@ export class DeviceFirmwareComponent implements OnDestroy {
             this.firmwareUpgradeSuccess = data;
             this.scrollToTheEndOfTheLogs();
         }));
+        this.subscription.add(store.select(getPlatform).subscribe(data => {
+            this.platform = data;
+            this.cdRef.markForCheck();
+        }))
     }
 
     ngOnDestroy(): void {
