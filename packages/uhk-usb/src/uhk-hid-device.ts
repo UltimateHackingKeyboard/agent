@@ -432,7 +432,7 @@ export class UhkHidDevice {
             this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData));
             device.write(sendData);
             await snooze(1);
-            const receivedData = device.readTimeout(1000);
+            const receivedData = device.readTimeout(2000);
             const logString = bufferToString(receivedData);
             this.logService.usb('[UhkHidDevice] USB[R]:', logString);
 
