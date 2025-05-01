@@ -88,6 +88,13 @@
                         </div>
                     </li>
                     <li class="sidebar__level-2--item"
+                        *ngIf="!state.restoreUserConfiguration && isBatterySettingsMenuAllowed">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/device/battery-settings']"
+                               [class.disabled]="state.updatingFirmware">Battery settings</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item"
                         *ngIf="!state.restoreUserConfiguration && isConnectionsMenuAllowed">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/host-connections']"

@@ -71,6 +71,7 @@ interface SideMenuState {
 export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     @Input() deviceConfigurationLoaded: boolean;
 
+    isBatterySettingsMenuAllowed: boolean;
     isConnectionsMenuAllowed: boolean;
     state: SideMenuPageState;
     sideMenuState: SideMenuState = {
@@ -119,6 +120,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     ngOnInit(): void {
         this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
             this.state = data;
+            this.isBatterySettingsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.isConnectionsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.calculateDeviceAnimationState();
             this.cdRef.markForCheck();

@@ -1,0 +1,6 @@
+@import '../../../../styles/variables';
+
+:host {
+    display: block;
+    --slider-value-width: 35px;
+}

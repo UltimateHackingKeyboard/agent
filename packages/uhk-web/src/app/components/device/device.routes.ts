@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { AdvancedSettingsPageComponent } from './advanced-settings/advanced-settings.page.component';
+import { BatterySettingsComponent } from './battery-settings/battery-settings.component';
 import { DeviceConfigurationComponent } from './configuration/device-configuration.component';
 import { DeviceFirmwareComponent } from './firmware/device-firmware.component';
 import { MouseSpeedComponent } from './mouse-speed/mouse-speed.component';
@@ -21,6 +22,10 @@ export const deviceRoutes: Routes = [
             {
                 path: 'advanced-settings',
                 component: AdvancedSettingsPageComponent
+            },
+            {
+                path: 'battery-settings',
+                component: BatterySettingsComponent,
             },
             {
                 path: 'configuration',

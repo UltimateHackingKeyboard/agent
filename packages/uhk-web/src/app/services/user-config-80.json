@@ -1,6 +1,6 @@
 {
   "userConfigMajorVersion": 9,
-  "userConfigMinorVersion": 0,
+  "userConfigMinorVersion": 99,
   "userConfigPatchVersion": 0,
   "deviceName": "My UHK",
   "doubleTapSwitchLayerTimeout": 250,
@@ -81,6 +81,8 @@
   "displayFadeOutBatteryTimeout": 10,
   "keyBacklightFadeOutTimeout": 300,
   "keyBacklightFadeOutBatteryTimeout": 10,
+  "keyBacklightBrightnessChargingDefault": 50,
+  "batteryChargingMode": "Full",
   "hostConnections": [
     {
       "type": "UsbRight",

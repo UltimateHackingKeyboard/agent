@@ -26,6 +26,7 @@ import { DonglePairingPanelComponent } from './components/device/dongle-pairing-
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
     AdvancedSettingsPageComponent,
+    BatterySettingsComponent,
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
     HostConnectionsComponent,
@@ -175,6 +176,7 @@ import appInitFactory from './services/app-init-factory';
         AsHexColorPipe,
         BackToComponent,
         BlePairingPanelComponent,
+        BatterySettingsComponent,
         HostConnectionTypeLabelPipePipe,
         NewLineToBrPipe,
         SafeHtmlPipe,

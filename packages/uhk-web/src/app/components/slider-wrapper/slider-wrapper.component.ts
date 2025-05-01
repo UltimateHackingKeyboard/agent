@@ -33,6 +33,7 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     @Input() config: any = {};
     @Input() label: string;
     @Input() tooltip: string;
+    @Input() tooltipWidth: number;
     @Input() min: number;
     @Input() max: number;
     @Input() step: number;
