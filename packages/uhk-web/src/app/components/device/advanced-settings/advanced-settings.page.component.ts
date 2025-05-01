@@ -13,19 +13,28 @@ import { Observable, Subscription } from 'rxjs';
 import { KeyboardLayout, UHK_80_DEVICE } from 'uhk-common';
 
 import {
+    IsDongleZephyrLoggingEnabledAction,
+    IsLeftHalfZephyrLoggingEnabledAction,
+    IsRightHalfZephyrLoggingEnabledAction,
+    ToggleDongleZephyrLoggingAction,
+    ToggleLeftHalfZephyrLoggingAction,
+    ToggleRightHalfZephyrLoggingAction,
     ToggleI2cDebuggingAction,
     ToggleI2cDebuggingRingBellAction,
+    ToggleZephyrLoggingAction,
     StartLeftHalfPairingAction,
 } from '../../../store/actions/advance-settings.action';
 import {
     advanceSettingsState,
     AppState,
     getConnectedDevice,
+    getDongle,
     getKeyboardLayout,
+    getLeftHalfDetected,
     isKeyboardLayoutChanging,
 } from '../../../store';
 import { ChangeKeyboardLayoutAction } from '../../../store/actions/device';
-import { initialState, State } from '../../../store/reducers/advanced-settings.reducer';
+import { ActiveButton, initialState, State } from '../../../store/reducers/advanced-settings.reducer';
 
 @Component({
     selector: 'advanced-settings',
@@ -36,21 +45,26 @@ import { initialState, State } from '../../../store/reducers/advanced-settings.r
     }
 })
 export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
+    ActiveButton = ActiveButton;
     faCog = faCog;
 
     @ViewChild('audioPlayer', {static: true,}) audioPlayer: ElementRef<HTMLAudioElement>;
 
     isKeyboardLayoutChanging$: Observable<boolean>;
     isHalvesPairingAllowed: boolean;
+    isHZephyrLoggingAllowed: boolean;
     keyboardLayout: KeyboardLayout;
     keyboardLayoutEnum = KeyboardLayout;
-
+    showDongleZephyrLogCheckbox: boolean;
+    showLeftHalfZephyrLogCheckbox: boolean;
     state: State;
 
     private i2cErrorsLength = 0;
     private stateSubscription: Subscription;
     private connectedDeviceSubscription: Subscription;
+    private dongleSubscription: Subscription;
     private keyboardLayoutSubscription: Subscription;
+    private leftHalfDetectedSubscription: Subscription;
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
@@ -60,27 +74,42 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.connectedDeviceSubscription?.unsubscribe();
+        this.dongleSubscription?.unsubscribe();
         if(this.keyboardLayoutSubscription) {
             this.keyboardLayoutSubscription.unsubscribe();
         }
-
+        this.leftHalfDetectedSubscription?.unsubscribe();
         if (this.stateSubscription) {
             this.stateSubscription.unsubscribe();
         }
     }
 
     ngOnInit(): void {
+        this.store.dispatch(new IsRightHalfZephyrLoggingEnabledAction())
+        this.store.dispatch(new IsLeftHalfZephyrLoggingEnabledAction())
+        this.store.dispatch(new IsDongleZephyrLoggingEnabledAction())
+
         this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
             .subscribe(connectedDevice => {
                 this.isHalvesPairingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.isHZephyrLoggingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
                 this.cdRef.detectChanges();
             });
+        this.dongleSubscription = this.store.select(getDongle)
+            .subscribe(dongle => {
+                this.showDongleZephyrLogCheckbox = !!dongle.serialNumber;
+                this.cdRef.detectChanges();
+            })
         this.keyboardLayoutSubscription = this.store.select(getKeyboardLayout)
             .subscribe(layout => {
                 this.keyboardLayout = layout;
                 this.cdRef.detectChanges();
             });
-
+        this.leftHalfDetectedSubscription = this.store.select(getLeftHalfDetected)
+            .subscribe(leftHalfDetected => {
+                this.showLeftHalfZephyrLogCheckbox = leftHalfDetected;
+                this.cdRef.detectChanges();
+            });
         this.stateSubscription = this.store.select(advanceSettingsState)
             .subscribe(state => {
                 this.state = state;
@@ -112,6 +141,22 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     onToggleI2cDebugRingBell(): void {
         this.store.dispatch(new ToggleI2cDebuggingRingBellAction());
+    }
+
+    onToggleZephyrLogging(): void {
+        this.store.dispatch(new ToggleZephyrLoggingAction());
+    }
+
+    onToggleDongleZephyrLogging(): void {
+        this.store.dispatch(new ToggleDongleZephyrLoggingAction());
+    }
+
+    onToggleLeftHalfZephyrLogging(): void {
+        this.store.dispatch(new ToggleLeftHalfZephyrLoggingAction());
+    }
+
+    onToggleRightHalfZephyrLogging(): void {
+        this.store.dispatch(new ToggleRightHalfZephyrLoggingAction());
     }
 
     startLeftHalfPairing(): void {

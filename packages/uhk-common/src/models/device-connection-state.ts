@@ -15,6 +15,7 @@ export interface DeviceConnectionState {
     hasPermission: boolean;
     bootloaderActive: boolean;
     isMacroStatusDirty: boolean;
+    isZephyrLogAvailable: boolean;
     leftHalfDetected: boolean;
     /**
      * True if more than 1 UHK device connected.

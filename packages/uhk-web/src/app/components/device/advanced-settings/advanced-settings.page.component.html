@@ -31,42 +31,76 @@
                     </div>
                 </div>
 
-                <div *ngIf="isHalvesPairingAllowed" class="form-check mt-3">
-                    <button class="btn btn-default"
+                <div class="btn-group mt-2" role="group" aria-label="Options">
+                    <button class="btn"
+                            type="button"
+                            *ngIf="isHalvesPairingAllowed"
+                            [class.btn-primary]="state.activeButton === ActiveButton.RepairKeyboardHalf"
+                            [class.btn-default]="state.activeButton !== ActiveButton.RepairKeyboardHalf"
+                            [attr.aria-pressed]="state.activeButton === ActiveButton.RepairKeyboardHalf"
                             [disabled]="state.isLeftHalfPairing"
                             (click)="startLeftHalfPairing()"
                     >
                         Re-pair keyboard halves
                     </button>
-                </div>
-
-                <div class="form-check mt-3">
-                    <div class="checkbox d-inline-block mb-0 mt-0">
-                        <label>
-                            <input type="checkbox"
-                                   [checked]="state.i2cDebuggingEnabled"
-                                   [disabled]="state.isLeftHalfPairing"
-                                   (click)="onToggleI2cDebug()"
-                            > I2cRecovery debugging
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-check">
-                    <div class="checkbox d-inline-block mb-0 mt-0">
-                        <label>
-                            <input type="checkbox"
-                                   [checked]="state.i2cDebuggingRingBellEnabled"
-                                   [disabled]="state.i2cDebuggingRingBellControlDisabled || state.isLeftHalfPairing"
-                                   (click)="onToggleI2cDebugRingBell()"
-                            > Ring an audible bell upon I2cRecovery increments
-                        </label>
-                    </div>
+                    <button class="btn btn-default"
+                            type="button"
+                            [class.btn-primary]="state.activeButton === ActiveButton.I2CRecoveryDebugging"
+                            [class.btn-default]="state.activeButton !== ActiveButton.I2CRecoveryDebugging"
+                            [attr.aria-pressed]="state.activeButton === ActiveButton.I2CRecoveryDebugging"
+                            [disabled]="state.isLeftHalfPairing"
+                            (click)="onToggleI2cDebug()"
+                    >
+                        I2cRecovery debugging
+                    </button>
+                    <button class="btn"
+                            type="button"
+                            *ngIf="isHZephyrLoggingAllowed"
+                            [class.btn-primary]="state.activeButton === ActiveButton.ShowZephyrLogs"
+                            [class.btn-default]="state.activeButton !== ActiveButton.ShowZephyrLogs"
+                            [attr.aria-pressed]="state.activeButton === ActiveButton.ShowZephyrLogs"
+                            [disabled]="state.isLeftHalfPairing"
+                            (click)="onToggleZephyrLogging()"
+                    >
+                        Zephyr logging
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="flex-grow">
+        <div *ngIf="state.activeButton === ActiveButton.I2CRecoveryDebugging" class="checkbox d-inline-block mb-0 mt-3">
+            <label class="d-inline-flex align-items-center gap-1">
+                <input type="checkbox"
+                       [checked]="state.i2cDebuggingRingBellEnabled"
+                       (click)="onToggleI2cDebugRingBell()"
+                > Ring an audible bell upon I2cRecovery increments
+            </label>
+        </div>
+
+        <div *ngIf="state.activeButton === ActiveButton.ShowZephyrLogs" class="checkbox d-flex mb-0 mt-3 gap-3">
+            <label *ngIf="showLeftHalfZephyrLogCheckbox" class="d-inline-flex align-items-center gap-1">
+                <input type="checkbox"
+                       [checked]="state.isLeftHalfZephyrLoggingEnabled"
+                       (click)="onToggleLeftHalfZephyrLogging()"
+                > Left half
+            </label>
+
+            <label class="d-inline-flex align-items-center gap-1">
+                <input type="checkbox"
+                       [checked]="state.isRightHalfZephyrLoggingEnabled"
+                       (click)="onToggleRightHalfZephyrLogging()"
+                > Right half
+            </label>
+
+            <label *ngIf="showDongleZephyrLogCheckbox" class="d-inline-flex align-items-center gap-1">
+                <input type="checkbox"
+                       [checked]="state.isDongleZephyrLoggingEnabled"
+                       (click)="onToggleDongleZephyrLogging()"
+                > Dongle
+            </label>
+        </div>
+
+        <div class="flex-grow mt-3">
             <xterm [logs]="state.i2cLogs"></xterm>
         </div>
         <audio #audioPlayer src="assets/beep.mp3" preload="auto"></audio>

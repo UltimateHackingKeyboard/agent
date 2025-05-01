@@ -32,6 +32,12 @@ export class Device {
     public static readonly eraseBleSettings = 'device-erase-ble-settings';
     public static readonly eraseBleSettingsReply = 'device-erase-ble-settings-reply';
     public static readonly hardwareModulesLoaded = 'device-hardware-modules-loaded';
+    public static readonly isDongleZephyrLoggingEnabled = 'device-is-dongle-zephyr-logging-enabled';
+    public static readonly isDongleZephyrLoggingEnabledReply = 'device-is-dongle-zephyr-logging-enabled-reply';
+    public static readonly isLeftHalfZephyrLoggingEnabled = 'device-is-left-half-zephyr-logging-enabled';
+    public static readonly isLeftHalfZephyrLoggingEnabledReply = 'device-is-left-half-zephyr-logging-enabled-reply';
+    public static readonly isRightHalfZephyrLoggingEnabled = 'device-is-right-half-zephyr-logging-enabled';
+    public static readonly isRightHalfZephyrLoggingEnabledReply = 'device-is-right-half-zephyr-logging-enabled-reply';
     public static readonly setPrivilegeOnLinux = 'set-privilege-on-linux';
     public static readonly setPrivilegeOnLinuxReply = 'set-privilege-on-linux-reply';
     public static readonly deviceConnectionStateChanged = 'device-connection-state-changed';
@@ -58,6 +64,9 @@ export class Device {
     public static readonly getUserConfigFromHistoryReply = 'device-get-user-config-from-history-reply';
     public static readonly statusBufferChanged = 'device-status-buffer-changed';
     public static readonly toggleI2cDebugging = 'device-toggle-i2c-debugging';
+    public static readonly toggleDongleZephyrLogging = 'device-toggle-dongle-zephyr-logging';
+    public static readonly toggleLeftHalfZephyrLogging = 'device-toggle-left-half-zephyr-logging';
+    public static readonly toggleRightHalfZephyrLogging = 'device-toggle-right-half-zephyr-logging';
     public static readonly deleteHostConnection = 'device-delete-host-connection';
     public static readonly deleteHostConnectionSuccess = 'device-delete-host-connection-success';
     public static readonly deleteHostConnectionFailed = 'device-delete-host-connection-failed';
@@ -68,6 +77,7 @@ export class Device {
     public static readonly leftHalfPairingSuccess = 'device-left-half-pairing-success';
     public static readonly leftHalfPairingFailed = 'device-left-half-pairing-failed';
     public static readonly i2cWatchdogCounterChanged = 'device-i2c-watchdog-counter-changed';
+    public static readonly zephyrLog = 'device-zephyr-log';
 }
 
 export class SmartMacroDoc {

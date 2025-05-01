@@ -1,6 +1,7 @@
 export interface DeviceState {
     isEepromBusy: boolean;
     isMacroStatusDirty: boolean;
+    isZephyrLogAvailable: boolean;
     areHalvesMerged: boolean;
     isLeftHalfConnected: boolean;
     activeLayerNumber: number;

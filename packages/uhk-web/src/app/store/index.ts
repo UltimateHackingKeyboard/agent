@@ -228,6 +228,7 @@ export const deviceConnected = createSelector(
     });
 export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
 export const getHostConnectionPairState = createSelector(deviceState, fromDevice.getHostConnectionPairState);
+export const getLeftHalfDetected = createSelector(deviceState, fromDevice.getLeftHalfDetected);
 export const getDeviceBleAddress = createSelector(deviceState, fromDevice.getDeviceBleAddress);
 export const getDevicePairedWithDongle = createSelector(deviceState, fromDevice.getDevicePairedWithDongle);
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);

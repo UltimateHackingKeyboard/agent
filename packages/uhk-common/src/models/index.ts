@@ -41,3 +41,4 @@ export * from './update-firmware-data.js';
 export * from './upload-file-data.js';
 export * from './user-config-history.js';
 export * from './halves-info.js';
+export * from './zephyr-log-entry.js';

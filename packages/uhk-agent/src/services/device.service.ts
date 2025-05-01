@@ -3,8 +3,8 @@ import { emptyDir } from 'fs-extra';
 import { cloneDeep, isEqual } from 'lodash';
 import os from 'os';
 import {
-    AreBleAddressesPairedIpcResponse,
     ALL_UHK_DEVICES,
+    AreBleAddressesPairedIpcResponse,
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
     CommandLineArgs,
@@ -43,6 +43,7 @@ import {
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
     simulateInvalidUserConfigError,
+    UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
     UHK_DEVICE_IDS,
     UHK_DONGLE,
@@ -50,7 +51,8 @@ import {
     UHK_MODULES,
     UpdateFirmwareData,
     UploadFileData,
-    VersionInformation
+    VersionInformation,
+    ZephyrLogEntry,
 } from 'uhk-common';
 import {
     checkFirmwareAndDeviceCompatibility,
@@ -93,6 +95,7 @@ import {
 } from '../util';
 
 import { QueueManager } from './queue-manager';
+import { ZephyrLogService } from './zephyr-log.service';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -104,12 +107,13 @@ export class DeviceService {
     private _pollerAllowed: boolean;
     private _uhkDevicePolling: boolean;
     private _checkStatusBuffer: boolean;
+    private dongleZephyrLogService: ZephyrLogService;
+    private leftHalfZephyrLogService: ZephyrLogService;
     private queueManager = new QueueManager();
     private wasCalledSaveUserConfiguration = false;
     private isI2cDebuggingEnabled = false;
     private i2cWatchdogRecoveryCounter = -1;
     private savedState: DeviceConnectionState;
-
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
@@ -118,6 +122,32 @@ export class DeviceService {
                 private options: CommandLineArgs,
                 private rootDir: string
     ) {
+        this.dongleZephyrLogService =  new ZephyrLogService({
+            cliArgs: this.options,
+            currentDeviceFn: getCurrentUhkDongleHID,
+            logService: this.logService,
+            ipcEvents: {
+                isZephyrLoggingEnabled: IpcEvents.device.isDongleZephyrLoggingEnabled,
+                isZephyrLoggingEnabledReply: IpcEvents.device.isDongleZephyrLoggingEnabledReply,
+                toggleZephyrLogging: IpcEvents.device.toggleDongleZephyrLogging,
+            },
+            rootDir: this.rootDir,
+            uhkDeviceProduct: UHK_DONGLE,
+            win: this.win,
+        })
+        this.leftHalfZephyrLogService =  new ZephyrLogService({
+            cliArgs: this.options,
+            currentDeviceFn: getCurrenUhk80LeftHID,
+            logService: this.logService,
+            ipcEvents: {
+                isZephyrLoggingEnabled: IpcEvents.device.isLeftHalfZephyrLoggingEnabled,
+                isZephyrLoggingEnabledReply: IpcEvents.device.isLeftHalfZephyrLoggingEnabledReply,
+                toggleZephyrLogging: IpcEvents.device.toggleLeftHalfZephyrLogging,
+            },
+            rootDir: this.rootDir,
+            uhkDeviceProduct: UHK_80_DEVICE_LEFT,
+            win: this.win,
+        })
         this.uhkDevicePoller()
             .catch(error => {
                 this.logService.error('[DeviceService] UHK Device poller error', error);
@@ -168,6 +198,24 @@ export class DeviceService {
         });
 
         ipcMain.on(IpcEvents.device.toggleI2cDebugging, this.toggleI2cDebugging.bind(this));
+
+        ipcMain.on(IpcEvents.device.isRightHalfZephyrLoggingEnabled, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.isRightHalfZephyrLoggingEnabled,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.toggleRightHalfZephyrLogging, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.toggleRightHalfZephyrLogging,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
 
         ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
             this.queueManager.add({
@@ -422,8 +470,11 @@ export class DeviceService {
     }
 
     public async close(): Promise<void> {
+        this.logService.misc('[DeviceService] closing.');
+        await this.dongleZephyrLogService.close();
+        await this.leftHalfZephyrLogService.close();
         await this.stopPollUhkDevice();
-        this.logService.misc('[DeviceService] Device connection checker stopped.');
+        this.logService.misc('[DeviceService] closed.');
     }
 
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
@@ -443,6 +494,8 @@ export class DeviceService {
 
         try {
             await this.stopPollUhkDevice();
+            await this.dongleZephyrLogService.disable();
+            await this.leftHalfZephyrLogService.disable();
 
             firmwarePathData = data.uploadFile
                 ? await saveTmpFirmware(data.uploadFile)
@@ -720,6 +773,8 @@ export class DeviceService {
 
         this.savedState = undefined;
         this.startPollUhkDevice();
+        await this.dongleZephyrLogService.enable();
+        await this.leftHalfZephyrLogService.enable();
 
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
@@ -848,6 +903,7 @@ export class DeviceService {
 
         try {
             await this.stopPollUhkDevice();
+            await this.dongleZephyrLogService.disable();
             let dongleUhkDevice: UhkHidDevice;
             try {
                 if (isConnectedDongleAddress) {
@@ -879,6 +935,7 @@ export class DeviceService {
         finally {
             this.savedState = undefined;
             this.startPollUhkDevice();
+            await this.dongleZephyrLogService.enable();
         }
     }
 
@@ -910,6 +967,7 @@ export class DeviceService {
         this.logService.misc('[DeviceService] start Dongle pairing');
         try {
             await this.stopPollUhkDevice();
+            await this.dongleZephyrLogService.disable();
             const dongleHid = await getCurrentUhkDongleHID();
             if (!dongleHid) {
                 throw new Error('Cannot find dongle!');
@@ -938,6 +996,7 @@ export class DeviceService {
         finally {
             this.savedState = undefined;
             this.startPollUhkDevice();
+            await this.dongleZephyrLogService.enable();
         }
     }
 
@@ -946,6 +1005,7 @@ export class DeviceService {
 
         try {
             await this.stopPollUhkDevice();
+            await this.leftHalfZephyrLogService.disable();
             if (!(await isUkhKeyboardConnected(UHK_80_DEVICE_LEFT))) {
                 this.logService.misc('[DeviceService] Both keyboard halves must be connected via USB.');
                 this.logService.misc('[DeviceService] Please connect them and retry pairing the halves.');
@@ -984,6 +1044,7 @@ export class DeviceService {
         finally {
             this.savedState = undefined;
             this.startPollUhkDevice();
+            await this.leftHalfZephyrLogService.enable();
         }
     }
 
@@ -1087,6 +1148,7 @@ export class DeviceService {
                                 && !state.dongle.bootloaderActive
                                 && state.dongle.serialNumber) {
 
+                                await this.dongleZephyrLogService.disable();
                                 const dongle = await getCurrentUhkDongleHID();
                                 let dongleUhkDevice: UhkHidDevice;
                                 try {
@@ -1105,7 +1167,11 @@ export class DeviceService {
                                     if (dongleUhkDevice) {
                                         await dongleUhkDevice.close();
                                     }
+                                    await this.dongleZephyrLogService.enable();
                                 }
+                            }
+                            else {
+                                await this.dongleZephyrLogService.disable();
                             }
 
                             this._checkStatusBuffer = true;
@@ -1131,6 +1197,17 @@ export class DeviceService {
 
                     await this.pollDebugInfo(iterationCount);
                     await this.checkStatusBuffer(deviceProtocolVersion);
+
+                    if (state.isZephyrLogAvailable) {
+                        await this.readZephyrLog()
+                    }
+
+                    if (state.leftHalfDetected) {
+                        await this.leftHalfZephyrLogService.enable();
+                    }
+                    else {
+                        await this.leftHalfZephyrLogService.disable();
+                    }
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
                 }
@@ -1211,9 +1288,37 @@ export class DeviceService {
     }
 
     private async toggleI2cDebugging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
-        this.logService.error('[DeviceService] Toggle I2C debugging =>', enabled);
+        this.logService.misc('[DeviceService] Toggle I2C debugging =>', enabled);
 
         this.isI2cDebuggingEnabled = enabled;
+    }
+
+    private async isRightHalfZephyrLoggingEnabled(event: Electron.IpcMainEvent): Promise<void> {
+        this.logService.misc('[DeviceService] Check Right Half zephyr logging');
+
+        try {
+            await this.stopPollUhkDevice();
+            const response = await this.operations.getVariable(UsbVariables.ShellEnabled);
+            const enabled = response === 1
+            this.logService.misc(`[DeviceService] Is Right Half zephyr logging enabled: ${enabled}`);
+            event.sender.send(IpcEvents.device.isRightHalfZephyrLoggingEnabledReply, enabled);
+        }
+        finally {
+            this.startPollUhkDevice();
+        }
+    }
+
+    private async toggleRightHalfZephyrLogging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
+        this.logService.misc('[DeviceService] Toggle Right Half zephyr logging =>', enabled);
+
+        try {
+            await this.stopPollUhkDevice();
+            const value = enabled ? 1 : 0;
+            await this.operations.setVariable(UsbVariables.ShellEnabled, value);
+        }
+        finally {
+            this.startPollUhkDevice();
+        }
     }
 
     private async loadUserConfigFromHistory(event: Electron.IpcMainEvent): Promise<void> {
@@ -1300,6 +1405,28 @@ export class DeviceService {
         finally {
             await this.device.close();
             await snooze(1000);
+        }
+    }
+
+    private async readZephyrLog(): Promise<void> {
+        try {
+            const log = await this.operations.getVariable(UsbVariables.ShellBuffer)
+            this.logService.misc(`[DeviceService] Right half zephyr log: ${log}`);
+            const logEntry: ZephyrLogEntry = {
+                log: log as string,
+                level: 'info',
+                device: UHK_80_DEVICE.logName,
+            }
+            this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+        }
+        catch (error) {
+            this.logService.error(`[DeviceService] Right half can't read zephyr log`, error);
+            const logEntry: ZephyrLogEntry = {
+                log: error.message as string,
+                level: 'error',
+                device: UHK_80_DEVICE.logName,
+            }
+            this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
         }
     }
 }

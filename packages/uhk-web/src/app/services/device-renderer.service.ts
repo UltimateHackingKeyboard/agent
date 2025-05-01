@@ -22,11 +22,18 @@ import {
     UploadFileData,
     UserConfiguration,
     UserConfigHistory,
-    VersionInformation
+    VersionInformation,
+    ZephyrLogEntry,
 } from 'uhk-common';
 
 import { DeleteHostConnectionPayload } from '../models';
 import { AppState } from '../store';
+import {
+    IsDongleZephyrLoggingEnabledReplyAction,
+    IsLeftHalfZephyrLoggingEnabledReplyAction,
+    IsRightHalfZephyrLoggingEnabledReplyAction,
+    ZephyrLogAction,
+} from '../store/actions/advance-settings.action';
 import {
     DeleteHostConnectionFailedAction,
     DeleteHostConnectionSuccessAction,
@@ -97,6 +104,18 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.eraseBleSettings);
     }
 
+    isDongleZephyrLoggingEnabled(): void {
+        this.ipcRenderer.send(IpcEvents.device.isDongleZephyrLoggingEnabled);
+    }
+
+    isLeftHalfZephyrLoggingEnabled(): void {
+        this.ipcRenderer.send(IpcEvents.device.isLeftHalfZephyrLoggingEnabled);
+    }
+
+    isRightHalfZephyrLoggingEnabled(): void {
+        this.ipcRenderer.send(IpcEvents.device.isRightHalfZephyrLoggingEnabled);
+    }
+
     setPrivilegeOnLinux(): void {
         this.ipcRenderer.send(IpcEvents.device.setPrivilegeOnLinux);
     }
@@ -156,6 +175,18 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.toggleI2cDebugging, enabled);
     }
 
+    toggleDongleZephyrLogging(enabled: boolean): void {
+        this.ipcRenderer.send(IpcEvents.device.toggleDongleZephyrLogging, enabled);
+    }
+
+    toggleLeftHalfZephyrLogging(enabled: boolean): void {
+        this.ipcRenderer.send(IpcEvents.device.toggleLeftHalfZephyrLogging, enabled);
+    }
+
+    toggleRightHalfZephyrLogging(enabled: boolean): void {
+        this.ipcRenderer.send(IpcEvents.device.toggleRightHalfZephyrLogging, enabled);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.areBleAddressesPairedReply, (event: string, response: AreBleAddressesPairedIpcResponse) => {
             this.dispachStoreAction(new CheckAreHostConnectionsPairedReplyAction(response));
@@ -189,11 +220,23 @@ export class DeviceRendererService {
             this.dispachStoreAction(new HardwareModulesLoadedAction(response));
         });
 
+        this.ipcRenderer.on(IpcEvents.device.isDongleZephyrLoggingEnabledReply, (event: string, enabled: boolean) => {
+            this.dispachStoreAction(new IsDongleZephyrLoggingEnabledReplyAction(enabled));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.isLeftHalfZephyrLoggingEnabledReply, (event: string, enabled: boolean) => {
+            this.dispachStoreAction(new IsLeftHalfZephyrLoggingEnabledReplyAction(enabled));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.isRightHalfZephyrLoggingEnabledReply, (event: string, enabled: boolean) => {
+            this.dispachStoreAction(new IsRightHalfZephyrLoggingEnabledReplyAction(enabled));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.i2cWatchdogCounterChanged, (event: string, counter) => {
+        this.ipcRenderer.on(IpcEvents.device.i2cWatchdogCounterChanged, (event: string, counter: number) => {
             this.dispachStoreAction(new I2cWatchdogCounterChangedAction(counter));
         });
 
@@ -266,6 +309,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.leftHalfPairingFailed, (event: string, message: string) => {
             this.store.dispatch(new LeftHalfPairingFailedAction(message));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.zephyrLog, (event: string, log: ZephyrLogEntry) => {
+            this.store.dispatch(new ZephyrLogAction(log));
         });
     }
 
