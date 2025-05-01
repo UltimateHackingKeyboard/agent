@@ -1,0 +1,35 @@
+<h1>
+    <fa-icon [icon]="faBatteryEmpty"></fa-icon>
+    <span>Battery settings</span>
+</h1>
+
+<div class="row">
+    <div class="col-12 mt-1">
+        <div class="checkbox d-inline-block mb-0 mt-0">
+            <label class="d-inline-flex align-items-center gap-1">
+                <input type="checkbox"
+                       [checked]="extendBatteryLife"
+                       (change)="toggleExtendBatteryLife($event.target.checked)">
+                Extend battery life: limit maximum battery charge level
+                <circle-tooltip tooltip="Use this setting to extend the lifespan of the built-in batteries if you regularily keep your UHK plugged in. Battery degradation will be reduced by charging only to a level suited for long-term storage." [width]="350"/>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12 col-lg-6 mt-1">
+        <slider-wrapper
+            class="col-12"
+            label="Speed up charging by limiting key backlight during charging"
+            tooltip="Key backlights are a power hog. The less power they consume, the more power is available for charging, and the faster your UHK gets charged."
+            [tooltipWidth]="350"
+            [min]="0"
+            [max]="100"
+            [step]="1"
+            [(ngModel)]="keyBacklightBrightnessChargingDefault"
+            (ngModelChange)="onSetPropertyValue('keyBacklightBrightnessChargingDefault', $event)"
+            valueUnit="%"
+            />
+    </div>
+</div>

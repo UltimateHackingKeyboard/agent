@@ -9,7 +9,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', () => {
         jsonTester({
             userConfigMajorVersion: 9,
-            userConfigMinorVersion: 0,
+            userConfigMinorVersion: 99,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
@@ -54,6 +54,8 @@ describe('user-configuration', () => {
             displayFadeOutBatteryTimeout: 0,
             keyBacklightFadeOutTimeout: 0,
             keyBacklightFadeOutBatteryTimeout: 0,
+            keyBacklightBrightnessChargingDefault: 50,
+            batteryChargingMode: 'Full',
             hostConnections: [
                 {
                     type: 'UsbRight',

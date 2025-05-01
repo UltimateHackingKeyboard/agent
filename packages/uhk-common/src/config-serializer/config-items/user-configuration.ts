@@ -2,6 +2,7 @@ import { assertEnum, assertFloat, assertInt16, assertUInt16, assertUInt32, asser
 import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { BacklightingMode } from './backlighting-mode.js';
+import { BatteryChargingMode } from './battery-charging-mode.js';
 import {
     defaultHostConnections,
     HOST_CONNECTION_COUNT_MAX,
@@ -23,7 +24,7 @@ import { isAllowedScancode } from './scancode-checker.js';
 import { SecondaryRoleAction } from './secondary-role-action.js';
 import { SecondaryRoleAdvancedStrategyTimeoutAction } from './secondary-role-advanced-strategy-timeout-action.js';
 import { SecondaryRoleStrategy } from './secondary-role-strategy.js';
-import { SerialisationInfo } from './serialisation-info.js';
+import { isSerialisationInfoGte, SerialisationInfo } from './serialisation-info.js';
 
 export class UserConfiguration implements MouseSpeedConfiguration {
 
@@ -77,6 +78,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
     @assertUInt16 keyBacklightFadeOutTimeout: number;
 
     @assertUInt16 keyBacklightFadeOutBatteryTimeout: number;
+
+    @assertUInt8 keyBacklightBrightnessChargingDefault: number;
+
+    @assertEnum(BatteryChargingMode) batteryChargingMode: BatteryChargingMode;
 
     perKeyRgbPresent: boolean;
 
@@ -211,6 +216,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV8_3();
         this.migrateToV8_3_1();
         this.migrateToV9();
+        this.migrateToV9_99();
 
         this.recalculateConfigurationLength();
 
@@ -292,6 +298,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             this.userConfigurationLength = 0;
         }
 
+        if (this.migrateToV9_99()) {
+            this.userConfigurationLength = 0;
+        }
+
         if (this.userConfigurationLength === 0) {
             this.recalculateConfigurationLength();
         }
@@ -348,6 +358,9 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             displayFadeOutBatteryTimeout: this.displayFadeOutBatteryTimeout,
             keyBacklightFadeOutTimeout: this.keyBacklightFadeOutTimeout,
             keyBacklightFadeOutBatteryTimeout: this.keyBacklightFadeOutBatteryTimeout,
+
+            keyBacklightBrightnessChargingDefault: this.keyBacklightBrightnessChargingDefault,
+            batteryChargingMode: BatteryChargingMode[this.batteryChargingMode],
 
             hostConnections: this.hostConnections.map(hostConnection => hostConnection.toJsonObject()),
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
@@ -406,6 +419,9 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt16(this.displayFadeOutBatteryTimeout);
         buffer.writeUInt16(this.keyBacklightFadeOutTimeout);
         buffer.writeUInt16(this.keyBacklightFadeOutBatteryTimeout);
+
+        buffer.writeUInt8(this.keyBacklightBrightnessChargingDefault);
+        buffer.writeUInt8(this.batteryChargingMode);
 
         for(let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
             const hostConnection = this.hostConnections[i];
@@ -732,6 +748,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
         const serialisationInfo = this.getSerialisationInfo();
 
+        if (isSerialisationInfoGte(serialisationInfo, '9.99.0')) {
+            this.keyBacklightBrightnessChargingDefault = buffer.readUInt8();
+            this.batteryChargingMode = buffer.readUInt8();
+        }
+
         this.hostConnections = [];
         for (let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
             const hostConnection = new HostConnection().fromBinary(buffer, serialisationInfo);
@@ -1001,6 +1022,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.keyBacklightFadeOutBatteryTimeout = jsonObject.keyBacklightFadeOutBatteryTimeout;
 
         const serialisationInfo = this.getSerialisationInfo();
+
+        if (isSerialisationInfoGte(serialisationInfo, '9.99.0')) {
+            this.keyBacklightBrightnessChargingDefault = jsonObject.keyBacklightBrightnessChargingDefault;
+            this.batteryChargingMode = BatteryChargingMode[jsonObject.batteryChargingMode as string];
+        }
 
         this.hostConnections = jsonObject.hostConnections.map((hostConnection: any, index: number) => {
             const connection = new HostConnection().fromJsonObject(hostConnection, serialisationInfo);
@@ -1281,6 +1307,22 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMinorVersion = 0;
         this.userConfigPatchVersion = 0;
         this.backlightingDeviceColor = new RgbColor({r:255, g:136, b:68});
+    }
+
+    private migrateToV9_99(): boolean {
+        if (this.userConfigMajorVersion > 9) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 99) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 9;
+        this.userConfigMinorVersion = 99;
+        this.userConfigPatchVersion = 0;
+        this.keyBacklightBrightnessChargingDefault = 50;
+        this.batteryChargingMode = BatteryChargingMode.Full;
     }
 
     private getSerialisationInfo(): SerialisationInfo {
