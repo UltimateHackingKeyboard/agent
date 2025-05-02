@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { BatteryChargingMode } from 'uhk-common';
 
+import { faBatteryFull } from '../../../custom-fa-icons/index';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
 import { AppState, getUserConfiguration } from '../../../store/index';
 
@@ -16,7 +16,7 @@ import { AppState, getUserConfiguration } from '../../../store/index';
     }
 })
 export class BatterySettingsComponent implements OnInit, OnDestroy{
-    faBatteryEmpty = faBatteryEmpty;
+    faBatteryFull = faBatteryFull;
     keyBacklightBrightnessChargingDefault = 50;
     extendBatteryLife = false;
 
