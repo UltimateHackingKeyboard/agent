@@ -10,7 +10,7 @@ import {
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { KeyboardLayout, UHK_80_DEVICE } from 'uhk-common';
+import { KeyboardLayout, UHK_60_DEVICE, UHK_60_V2_DEVICE, UHK_80_DEVICE } from 'uhk-common';
 
 import {
     IsDongleZephyrLoggingEnabledAction,
@@ -52,10 +52,11 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     isKeyboardLayoutChanging$: Observable<boolean>;
     isHalvesPairingAllowed: boolean;
-    isHZephyrLoggingAllowed: boolean;
+    isZephyrLoggingAllowed: boolean;
     keyboardLayout: KeyboardLayout;
     keyboardLayoutEnum = KeyboardLayout;
     showDongleZephyrLogCheckbox: boolean;
+    showI2CRecoverButton: boolean;
     showLeftHalfZephyrLogCheckbox: boolean;
     state: State;
 
@@ -92,7 +93,8 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
         this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
             .subscribe(connectedDevice => {
                 this.isHalvesPairingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
-                this.isHZephyrLoggingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.isZephyrLoggingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.showI2CRecoverButton = connectedDevice?.id === UHK_60_DEVICE.id ||  connectedDevice?.id === UHK_60_V2_DEVICE.id;
                 this.cdRef.detectChanges();
             });
         this.dongleSubscription = this.store.select(getDongle)

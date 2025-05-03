@@ -45,6 +45,7 @@
                     </button>
                     <button class="btn btn-default"
                             type="button"
+                            *ngIf="showI2CRecoverButton"
                             [class.btn-primary]="state.activeButton === ActiveButton.I2CRecoveryDebugging"
                             [class.btn-default]="state.activeButton !== ActiveButton.I2CRecoveryDebugging"
                             [attr.aria-pressed]="state.activeButton === ActiveButton.I2CRecoveryDebugging"
@@ -55,7 +56,7 @@
                     </button>
                     <button class="btn"
                             type="button"
-                            *ngIf="isHZephyrLoggingAllowed"
+                            *ngIf="isZephyrLoggingAllowed"
                             [class.btn-primary]="state.activeButton === ActiveButton.ShowZephyrLogs"
                             [class.btn-default]="state.activeButton !== ActiveButton.ShowZephyrLogs"
                             [attr.aria-pressed]="state.activeButton === ActiveButton.ShowZephyrLogs"

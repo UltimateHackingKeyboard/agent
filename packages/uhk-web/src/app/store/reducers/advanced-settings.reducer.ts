@@ -114,6 +114,7 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
         case ActionTypes.toggleI2CDebugging: {
             const newState = {
                 ...state,
+                i2cLogs: [],
                 activeButton: state.activeButton === ActiveButton.I2CRecoveryDebugging
                     ? ActiveButton.None
                     : ActiveButton.I2CRecoveryDebugging,
@@ -160,6 +161,7 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
         case ActionTypes.toggleZephyrLogging: {
             return {
                 ...state,
+                i2cLogs: [],
                 activeButton: state.activeButton === ActiveButton.ShowZephyrLogs
                     ? ActiveButton.None
                     : ActiveButton.ShowZephyrLogs,
