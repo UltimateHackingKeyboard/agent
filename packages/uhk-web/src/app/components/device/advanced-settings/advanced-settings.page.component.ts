@@ -11,19 +11,6 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { KeyboardLayout, UHK_60_DEVICE, UHK_60_V2_DEVICE, UHK_80_DEVICE } from 'uhk-common';
-
-import {
-    IsDongleZephyrLoggingEnabledAction,
-    IsLeftHalfZephyrLoggingEnabledAction,
-    IsRightHalfZephyrLoggingEnabledAction,
-    ToggleDongleZephyrLoggingAction,
-    ToggleLeftHalfZephyrLoggingAction,
-    ToggleRightHalfZephyrLoggingAction,
-    ToggleI2cDebuggingAction,
-    ToggleI2cDebuggingRingBellAction,
-    ToggleZephyrLoggingAction,
-    StartLeftHalfPairingAction,
-} from '../../../store/actions/advance-settings.action';
 import {
     advanceSettingsState,
     AppState,
@@ -33,6 +20,16 @@ import {
     getLeftHalfDetected,
     isKeyboardLayoutChanging,
 } from '../../../store';
+
+import {
+    StartLeftHalfPairingAction,
+    ToggleDongleZephyrLoggingAction,
+    ToggleI2cDebuggingAction,
+    ToggleI2cDebuggingRingBellAction,
+    ToggleLeftHalfZephyrLoggingAction,
+    ToggleRightHalfZephyrLoggingAction,
+    ToggleZephyrLoggingAction,
+} from '../../../store/actions/advance-settings.action';
 import { ChangeKeyboardLayoutAction } from '../../../store/actions/device';
 import { ActiveButton, initialState, State } from '../../../store/reducers/advanced-settings.reducer';
 
@@ -86,10 +83,6 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.store.dispatch(new IsRightHalfZephyrLoggingEnabledAction())
-        this.store.dispatch(new IsLeftHalfZephyrLoggingEnabledAction())
-        this.store.dispatch(new IsDongleZephyrLoggingEnabledAction())
-
         this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
             .subscribe(connectedDevice => {
                 this.isHalvesPairingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
