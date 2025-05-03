@@ -1,33 +1,50 @@
-import { getFormattedTimestamp } from 'uhk-common';
+import { getFormattedTimestamp, UhkDeviceProduct } from 'uhk-common';
 
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { appendXtermLogs } from '../../util/merge-xterm-logs';
 import {
     Actions,
     ActionTypes,
-    I2cWatchdogCounterChangedAction ,
+    I2cWatchdogCounterChangedAction,
+    IsDongleZephyrLoggingEnabledReplyAction,
+    IsLeftHalfZephyrLoggingEnabledReplyAction,
+    IsRightHalfZephyrLoggingEnabledReplyAction,
+    ZephyrLogAction,
 } from '../actions/advance-settings.action';
 import * as App from '../actions/app';
+import * as Device from '../actions/device';
+
+export enum ActiveButton {
+    None = 'None',
+    RepairKeyboardHalf = 'RepairKeyboardHalf',
+    I2CRecoveryDebugging = 'I2CRecoveryDebugging',
+    ShowZephyrLogs = 'ShowZephyrLogs',
+}
 
 export interface State {
-    i2cDebuggingEnabled: boolean;
+    activeButton: ActiveButton;
     i2cDebuggingRingBellEnabled: boolean,
-    i2cDebuggingRingBellControlDisabled: boolean,
     i2cLogs: Array<XtermLog>;
     isLeftHalfPairing: boolean;
+    isDongleZephyrLoggingEnabled: boolean;
+    isLeftHalfZephyrLoggingEnabled: boolean;
+    isRightHalfZephyrLoggingEnabled: boolean;
+    lastConnectedDevice?: UhkDeviceProduct;
     menuVisible: boolean;
 }
 
 export const initialState = (): State => ({
-    i2cDebuggingEnabled: false,
+    activeButton: ActiveButton.None,
     i2cDebuggingRingBellEnabled: false,
-    i2cDebuggingRingBellControlDisabled: true,
     i2cLogs: [],
+    isDongleZephyrLoggingEnabled: false,
+    isLeftHalfZephyrLoggingEnabled: false,
+    isRightHalfZephyrLoggingEnabled: false,
     isLeftHalfPairing: false,
     menuVisible: false,
 });
 
-export function reducer(state = initialState(), action: Actions | App.Actions) {
+export function reducer(state = initialState(), action: Actions | App.Actions | Device.Actions) {
     switch (action.type) {
 
         case App.ActionTypes.ElectronMainLogReceived: {
@@ -41,6 +58,45 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
                 ...state,
                 i2cLogs: appendXtermLogs(state.i2cLogs, payload),
             };
+        }
+
+        case Device.ActionTypes.ConnectionStateChanged: {
+            const payload = (action as Device.ConnectionStateChangedAction).payload;
+            if (!payload.connectedDevice) {
+                return state;
+            }
+
+            if (payload.connectedDevice?.id === state.lastConnectedDevice?.id) {
+                return state;
+            }
+
+            return {
+                ...state,
+                activeButton: ActiveButton.None,
+                i2cLogs: [],
+                lastConnectedDevice: payload.connectedDevice,
+            }
+        }
+
+        case ActionTypes.isDongleZephyrLoggingEnabledReply: {
+            return {
+                ...state,
+                isDongleZephyrLoggingEnabled: (action as IsDongleZephyrLoggingEnabledReplyAction).enabled,
+            }
+        }
+
+        case ActionTypes.isLeftHalfZephyrLoggingEnabledReply: {
+            return {
+                ...state,
+                isLeftHalfZephyrLoggingEnabled: (action as IsLeftHalfZephyrLoggingEnabledReplyAction).enabled,
+            }
+        }
+
+        case ActionTypes.isRightHalfZephyrLoggingEnabledReply: {
+            return {
+                ...state,
+                isRightHalfZephyrLoggingEnabled: (action as IsRightHalfZephyrLoggingEnabledReplyAction).enabled,
+            }
         }
 
         case ActionTypes.i2cWatchdogCounterChanged: {
@@ -61,6 +117,7 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
         case ActionTypes.startLeftHalfPairing: {
             return {
                 ...state,
+                activeButton: ActiveButton.RepairKeyboardHalf,
                 i2cLogs: [],
                 isLeftHalfPairing: true,
             };
@@ -77,13 +134,16 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
         case ActionTypes.toggleI2CDebugging: {
             const newState = {
                 ...state,
-                i2cDebuggingEnabled: !state.i2cDebuggingEnabled,
+                i2cLogs: [],
+                activeButton: state.activeButton === ActiveButton.I2CRecoveryDebugging
+                    ? ActiveButton.None
+                    : ActiveButton.I2CRecoveryDebugging,
+                isDongleZephyrLoggingEnabled: false,
+                isLeftHalfZephyrLoggingEnabled: false,
+                isRightHalfZephyrLoggingEnabled: false,
             };
 
-            if (newState.i2cDebuggingEnabled) {
-                newState.i2cDebuggingRingBellControlDisabled = false;
-            } else {
-                newState.i2cDebuggingRingBellControlDisabled = true;
+            if (newState.activeButton !== ActiveButton.I2CRecoveryDebugging) {
                 newState.i2cDebuggingRingBellEnabled = false;
             }
 
@@ -97,11 +157,59 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
             };
         }
 
+        case ActionTypes.toggleDongleZephyrLogging: {
+            return {
+                ...state,
+                isDongleZephyrLoggingEnabled: !state.isDongleZephyrLoggingEnabled,
+            }
+        }
+
+        case ActionTypes.toggleLeftHalfZephyrLogging: {
+            return {
+                ...state,
+                isLeftHalfZephyrLoggingEnabled: !state.isLeftHalfZephyrLoggingEnabled,
+            }
+        }
+
+        case ActionTypes.toggleRightHalfZephyrLogging: {
+            return {
+                ...state,
+                isRightHalfZephyrLoggingEnabled: !state.isRightHalfZephyrLoggingEnabled,
+            }
+        }
+
+        case ActionTypes.toggleZephyrLogging: {
+            return {
+                ...state,
+                i2cLogs: [],
+                activeButton: state.activeButton === ActiveButton.ShowZephyrLogs
+                    ? ActiveButton.None
+                    : ActiveButton.ShowZephyrLogs,
+                i2cDebuggingEnabled: false,
+                i2cDebuggingRingBellEnabled: false,
+            }
+        }
+
         case ActionTypes.showAdvancedSettingsMenu: {
             return {
                 ...state,
                 menuVisible: true
             };
+        }
+
+        case ActionTypes.zephyrLog: {
+            const payload = (action as ZephyrLogAction).payload;
+            const newState = {...state};
+
+            newState.i2cLogs = [
+                ...state.i2cLogs,
+                {
+                    message: `${getFormattedTimestamp()} | ${payload.device.padEnd(15 )} | ${payload.log}`,
+                    cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard,
+                }
+            ];
+
+            return newState;
         }
 
         default: {
@@ -112,5 +220,5 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
 
 export const isAdvancedSettingsMenuVisible = (state: State): boolean => state.menuVisible;
 export const isLeftHalfPairing = (state: State): boolean => state.isLeftHalfPairing;
-export const isI2cDebuggingEnabled = (state: State): boolean => state.i2cDebuggingEnabled;
+export const isI2cDebuggingEnabled = (state: State): boolean => state.activeButton === ActiveButton.I2CRecoveryDebugging;
 export const isI2cDebuggingRingBellEnabled = (state: State): boolean => state.i2cDebuggingRingBellEnabled;

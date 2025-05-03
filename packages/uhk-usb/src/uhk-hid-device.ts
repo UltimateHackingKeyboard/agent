@@ -325,6 +325,7 @@ export class UhkHidDevice {
             },
             hardwareModules: {},
             isMacroStatusDirty: false,
+            isZephyrLogAvailable: false,
             leftHalfDetected: false,
             multiDevice: await getNumberOfConnectedDevices(this.options) > 1,
             newPairedDevices: [],
@@ -405,6 +406,7 @@ export class UhkHidDevice {
             const deviceState = await this.getDeviceState();
             result.halvesInfo = calculateHalvesState(deviceState);
             result.isMacroStatusDirty = deviceState.isMacroStatusDirty;
+            result.isZephyrLogAvailable = deviceState.isZephyrLogAvailable;
 
             if (deviceState.newPairedDevice) {
                 result.newPairedDevices = await this.getPairedDevices();
@@ -621,6 +623,7 @@ export class UhkHidDevice {
             leftKeyboardHalfSlot: MODULE_ID_TO_STRING[buffer[3]],
             leftModuleSlot: MODULE_ID_TO_STRING[buffer[4]],
             newPairedDevice: isBitSet(buffer[2], 2),
+            isZephyrLogAvailable: isBitSet(buffer[2], 3),
             rightModuleSlot: MODULE_ID_TO_STRING[buffer[5]]
         };
     }

@@ -668,7 +668,7 @@ export class UhkOperations {
         const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
         const responseBuffer = await this.device.write(buffer);
 
-        if (variableId === UsbVariables.statusBuffer) {
+        if (variableId === UsbVariables.statusBuffer || variableId === UsbVariables.ShellBuffer) {
             let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
             this.logService.misc(`[DeviceOperation] status buffer segment: ${message}`);
             if (message.length === responseBuffer.length - 1 && iteration < 20) {

@@ -109,6 +109,9 @@ export enum UsbVariables {
     debounceTimeRelease = 3,
     usbReportSemaphore= 4,
     statusBuffer= 5,
+    LedAudioRegisters = 6,
+    ShellEnabled = 7,
+    ShellBuffer = 8,
 }
 
 // TODO: use the LayerName enum instead of this array

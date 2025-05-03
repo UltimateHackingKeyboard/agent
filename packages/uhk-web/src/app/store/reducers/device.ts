@@ -424,6 +424,7 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 
 export const getConnectedDevice = (state: State) => state.connectedDevice;
 export const getHostConnectionPairState = (state: State): Record<string, boolean> => state.hostConnectionPairState;
+export const getLeftHalfDetected = (state: State) => state.leftHalfDetected;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;

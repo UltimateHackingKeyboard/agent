@@ -11,9 +11,7 @@ import { logUserConfigHelper, LogService, LogRegExps, UserConfiguration } from '
  * - on Windows: %USERPROFILE%\AppData\Roaming\<app name>\uhk-agent.log
  * The app name: UHK Agent. The up to date value in the scripts/release.js file.
  */
-log.initialize({
-    spyRendererConsole: true,
-})
+log.initialize({})
 log.transports.console.level = 'silly';
 log.transports.file.level = 'silly';
 log.transports.ipc.level = 'silly';

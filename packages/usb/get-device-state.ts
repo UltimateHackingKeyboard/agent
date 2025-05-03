@@ -14,6 +14,7 @@ setInterval(async function () {
         console.log(
             `isEepromBusy: ${state.isEepromBusy ? 'yes' : 'no'} | \
 isMacroStatusDirty: ${state.isMacroStatusDirty ? 'yes' : 'no'} | \
+isZephyrLogAvailable: ${state.isZephyrLogAvailable ? 'yes' : 'no'} | \
 areHalvesMerged: ${state.areHalvesMerged ? 'yes' : 'no'} | \
 newPairedDevice: ${state.newPairedDevice ? 'yes' : 'no'} | \
 leftKeyboardHalfSlot:${state.leftKeyboardHalfSlot} | \
