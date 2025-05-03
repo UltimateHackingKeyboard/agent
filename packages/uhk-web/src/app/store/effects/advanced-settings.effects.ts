@@ -18,7 +18,7 @@ export class AdvancedSettingsEffects {
 
     isDongleZephyrLoggingEnabled$ = createEffect(() => this.actions$
             .pipe(
-                ofType(ActionTypes.isDongleZephyrLoggingEnabledReply),
+                ofType(ActionTypes.isDongleZephyrLoggingEnabled),
                 withLatestFrom(this.store.select(getDongle)),
                 tap(([, dongle]) => {
                     if (dongle?.serialNumber) {
