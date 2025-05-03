@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { tap, withLatestFrom } from 'rxjs/operators';
+import { mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { DeviceRendererService } from '../../services/device-renderer.service';
-import { ActionTypes } from '../actions/advance-settings.action';
+import {
+    ActionTypes,
+    IsDongleZephyrLoggingEnabledAction,
+    IsLeftHalfZephyrLoggingEnabledAction,
+    IsRightHalfZephyrLoggingEnabledAction,
+} from '../actions/advance-settings.action';
 import {
     advanceSettingsState,
     AppState,
@@ -12,13 +17,14 @@ import {
     getIsI2cDebuggingEnabled,
     getLeftHalfDetected,
 } from '../index';
+import { ActiveButton } from '../reducers/advanced-settings.reducer';
 
 @Injectable()
 export class AdvancedSettingsEffects {
 
     isDongleZephyrLoggingEnabled$ = createEffect(() => this.actions$
             .pipe(
-                ofType(ActionTypes.isDongleZephyrLoggingEnabledReply),
+                ofType(ActionTypes.isDongleZephyrLoggingEnabled),
                 withLatestFrom(this.store.select(getDongle)),
                 tap(([, dongle]) => {
                     if (dongle?.serialNumber) {
@@ -92,6 +98,24 @@ export class AdvancedSettingsEffects {
             })
         ),
         {dispatch: false}
+    )
+
+    toggleZephyrLogging$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.toggleZephyrLogging),
+            withLatestFrom(this.store.select(advanceSettingsState)),
+            mergeMap(([, state]) => {
+                if (state.activeButton === ActiveButton.ShowZephyrLogs) {
+                    return [
+                        new IsRightHalfZephyrLoggingEnabledAction(),
+                        new IsLeftHalfZephyrLoggingEnabledAction(),
+                        new IsDongleZephyrLoggingEnabledAction(),
+                    ]
+                }
+
+                return []
+            } )
+        )
     )
 
     startLeftHalfPairing$ = createEffect(() => this.actions$

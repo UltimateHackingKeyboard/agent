@@ -64,7 +64,7 @@ export class ZephyrLogService {
             return;
         }
 
-        this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Enable`);
+        this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Enabling`);
         this.isEnabled = true;
         this.startLogPoller();
     }
@@ -77,6 +77,7 @@ export class ZephyrLogService {
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Disabling`);
         this.isEnabled = false;
         await this.waitUntilPollerStopped()
+        await this.releaseOperations()
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Disabled`);
     }
 
@@ -88,21 +89,21 @@ export class ZephyrLogService {
         return this.operationLimiter(async () => {
             if (this.operations) {
                 if (logEarlierInited) {
-                    this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] returns with earlier inited`);
+                    this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] getOperations returns with earlier inited`);
                 }
                 return this.operations;
             }
 
-            this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] init new instances`);
+            this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] getOperations init new instances`);
             const hidDevice = await this.options.currentDeviceFn();
             if (!hidDevice) {
-                this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] device not connected`);
+                this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] getOperations device not connected`);
                 return;
             }
 
             this.uhkHidDevice = new UhkHidDevice(this.options.logService, this.options.cliArgs, this.options.rootDir, hidDevice);
             this.operations = new UhkOperations(this.options.logService, this.uhkHidDevice);
-            this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] new instances are inited`);
+            this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] getOperations new instances are inited`);
 
             return this.operations;
         })
