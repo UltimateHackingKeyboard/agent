@@ -1,4 +1,4 @@
-import { getFormattedTimestamp } from 'uhk-common';
+import { getFormattedTimestamp, UhkDeviceProduct } from 'uhk-common';
 
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { appendXtermLogs } from '../../util/merge-xterm-logs';
@@ -12,6 +12,7 @@ import {
     ZephyrLogAction,
 } from '../actions/advance-settings.action';
 import * as App from '../actions/app';
+import * as Device from '../actions/device';
 
 export enum ActiveButton {
     None = 'None',
@@ -28,6 +29,7 @@ export interface State {
     isDongleZephyrLoggingEnabled: boolean;
     isLeftHalfZephyrLoggingEnabled: boolean;
     isRightHalfZephyrLoggingEnabled: boolean;
+    lastConnectedDevice?: UhkDeviceProduct;
     menuVisible: boolean;
 }
 
@@ -42,7 +44,7 @@ export const initialState = (): State => ({
     menuVisible: false,
 });
 
-export function reducer(state = initialState(), action: Actions | App.Actions) {
+export function reducer(state = initialState(), action: Actions | App.Actions | Device.Actions) {
     switch (action.type) {
 
         case App.ActionTypes.ElectronMainLogReceived: {
@@ -56,6 +58,24 @@ export function reducer(state = initialState(), action: Actions | App.Actions) {
                 ...state,
                 i2cLogs: appendXtermLogs(state.i2cLogs, payload),
             };
+        }
+
+        case Device.ActionTypes.ConnectionStateChanged: {
+            const payload = (action as Device.ConnectionStateChangedAction).payload;
+            if (!payload.connectedDevice) {
+                return state;
+            }
+
+            if (payload.connectedDevice?.id === state.lastConnectedDevice?.id) {
+                return state;
+            }
+
+            return {
+                ...state,
+                activeButton: ActiveButton.None,
+                i2cLogs: [],
+                lastConnectedDevice: payload.connectedDevice,
+            }
         }
 
         case ActionTypes.isDongleZephyrLoggingEnabledReply: {

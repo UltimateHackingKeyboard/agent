@@ -18,7 +18,7 @@ export class AdvancedSettingsEffects {
 
     isDongleZephyrLoggingEnabled$ = createEffect(() => this.actions$
             .pipe(
-                ofType(ActionTypes.isRightHalfZephyrLoggingEnabled),
+                ofType(ActionTypes.isDongleZephyrLoggingEnabledReply),
                 withLatestFrom(this.store.select(getDongle)),
                 tap(([, dongle]) => {
                     if (dongle?.serialNumber) {
@@ -31,7 +31,7 @@ export class AdvancedSettingsEffects {
 
     isLeftHalfZephyrLoggingEnabled$ = createEffect(() => this.actions$
             .pipe(
-                ofType(ActionTypes.isRightHalfZephyrLoggingEnabled),
+                ofType(ActionTypes.isLeftHalfZephyrLoggingEnabled),
                 withLatestFrom(this.store.select(getLeftHalfDetected)),
                 tap(([, leftHalfDetected]) => {
                     if (leftHalfDetected) {
@@ -52,7 +52,7 @@ export class AdvancedSettingsEffects {
 
     toggleI2cDebugging$ = createEffect(() => this.actions$
         .pipe(
-            ofType(ActionTypes.toggleI2CDebugging, ActionTypes.toggleZephyrLogging),
+            ofType(ActionTypes.toggleI2CDebugging),
             withLatestFrom(this.store.select(getIsI2cDebuggingEnabled)),
             tap(([, enabled])=>{
                 this.deviceRendererService.toggleI2cDebugging(enabled);
@@ -63,7 +63,7 @@ export class AdvancedSettingsEffects {
 
     toggleDongleZephyrLogging$ = createEffect(() => this.actions$
         .pipe(
-            ofType(ActionTypes.toggleI2CDebugging, ActionTypes.toggleDongleZephyrLogging),
+            ofType(ActionTypes.toggleDongleZephyrLogging),
             withLatestFrom(this.store.select(advanceSettingsState)),
             tap(([, state])=> {
                 this.deviceRendererService.toggleDongleZephyrLogging(state.isDongleZephyrLoggingEnabled);
@@ -74,7 +74,7 @@ export class AdvancedSettingsEffects {
 
     toggleLeftHalfZephyrLogging$ = createEffect(() => this.actions$
         .pipe(
-            ofType(ActionTypes.toggleI2CDebugging, ActionTypes.toggleLeftHalfZephyrLogging),
+            ofType(ActionTypes.toggleLeftHalfZephyrLogging),
             withLatestFrom(this.store.select(advanceSettingsState)),
             tap(([, state])=> {
                 this.deviceRendererService.toggleLeftHalfZephyrLogging(state.isLeftHalfZephyrLoggingEnabled);
@@ -85,7 +85,7 @@ export class AdvancedSettingsEffects {
 
     toggleRightHalfZephyrLogging$ = createEffect(() => this.actions$
         .pipe(
-            ofType(ActionTypes.toggleI2CDebugging, ActionTypes.toggleRightHalfZephyrLogging),
+            ofType(ActionTypes.toggleRightHalfZephyrLogging),
             withLatestFrom(this.store.select(advanceSettingsState)),
             tap(([, state])=> {
                 this.deviceRendererService.toggleRightHalfZephyrLogging(state.isRightHalfZephyrLoggingEnabled);
