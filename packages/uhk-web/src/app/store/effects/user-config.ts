@@ -30,13 +30,21 @@ import {
     NavigateToModuleSettings,
     PreviewUserConfigurationAction,
     SaveUserConfigSuccessAction,
-    SelectModuleConfigurationAction
+    SelectModuleConfigurationAction,
+    UserConfigurationNewerAction
 } from '../actions/user-config';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { Uhk80MigratorService } from '../../services/uhk80-migrator.service';
-import { AppState, getPrevUserConfiguration, getRouterState, getUserConfiguration } from '../index';
+import {
+    AppState,
+    getConnectedDevice,
+    getPrevUserConfiguration,
+    getRouterState,
+    getUserConfiguration,
+    disableUpdateAgentProtection,
+} from '../index';
 import * as Keymaps from '../actions/keymap';
 import * as Macros from '../actions/macro';
 import {
@@ -157,8 +165,12 @@ export class UserConfigEffects {
     loadConfigFromDeviceReply$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LoadConfigFromDeviceReply),
-            withLatestFrom(this.store.select(getRouterState)),
-            mergeMap(([action, route]) => {
+            withLatestFrom(
+                this.store.select(getRouterState),
+                this.store.select(disableUpdateAgentProtection),
+                this.store.select(getConnectedDevice),
+            ),
+            mergeMap(([action, route, disableUpdateAgentProtection, uhkDeviceProduct]) => {
                 const data: ConfigurationReply = action.payload;
 
                 if (!data.success) {
@@ -171,28 +183,62 @@ export class UserConfigEffects {
                 const result = [];
                 let newPageDestination: Array<string>;
 
-                try {
-                    const userConfig = getUserConfigFromDeviceResponse(data.userConfiguration);
-                    this.logService.config('[UserConfigEffect] Loaded user configuration', userConfig);
-                    result.push(new LoadUserConfigSuccessAction(userConfig));
-                    result.push(new CheckAreHostConnectionsPairedAction());
+                const parsedUserConfiguration = getUserConfigFromDeviceResponse(data.userConfiguration);
+                switch (parsedUserConfiguration.result) {
+                    case "success": {
+                        this.logService.config('[UserConfigEffect] Loaded user configuration', parsedUserConfiguration.userConfiguration);
+                        result.push(new LoadUserConfigSuccessAction(parsedUserConfiguration.userConfiguration));
+                        result.push(new CheckAreHostConnectionsPairedAction());
 
-                    if (route.state
-                        && !route.state.url.startsWith('/device/firmware')
-                        && !route.state.url.startsWith('/update-firmware')) {
-                        newPageDestination = ['/'];
+                        if (route.state
+                            && !route.state.url.startsWith('/device/firmware')
+                            && !route.state.url.startsWith('/update-firmware')) {
+                            newPageDestination = ['/'];
+                        }
+                        break
                     }
 
-                } catch (err) {
-                    this.logService.error('Eeprom user-config parse error:', err);
-                    result.push(new BackupUserConfigurationAction(data.backupConfiguration));
-                    if (data.backupConfiguration.info === BackupUserConfigurationInfo.LastCompatible
-                        || data.backupConfiguration.info === BackupUserConfigurationInfo.EarlierCompatible) {
-                        const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration.userConfiguration);
-                        result.push(new LoadUserConfigSuccessAction(userConfig));
+                    case "newer": {
+                        if (data.backupConfiguration.info === BackupUserConfigurationInfo.LastCompatible
+                            || data.backupConfiguration.info === BackupUserConfigurationInfo.EarlierCompatible) {
+                            const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration.userConfiguration);
+                            result.push(new UserConfigurationNewerAction({
+                                date: data.backupConfiguration.date,
+                                userConfiguration: userConfig,
+                                newUserConfigurationVersion: parsedUserConfiguration.userConfigurationVersion,
+                                type: 'backup',
+                            }));
+                        }
+                        else {
+                            const config = this.defaultUserConfigurationService.getResetUserConfiguration(uhkDeviceProduct);
+                            result.push(new UserConfigurationNewerAction({
+                                type: 'reset',
+                                newUserConfigurationVersion: parsedUserConfiguration.userConfigurationVersion,
+                                userConfiguration: config,
+                            }));
+                        }
+
+                        if (disableUpdateAgentProtection) {
+                            newPageDestination = ['/'];
+                        }
+                        else {
+                            newPageDestination = ['/update-agent'];
+                        }
+                        break;
                     }
 
-                    newPageDestination = ['/device/restore-user-configuration'];
+                    default: {
+                        this.logService.error('Eeprom user-config parse error:', parsedUserConfiguration.error);
+                        result.push(new BackupUserConfigurationAction(data.backupConfiguration));
+                        if (data.backupConfiguration.info === BackupUserConfigurationInfo.LastCompatible
+                            || data.backupConfiguration.info === BackupUserConfigurationInfo.EarlierCompatible) {
+                            const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration.userConfiguration);
+                            result.push(new LoadUserConfigSuccessAction(userConfig));
+                        }
+
+                        newPageDestination = ['/device/restore-user-configuration'];
+                        break
+                    }
                 }
 
                 try {

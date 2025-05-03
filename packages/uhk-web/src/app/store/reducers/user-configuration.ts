@@ -39,6 +39,7 @@ import {
     ExchangeKey,
     LastEditedKey,
     LayerOption,
+    NewerUserConfiguration,
     OpenPopoverModel,
     SelectedMacroAction
 } from '../../models';
@@ -75,6 +76,7 @@ export interface State {
     halvesInfo: HalvesInfo;
     newPairedDevices: string[];
     newPairedDevicesAdding: boolean;
+    newerUserConfiguration?: NewerUserConfiguration;
     selectedLayerOption: LayerOption;
     theme: string;
 }
@@ -150,6 +152,7 @@ export function reducer(
         case UserConfig.ActionTypes.LoadUserConfigSuccess: {
             const userConfig = (action as UserConfig.LoadUserConfigSuccessAction).payload;
             const newState = assignUserConfiguration(state, userConfig);
+            newState.newerUserConfiguration = undefined;
             newState.selectedKeymapAbbr = undefined;
             newState.layerOptions = calculateLayerOptions(newState);
 
@@ -195,6 +198,13 @@ export function reducer(
             newState.backlightingColorPalette[payload.index] = payload.color;
 
             return newState;
+        }
+
+        case UserConfig.ActionTypes.UserConfigurationNewer: {
+            return {
+                ...state,
+                newerUserConfiguration: (action as UserConfig.UserConfigurationNewerAction).payload,
+            }
         }
 
         case UserConfig.ActionTypes.ToggleColorFromBacklightingColorPalette: {
@@ -1234,6 +1244,7 @@ export const backlightingOptions = (state: State): Array<BacklightingOption> => 
         }
     ];
 };
+export const getNewerUserConfiguration = (state: State): NewerUserConfiguration => state.newerUserConfiguration;
 export const hasRecoverableLEDSpace = (state: State): boolean => state.userConfiguration.backlightingMode === BacklightingMode.FunctionalBacklighting && state.userConfiguration.perKeyRgbPresent;
 export const backlightingColorPalette = (state: State): Array<RgbColorInterface> => state.backlightingColorPalette;
 export const isBacklightingColoring = (state: State): boolean => state.selectedBacklightingColorIndex > -1;

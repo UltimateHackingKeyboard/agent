@@ -16,6 +16,7 @@ export * from './load-user-configuration-from-file-payload';
 export * from './macro-menu-item';
 export * from './modify-color-of-backlighting-color-palette-payload';
 export * from './navigation-payload';
+export * from './newer-user-configuration';
 export * from './open-popover.model';
 export * from './out-of-space-warning-data';
 export * from './recover-page-state';

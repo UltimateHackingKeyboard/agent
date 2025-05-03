@@ -9,14 +9,12 @@ import {
     HalvesInfo,
     HardwareModules,
     isVersionGte,
-    isVersionGtMinor,
     LeftSlotModules,
     RightSlotModules,
     UdevRulesInfo,
     UHK_DEVICE_IDS,
     UHK_DEVICE_IDS_TYPE,
     UhkDeviceProduct,
-    VERSIONS,
 } from 'uhk-common';
 import { DeviceUiStates, EraseBleSettingsButtonState, RecoverPageState } from '../../models';
 import { MissingDeviceState } from '../../models/missing-device-state';
@@ -414,11 +412,6 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 
     if (!state.connectedDevice) {
         return DeviceUiStates.NotFound;
-    }
-
-    if (state.modules.rightModuleInfo.userConfigVersion
-        && isVersionGtMinor(state.modules.rightModuleInfo.userConfigVersion, VERSIONS.userConfigVersion)) {
-        return DeviceUiStates.UpdateNeeded;
     }
 };
 

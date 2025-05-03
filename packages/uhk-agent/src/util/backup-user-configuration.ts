@@ -4,11 +4,11 @@ import * as path from 'path';
 import {
     BackupUserConfiguration,
     BackupUserConfigurationInfo,
+    convertDateToDisplayText,
     LogService,
     SaveUserConfigurationData,
     shouldUpgradeAgent,
     UserConfiguration,
-    VersionInformation
 } from 'uhk-common';
 
 import { loadUserConfigFromBinaryFile } from './load-user-config-from-binary-file';
@@ -37,7 +37,10 @@ export async function getBackupUserConfigurationContent(logService: LogService, 
                 if (!shouldUpgradeAgent(config.getSemanticVersion(), false)) {
                     logService.config('Backup user configuration', config);
 
+                    const stat = await fs.stat(backupFilePath);
+
                     return {
+                        date: convertDateToDisplayText(stat.mtime),
                         info: BackupUserConfigurationInfo.LastCompatible,
                         userConfiguration: json
                     };

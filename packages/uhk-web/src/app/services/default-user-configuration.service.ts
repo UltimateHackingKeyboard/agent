@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserConfiguration } from 'uhk-common';
+import { UhkDeviceProduct, UserConfiguration, UHK_80_DEVICE } from 'uhk-common';
 
 @Injectable()
 export class DefaultUserConfigurationService {
@@ -24,5 +24,20 @@ export class DefaultUserConfigurationService {
         }
 
         return this._defaultConfig80;
+    }
+
+    getResetUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): UserConfiguration {
+        let config: UserConfiguration;
+
+        if (uhkDeviceProduct?.id === UHK_80_DEVICE.id) {
+            config = this.getDefault80().clone();
+        }
+        else {
+            config = this.getDefault60().clone();
+        }
+
+        config.keymaps = config.keymaps.filter(keymap => keymap.abbreviation !== 'EMP');
+
+        return config;
     }
 }

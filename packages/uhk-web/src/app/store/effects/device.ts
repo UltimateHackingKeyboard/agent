@@ -13,7 +13,6 @@ import {
     HOST_CONNECTION_COUNT_MAX,
     IpcResponse,
     NotificationType,
-    shouldUpgradeAgent,
     shouldUpgradeFirmware,
     UdevRulesInfo,
     UHK_60_DEVICE,
@@ -64,7 +63,6 @@ import {
 import {
     AppState,
     deviceConnected,
-    disableUpdateAgentProtection,
     getConnectedDevice,
     getHardwareConfiguration,
     getHostConnections,
@@ -85,8 +83,6 @@ import { DataStorageRepositoryService } from '../../services/datastorage-reposit
 
 @Injectable()
 export class DeviceEffects {
-    private shouldUpgradeAgent = false;
-
     changeKeyboardLayout$ = createEffect(() => this.actions$
         .pipe(
             ofType<ChangeKeyboardLayoutAction>(ActionTypes.ChangeKeyboardLayout),
@@ -159,9 +155,8 @@ export class DeviceEffects {
             withLatestFrom(
                 this.store.select(getRouterState),
                 this.store.select(deviceConnected),
-                this.store.select(disableUpdateAgentProtection),
             ),
-            tap(([action, route, connected, disableUpdateAgentProtection]) => {
+            tap(([action, route, connected]) => {
                 const state = action.payload;
 
                 if (route.state && route.state.url.startsWith('/device/firmware')) {
@@ -178,12 +173,6 @@ export class DeviceEffects {
 
                 if (state.bootloaderActive || state.leftHalfBootloaderActive || state.dongle.bootloaderActive) {
                     return this.router.navigate(['/recovery-device']);
-                }
-
-                if (shouldUpgradeAgent(state.hardwareModules?.rightModuleInfo?.userConfigVersion, disableUpdateAgentProtection)) {
-                    this.shouldUpgradeAgent = true;
-
-                    return this.router.navigate(['/update-agent']);
                 }
 
                 if (shouldUpgradeFirmware(state.hardwareModules?.rightModuleInfo?.userConfigVersion)) {
@@ -223,11 +212,8 @@ export class DeviceEffects {
 
                     const result: Array<Action> = [
                         new ReadConfigSizesAction(),
+                        new LoadConfigFromDeviceAction(),
                     ];
-
-                    if(!this.shouldUpgradeAgent) {
-                        result.push(new LoadConfigFromDeviceAction());
-                    }
 
                     return result;
                 }
@@ -371,16 +357,7 @@ export class DeviceEffects {
             ofType(ActionTypes.ResetUserConfiguration),
             withLatestFrom(this.store.select(getConnectedDevice)),
             switchMap(([, uhkDeviceProduct]) => {
-                let config: UserConfiguration;
-
-                if (uhkDeviceProduct?.id === UHK_80_DEVICE.id) {
-                    config = this.defaultUserConfigurationService.getDefault80().clone();
-                }
-                else {
-                    config = this.defaultUserConfigurationService.getDefault60().clone();
-                }
-
-                config.keymaps = config.keymaps.filter(keymap => keymap.abbreviation !== 'EMP');
+                const config = this.defaultUserConfigurationService.getResetUserConfiguration(uhkDeviceProduct);
                 return of(new LoadResetUserConfigurationAction(config));
             })
         )

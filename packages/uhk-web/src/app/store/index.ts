@@ -165,6 +165,7 @@ export const showColorPalette = createSelector(userConfigState, fromUserConfig.s
 export const perKeyRgbPresent = createSelector(userConfigState, fromUserConfig.perKeyRgbPresent);
 export const backlightingMode = createSelector(userConfigState, fromUserConfig.backlightingMode);
 export const getBacklightingOptions = createSelector(userConfigState, fromUserConfig.backlightingOptions);
+export const getNewerUserConfiguration = createSelector(userConfigState, fromUserConfig.getNewerUserConfiguration);
 export const hasRecoverableLEDSpace = createSelector(userConfigState, fromUserConfig.hasRecoverableLEDSpace);
 export const backlightingColorPalette = createSelector(userConfigState, fromUserConfig.backlightingColorPalette);
 export const isBacklightingColoring = createSelector(userConfigState, fromUserConfig.isBacklightingColoring);
@@ -474,13 +475,18 @@ export const calculateDeviceUiState = createSelector(
     deviceUiState,
     deviceConfigurationLoaded,
     disableUpdateAgentProtection,
-    (uiState, deviceConfigLoaded, disableUpdateAgentProtection): DeviceUiStates | undefined => {
+    getNewerUserConfiguration,
+    (uiState, deviceConfigLoaded, disableUpdateAgentProtection, newerUserConfiguration): DeviceUiStates | undefined => {
         if (uiState) {
-
-            if(disableUpdateAgentProtection && uiState === DeviceUiStates.UpdateNeeded)
-                return;
-
             return uiState;
+        }
+
+        if (newerUserConfiguration) {
+            if (disableUpdateAgentProtection) {
+                return;
+            }
+
+            return DeviceUiStates.UpdateNeeded;
         }
 
         if (!deviceConfigLoaded) {
@@ -750,9 +756,13 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
         };
     });
 export const upgradeAgentTooltip = createSelector(
-    getHardwareModules,
-    (hardwareModules:HardwareModules) => {
-        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} minor version is larger than agent.userConfigVersion ${VERSIONS.userConfigVersion}`;
+    getNewerUserConfiguration,
+    (newUserConfiguration) => {
+        if (!newUserConfiguration) {
+            return '';
+        }
+
+        return `rightModule.userConfigVersion ${newUserConfiguration.newUserConfigurationVersion} minor version is larger than agent.userConfigVersion ${VERSIONS.userConfigVersion}`;
     });
 export const upgradeFirmwareTooltip = createSelector(
     getHardwareModules,
