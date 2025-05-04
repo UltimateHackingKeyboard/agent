@@ -82,7 +82,6 @@ import { AppRendererService } from '../../services/app-renderer.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
-import { getVersions } from '../../util';
 
 @Injectable()
 export class DeviceEffects {
@@ -181,13 +180,13 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (shouldUpgradeAgent(state.hardwareModules?.rightModuleInfo?.userConfigVersion, disableUpdateAgentProtection, getVersions()?.userConfigVersion)) {
+                if (shouldUpgradeAgent(state.hardwareModules?.rightModuleInfo?.userConfigVersion, disableUpdateAgentProtection)) {
                     this.shouldUpgradeAgent = true;
 
                     return this.router.navigate(['/update-agent']);
                 }
 
-                if (shouldUpgradeFirmware(state.hardwareModules?.rightModuleInfo?.userConfigVersion, getVersions())) {
+                if (shouldUpgradeFirmware(state.hardwareModules?.rightModuleInfo?.userConfigVersion)) {
                     return this.router.navigate(['/update-firmware']);
                 }
 
@@ -418,7 +417,6 @@ export class DeviceEffects {
             tap(([action, userConfig]) => this.deviceRendererService.updateFirmware({
                 userConfig: userConfig.toJsonObject(),
                 forceUpgrade: action.payload,
-                versionInformation: getVersions()
             }))
         ),
     { dispatch: false }
@@ -431,7 +429,6 @@ export class DeviceEffects {
             tap(([action, userConfig]) => this.deviceRendererService.updateFirmware({
                 userConfig: userConfig.toJsonObject(),
                 forceUpgrade: action.payload.forceUpgrade,
-                versionInformation: getVersions(),
                 uploadFile: action.payload.uploadFileData
             }))
         ),

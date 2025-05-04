@@ -8,7 +8,7 @@ import {
     faSlidersH,
     faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
-import { FirmwareUpgradeFailReason, UhkModule, VersionInformation } from 'uhk-common';
+import { FirmwareUpgradeFailReason, UhkModule, VERSIONS } from 'uhk-common';
 
 import {
     AppState,
@@ -16,7 +16,6 @@ import {
     firmwareUpgradeFailed,
     firmwareUpgradeSuccess,
     flashFirmwareButtonDisabled,
-    getAgentVersionInfo,
     getFirmwareUpgradeState,
     getPlatform,
     runningOnNotSupportedWindows,
@@ -38,7 +37,6 @@ import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPay
 export class DeviceFirmwareComponent implements OnDestroy {
     flashFirmwareButtonDisabled$: Observable<boolean>;
     xtermLog$: Observable<Array<XtermLog>>;
-    getAgentVersionInfo$: Observable<VersionInformation>;
     firmwareUpgradeStates: FirmwareUpgradeState;
     runningOnNotSupportedWindows$: Observable<boolean>;
     firmwareUpgradeAllowed$: Observable<boolean>;
@@ -48,6 +46,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     firmwareUpgradeSuccess: boolean;
     upgradeType = 'Firmware';
     platform: string;
+    versions = VERSIONS;
 
     @ViewChild(XtermComponent, { static: false }) xtermRef: XtermComponent;
 
@@ -63,7 +62,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
                 private cdRef: ChangeDetectorRef) {
         this.flashFirmwareButtonDisabled$ = store.select(flashFirmwareButtonDisabled);
         this.xtermLog$ = store.select(xtermLog);
-        this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
         this.subscription.add(store.select(getFirmwareUpgradeState).subscribe(data => {
             this.firmwareUpgradeStates = data;
             this.cdRef.markForCheck();

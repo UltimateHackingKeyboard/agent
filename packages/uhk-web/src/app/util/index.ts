@@ -7,4 +7,3 @@ export * from './key-modifier-model-mapper';
 export * from './set-svg-keyboard-cover-colors-of-all-layer';
 export * from './set-svg-keyboard-cover-colors-of-layer';
 export * from './validators';
-export * from './version-helper';

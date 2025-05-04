@@ -36,7 +36,6 @@ import {
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { Uhk80MigratorService } from '../../services/uhk80-migrator.service';
-import { getVersions } from '../../util';
 import { AppState, getPrevUserConfiguration, getRouterState, getUserConfiguration } from '../index';
 import * as Keymaps from '../actions/keymap';
 import * as Macros from '../actions/macro';
@@ -150,7 +149,7 @@ export class UserConfigEffects {
     loadConfigFromDevice$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.LoadConfigFromDevice),
-            tap(() => this.deviceRendererService.loadConfigurationFromKeyboard(getVersions()))
+            tap(() => this.deviceRendererService.loadConfigurationFromKeyboard())
         ),
     { dispatch: false }
     );

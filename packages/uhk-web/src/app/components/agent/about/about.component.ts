@@ -3,9 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-import { Constants } from 'uhk-common';
-
-import { getVersions } from '../../../util';
+import { Constants, VERSIONS } from 'uhk-common';
 
 import { AppState, contributors } from '../../../store';
 import { State } from '../../../store/reducers/contributors.reducer';
@@ -21,7 +19,7 @@ import { GetAgentContributorsAction } from '../../../store/actions/contributors.
     }
 })
 export class AboutComponent implements OnInit {
-    version: string = getVersions().version;
+    version: string = VERSIONS.version;
     agentGithubUrl: string = Constants.AGENT_GITHUB_URL;
     agentContributorsUrl: string = Constants.AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
     logoClickCounter = 0;

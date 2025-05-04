@@ -28,6 +28,7 @@ export * from './simulate-invalid-user-config-error.js';
 export * from './sort-string-desc.js';
 export * from './to-hex-string.js';
 export * from './user-configuration-history-helpers.js';
+export * from './versions.js';
 
 // Source: http://stackoverflow.com/questions/13720256/javascript-regex-camelcase-to-sentence
 export function camelCaseToSentence(camelCasedText: string): string {

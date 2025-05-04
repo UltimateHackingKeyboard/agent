@@ -1,11 +1,11 @@
 import semver from 'semver';
 
-import { VersionInformation } from '../models/index.js';
+import { VERSIONS } from './versions.js';
 
 /**
- * Returns true if have to upgrade the firmware before the user could use the Agent
+ * Returns true if have to upgrade the firmware before the user could save user configuration
  */
-export function shouldUpgradeFirmware(userConfigVersion: string, versions: VersionInformation): boolean {
+export function shouldUpgradeFirmware(userConfigVersion: string): boolean {
     return userConfigVersion
-        && semver.gt(versions.userConfigVersion, userConfigVersion);
+        && semver.gt(VERSIONS.userConfigVersion, userConfigVersion);
 }

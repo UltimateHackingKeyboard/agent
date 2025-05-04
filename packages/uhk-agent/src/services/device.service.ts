@@ -51,7 +51,7 @@ import {
     UHK_MODULES,
     UpdateFirmwareData,
     UploadFileData,
-    VersionInformation,
+    VERSIONS,
     ZephyrLogEntry,
 } from 'uhk-common';
 import {
@@ -345,7 +345,6 @@ export class DeviceService {
      */
     public async loadConfigurations(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
         this.logService.misc('[DeviceService] load user configuration');
-        const versionInformation: VersionInformation = args[0];
 
         let response: ConfigurationReply;
 
@@ -375,7 +374,7 @@ export class DeviceService {
                 ...result,
                 modules,
                 backupConfiguration: isUserConfigInvalid
-                    ? await getBackupUserConfigurationContent(this.logService, uniqueId, versionInformation)
+                    ? await getBackupUserConfigurationContent(this.logService, uniqueId)
                     : {
                         info: BackupUserConfigurationInfo.Unknown
                     }
@@ -503,7 +502,7 @@ export class DeviceService {
 
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             this.logService.misc(`[DeviceService] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
-            this.logService.misc('[DeviceService] Agent version:', data.versionInformation.version);
+            this.logService.misc('[DeviceService] Agent version:', VERSIONS.version);
             this.logService.misc('[DeviceService] New firmware version:', packageJson.firmwareVersion);
             this.logService.misc('[DeviceService] New firmware user config version:', packageJson.userConfigVersion);
 
@@ -512,7 +511,7 @@ export class DeviceService {
             const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
             const disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
-            if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade, data.versionInformation?.userConfigVersion)) {
+            if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade)) {
                 response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
                 this.logService.error(`[DeviceService] Firmware contains newer ${packageJson.userConfigVersion} user config version than what Agent supports`);
 
@@ -599,7 +598,7 @@ export class DeviceService {
                 hardwareModules = await this.getHardwareModules(false);
                 event.sender.send(IpcEvents.device.hardwareModulesLoaded, hardwareModules);
 
-                if(shouldUpgradeFirmware(packageJson.userConfigVersion, data.versionInformation)) {
+                if(shouldUpgradeFirmware(packageJson.userConfigVersion)) {
                     this.logService.misc('[DeviceService] Skip user config saving because user config version is newer than what firmware supports');
                     response.firmwareDowngraded = true;
                 } else {

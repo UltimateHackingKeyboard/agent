@@ -9,13 +9,11 @@ import {
     NotificationType,
     runInElectron,
     UserConfiguration,
-    VersionInformation
 } from 'uhk-common';
 
 import * as App from '../actions/app';
 import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } from '../actions/user-config';
 import { ActionTypes as DeviceActionTypes, ConnectionStateChangedAction } from '../actions/device';
-import { getVersions } from '../../util';
 
 const DEFAULT_ERROR_PANEL_HEIGHT = 10;
 
@@ -31,7 +29,6 @@ export interface State {
     runningInElectron: boolean;
     configLoading: boolean;
     hardwareConfig?: HardwareConfiguration;
-    agentVersionInfo?: VersionInformation;
     privilegeWhatWillThisDoClicked: boolean;
     permissionError?: any;
     platform?: string;
@@ -50,7 +47,6 @@ export const initialState: State = {
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
     configLoading: true,
-    agentVersionInfo: getVersions(),
     privilegeWhatWillThisDoClicked: false,
     keypressCapturing: false,
     everAttemptedSavingToKeyboard: false,
@@ -236,7 +232,6 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
     return KeyboardLayout.ANSI;
 };
 export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
-export const getAgentVersionInfo = (state: State) => state.agentVersionInfo || {} as VersionInformation;
 
 export const runningOnNotSupportedWindows = (state: State): boolean => {
     if (!state.osVersion || state.platform !== 'win32') {

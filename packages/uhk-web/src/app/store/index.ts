@@ -32,7 +32,7 @@ import {
     UhkBuffer,
     UhkThemeColors,
     UserConfiguration,
-    VersionInformation
+    VERSIONS,
 } from 'uhk-common';
 import { environment } from '../../environments/environment';
 import {
@@ -188,7 +188,6 @@ export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrev
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
-export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
 export const keypressCapturing = createSelector(appState, fromApp.keypressCapturing);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
@@ -235,8 +234,8 @@ export const getMissingDeviceState = createSelector(deviceState, fromDevice.getM
 export const xtermLog = createSelector(firmwareState, fromFirmware.xtermLog);
 export const flashFirmwareButtonDisabled = createSelector(runningInElectron, updatingFirmware, (electron, upgradingFirmware) => !electron || upgradingFirmware);
 export const getStateHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
-export const getHardwareModules = createSelector(runningInElectron, getStateHardwareModules, getAgentVersionInfo,
-    (electron, hardwareModules, agentVersionInfo): HardwareModules => {
+export const getHardwareModules = createSelector(runningInElectron, getStateHardwareModules,
+    (electron, hardwareModules): HardwareModules => {
         if (electron) {
             return hardwareModules;
         }
@@ -246,34 +245,34 @@ export const getHardwareModules = createSelector(runningInElectron, getStateHard
                 {
                     module: LEFT_HALF_MODULE,
                     info: {
-                        firmwareVersion: agentVersionInfo.firmwareVersion,
-                        moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+                        firmwareVersion: VERSIONS.firmwareVersion,
+                        moduleProtocolVersion: '',
                     }
                 },
                 {
                     module: LEFT_KEY_CLUSTER_MODULE,
                     info: {
-                        firmwareVersion: agentVersionInfo.firmwareVersion,
-                        moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+                        firmwareVersion: VERSIONS.firmwareVersion,
+                        moduleProtocolVersion: '',
                     }
                 },
                 {
                     module: RIGHT_TRACKPOINT_MODULE,
                     info: {
-                        firmwareVersion: agentVersionInfo.firmwareVersion,
-                        moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+                        firmwareVersion: VERSIONS.firmwareVersion,
+                        moduleProtocolVersion: '',
                     }
                 }
             ],
             rightModuleInfo: {
-                deviceProtocolVersion: agentVersionInfo.deviceProtocolVersion,
-                hardwareConfigVersion: agentVersionInfo.hardwareConfigVersion,
-                firmwareVersion: agentVersionInfo.firmwareVersion,
+                deviceProtocolVersion: VERSIONS.deviceProtocolVersion,
+                hardwareConfigVersion: VERSIONS.hardwareConfigVersion,
+                firmwareVersion: VERSIONS.firmwareVersion,
                 firmwareGitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
                 firmwareGitTag: 'master',
-                moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion,
+                moduleProtocolVersion: '',
                 modules: {},
-                userConfigVersion: agentVersionInfo.userConfigVersion
+                userConfigVersion: VERSIONS.userConfigVersion
             }
         };
     });
@@ -609,12 +608,12 @@ export const isMacroCommandSupported = createSelector(getHardwareModules, (hardw
 });
 
 export const getShowFirmwareUpgradePanel = createSelector(
-    runningInElectron, getHardwareModules, getAgentVersionInfo, getSkipFirmwareUpgrade,
-    (inElectron: boolean, hardwareModules:HardwareModules, agentVersionInfo: VersionInformation, skipFirmwareUpgrade: boolean): boolean => {
+    runningInElectron, getHardwareModules, getSkipFirmwareUpgrade,
+    (inElectron: boolean, hardwareModules:HardwareModules, skipFirmwareUpgrade: boolean): boolean => {
         return inElectron
             && skipFirmwareUpgrade
             && hardwareModules.rightModuleInfo.userConfigVersion
-            && gt(agentVersionInfo.userConfigVersion, hardwareModules.rightModuleInfo.userConfigVersion);
+            && gt(VERSIONS.userConfigVersion, hardwareModules.rightModuleInfo.userConfigVersion);
     });
 
 export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;
@@ -714,8 +713,8 @@ export const getSupportedThemes = (): AppThemeSelect[] => {
 };
 
 export const getStateFirmwareUpgradeState = createSelector(firmwareState, fromFirmware.firmwareUpgradeState);
-export const getFirmwareUpgradeState = createSelector(runningInElectron, getStateFirmwareUpgradeState, getAgentVersionInfo,
-    (electron, firmwareUpgrade, agentVersionInfo): FirmwareUpgradeState => {
+export const getFirmwareUpgradeState = createSelector(runningInElectron, getStateFirmwareUpgradeState,
+    (electron, firmwareUpgrade): FirmwareUpgradeState => {
         if (electron) {
             return firmwareUpgrade;
         }
@@ -730,7 +729,7 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                     gitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
                     isOfficialFirmware: true,
                     currentFirmwareChecksum: '',
-                    currentFirmwareVersion: agentVersionInfo.firmwareVersion,
+                    currentFirmwareVersion: VERSIONS.firmwareVersion,
                     forceUpgraded: false,
                     newFirmwareVersion: undefined,
                     state: ModuleFirmwareUpgradeStates.Idle
@@ -741,7 +740,7 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                     gitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
                     isOfficialFirmware: true,
                     currentFirmwareChecksum: '',
-                    currentFirmwareVersion: agentVersionInfo.firmwareVersion,
+                    currentFirmwareVersion: VERSIONS.firmwareVersion,
                     forceUpgraded: false,
                     newFirmwareVersion: undefined,
                     state: ModuleFirmwareUpgradeStates.Idle
@@ -751,14 +750,14 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
         };
     });
 export const upgradeAgentTooltip = createSelector(
-    getHardwareModules, getAgentVersionInfo,
-    (hardwareModules:HardwareModules, agentVersionInfo: VersionInformation) => {
-        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} minor version is larger than agent.userConfigVersion ${agentVersionInfo.userConfigVersion}`;
+    getHardwareModules,
+    (hardwareModules:HardwareModules) => {
+        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} minor version is larger than agent.userConfigVersion ${VERSIONS.userConfigVersion}`;
     });
 export const upgradeFirmwareTooltip = createSelector(
-    getHardwareModules, getAgentVersionInfo,
-    (hardwareModules:HardwareModules, agentVersionInfo: VersionInformation) => {
-        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} patch version is less than agent.userConfigVersion ${agentVersionInfo.userConfigVersion}`;
+    getHardwareModules,
+    (hardwareModules:HardwareModules) => {
+        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} patch version is less than agent.userConfigVersion ${VERSIONS.userConfigVersion}`;
     });
 export const defaultUserConfigState = (state: AppState) => state.defaultUserConfiguration;
 export const getDefaultUserConfiguration = createSelector(
