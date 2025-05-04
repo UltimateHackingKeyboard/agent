@@ -25,7 +25,7 @@ export const backupUserConfiguration = (data: SaveUserConfigurationData): Promis
     return fs.writeJSON(backupFilePath, data.configuration, {spaces: 2});
 };
 
-export async function getBackupUserConfigurationContent(logService: LogService, uniqueId: number, versionInformation: VersionInformation): Promise<BackupUserConfiguration> {
+export async function getBackupUserConfigurationContent(logService: LogService, uniqueId: number): Promise<BackupUserConfiguration> {
     try {
         const backupFilePath = getBackupUserConfigurationPath(uniqueId);
 
@@ -34,7 +34,7 @@ export async function getBackupUserConfigurationContent(logService: LogService, 
                 const json = await fs.readJSON(backupFilePath);
                 const config = new UserConfiguration().fromJsonObject(json);
 
-                if (!shouldUpgradeAgent(config.getSemanticVersion(), false, versionInformation?.userConfigVersion)) {
+                if (!shouldUpgradeAgent(config.getSemanticVersion(), false)) {
                     logService.config('Backup user configuration', config);
 
                     return {
@@ -47,7 +47,7 @@ export async function getBackupUserConfigurationContent(logService: LogService, 
             }
         }
 
-        const fromHistory = await getCompatibleUserConfigFromHistory(logService, versionInformation, uniqueId);
+        const fromHistory = await getCompatibleUserConfigFromHistory(logService, uniqueId);
         if (fromHistory) {
             logService.config('Backup user configuration from history', fromHistory.userConfiguration);
             return fromHistory;
@@ -63,7 +63,7 @@ export async function getBackupUserConfigurationContent(logService: LogService, 
     }
 }
 
-export async function getCompatibleUserConfigFromHistory(logService: LogService, versionInformation: VersionInformation, uniqueId: number): Promise<BackupUserConfiguration> {
+export async function getCompatibleUserConfigFromHistory(logService: LogService, uniqueId: number): Promise<BackupUserConfiguration> {
     let history = await loadUserConfigHistoryAsync();
 
     const deviceHistory = history.devices.find(device => device.uniqueId === uniqueId);
@@ -76,7 +76,7 @@ export async function getCompatibleUserConfigFromHistory(logService: LogService,
         try {
             const userConfig = await loadUserConfigFromBinaryFile(file.filePath);
 
-            if (shouldUpgradeAgent(userConfig.getSemanticVersion(), false, versionInformation?.userConfigVersion)) {
+            if (shouldUpgradeAgent(userConfig.getSemanticVersion(), false)) {
                 continue;
             }
 

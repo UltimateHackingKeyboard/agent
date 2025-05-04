@@ -124,8 +124,8 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.saveUserConfiguration, JSON.stringify(data));
     }
 
-    loadConfigurationFromKeyboard(versionInformation: VersionInformation): void {
-        this.ipcRenderer.send(IpcEvents.device.loadConfigurations, versionInformation);
+    loadConfigurationFromKeyboard(): void {
+        this.ipcRenderer.send(IpcEvents.device.loadConfigurations);
     }
 
     updateFirmware(data: UpdateFirmwareData): void {

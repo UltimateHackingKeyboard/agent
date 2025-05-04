@@ -15,12 +15,12 @@ import {
     UdevRulesInfo,
     UHK_DEVICE_IDS,
     UHK_DEVICE_IDS_TYPE,
-    UhkDeviceProduct
+    UhkDeviceProduct,
+    VERSIONS,
 } from 'uhk-common';
 import { DeviceUiStates, EraseBleSettingsButtonState, RecoverPageState } from '../../models';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
-import { getVersions } from '../../util';
 
 import * as App from '../actions/app';
 import * as Device from '../actions/device';
@@ -417,7 +417,7 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
     }
 
     if (state.modules.rightModuleInfo.userConfigVersion
-        && isVersionGtMinor(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+        && isVersionGtMinor(state.modules.rightModuleInfo.userConfigVersion, VERSIONS.userConfigVersion)) {
         return DeviceUiStates.UpdateNeeded;
     }
 };

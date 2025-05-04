@@ -55,7 +55,7 @@
                         [isOpen]="firmwareUpgradeStates.showForceFirmwareUpgrade"
                         (confirm)="onForceUpgradeFirmware()"
                 >
-                    Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
+                    Flash firmware {{ versions.firmwareVersion }} (bundled with Agent)
                 </button>
                 <context-menu #recoveryContextMenu [disabled]="firmwareUpgradeStates.recoveryModules.length === 0">
                     <ng-template *ngFor="let module of firmwareUpgradeStates.recoveryModules; trackBy:trackByRecoveryModuleFn"
