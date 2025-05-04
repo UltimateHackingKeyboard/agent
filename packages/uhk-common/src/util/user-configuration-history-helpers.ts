@@ -14,3 +14,7 @@ export function convertHistoryFilenameToDisplayText(filename: string): string {
 
     return moment(timestamp, FILENAME_DATE_FORMAT).format(DISPLAY_DATE_FORMAT);
 }
+
+export function convertDateToDisplayText(date: Date): string {
+    return moment(date).format(DISPLAY_DATE_FORMAT);
+}

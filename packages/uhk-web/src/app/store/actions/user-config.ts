@@ -5,6 +5,7 @@ import { HostConnection, UserConfiguration, ConfigurationReply } from 'uhk-commo
 import {
     ApplyUserConfigurationFromFilePayload,
     ModifyColorOfBacklightingColorPalettePayload,
+    NewerUserConfiguration,
     UserConfigurationRgbValue,
     UserConfigurationValue,
     LoadUserConfigurationFromFilePayload,
@@ -39,6 +40,7 @@ export enum ActionTypes {
     ApplyUserConfigurationFromFile = '[user-config] Apply user configuration from file',
     PreviewUserConfiguration = '[user-config] Preview user configuration',
     RecoverLEDSpaces = '[user-config] recover LED spaces',
+    UserConfigurationNewer = '[user-config] user configuration is newer that Agent support',
 }
 
 export class AddColorToBacklightingColorPaletteAction implements Action {
@@ -206,6 +208,12 @@ export class RecoverLEDSpacesAction implements Action {
     type = ActionTypes.RecoverLEDSpaces;
 }
 
+export class UserConfigurationNewerAction implements Action {
+    type = ActionTypes.UserConfigurationNewer;
+
+    constructor(public payload?: NewerUserConfiguration) {}
+}
+
 export type Actions
     = AddColorToBacklightingColorPaletteAction
     | AddNewPairedDevicesToHostConnectionsAction
@@ -233,4 +241,5 @@ export type Actions
     | LoadUserConfigurationFromFileAction
     | ApplyUserConfigurationFromFileAction
     | RecoverLEDSpacesAction
+    | UserConfigurationNewerAction
     ;

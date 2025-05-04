@@ -107,6 +107,7 @@ export class DeviceService {
     private _pollerAllowed: boolean;
     private _uhkDevicePolling: boolean;
     private _checkStatusBuffer: boolean;
+    private disableAgentUpgrade = false;
     private dongleZephyrLogService: ZephyrLogService;
     private leftHalfZephyrLogService: ZephyrLogService;
     private queueManager = new QueueManager();
@@ -122,6 +123,8 @@ export class DeviceService {
                 private options: CommandLineArgs,
                 private rootDir: string
     ) {
+        this.disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
+
         this.dongleZephyrLogService =  new ZephyrLogService({
             cliArgs: this.options,
             currentDeviceFn: getCurrentUhkDongleHID,
@@ -362,18 +365,13 @@ export class DeviceService {
                 result.userConfiguration = 'invalid user config';
             }
 
-            let isUserConfigInvalid = false;
-            try {
-                getUserConfigFromDeviceResponse(result.userConfiguration);
-            } catch {
-                isUserConfigInvalid = true;
-            }
+            const parsedUserConfiguration = getUserConfigFromDeviceResponse(result.userConfiguration);
 
             response = {
                 success: true,
                 ...result,
                 modules,
-                backupConfiguration: isUserConfigInvalid
+                backupConfiguration: parsedUserConfiguration.result !== 'success'
                     ? await getBackupUserConfigurationContent(this.logService, uniqueId)
                     : {
                         info: BackupUserConfigurationInfo.Unknown
@@ -510,8 +508,7 @@ export class DeviceService {
 
             const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
-            const disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
-            if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade)) {
+            if (shouldUpgradeAgent(packageJson.userConfigVersion, this.disableAgentUpgrade)) {
                 response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
                 this.logService.error(`[DeviceService] Firmware contains newer ${packageJson.userConfigVersion} user config version than what Agent supports`);
 
