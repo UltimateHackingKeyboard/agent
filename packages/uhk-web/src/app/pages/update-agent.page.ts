@@ -26,9 +26,10 @@ import { PreviewUserConfigurationAction } from '../store/actions/user-config';
                 <p>
                     Your UHK contains a <span class="text-dotted" [ngbTooltip]="upgradeAgentTooltip$ | async">newer configuration version</span>
                     than this Agent version can handle, so you must update Agent.
-                    <br/>
+                </p>
+                <p>
                     <ng-container *ngIf="newerUserConfiguration?.type === 'backup'">
-                        Or, <a href="#"
+                        Alternatively, <a href="#"
                                mwlConfirmationPopover
                                popoverTitle="Are you sure?"
                                placement="bottom"
@@ -42,7 +43,7 @@ import { PreviewUserConfigurationAction } from '../store/actions/user-config';
                         Agent.
                     </ng-container>
                     <ng-container *ngIf="newerUserConfiguration?.type === 'reset'">
-                        Or, <a href="#"
+                        Alternatively, <a href="#"
                                mwlConfirmationPopover
                                popoverTitle="Are you sure?"
                                placement="bottom"
