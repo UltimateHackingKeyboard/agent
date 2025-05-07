@@ -6,6 +6,24 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [7.0.0] - 2025-05-07
+
+Firmware: 14.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v14.0.0)] | Device Protocol: 4.**15.0** | User Config: **11.0.0** | Hardware Config: 1.0.0
+
+- Add "Battery settings" page.
+- Expose Zephyr logs via the "Advanced settings" page.
+- Add "ISO #" scancode in the scancode selector.
+- Fix the selected keymap in the side menu after deleting or duplicating a keymap.
+- Use async node-hid communication, making Agent no longer miss a packet occasionally.
+- Delete all configuration history records per device by right-clicking on the relevant device tab in the "Configuration history" section.
+- Select the default keymap in the side menu upon startup.
+- Show git sha on the firmware when upgrading firmwares.
+- Fix keymap description position when UHK 60 halves are merged.
+- Fix the visibility of the corner of the next/previous keymap when window size is small.
+- Extend and fine-tune firmware update error instructions.
+- Offer to load previous configuration or reset it when Agent is downgraded.
+- Show firmware upgrade log entries. This addresses a regression introduced in the previous Agent release.
+
 ## [6.0.0] - 2025-03-21
 
 Firmware: 13.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v13.0.0)] | Device Protocol: 4.14.1 | User Config: **9.0.0** | Hardware Config: 1.0.0
