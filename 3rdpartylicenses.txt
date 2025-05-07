@@ -2090,19 +2090,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-uhk-agent
-See in LICENSE
-Agent License
-
-Agent can be modified and redistributed in source and binary form provided the following conditions are met.
-
-1. Agent can only be used with the Ultimate Hacking Keyboard.
-2. Modified versions must be redistributed and accompanied by source code.
-3. This license file must be preserved verbatim.
-
-Ultimate Hacking Keyboard is a registered trademark of Ultimate Gadget Laboratories Kft.
-
-
 uhk-common
 GPL-3.0
 
