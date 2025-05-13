@@ -120,7 +120,7 @@ export class ZephyrLogService {
             }
 
             this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] releasing instances`);
-            await this.uhkHidDevice.close()
+            this.uhkHidDevice.close()
             this.uhkHidDevice = undefined;
             this.operations = undefined
             this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] instances are released`);
