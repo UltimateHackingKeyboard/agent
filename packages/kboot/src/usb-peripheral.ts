@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { devicesAsync, HIDAsync } from 'node-hid';
+import { devicesAsync, HID } from 'node-hid';
 import { pack } from 'byte-data';
 
 import { Peripheral } from './peripheral.js';
@@ -19,7 +19,7 @@ const logger = debug('kboot:usb');
 const WRITE_DATA_STREAM_PACKAGE_LENGTH = 32;
 
 export class UsbPeripheral implements Peripheral {
-    private _device: HIDAsync;
+    private _device: HID;
 
     constructor(private options: USB) {
         logger('constructor options: %o', options);
@@ -44,12 +44,12 @@ export class UsbPeripheral implements Peripheral {
             throw new Error('USB device can not be found');
         }
 
-        this._device = await HIDAsync.open(device.path);
+        this._device = new HID(device.path);
     }
 
-    async close(): Promise<void> {
+    close(): void {
         if (this._device) {
-            await this._device.close();
+            this._device.close();
             this._device = undefined;
         }
     }
@@ -61,10 +61,10 @@ export class UsbPeripheral implements Peripheral {
                 validateCommandParams(options.params);
                 const data = encodeCommandOption(options);
                 logger('send data %o', `<${convertToHexString(data)}>`);
-                await this._device.write(data);
-                const receivedData = await this._device.read(options.timeout || 2000);
+                this._device.write(data);
+                const receivedData = this._device.readTimeout(options.timeout || 2000);
                 logger('received data %o', `<${convertToHexString(receivedData)}>`);
-                const commandResponse = decodeCommandResponse(receivedData);
+                const commandResponse = decodeCommandResponse(Buffer.from(receivedData));
                 logger('command response: %o', commandResponse);
                 resolve(commandResponse);
             } catch (err) {
@@ -110,14 +110,14 @@ export class UsbPeripheral implements Peripheral {
                     ];
 
                     logger('send data %o', convertToHexString(writeData));
-                    await this._device.write(writeData);
+                    this._device.write(writeData);
                     // workaround to prevent main thread blocking
                     await snooze(1);
                 }
 
-                const receivedData = await this._device.read(option.timeout || 2000);
+                const receivedData = this._device.readTimeout(option.timeout || 2000);
                 logger('write memory received data %o', `<${convertToHexString(receivedData)}>`);
-                const secondCommandResponse = decodeCommandResponse(receivedData);
+                const secondCommandResponse = decodeCommandResponse(Buffer.from(receivedData));
                 logger('write memory response: %o', secondCommandResponse);
 
                 if (secondCommandResponse.tag !== ResponseTags.Generic) {
@@ -166,17 +166,17 @@ export class UsbPeripheral implements Peripheral {
                 const arrivingDataSize = convertLittleEndianNumber(byte4Number);
                 const memoryData: Array<number> = [];
                 while (memoryData.length < arrivingDataSize) {
-                    const receivedData = await this._device.read(2000);
+                    const receivedData = this._device.readTimeout(2000);
                     logger('received data %o', `<${convertToHexString(receivedData)}>`);
                     memoryData.push(...receivedData);
                     // workaround to prevent main thread blocking
                     await snooze(1);
                 }
 
-                const responseData = await this._device.read(2000);
+                const responseData = this._device.readTimeout(2000);
                 logger('received data %o', `<${convertToHexString(responseData)}>`);
 
-                const secondCommandResponse = decodeCommandResponse(responseData);
+                const secondCommandResponse = decodeCommandResponse(Buffer.from(responseData));
                 if (secondCommandResponse.tag !== ResponseTags.Generic) {
                     logger('Invalid read memory final response %o', secondCommandResponse);
                     return reject(new Error('Invalid read memory final response!'));

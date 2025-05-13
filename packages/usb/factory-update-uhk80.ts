@@ -104,8 +104,8 @@ try {
         await leftUhkOperations.setVariable(UsbVariables.testSwitches, 1);
     }
     finally {
-        await leftUhkDevice?.close();
-        await rightUhkDevice?.close();
+        leftUhkDevice?.close();
+        rightUhkDevice?.close();
     }
 
 } catch (error) {
@@ -169,7 +169,7 @@ async function upgradeFirmware(uhkDeviceProduct: UhkDeviceProduct, hidDevice: De
         result.error = error;
     }
     finally {
-        await uhkHidDevice?.close();
+        uhkHidDevice?.close();
     }
 
     return result;
@@ -191,7 +191,7 @@ async function writeHardwareConfig(uhkDeviceProduct: UhkDeviceProduct, hidDevice
         result.error = error;
     }
     finally {
-        await uhkHidDevice?.close();
+        uhkHidDevice?.close();
     }
 
 
