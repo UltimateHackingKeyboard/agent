@@ -26,7 +26,7 @@ import Uhk, {
             device: uhkDeviceProduct,
             enumerationMode: EnumerationModes.Buspal,
         });
-        await device.close();
+        device.close();
         await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
         const usbPeripheral = new UsbPeripheral({ productId: reenumerateResult.vidPidPair.pid, vendorId: reenumerateResult.vidPidPair.vid });
         let kboot: KBoot;
@@ -42,13 +42,13 @@ import Uhk, {
                 break;
             } catch {
                 if (kboot) {
-                    await kboot.close();
+                    kboot.close();
                 }
                 await snooze(200);
             }
         }
-        await kboot.reset();
-        await kboot.close();
+        kboot.reset();
+        kboot.close();
         await device.reenumerate({
             device: uhkDeviceProduct,
             enumerationMode: EnumerationModes.NormalKeyboard,
