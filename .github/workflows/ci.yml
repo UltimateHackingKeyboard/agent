@@ -89,3 +89,15 @@ jobs:
           path: dist/UHK.Agent-*-win*.exe
           compression-level: 0
           retention-days: 30
+
+      - name: Run build-archiver
+        if: github.ref == 'refs/heads/master'
+        uses: UltimateHackingKeyboard/build-archiver@v0.0.2
+        with:
+          FILE_PATTERN: "dist/UHK.Agent-*-@(mac.dmg|linux-x86_64.AppImage|win*.exe)"
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          S3_ACCESS_KEY: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_SECRET }}
+          S3_ACCESS_KEY_ID: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_KEY }}
+          S3_BUCKET: "uhk-build-archives"
+          S3_KEY_PREFIX: "agent/"
+          S3_REGION: "eu-central-1"
