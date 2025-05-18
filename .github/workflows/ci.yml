@@ -94,7 +94,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         uses: UltimateHackingKeyboard/build-archiver@v0.0.2
         with:
-          FILE_PATTERN: "dist/UHK.Agent-*-@(mac.dmg|linux-x86_64.AppImage|win*.exe)"
+          FILE_PATTERN: "dist/UHK.Agent-*-linux-x86_64.AppImage\ndist/UHK.Agent-*-mac.dmg\ndist/UHK.Agent-*-win*.exe"
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           S3_ACCESS_KEY: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_SECRET }}
           S3_ACCESS_KEY_ID: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_KEY }}
