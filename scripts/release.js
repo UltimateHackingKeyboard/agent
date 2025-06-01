@@ -85,42 +85,7 @@ extraResources.push({ from: path.join(__dirname, '../tmp/smart-macro-docs'), to:
 const APPLE_TEAM_ID = 'CMXCBCFHDG'
 process.env.APPLE_TEAM_ID = APPLE_TEAM_ID
 
-builder.build({
-    publish: "onTag",
-    targets: target,
-    config: {
-        afterPack,
-        directories: {
-            app: electron_build_folder
-        },
-        appId: 'com.ultimategadgetlabs.agent',
-        npmRebuild: false,
-        productName: 'UHK Agent',
-        mac: {
-            category: 'public.app-category.utilities',
-            extraResources,
-            identity: APPLE_TEAM_ID,
-            cscLink: macCertificatePath,
-            hardenedRuntime: true,
-            gatekeeperAssess: false,
-            entitlements: path.join(__dirname, 'entitlements.mac.plist'),
-            entitlementsInherit: path.join(__dirname, 'entitlements.mac.plist'),
-        },
-        win: {
-            extraResources,
-            publisherName: 'Ultimate Gadget Laboratories Kft.',
-            certificateFile: winCertificatePath,
-        },
-        linux: {
-            extraResources
-        },
-        publish: 'github',
-        artifactName,
-        files: [
-            '**/*'
-        ]
-    },
-})
+release()
     .then(() => {
         console.log('Packing success.');
     })
@@ -128,6 +93,48 @@ builder.build({
         console.error(error);
         process.exit(1);
     })
+
+async function release () {
+    return builder.build({
+        publish: "onTag",
+        targets: target,
+        config: {
+            afterPack,
+            directories: {
+                app: electron_build_folder
+            },
+            appId: 'com.ultimategadgetlabs.agent',
+            npmRebuild: false,
+            productName: 'UHK Agent',
+            mac: {
+                category: 'public.app-category.utilities',
+                extraResources,
+                identity: APPLE_TEAM_ID,
+                cscLink: macCertificatePath,
+                hardenedRuntime: true,
+                gatekeeperAssess: false,
+                entitlements: path.join(__dirname, 'entitlements.mac.plist'),
+                entitlementsInherit: path.join(__dirname, 'entitlements.mac.plist'),
+            },
+            win: {
+                extraResources,
+                publisherName: 'Ultimate Gadget Laboratories Kft.',
+                certificateFile: winCertificatePath,
+            },
+            linux: {
+                extraResources
+            },
+            publish: 'github',
+            artifactName,
+            files: [
+                '**/*'
+            ],
+            releaseInfo: {
+                releaseNotes: await getReleaseNotes()
+            }
+        },
+    })
+}
 
 function update2ndPackageJson(rootJson) {
     const jsonPath = path.join(__dirname, '../packages/uhk-agent/dist/package.json');
@@ -150,4 +157,33 @@ function getGithubTag() {
     const result = /^refs\/tags\/(v\d+\.\d+\.\d+)$/.exec(process.env.GITHUB_REF);
 
     return result && result[1];
+}
+
+async function getReleaseNotes() {
+    if(!gitTag) {
+        return
+    }
+
+    const version = gitTag.slice(1)
+    const changeLogPath = path.join(__dirname, '..', 'CHANGELOG.md');
+    const changelogContent = await fs.readFile(changeLogPath, { encoding: 'utf8' });
+    const lines = changelogContent.split('\n');
+
+    let capturing = false;
+    const result = [];
+
+    for (const line of lines) {
+        if (line.match(new RegExp(`^## \\[${version}\\]`))) {
+            capturing = true;
+            result.push(line);
+        } else if (line.match(/^## \[/) && capturing) {
+            break; // Stop when we hit the next section
+        } else if (capturing) {
+            result.push(line);
+        }
+    }
+
+    return result
+        .slice(2)
+        .join('\n');
 }
