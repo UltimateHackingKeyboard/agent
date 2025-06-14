@@ -1,4 +1,5 @@
 import { Macro } from 'uhk-common';
+import { escapeHtml } from './escape-html';
 
 export function parseStatusBuffer(macros: Macro[], statusBuffer: string): string {
     if (!statusBuffer) {
@@ -36,12 +37,12 @@ function splitToErrorBlocks(text: string): string[] {
 function transformToErrorBlock(macros: Macro[], block: string): any {
     const lines = block.split('\n');
     if (lines.length !== 4) {
-        return block;
+        return escapeHtml(block);
     }
 
     const line0Result = /^(Error at |Warning at )(.*) (\d+)\/(\d+)\/(\d+):/.exec(lines[0]);
     if (!line0Result) {
-        return block;
+        return escapeHtml(block);
     }
 
     const macroName = line0Result[2];
@@ -53,7 +54,7 @@ function transformToErrorBlock(macros: Macro[], block: string): any {
     const macro = macros.find(macro => macro.name === macroName);
 
     if (!macro)
-        return block;
+        return escapeHtml(block);
 
     const macroActionIndex = parseInt(line0Result[3], 10) - 1;
     const lineNr = parseInt(line0Result[4], 10);
@@ -61,7 +62,7 @@ function transformToErrorBlock(macros: Macro[], block: string): any {
 
     const line1Result = /^(> \d* \| )(.*)/.exec(lines[1]);
     const url = `#/macro/${macro.id}?actionIndex=${macroActionIndex}&lineNr=${lineNr}&columnNr=${columnNr}&inlineEdit=true`;
-    const newLine2 = `${line1Result[1]}<a href="${url}">${line1Result[2]}</a>`;
+    const newLine2 = `${line1Result[1]}<a href="${url}">${escapeHtml(line1Result[2])}</a>`;
 
     return `${lines[0]}\n${newLine2}\n${lines[2]}\n`;
 }
