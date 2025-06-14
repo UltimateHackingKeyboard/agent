@@ -92,7 +92,7 @@ jobs:
 
       - name: Run build-archiver
         if: github.ref == 'refs/heads/master'
-        uses: UltimateHackingKeyboard/build-archiver@v0.0.3
+        uses: UltimateHackingKeyboard/build-archiver@v0.0.4
         with:
           FILE_PATTERN: "dist/UHK.Agent-*-linux-x86_64.AppImage\ndist/UHK.Agent-*-mac.dmg\ndist/UHK.Agent-*-win*.exe"
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
