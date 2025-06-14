@@ -1,7 +1,9 @@
 <div class="x-term-container">
     <div class="x-term-wrapper" #scrollMe>
         <ul class="list-unstyled">
-            <li *ngFor="let log of logs" [ngClass]="log.cssClass"><span>{{ log.message }}</span></li>
+            <li *ngFor="let log of logs" [ngClass]="log.cssClass">
+                <span [innerHTML]="log.message | newLineToBr | safeHtml"></span>
+            </li>
         </ul>
     </div>
     <div class="copy-container-wrapper">
