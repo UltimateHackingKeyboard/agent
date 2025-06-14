@@ -1,6 +1,7 @@
 import { getFormattedTimestamp, UhkDeviceProduct } from 'uhk-common';
 
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
+import { escapeHtml } from '../../util/escape-html';
 import { appendXtermLogs } from '../../util/merge-xterm-logs';
 import {
     Actions,
@@ -204,7 +205,7 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             newState.i2cLogs = [
                 ...state.i2cLogs,
                 {
-                    message: `${getFormattedTimestamp()} | ${payload.device.padEnd(15 )} | ${payload.log}`,
+                    message: `${getFormattedTimestamp()} | ${payload.device.padEnd(15 )} | ${escapeHtml(payload.log)}`,
                     cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard,
                 }
             ];
