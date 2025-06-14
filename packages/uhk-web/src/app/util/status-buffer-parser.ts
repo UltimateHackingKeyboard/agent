@@ -61,6 +61,11 @@ function transformToErrorBlock(macros: Macro[], block: string): any {
     const columnNr = parseInt(line0Result[5], 10);
 
     const line1Result = /^(> \d* \| )(.*)/.exec(lines[1]);
+
+    if (!line1Result || line1Result.length < 3) {
+        return escapeHtml(block);
+    }
+
     const url = `#/macro/${macro.id}?actionIndex=${macroActionIndex}&lineNr=${lineNr}&columnNr=${columnNr}&inlineEdit=true`;
     const newLine2 = `${line1Result[1]}<a href="${url}">${escapeHtml(line1Result[2])}</a>`;
 
