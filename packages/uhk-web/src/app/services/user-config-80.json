@@ -86,8 +86,8 @@
   "hostConnections": [
     {
       "type": "UsbRight",
-      "name": "My PC",
-      "switchover": false
+      "switchover": false,
+      "name": "My PC"
     },
     {
       "type": "Empty"
@@ -1994,7 +1994,8 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "other",
+                  "actionSubtype": "Sleep"
                 },
                 {
                   "keyActionType": "none"
@@ -3919,7 +3920,8 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "other",
+                  "actionSubtype": "Sleep"
                 },
                 {
                   "keyActionType": "none"
@@ -5839,7 +5841,8 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "other",
+                  "actionSubtype": "Sleep"
                 },
                 {
                   "keyActionType": "none"
@@ -7764,7 +7767,8 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "other",
+                  "actionSubtype": "Sleep"
                 },
                 {
                   "keyActionType": "none"
@@ -9684,7 +9688,8 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "other",
+                  "actionSubtype": "Sleep"
                 },
                 {
                   "keyActionType": "none"
@@ -11609,7 +11614,8 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "none"
+                  "keyActionType": "other",
+                  "actionSubtype": "Sleep"
                 },
                 {
                   "keyActionType": "none"
