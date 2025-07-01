@@ -856,7 +856,8 @@ export class UhkOperations {
         if (cmd.length <= 63) {
             const b1 = Buffer.from([UsbCommand.ExecMacroCommand]);
             const b2 = Buffer.from(cmd);
-            const buffer = Buffer.concat([b1,b2]);
+            const b0 = Buffer.from([0x00]);
+            const buffer = Buffer.concat([b1, b2, b0]);
             await this.device.write(buffer);
         }
     }
