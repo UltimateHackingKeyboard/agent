@@ -853,7 +853,7 @@ export class UhkOperations {
 
     public async execMacroCommand(cmd: string): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Execute Macro Command');
-        if (cmd.length <= 63) {
+        if (cmd.length <= 62) {
             const b1 = Buffer.from([UsbCommand.ExecMacroCommand]);
             const b2 = Buffer.from(cmd);
             const b0 = Buffer.from([0x00]);

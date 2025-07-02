@@ -12,8 +12,8 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
 
         const cmd = argv._[0];
 
-        if (cmd.length > 63) {
-            console.error('Command is too long. At most 63 characters are supported. Feel free to execute native uhk macro using `exec <uhk macro name>`.');
+        if (cmd.length > 62) {
+            console.error('Command is too long. At most 62 characters are supported. Feel free to execute native uhk macro using `exec <uhk macro name>`.');
             process.exit(1);
         }
 
