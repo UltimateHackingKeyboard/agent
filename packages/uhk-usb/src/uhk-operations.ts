@@ -853,12 +853,15 @@ export class UhkOperations {
 
     public async execMacroCommand(cmd: string): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Execute Macro Command');
-        if (cmd.length <= 62) {
-            const b1 = Buffer.from([UsbCommand.ExecMacroCommand]);
-            const b2 = Buffer.from(cmd);
-            const b0 = Buffer.from([0x00]);
-            const buffer = Buffer.concat([b1, b2, b0]);
-            await this.device.write(buffer);
+        const b1 = Buffer.from([UsbCommand.ExecMacroCommand]);
+        const b2 = Buffer.from(cmd);
+        const b0 = Buffer.from([0x00]);
+        const buffer = Buffer.concat([b1, b2, b0]);
+
+        if (buffer.length > 63) {
+            throw new Error('Macro command is too long. At most 62 characters are supported. Feel free to execute native uhk macro using `exec <uhk macro name>`.')
         }
+
+        await this.device.write(buffer);
     }
 }
