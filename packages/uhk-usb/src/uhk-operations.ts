@@ -858,8 +858,8 @@ export class UhkOperations {
         const b0 = Buffer.from([0x00]);
         const buffer = Buffer.concat([b1, b2, b0]);
 
-        if (buffer.length > 63) {
-            throw new Error('Macro command is too long. At most 62 characters are supported. Feel free to execute native uhk macro using `exec <uhk macro name>`.')
+        if (buffer.length > MAX_USB_PAYLOAD_SIZE) {
+            throw new Error('Macro command is too long. At most 61 characters are supported. Feel free to execute native uhk macro using `exec <uhk macro name>`.')
         }
 
         await this.device.write(buffer);
