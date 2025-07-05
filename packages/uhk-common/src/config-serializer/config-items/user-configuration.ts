@@ -1333,7 +1333,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
     }
 
     private migrateToV11(): boolean {
-        if (this.userConfigMajorVersion > 11) {
+        if (this.userConfigMajorVersion > 9) {
             return false;
         }
 
