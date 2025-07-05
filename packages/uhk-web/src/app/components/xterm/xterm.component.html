@@ -2,7 +2,7 @@
     <div class="x-term-wrapper" #scrollMe>
         <ul class="list-unstyled">
             <li *ngFor="let log of logs" [ngClass]="log.cssClass">
-                <span [innerHTML]="log.message | newLineToBr | safeHtml"></span>
+                <span [innerHTML]="log.message | escapeHtml | newLineToBr | safeHtml"></span>
             </li>
         </ul>
     </div>
