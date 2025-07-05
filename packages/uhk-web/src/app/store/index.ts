@@ -322,7 +322,8 @@ export const getRgbColorSpaceUsage = createSelector(getUserConfiguration, userCo
     for (const keymap of userConfig.keymaps) {
         for (const layer of keymap.layers) {
             for (const module of layer.modules) {
-                rgbColorSpaceUsage += module.keyActions.length;
+                const keyActions = module.getCompressedKeyActions()
+                rgbColorSpaceUsage += keyActions.length;
             }
         }
     }
