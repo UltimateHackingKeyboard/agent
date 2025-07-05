@@ -101,6 +101,7 @@ import { UhkAgentIconComponent } from './components/uhk-icon/uhk-agent-icon.comp
 import { CancelableDirective, ExternalUrlDirective } from './directives';
 import {
     AsHexColorPipe,
+    EscapeHtmlPipe,
     HostConnectionTypeLabelPipePipe,
     NewLineToBrPipe,
     SafeHtmlPipe,
@@ -186,6 +187,7 @@ import appInitFactory from './services/app-init-factory';
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,
         HostConnectionsComponent,
+        EscapeHtmlPipe,
         FadeTimeoutSliderComponent,
         FirmwareFileUploadComponent,
         FirmwareUpgradePanelComponent,

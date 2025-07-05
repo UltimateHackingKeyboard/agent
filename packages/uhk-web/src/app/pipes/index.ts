@@ -1,4 +1,5 @@
 export  { AsHexColorPipe } from './as-hex-color.pipe';
+export  { EscapeHtmlPipe } from './escape-html.pipe';
 export  { HostConnectionTypeLabelPipePipe } from './host-connection-type-label.pipe';
 export  { NewLineToBrPipe } from './new-line-to-br.pipe';
 export  { SafeHtmlPipe } from './safe-html.pipe';
