@@ -83,7 +83,13 @@ export class KeymapEditComponent implements OnDestroy {
             .pipe(
                 map(params => params.abbr)
             )
-            .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
+            .subscribe(abbr => {
+                if (abbr) {
+                    abbr = decodeURIComponent(abbr)
+                }
+
+                store.dispatch(new SelectKeymapAction(abbr));
+            });
 
         this.queryParamsSubscription = route.queryParams.subscribe(params => {
             this.selectedLayer = params.layer ? +params.layer : LayerName.base;
