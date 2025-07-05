@@ -4,6 +4,7 @@ export default {
     rules: {
         'alpha-value-notation': null,
         'at-rule-empty-line-before': null,
+        'color-function-alias-notation': null,
         'color-function-notation': null,
         'custom-property-empty-line-before': null,
         'declaration-block-no-redundant-longhand-properties': null,
