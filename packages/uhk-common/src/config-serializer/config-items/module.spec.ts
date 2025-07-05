@@ -1,0 +1,51 @@
+import { UhkBuffer } from '../uhk-buffer.js';
+import { KeyActionId } from './key-action/key-action.js';
+import { NoneAction } from './key-action/none-action.js';
+import { Module } from './module.js';
+import { DEFAULT_SERIALISATION_INFO } from './serialisation-info.js';
+import { UserConfiguration } from './user-configuration.js';
+
+describe('module', () => {
+    it('should be instantiate', () => {
+        const module = new Module();
+        expect(module).toBeTruthy();
+    })
+
+    it('should not compress 1 NoneAction', () => {
+        const module = new Module();
+        module.id = 1;
+        module.keyActions = [
+            new NoneAction(),
+        ];
+
+        const buffer = new UhkBuffer();
+        module.toBinary(buffer, DEFAULT_SERIALISATION_INFO, new UserConfiguration());
+
+        const expected = new UhkBuffer();
+        expected.writeUInt8(1); // module id
+        expected.writeUInt8(1); // keyActions array length
+        expected.writeUInt8(KeyActionId.NoneAction);
+
+        expect(buffer).toEqual(expected);
+    })
+
+    it ('should compress 2 NoneAction', () => {
+        const module = new Module();
+        module.id = 1;
+        module.keyActions = [
+            new NoneAction(),
+            new NoneAction(),
+        ];
+
+        const buffer = new UhkBuffer();
+        module.toBinary(buffer, DEFAULT_SERIALISATION_INFO, new UserConfiguration());
+
+        const expected = new UhkBuffer();
+        expected.writeUInt8(1) // moduleId
+        expected.writeUInt8(2) // keyActions array length
+        expected.writeUInt8(KeyActionId.NoneBlockAction);
+        expected.writeUInt8(2);
+
+        expect(buffer).toEqual(expected)
+    })
+})

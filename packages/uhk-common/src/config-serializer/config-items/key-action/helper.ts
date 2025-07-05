@@ -5,6 +5,7 @@ import { Macro } from '../macro.js';
 import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { KeystrokeAction } from './keystroke-action.js';
+import { NoneBlockAction } from './none-block-action.js';
 import { OtherAction } from './other-action.js';
 import { SwitchLayerAction } from './switch-layer-action.js';
 import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action.js';
@@ -36,6 +37,7 @@ export class Helper {
             case 7:
             case 8:
             case 9:
+            case 11:
                 return this.fromUhkBufferV1(buffer, macros, serialisationInfo);
 
             default:
@@ -67,6 +69,8 @@ export class Helper {
                 return new UnresolvedSwitchKeymapAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.MouseAction:
                 return new MouseAction().fromBinary(buffer, serialisationInfo);
+            case KeyActionId.NoneBlockAction:
+                return new NoneBlockAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.OtherAction:
                 return new OtherAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.PlayMacroAction:
@@ -92,6 +96,8 @@ export class Helper {
             newKeyAction = new PlayMacroAction(keyAction);
         } else if (keyAction instanceof NoneAction) {
             newKeyAction = new NoneAction(keyAction);
+        } else if (keyAction instanceof NoneBlockAction) {
+            newKeyAction = new NoneBlockAction(keyAction);
         } else if (keyAction instanceof OtherAction) {
             newKeyAction = new OtherAction(keyAction);
         }
@@ -110,6 +116,7 @@ export class Helper {
             case 7:
             case 8:
             case 9:
+            case 11:
                 return this.fromJSONObjectV1(keyAction, macros, serialisationInfo);
 
             default:
@@ -145,6 +152,8 @@ export class Helper {
                 return new OtherAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.NoneAction:
                 return new NoneAction().fromJsonObject(keyAction, serialisationInfo);
+            case keyActionType.NoneBlockAction:
+                return new NoneBlockAction().fromJsonObject(keyAction, serialisationInfo);
             default:
                 throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
         }
