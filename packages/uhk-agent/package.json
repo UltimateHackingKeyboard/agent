@@ -21,7 +21,7 @@
     "fastify": "5.2.2",
     "fs-extra": "11.3.0",
     "get-port": "7.1.0",
-    "node-hid": "3.1.2",
+    "node-hid": "3.2.0",
     "p-limit": "6.2.0",
     "serialport": "13.0.0",
     "sudo-prompt": "9.2.1",

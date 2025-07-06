@@ -45,7 +45,7 @@
     "jasmine": "5.8.0",
     "lerna": "8.2.3",
     "lodash": "4.17.21",
-    "node-hid": "3.1.2",
+    "node-hid": "3.2.0",
     "npm-run-all": "4.1.5",
     "nrf-intel-hex": "1.4.0",
     "rimraf": "6.0.1",
