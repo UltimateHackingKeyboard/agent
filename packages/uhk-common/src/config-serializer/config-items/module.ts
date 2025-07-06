@@ -172,6 +172,10 @@ export class Module {
                 if (blockCount > 1) {
                     const noneBlockAction = new NoneBlockAction()
                     noneBlockAction.blockCount = blockCount;
+                    noneBlockAction.r = keyAction.r;
+                    noneBlockAction.g = keyAction.g;
+                    noneBlockAction.b = keyAction.b;
+
                     result.push(noneBlockAction);
 
                     i += blockCount;
