@@ -49,7 +49,7 @@ describe('module', () => {
         expect(buffer).toEqual(expected)
     })
 
-    fit ('should compress 2 NoneAction with per key backlighting', () => {
+    it ('should compress 2 NoneAction with per key backlighting', () => {
         const noneAction1 = new NoneAction();
         noneAction1.r = 1
         noneAction1.g = 2
