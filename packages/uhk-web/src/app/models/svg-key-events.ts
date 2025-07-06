@@ -1,3 +1,5 @@
+import { RgbColorInterface } from 'uhk-common';
+
 import { KeyModifierModel } from './key-modifier-model';
 
 export interface SvgKeyClickEvent {
@@ -20,7 +22,7 @@ export interface KeyCaptureData {
     right: KeyModifierModel[];
 }
 
-export interface SvgKeyCaptureEvent {
+export interface SvgKeyCaptureEvent extends RgbColorInterface {
     captured: KeyCaptureData;
     shiftPressed?: boolean;
     altPressed?: boolean;

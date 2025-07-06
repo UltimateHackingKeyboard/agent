@@ -32,6 +32,7 @@ import {
     KeystrokeAction,
     Macro,
     MouseAction,
+    NoneAction,
     OtherAction,
     PlayMacroAction,
     SwitchKeymapAction,
@@ -385,6 +386,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             return;
         }
 
+        const keyAction = this.keyAction || new NoneAction();
+
         this.capture.emit({
             captured: {
                 code,
@@ -392,7 +395,10 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 right
             },
             shiftPressed: this.shiftPressed,
-            altPressed: this.altPressed
+            altPressed: this.altPressed,
+            r: keyAction.r,
+            g: keyAction.g,
+            b: keyAction.b,
         });
 
         this.reset();
