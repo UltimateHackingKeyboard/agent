@@ -48,6 +48,7 @@ import { initLayerOptions } from '../../../../store/reducers/layer-options';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
+import { LastEditedKey } from '../../../../models/last-edited-key';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
 import { getColorsOf } from '../../../../util/get-colors-of';
@@ -107,7 +108,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
     @Input() macroMap = new Map<number, Macro>();
-    @Input() blink: boolean;
+    @Input() lastEdited: boolean;
+    @Input() lastEditedKey: LastEditedKey;
 
     @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
     @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();
@@ -318,7 +320,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             this.setColors();
         }
 
-        if (changes['blink'] && changes['blink'].currentValue) {
+        if ((changes.lastEdited || changes.lastEditedKey)
+         && (this.lastEdited && this.lastEditedKey?.key === this.svgKey?.id)) {
             this.blinkSvgRec();
         }
     }
