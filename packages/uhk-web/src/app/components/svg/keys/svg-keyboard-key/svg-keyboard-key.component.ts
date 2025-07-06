@@ -78,7 +78,11 @@ enum LabelTypes {
             state('end', style({
                 fill: '{{endColor}}'
             }), { params: { endColor: '#333333' } }),
-            transition('start => end', animate('1000ms  ease-out'))
+            state('ended', style({
+                fill: '{{endColor}}'
+            }), { params: { endColor: '#333333' } }),
+            transition('start => end', animate('1000ms  ease-out')),
+            transition('end => ended', animate('1ms'))
         ]),
         trigger('recording', [
             state('inactive', style({
@@ -110,7 +114,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @ViewChild('svgRec', { static: false }) svgRec: ElementRef<HTMLElement>;
 
-    blinkAnimation: 'start' | 'end' = 'end';
+    blinkAnimation: 'start' | 'end' | 'ended' = 'end';
     enumLabelTypes = LabelTypes;
     fillColor = '#333';
     strokeColor = '';
@@ -325,7 +329,11 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @HostListener('@blink.done')
     onBlinkAnimationDone(): void {
-        this.blinkAnimation = 'end';
+        if (this.blinkAnimation === 'start') {
+            this.blinkAnimation = 'end';
+        } else if (this.blinkAnimation === 'end') {
+            this.blinkAnimation = 'ended';
+        }
     }
 
     calcTransform(): string {
