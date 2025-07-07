@@ -41,6 +41,7 @@ export class Keymap {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromJsonObjectV1(jsonObject, macros, serialisationInfo);
                 break;
 
@@ -65,6 +66,7 @@ export class Keymap {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromBinaryV1(buffer, macros, serialisationInfo);
                 break;
 

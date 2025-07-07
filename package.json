@@ -6,7 +6,7 @@
   "version": "7.0.1",
   "firmwareVersion": "14.0.1",
   "deviceProtocolVersion": "4.15.0",
-  "userConfigVersion": "11.1.0",
+  "userConfigVersion": "12.0.0",
   "hardwareConfigVersion": "1.0.0",
   "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
   "repository": {

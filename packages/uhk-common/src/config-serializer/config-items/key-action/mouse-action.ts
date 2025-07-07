@@ -63,6 +63,7 @@ export class MouseAction extends KeyAction {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromJsonObjectV6(jsonObject, serialisationInfo);
                 break;
 
@@ -88,6 +89,7 @@ export class MouseAction extends KeyAction {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromBinaryV6(buffer, serialisationInfo);
                 break;
 

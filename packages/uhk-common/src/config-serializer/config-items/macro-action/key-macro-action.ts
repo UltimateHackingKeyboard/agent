@@ -59,6 +59,7 @@ export class KeyMacroAction extends MacroAction {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
@@ -81,6 +82,7 @@ export class KeyMacroAction extends MacroAction {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromBinaryV1(buffer);
                 break;
 
