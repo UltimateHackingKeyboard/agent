@@ -1,6 +1,7 @@
 import { assertUInt8 } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action/index.js';
+import { NoneBlockAction } from './key-action/none-block-action.js';
 import { Macro } from './macro.js';
 import { SerialisationInfo } from './serialisation-info.js';
 import { UserConfiguration } from './user-configuration.js';
@@ -33,6 +34,7 @@ export class Module {
             case 7:
             case 8:
             case 9:
+            case 11:
                 this.fromJsonObjectV1(jsonObject, macros, serialisationInfo);
                 break;
 
@@ -54,6 +56,7 @@ export class Module {
             case 7:
             case 8:
             case 9:
+            case 11:
                 this.fromBinaryV1(buffer, macros, serialisationInfo);
                 break;
 
@@ -79,16 +82,12 @@ export class Module {
 
     toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo, userConfiguration: UserConfiguration): void {
         buffer.writeUInt8(this.id);
+        buffer.writeCompactLength(this.keyActions.length); // write the original key actions length and not the compressed !!!
 
-        const noneAction = new NoneAction();
-
-        buffer.writeArray(this.keyActions, (uhkBuffer: UhkBuffer, keyAction: KeyAction) => {
-            if (keyAction) {
-                keyAction.toBinary(uhkBuffer, serialisationInfo, userConfiguration);
-            } else {
-                noneAction.toBinary(uhkBuffer, serialisationInfo);
-            }
-        });
+        const keyActions = this.getCompressedKeyActions()
+        for (const keyAction of keyActions) {
+            keyAction.toBinary(buffer, serialisationInfo, userConfiguration);
+        }
     }
 
     toString(): string {
@@ -128,8 +127,70 @@ export class Module {
         this.id = buffer.readUInt8();
         const keyActionsLength: number = buffer.readCompactLength();
         this.keyActions = [];
-        for (let i = 0; i < keyActionsLength; ++i) {
-            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, macros, serialisationInfo));
+
+        while (this.keyActions.length < keyActionsLength) {
+            const keyAction = KeyActionHelper.createKeyAction(buffer, macros, serialisationInfo)
+            if (keyAction instanceof NoneBlockAction) {
+                for (let i = 0; i < keyAction.blockCount; i++) {
+                    const noneAction = new NoneAction();
+                    noneAction.r = keyAction.r;
+                    noneAction.g = keyAction.g;
+                    noneAction.b = keyAction.b;
+
+                    this.keyActions.push(noneAction);
+                }
+            }
+            else {
+                this.keyActions.push(keyAction);
+            }
         }
+    }
+
+    getCompressedKeyActions(): KeyAction[] {
+        const result: KeyAction[] = [];
+
+        for (let i = 0; i < this.keyActions.length;) {
+            const keyAction = this.keyActions[i] || new NoneAction();
+
+            if (keyAction instanceof NoneAction) {
+                let blockCount = 1
+
+                for (let j = i + 1; j < this.keyActions.length; j++) {
+                    const nextAction = this.keyActions[j] || new NoneAction();
+
+                    if (nextAction instanceof NoneAction
+                        && keyAction.r === nextAction.r
+                        && keyAction.g === nextAction.g
+                        && keyAction.b === nextAction.b) {
+                        blockCount++;
+                    }
+                    else {
+                        break
+                    }
+                }
+
+                if (blockCount > 1) {
+                    const noneBlockAction = new NoneBlockAction()
+                    noneBlockAction.blockCount = blockCount;
+                    noneBlockAction.r = keyAction.r;
+                    noneBlockAction.g = keyAction.g;
+                    noneBlockAction.b = keyAction.b;
+
+                    result.push(noneBlockAction);
+
+                    i += blockCount;
+                }
+                else {
+                    result.push(keyAction)
+                    i++;
+                }
+            }
+            else {
+                result.push(keyAction)
+                i++;
+            }
+        }
+
+        return result;
     }
 }

@@ -23,6 +23,7 @@ export enum KeyActionId {
     PlayMacroAction              = 35,
     ConnectionsAction            = 36,
     OtherAction                  = 37,
+    NoneBlockAction              = 38,
 }
 
 export let keyActionType = {
@@ -31,6 +32,7 @@ export let keyActionType = {
     SwitchLayerAction            : 'switchLayer',
     SwitchKeymapAction           : 'switchKeymap',
     MouseAction                  : 'mouse',
+    NoneBlockAction              : 'noneBlock',
     PlayMacroAction              : 'playMacro',
     ConnectionsAction            : 'connections',
     OtherAction                  : 'other',

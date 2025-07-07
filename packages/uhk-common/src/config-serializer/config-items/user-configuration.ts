@@ -198,6 +198,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 break;
 
             case 9:
+            case 11:
                 this.fromJsonObjectV9(jsonObject);
                 break;
 
@@ -217,6 +218,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV8_3_1();
         this.migrateToV9();
         this.migrateToV9_99();
+        this.migrateToV11();
 
         this.recalculateConfigurationLength();
 
@@ -250,6 +252,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 break;
 
             case 9:
+            case 11:
                 this.fromBinaryV9(buffer);
                 break;
 
@@ -299,6 +302,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         if (this.migrateToV9_99()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV11()) {
             this.userConfigurationLength = 0;
         }
 
@@ -1323,6 +1330,16 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigPatchVersion = 0;
         this.keyBacklightBrightnessChargingDefault = 50;
         this.batteryChargingMode = BatteryChargingMode.Full;
+    }
+
+    private migrateToV11(): boolean {
+        if (this.userConfigMajorVersion > 9) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 11;
+        this.userConfigMinorVersion = 1;
+        this.userConfigPatchVersion = 0;
     }
 
     private getSerialisationInfo(): SerialisationInfo {
