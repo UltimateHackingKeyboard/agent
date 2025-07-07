@@ -22,7 +22,7 @@ export class BackToComponent implements OnDestroy {
         this.routeSubscription = route.queryParams.subscribe(params => {
             if (params.backUrl) {
                 const backUrl = new URL(params.backUrl, window.location.origin);
-                this.backUrl = backUrl.pathname;
+                this.backUrl = decodeURIComponent(backUrl.pathname);
                 this.backText = params.backText;
                 this.queryParams = {};
                 for (const key of backUrl.searchParams.keys()) {

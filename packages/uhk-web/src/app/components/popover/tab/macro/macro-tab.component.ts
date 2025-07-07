@@ -63,7 +63,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
             }
 
             this.jumpToMacroQueryParams = {
-                backUrl: `/keymap/${this.currentKeymap.abbreviation}?layer=${this.selectedKey.layerId}&module=${this.selectedKey.moduleId}&key=${this.selectedKey.keyId}${remapQueryParams}`,
+                backUrl: `/keymap/${encodeURIComponent(this.currentKeymap.abbreviation)}?layer=${this.selectedKey.layerId}&module=${this.selectedKey.moduleId}&key=${this.selectedKey.keyId}${remapQueryParams}`,
                 backText: `"${this.currentKeymap.name}" keymap`,
             };
         }
