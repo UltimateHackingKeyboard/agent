@@ -32,6 +32,7 @@ import {
     KeystrokeAction,
     Macro,
     MouseAction,
+    NoneAction,
     OtherAction,
     PlayMacroAction,
     SwitchKeymapAction,
@@ -48,6 +49,7 @@ import { initLayerOptions } from '../../../../store/reducers/layer-options';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
+import { LastEditedKey } from '../../../../models/last-edited-key';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
 import { getColorsOf } from '../../../../util/get-colors-of';
@@ -78,7 +80,11 @@ enum LabelTypes {
             state('end', style({
                 fill: '{{endColor}}'
             }), { params: { endColor: '#333333' } }),
-            transition('start => end', animate('1000ms  ease-out'))
+            state('ended', style({
+                fill: '{{endColor}}'
+            }), { params: { endColor: '#333333' } }),
+            transition('start => end', animate('1000ms  ease-out')),
+            transition('end => ended', animate('1ms'))
         ]),
         trigger('recording', [
             state('inactive', style({
@@ -103,14 +109,15 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
     @Input() macroMap = new Map<number, Macro>();
-    @Input() blink: boolean;
+    @Input() lastEdited: boolean;
+    @Input() lastEditedKey: LastEditedKey;
 
     @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
     @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();
 
     @ViewChild('svgRec', { static: false }) svgRec: ElementRef<HTMLElement>;
 
-    blinkAnimation: 'start' | 'end' = 'end';
+    blinkAnimation: 'start' | 'end' | 'ended' = 'end';
     enumLabelTypes = LabelTypes;
     fillColor = '#333';
     strokeColor = '';
@@ -314,7 +321,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             this.setColors();
         }
 
-        if (changes['blink'] && changes['blink'].currentValue) {
+        if ((changes.lastEdited || changes.lastEditedKey)
+         && (this.lastEdited && this.lastEditedKey?.key === this.svgKey?.id)) {
             this.blinkSvgRec();
         }
     }
@@ -325,7 +333,11 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @HostListener('@blink.done')
     onBlinkAnimationDone(): void {
-        this.blinkAnimation = 'end';
+        if (this.blinkAnimation === 'start') {
+            this.blinkAnimation = 'end';
+        } else if (this.blinkAnimation === 'end') {
+            this.blinkAnimation = 'ended';
+        }
     }
 
     calcTransform(): string {
@@ -374,6 +386,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             return;
         }
 
+        const keyAction = this.keyAction || new NoneAction();
+
         this.capture.emit({
             captured: {
                 code,
@@ -381,7 +395,10 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 right
             },
             shiftPressed: this.shiftPressed,
-            altPressed: this.altPressed
+            altPressed: this.altPressed,
+            r: keyAction.r,
+            g: keyAction.g,
+            b: keyAction.b,
         });
 
         this.reset();

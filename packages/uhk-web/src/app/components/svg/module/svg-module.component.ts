@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { BacklightingMode, HostConnection, KeyAction, Macro, UhkThemeColors } from 'uhk-common';
 import { Subscription } from 'rxjs';
 
+import { LastEditedKey } from '../../../models/last-edited-key';
 import { SvgKeyboardKey } from '../keys';
 import {
     SvgKeyCaptureEvent,
@@ -36,7 +37,7 @@ export class SvgModuleComponent implements OnDestroy {
     @Input() uhkThemeColors: UhkThemeColors;
     @Input() capturingEnabled: boolean;
     @Input() lastEdited: boolean;
-    @Input() lastEditedKeyId: string;
+    @Input() lastEditedKey: LastEditedKey;
     @Input() moduleNavCircle: any;
     @Input() moduleNavPath: any;
     @Output() keyClick = new EventEmitter<SvgModuleKeyClickEvent>();

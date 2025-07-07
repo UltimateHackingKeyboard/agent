@@ -21,7 +21,7 @@
            [selected]="selectedKey?.moduleId === module.id"
            [uhkThemeColors]="uhkThemeColors"
            [lastEdited]="lastEditedKey?.moduleId === module.id"
-           [lastEditedKeyId]="lastEditedKey?.key"
+           [lastEditedKey]="lastEditedKey"
            (keyClick)="onKeyClick(module.id, $event)"
            (keyHover)="onKeyHover($event.index, $event.event, $event.over, module.id)"
            (capture)="onCapture(module.id, $event)"

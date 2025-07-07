@@ -1,4 +1,4 @@
-import { RgbColorInterface } from '../../../models/index.js';
+import { defaultRgbColor, RgbColorInterface } from '../../../models/rgb-color-interface.js';
 import { assertUInt8 } from '../../assert.js';
 import { Macro } from '../macro.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
@@ -36,16 +36,18 @@ export let keyActionType = {
     OtherAction                  : 'other',
 };
 
+const DEFAULT_RGB_COLOR = defaultRgbColor()
+
 export abstract class KeyAction implements RgbColorInterface {
 
-    @assertUInt8 b = 255;
-    @assertUInt8 g = 255;
-    @assertUInt8 r = 255;
+    @assertUInt8 b = DEFAULT_RGB_COLOR.b;
+    @assertUInt8 g = DEFAULT_RGB_COLOR.g;
+    @assertUInt8 r = DEFAULT_RGB_COLOR.r;
 
     protected constructor(keyAction?: RgbColorInterface) {
-        this.b = keyAction?.b ?? 255;
-        this.g = keyAction?.g ?? 255;
-        this.r = keyAction?.r ?? 255;
+        this.b = keyAction?.b ?? DEFAULT_RGB_COLOR.b;
+        this.g = keyAction?.g ?? DEFAULT_RGB_COLOR.g;
+        this.r = keyAction?.r ?? DEFAULT_RGB_COLOR.r;
     }
 
     assertKeyActionType(jsObject: any): void {

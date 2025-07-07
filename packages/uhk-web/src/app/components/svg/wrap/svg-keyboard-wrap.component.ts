@@ -279,6 +279,9 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
         keystrokeAction.scancode = event.captured.code;
         keystrokeAction.type = KeystrokeType.basic;
         keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.captured.left, event.captured.right);
+        keystrokeAction.r = event.r;
+        keystrokeAction.g = event.g;
+        keystrokeAction.b = event.b;
 
         this.store.dispatch(
             new SaveKeyAction({
