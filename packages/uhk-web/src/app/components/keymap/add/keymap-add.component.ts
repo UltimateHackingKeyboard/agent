@@ -66,7 +66,7 @@ export class KeymapAddComponent implements OnDestroy, OnInit {
 
     navigateToModuleSettings(moduleId: number): void {
         this.store.dispatch(new NavigateToModuleSettings({
-            backUrl: `/add-keymap/${this.keymap.abbreviation}`,
+            backUrl: `/add-keymap/${encodeURIComponent(this.keymap.abbreviation)}`,
             backText: `new "${this.keymap.name}" keymap`,
             moduleId
         }));

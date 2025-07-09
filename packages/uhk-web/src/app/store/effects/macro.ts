@@ -65,7 +65,7 @@ export class MacroEffects {
             if (action) {
                 const payload = action.payload;
                 queryParams = {
-                    backUrl: `/keymap/${payload.keymap.abbreviation}?layer=${payload.layer}&module=${payload.module}&key=${payload.key}`,
+                    backUrl: `/keymap/${encodeURIComponent(payload.keymap.abbreviation)}?layer=${payload.layer}&module=${payload.module}&key=${payload.key}`,
                     backText: `"${payload.keymap.name}" keymap`,
                 };
             }
