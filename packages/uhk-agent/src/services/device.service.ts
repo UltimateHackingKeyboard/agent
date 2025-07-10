@@ -510,7 +510,7 @@ export class DeviceService {
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
             if (shouldUpgradeAgent(packageJson.userConfigVersion, this.disableAgentUpgrade)) {
                 response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
-                this.logService.error(`[DeviceService] Firmware contains newer ${packageJson.userConfigVersion} user config version than what Agent supports`);
+                this.logService.error(`[DeviceService] The firmware contains ${packageJson.userConfigVersion} user config version, which is newer than ${VERSIONS.userConfigVersion} which this Agent supports. Minor version check is used.`);
 
                 return event.sender.send(IpcEvents.device.updateFirmwareReply, response);
             }
