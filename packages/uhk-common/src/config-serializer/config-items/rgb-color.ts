@@ -36,6 +36,7 @@ export class RgbColor {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromJsonV6(jsonObject);
                 break;
 
@@ -60,6 +61,7 @@ export class RgbColor {
             case 8:
             case 9:
             case 11:
+            case 12:
                 this.fromBinaryV6(buffer);
                 break;
 
