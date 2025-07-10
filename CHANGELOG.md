@@ -6,6 +6,19 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [8.0.0] - 2025-07-10
+
+Firmware: 15.0.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v15.0.1)] | Device Protocol: 4.15.0 | User Config: **12.0.0** | Hardware Config: 1.0.0
+
+- Compress subsequent none actions, including their RGB properties, to make user configurations substantially smaller. `USERCONFIG:MAJOR`
+- Map sleep device action to Fn2+Pause on every keymap of the default configuration.
+- Prevent crash when couldn't parse macro command line from status buffer. `DEVICEPROTOCOL:MINOR`
+- Copy the Zephyr log to the clipboard when clicking on the "Copy log" button.
+- Handle Zephyr shell newline characters.
+- Properly terminate the execute macro USB command with 0x00. `DEVICEPROTOCOL:MINOR`
+- Make the blinking animation not stuck when remapping a key via middle click and leaving the mouse pointer on the key.
+- Fix a bug which made the key action popover impossible to close on a keymap whose abbreviation contained unconvential characters when jumping to a macro from it and jumping back to the key action popover.
+
 ## [7.0.1] - 2025-05-22
 
 Firmware: 14.0.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v14.0.1)] | Device Protocol: 4.15.0 | User Config: 11.0.0 | Hardware Config: 1.0.0
