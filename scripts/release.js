@@ -14,7 +14,7 @@ if (!process.env.CI && !TEST_BUILD) {
 
 const isCI = process.env.CI;
 const githubRef = process.env.GITHUB_REF;
-const gitTag = 'v8.0.0'; getGithubTag();
+const gitTag = getGithubTag();
 const githubEventName = process.env.GITHUB_EVENT_NAME;
 const repoName = process.env.GITHUB_REPOSITORY;
 
