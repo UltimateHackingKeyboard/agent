@@ -14,7 +14,7 @@ if (!process.env.CI && !TEST_BUILD) {
 
 const isCI = process.env.CI;
 const githubRef = process.env.GITHUB_REF;
-const gitTag = getGithubTag();
+const gitTag = 'v8.0.0'; getGithubTag();
 const githubEventName = process.env.GITHUB_EVENT_NAME;
 const repoName = process.env.GITHUB_REPOSITORY;
 
@@ -173,7 +173,7 @@ async function getReleaseNotes() {
     const result = [];
 
     for (const line of lines) {
-        if (line.match(new RegExp(`^## \[${version}\]`))) {
+        if (line.match(new RegExp(`^## \\[${version}\\]`))) {
             capturing = true;
             result.push(line);
         } else if (line.match(/^## \[/) && capturing) {
