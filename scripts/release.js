@@ -173,7 +173,7 @@ async function getReleaseNotes() {
     const result = [];
 
     for (const line of lines) {
-        if (line.match(new RegExp(`^## \\[${version}\\]`))) {
+        if (line.match(new RegExp(`^## \[${version}\]`))) {
             capturing = true;
             result.push(line);
         } else if (line.match(/^## \[/) && capturing) {
