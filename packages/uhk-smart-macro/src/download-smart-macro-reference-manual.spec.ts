@@ -6,7 +6,7 @@ import * as path from 'path';
 
 import { downloadSmartMacroReferenceManual } from './download-smart-macro-reference-manual.js';
 
-fdescribe('downloadSmartMacroReferenceManual', () => {
+describe('downloadSmartMacroReferenceManual', () => {
     it('should download the reference manual', async () => {
         const directory = desm.join(import.meta.url, '..', 'tmp', 'doc', 'doc-dev');
         await fs.remove(directory);
