@@ -16,4 +16,5 @@ export interface SideMenuPageState {
     restoreUserConfiguration: boolean;
     deviceUiState?: DeviceUiStates;
     connectedDevice?: UhkDeviceProduct;
+    selectedKeymap: Keymap | undefined;
 }
