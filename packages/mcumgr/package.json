@@ -19,7 +19,7 @@
   "license": "See in LICENSE",
   "description": "Micro controller manager utility",
   "dependencies": {
-    "debug": "^4.4.0"
+    "debug": "^4.4.1"
   },
   "peerDependencies": {
     "serialport": ">= 13.0.0"
