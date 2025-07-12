@@ -562,6 +562,8 @@ export const getSideMenuPageState = createSelector(
     getSelectedLayerOption,
     getDonglePairingState,
     isLeftHalfPairing,
+    getRouterState,
+    getSelectedKeymap,
     (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
@@ -573,6 +575,8 @@ export const getSideMenuPageState = createSelector(
         selectedLayerOption,
         donglePairingState,
         leftHalfPairing,
+        routerState,
+        selectedKeymap
     ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
 
@@ -589,7 +593,8 @@ export const getSideMenuPageState = createSelector(
             macros,
             maxMacroCountReached: macros.length >= Constants.MAX_ALLOWED_MACROS,
             restoreUserConfiguration,
-            deviceUiState: runningInElectronValue ? uiState : DeviceUiStates.UserConfigLoaded
+            deviceUiState: runningInElectronValue ? uiState : DeviceUiStates.UserConfigLoaded,
+            selectedKeymap: routerState?.state?.url?.startsWith('/keymap') ? selectedKeymap : undefined,
         };
     }
 );
