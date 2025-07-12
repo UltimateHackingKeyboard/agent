@@ -21,7 +21,7 @@
   "dependencies": {
     "@octokit/rest": "22.0.0",
     "fs-extra": "11.3.0",
-    "got": "14.4.6",
+    "got": "14.4.7",
     "url-join": "5.0.0"
   }
 }
