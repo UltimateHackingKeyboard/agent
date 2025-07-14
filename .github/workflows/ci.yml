@@ -101,3 +101,28 @@ jobs:
           S3_BUCKET: "uhk-build-archives"
           S3_KEY_PREFIX: "agent/"
           S3_REGION: "eu-central-1"
+
+      # Update GH release notes
+      - name: Strip `v` from git tag and
+        if: github.ref_type == 'tag' && runner.os == 'Linux'
+        run: |
+          TAG_VERSION=${{ github.ref_name }}
+          TAG_VERSION=${TAG_VERSION#v}
+          echo "TAG_VERSION=$TAG_VERSION" >> $GITHUB_ENV
+
+      - name: Extract changelog
+        id: changelog
+        if: github.ref_type == 'tag' && runner.os == 'Linux'
+        env:
+          VERSION: ${{ env.TAG_VERSION }}
+        run: |
+          cd firmware
+          DELIMITER=$(openssl rand -hex 16)
+          echo "content<<$DELIMITER" >> $GITHUB_OUTPUT
+          sed -n "/^## \\[${VERSION}\\]/,/^## \\[/p" CHANGELOG.md | sed '$d' | tail -n +3 >> $GITHUB_OUTPUT
+          echo "$DELIMITER" >> $GITHUB_OUTPUT
+
+      - name: Update GH release description
+        if: github.ref_type == 'tag' && runner.os == 'Linux'
+        run: gh release edit ${{ github.ref_name }} --notes="${{ steps.changelog.outputs.content }}"
+      # end Update GH release notes
