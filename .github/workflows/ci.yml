@@ -125,4 +125,6 @@ jobs:
       - name: Update GH release description
         if: github.ref_type == 'tag' && runner.os == 'Linux'
         run: gh release edit ${{ github.ref_name }} --notes="${{ steps.changelog.outputs.content }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # end Update GH release notes
