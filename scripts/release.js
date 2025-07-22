@@ -118,8 +118,10 @@ async function release () {
             },
             win: {
                 extraResources,
-                publisherName: 'Ultimate Gadget Laboratories Kft.',
-                certificateFile: winCertificatePath,
+                signtoolOptions: {
+                    publisherName: 'Ultimate Gadget Laboratories Kft.',
+                    certificateFile: winCertificatePath
+                },
             },
             linux: {
                 extraResources
