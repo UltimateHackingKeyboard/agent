@@ -14,7 +14,7 @@
       ],
       "type": "node",
       "envFile": "${workspaceFolder}/.env",
-      "runtimeVersion": "22.17.0"
+      "runtimeVersion": "22.17.1"
     },
     {
       "name": "Debug Main Process",
@@ -30,7 +30,7 @@
         "DEBUG": "*"
       },
       "sourceMaps": true,
-      "runtimeVersion": "22.17.0"
+      "runtimeVersion": "22.17.1"
     }
   ]
 }
