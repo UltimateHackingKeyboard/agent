@@ -15,12 +15,14 @@ import {
     KeyboardLayout,
     ModuleFirmwareUpgradeSkipInfo,
     UHK_DEVICE_IDS_TYPE,
+    UhkDeviceProduct,
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 import { UpdateFirmwareWithPayload } from '../../models';
 import { UpdateFirmwareSuccessPayload } from '../../models/update-firmware-success-payload';
 
 export enum ActionTypes {
+    ChangeDevice = '[device] change device',
     ChangeKeyboardLayout = '[device] change keyboard layout',
     CheckAreHostConnectionsPaired = '[device] check are host connections paired',
     CheckAreHostConnectionsPairedReply = '[device] check are host connections paired reply',
@@ -64,6 +66,12 @@ export enum ActionTypes {
     ReadConfigSizes = '[device] Read config sizes',
     ReadConfigSizesReply = '[device] Read config sizes reply',
     SkipFirmwareUpgrade = '[device] Skip firmware upgrade'
+}
+
+export class ChangeDeviceAction implements Action {
+    type = ActionTypes.ChangeDevice;
+
+    constructor(public payload: UhkDeviceProduct) {}
 }
 
 export class ChangeKeyboardLayoutAction implements Action {
@@ -312,7 +320,8 @@ export class SkipFirmwareUpgradeAction implements Action {
 }
 
 export type Actions
-    = ChangeKeyboardLayoutAction
+    =  ChangeDeviceAction
+    | ChangeKeyboardLayoutAction
     | ChangeKeyboardLayoutReplyAction
     | CheckAreHostConnectionsPairedAction
     | CheckAreHostConnectionsPairedReplyAction

@@ -107,6 +107,13 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
+        case Device.ActionTypes.ChangeDevice: {
+            return {
+                ...state,
+                connectedDevice: (<Device.ChangeDeviceAction>action).payload,
+            };
+        }
+
         case Device.ActionTypes.ChangeKeyboardLayout: {
             return {
                 ...state,
