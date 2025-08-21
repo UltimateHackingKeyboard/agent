@@ -11,7 +11,7 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
 import { DragulaService } from '@ert78gb/ng2-dragula';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { KeyMacroAction, KeystrokeAction, Macro, MacroAction, MacroKeySubAction } from 'uhk-common';
+import { KeyMacroAction, KeystrokeType, Macro, MacroAction, MacroKeySubAction } from 'uhk-common';
 
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
@@ -177,8 +177,11 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
     }
 
     onKeysCapture(event: KeyCaptureData) {
-        const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event)) as KeyMacroAction;
+        const keyMacroAction = new KeyMacroAction();
         keyMacroAction.action = MacroKeySubAction.tap;
+        keyMacroAction.type = KeystrokeType.basic;
+        keyMacroAction.scancode = event.code;
+        keyMacroAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.left, event.right);
 
         this.add.emit({
             macroId: this.macro.id,
@@ -205,15 +208,6 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
 
     onSelectedMacroAction(id: SelectedMacroActionId, item: SelectedMacroItem): void {
         this.selectedMacroActionChanged.emit({ id, ...item });
-    }
-
-    private toKeyAction(event: KeyCaptureData): KeystrokeAction {
-        const keystrokeAction: KeystrokeAction = new KeystrokeAction();
-        keystrokeAction.scancode = event.code;
-        keystrokeAction.modifierMask = 0;
-        keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.left, event.right);
-
-        return keystrokeAction;
     }
 
     private scrollToBottom(): void {
