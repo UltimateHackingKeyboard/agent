@@ -25,7 +25,7 @@
     "p-limit": "6.2.0",
     "serialport": "13.0.0",
     "sudo-prompt": "9.2.1",
-    "tmp": "0.2.3",
+    "tmp": "0.2.5",
     "tslib": "2.8.1",
     "uhk-common": "^1.0.0",
     "uhk-smart-macro": "^1.0.0",
