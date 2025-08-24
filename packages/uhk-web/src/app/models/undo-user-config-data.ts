@@ -1,6 +1,7 @@
-import { UserConfiguration } from 'uhk-common';
+import { UhkDeviceProduct, UserConfiguration } from 'uhk-common';
 
 export interface UndoUserConfigData {
     path: string;
     config: UserConfiguration;
+    uhkDeviceProduct: UhkDeviceProduct;
 }

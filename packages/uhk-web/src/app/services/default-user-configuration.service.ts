@@ -26,15 +26,14 @@ export class DefaultUserConfigurationService {
         return this._defaultConfig80;
     }
 
-    getResetUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): UserConfiguration {
-        let config: UserConfiguration;
+    getDefaultUserConfigurationOfUhkDeviceProduct(uhkDeviceProduct: UhkDeviceProduct): UserConfiguration {
+        return uhkDeviceProduct?.id === UHK_80_DEVICE.id
+            ? this.getDefault80().clone()
+            : this.getDefault60().clone();
+    }
 
-        if (uhkDeviceProduct?.id === UHK_80_DEVICE.id) {
-            config = this.getDefault80().clone();
-        }
-        else {
-            config = this.getDefault60().clone();
-        }
+    getResetUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): UserConfiguration {
+        const config = this.getDefaultUserConfigurationOfUhkDeviceProduct(uhkDeviceProduct)
 
         config.keymaps = config.keymaps.filter(keymap => keymap.abbreviation !== 'EMP');
 

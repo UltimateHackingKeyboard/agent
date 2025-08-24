@@ -388,8 +388,8 @@ export class DeviceEffects {
     saveResetUserConfigurationToDevice$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadResetUserConfigurationAction>(UserConfigActions.LoadResetUserConfiguration),
-            map(action => action.payload),
-            switchMap((config: UserConfiguration) => this.dataStorageRepository.saveConfig(config)
+            withLatestFrom(this.store.select(getConnectedDevice)),
+            switchMap(([action, uhkDeviceProduct]) => this.dataStorageRepository.saveConfig(action.payload, uhkDeviceProduct)
                 .pipe(
                     map(() => new SaveConfigurationAction(true))
                 )
@@ -400,10 +400,10 @@ export class DeviceEffects {
     applyUserConfigurationFromFileAction$ = createEffect(() => this.actions$
         .pipe(
             ofType<ApplyUserConfigurationFromFileAction>(UserConfigActions.ApplyUserConfigurationFromFile),
-            map(action => action.payload),
-            switchMap(payload => this.dataStorageRepository.saveConfig(payload.userConfig)
+            withLatestFrom(this.store.select(getConnectedDevice)),
+            switchMap(([action, uhkDeviceProduct]) => this.dataStorageRepository.saveConfig(action.payload.userConfig, uhkDeviceProduct)
                 .pipe(
-                    map(() => new SaveConfigurationAction(payload.saveInHistory))
+                    map(() => new SaveConfigurationAction(action.payload.saveInHistory))
                 )
             )
         )

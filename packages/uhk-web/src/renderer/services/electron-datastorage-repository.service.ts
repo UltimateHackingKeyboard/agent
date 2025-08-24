@@ -1,11 +1,11 @@
 import { ipcRenderer } from 'electron';
 
-import { ApplicationSettings, IpcEvents, UserConfiguration } from 'uhk-common';
+import { ApplicationSettings, IpcEvents, UhkDeviceProduct, UserConfiguration } from 'uhk-common';
 import { Observable, from, of } from 'rxjs';
 
 import { DataStorageRepositoryService } from '../../app/services/datastorage-repository.service';
 
-export class ElectronDataStorageRepositoryService implements DataStorageRepositoryService {
+export class ElectronDataStorageRepositoryService extends DataStorageRepositoryService {
     static async getValue(key: string): Promise<any> {
         const value = await ipcRenderer.invoke(IpcEvents.app.getConfig, key);
         if (!value) {
@@ -24,14 +24,14 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
     // TODO: Throw error when read user config from electron datastore
     // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
     // If implemented the feature should have to throw an error to prevent unwanted side effects.
-    getConfig(): Observable<UserConfiguration> {
+    getConfig(uhkDeviceProduct: UhkDeviceProduct): Observable<UserConfiguration> {
         return of(null);
     }
 
     // TODO: Throw error when save user config from electron-datastore
     // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
     // If implemented the feature should have to throw an error to prevent unwanted side effects.
-    saveConfig(config: UserConfiguration): Observable<null> {
+    saveConfig(config: UserConfiguration, uhkDeviceProduct: UhkDeviceProduct): Observable<null> {
         return of(null);
     }
 
