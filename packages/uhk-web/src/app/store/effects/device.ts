@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { ROUTER_NAVIGATED, RouterNavigatedAction } from '@ngrx/router-store';
+import { ROUTER_NAVIGATED, ROUTER_NAVIGATION, RouterNavigatedAction} from '@ngrx/router-store';
 import { Action, Store } from '@ngrx/store';
 import { EMPTY, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, pairwise, switchMap, tap, withLatestFrom } from 'rxjs/operators';
@@ -23,6 +23,7 @@ import {
 
 import {
     ActionTypes,
+    ChangeDeviceAction,
     ChangeKeyboardLayoutAction,
     ChangeKeyboardLayoutReplyAction,
     CheckAreHostConnectionsPairedAction,
@@ -80,9 +81,30 @@ import { AppRendererService } from '../../services/app-renderer.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
+import { RouterState } from '../router-util';
 
 @Injectable()
 export class DeviceEffects {
+
+    changeDevice$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<RouterNavigatedAction<RouterState>>(ROUTER_NAVIGATION),
+            map(action => action.payload.routerState.queryParams.device),
+            distinctUntilChanged(),
+            map(device => {
+                if (device === 'uhk60') {
+                    return new ChangeDeviceAction(UHK_60_DEVICE);
+                }
+
+                if (device === 'uhk80') {
+                    return new ChangeDeviceAction(UHK_80_DEVICE);
+                }
+
+                return new EmptyAction()
+            })
+        )
+    );
+
     changeKeyboardLayout$ = createEffect(() => this.actions$
         .pipe(
             ofType<ChangeKeyboardLayoutAction>(ActionTypes.ChangeKeyboardLayout),
@@ -366,8 +388,8 @@ export class DeviceEffects {
     saveResetUserConfigurationToDevice$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadResetUserConfigurationAction>(UserConfigActions.LoadResetUserConfiguration),
-            map(action => action.payload),
-            switchMap((config: UserConfiguration) => this.dataStorageRepository.saveConfig(config)
+            withLatestFrom(this.store.select(getConnectedDevice)),
+            switchMap(([action, uhkDeviceProduct]) => this.dataStorageRepository.saveConfig(action.payload, uhkDeviceProduct)
                 .pipe(
                     map(() => new SaveConfigurationAction(true))
                 )
@@ -378,10 +400,10 @@ export class DeviceEffects {
     applyUserConfigurationFromFileAction$ = createEffect(() => this.actions$
         .pipe(
             ofType<ApplyUserConfigurationFromFileAction>(UserConfigActions.ApplyUserConfigurationFromFile),
-            map(action => action.payload),
-            switchMap(payload => this.dataStorageRepository.saveConfig(payload.userConfig)
+            withLatestFrom(this.store.select(getConnectedDevice)),
+            switchMap(([action, uhkDeviceProduct]) => this.dataStorageRepository.saveConfig(action.payload.userConfig, uhkDeviceProduct)
                 .pipe(
-                    map(() => new SaveConfigurationAction(payload.saveInHistory))
+                    map(() => new SaveConfigurationAction(action.payload.saveInHistory))
                 )
             )
         )

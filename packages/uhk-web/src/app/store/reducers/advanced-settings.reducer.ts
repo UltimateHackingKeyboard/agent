@@ -60,6 +60,24 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             };
         }
 
+        case Device.ActionTypes.ChangeDevice: {
+            const payload = (action as Device.ChangeDeviceAction).payload;
+            if (!payload) {
+                return state;
+            }
+
+            if (payload?.id === state.lastConnectedDevice?.id) {
+                return state;
+            }
+
+            return {
+                ...state,
+                activeButton: ActiveButton.None,
+                i2cLogs: [],
+                lastConnectedDevice: payload,
+            }
+        }
+
         case Device.ActionTypes.ConnectionStateChanged: {
             const payload = (action as Device.ConnectionStateChangedAction).payload;
             if (!payload.connectedDevice) {

@@ -15,7 +15,9 @@ import {
     ConfigurationReply,
     LogService,
     NotificationType,
+    UHK_60_DEVICE,
     UhkBuffer,
+    UhkDeviceProduct,
     UHK_MODULES,
     UserConfiguration
 } from 'uhk-common';
@@ -55,7 +57,9 @@ import {
     NavigateTo
 } from '../actions/app';
 import {
+    ActionTypes as DeviceActionTypes,
     BackupUserConfigurationAction,
+    ChangeDeviceAction,
     CheckAreHostConnectionsPairedAction,
     HardwareModulesLoadedAction,
     ShowSaveToKeyboardButtonAction,
@@ -72,7 +76,7 @@ export class UserConfigEffects {
     loadUserConfig$ = createEffect(() => this.actions$
         .pipe(
             ofType(ROOT_EFFECTS_INIT),
-            switchMap(() => this.getUserConfiguration()
+            switchMap(() => this.getUserConfiguration(UHK_60_DEVICE)
                 .pipe(
                     map(userConfig => new LoadUserConfigSuccessAction(userConfig))
                 )
@@ -85,6 +89,17 @@ export class UserConfigEffects {
             ofType(ActionTypes.AddNewPairedDevicesToHostConnections),
             map(() => new SaveConfigurationAction(true))
         ));
+
+    changeDevice$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<ChangeDeviceAction>(DeviceActionTypes.ChangeDevice),
+            switchMap((action) => this.getUserConfiguration(action.payload)
+                .pipe(
+                    map(userConfig => new LoadUserConfigSuccessAction(userConfig))
+                )
+            )
+        )
+    );
 
     saveUserConfig$ = createEffect(() => this.actions$
         .pipe(
@@ -100,12 +115,12 @@ export class UserConfigEffects {
                 ActionTypes.RecoverLEDSpaces, ActionTypes.SetModuleConfigurationValue,
                 ActionTypes.ReorderHostConnections, ActionTypes.RenameHostConnection, ActionTypes.SetHostConnectionSwitchover,
             ),
-            withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
-            mergeMap(([action, config, prevUserConfiguration]) => {
+            withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration), this.store.select(getConnectedDevice)),
+            mergeMap(([action, config, prevUserConfiguration, uhkDeviceProduct]) => {
                 config = Object.assign(new UserConfiguration(), config);
                 config.recalculateConfigurationLength();
 
-                return this.dataStorageRepository.saveConfig(config)
+                return this.dataStorageRepository.saveConfig(config, uhkDeviceProduct)
                     .pipe(
                         mergeMap(() => {
                             if (action.type === Keymaps.ActionTypes.Remove || action.type === Macros.ActionTypes.Remove) {
@@ -113,7 +128,8 @@ export class UserConfigEffects {
                                 const pathPrefix = action.type === Keymaps.ActionTypes.Remove ? 'keymap' : 'macro';
                                 const payload: UndoUserConfigData = {
                                     path: `/${pathPrefix}/${(action as Keymaps.RemoveKeymapAction | Macros.RemoveMacroAction).payload}`,
-                                    config: prevUserConfiguration.clone()
+                                    config: prevUserConfiguration.clone(),
+                                    uhkDeviceProduct,
                                 };
 
                                 return [
@@ -145,7 +161,7 @@ export class UserConfigEffects {
         .pipe(
             ofType<UndoLastAction>(Keymaps.ActionTypes.UndoLastAction),
             map(action => action.payload),
-            switchMap((payload: UndoUserConfigData) => this.dataStorageRepository.saveConfig(payload.config)
+            switchMap((payload: UndoUserConfigData) => this.dataStorageRepository.saveConfig(payload.config, payload.uhkDeviceProduct)
                 .pipe(
                     tap(() => this.router.navigate([payload.path])),
                     map(() => new LoadUserConfigSuccessAction(payload.config))
@@ -408,21 +424,21 @@ export class UserConfigEffects {
     ) {
     }
 
-    private getUserConfiguration(): Observable<UserConfiguration> {
-        return this.dataStorageRepository.getConfig()
+    private getUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): Observable<UserConfiguration> {
+        return this.dataStorageRepository.getConfig(uhkDeviceProduct)
             .pipe(
                 map(configJsonObject => {
                     let config: UserConfiguration;
+                    const defaultConfig = this.defaultUserConfigurationService.getDefaultUserConfigurationOfUhkDeviceProduct(uhkDeviceProduct);
 
                     if (configJsonObject) {
-                        if (configJsonObject.userConfigMajorVersion ===
-                            this.defaultUserConfigurationService.getDefault60().userConfigMajorVersion) {
+                        if (configJsonObject.userConfigMajorVersion === defaultConfig.userConfigMajorVersion) {
                             config = new UserConfiguration().fromJsonObject(configJsonObject);
                         }
                     }
 
                     if (!config) {
-                        config = this.defaultUserConfigurationService.getDefault60();
+                        config = defaultConfig;
                     }
 
                     return config;
