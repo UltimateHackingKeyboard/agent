@@ -30,7 +30,7 @@
     "@types/tmp": "0.2.6",
     "@types/yargs": "17.0.33",
     "check-node-version": "4.2.1",
-    "copy-webpack-plugin": "13.0.0",
+    "copy-webpack-plugin": "13.0.1",
     "cross-env": "7.0.3",
     "decompress": "4.2.1",
     "decompress-targz": "^4.1.1",
