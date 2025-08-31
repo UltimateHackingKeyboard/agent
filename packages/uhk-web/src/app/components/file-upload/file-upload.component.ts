@@ -3,6 +3,7 @@ import { UploadFileData } from 'uhk-common';
 
 @Component({
     selector: 'file-upload',
+    standalone: false,
     templateUrl: './file-upload.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

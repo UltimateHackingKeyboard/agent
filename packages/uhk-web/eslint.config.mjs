@@ -26,6 +26,7 @@ export default tsEslint.config(
             '@angular-eslint/directive-class-suffix': 'off',
             '@angular-eslint/no-output-native': 'off',
             '@angular-eslint/no-output-on-prefix': 'off',
+            '@angular-eslint/prefer-standalone': 'off',
         },
     },
     {

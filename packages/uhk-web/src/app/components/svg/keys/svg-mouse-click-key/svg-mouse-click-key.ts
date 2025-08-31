@@ -8,6 +8,7 @@ const MIN_FONT_SIZE = 20;
 
 @Component({
     selector: 'g[svg-mouse-click-key]',
+    standalone: false,
     templateUrl: './svg-mouse-click-key.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

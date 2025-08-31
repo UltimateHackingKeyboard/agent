@@ -22,6 +22,7 @@ export interface SliderProps {
 
 @Component({
     selector: 'slider-wrapper',
+    standalone: false,
     templateUrl: './slider-wrapper.component.html',
     styleUrls: ['./slider-wrapper.component.scss'],
     providers: [

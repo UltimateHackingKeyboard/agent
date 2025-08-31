@@ -5,6 +5,7 @@ import { HistoryFileInfo, UserConfigHistoryComponentState } from '../../models';
 @Component({
     selector: 'user-configuration-history',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './user-configuration-history.component.html',
     styleUrls: ['./user-configuration-history.component.scss']
 })

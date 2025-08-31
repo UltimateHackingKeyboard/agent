@@ -64,6 +64,7 @@ interface SideMenuState {
         ])
     ],
     selector: 'side-menu',
+    standalone: false,
     templateUrl: './side-menu.component.html',
     styleUrls: ['./side-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

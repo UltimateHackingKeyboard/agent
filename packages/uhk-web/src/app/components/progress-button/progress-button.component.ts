@@ -6,6 +6,7 @@ import { ProgressButtonState, initProgressButtonState } from '../../store/reduce
 
 @Component({
     selector: 'progress-button',
+    standalone: false,
     templateUrl: './progress-button.component.html',
     styleUrls: ['./progress-button.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -4,6 +4,7 @@ import { calculateFitFontSize, START_FONT_SIZE } from '../util';
 
 @Component({
     selector: 'g[svg-two-line-text-key]',
+    standalone: false,
     templateUrl: './svg-two-line-text-key.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

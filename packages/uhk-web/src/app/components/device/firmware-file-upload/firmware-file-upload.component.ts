@@ -9,6 +9,7 @@ import { UpdateFirmwareWithPayload } from '../../../models';
 @Component({
     selector: 'firmware-file-upload',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './firmware-file-upload.component.html',
     styleUrls: ['./firmware-file-upload.component.scss']
 })

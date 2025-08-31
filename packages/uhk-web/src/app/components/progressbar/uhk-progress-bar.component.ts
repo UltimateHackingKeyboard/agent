@@ -5,6 +5,7 @@ import { ProgressBar, UhkProgressBarState } from '../../models/uhk-progress-bar-
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'uhk-progress-bar',
+    standalone: false,
     templateUrl: './uhk-progress-bar.component.html',
     styleUrls: ['./uhk-progress-bar.component.scss']
 })

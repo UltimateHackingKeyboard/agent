@@ -7,6 +7,7 @@ import { BleAddingState, BleAddingStates } from '../../../models';
 @Component({
     selector: 'ble-pairing-panel',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './ble-pairing-panel.component.html',
     styleUrls: ['./ble-pairing-panel.component.scss']
 })

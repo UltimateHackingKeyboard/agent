@@ -10,6 +10,7 @@ import {
 @Component(({
     selector: 'second-side-menu-container',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     template: '<template #secondaryContainer></template>'
 }))
 export class SecondSideMenuContainerComponent {

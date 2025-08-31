@@ -5,6 +5,7 @@ import { PlacementArray } from '@ng-bootstrap/ng-bootstrap/util/positioning';
 
 @Component({
     selector: 'circle-tooltip',
+    standalone: false,
     templateUrl: './circle-tooltip.component.html',
 })
 export default class CircleTooltipComponent {

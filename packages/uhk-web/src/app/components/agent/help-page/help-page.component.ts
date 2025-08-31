@@ -4,6 +4,7 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'help-page',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './help-page.component.html',
     styleUrls: ['./help-page.component.scss'],
     host: {

@@ -10,6 +10,7 @@ import { SetModuleConfigurationValueAction } from '../../store/actions/user-conf
 
 @Component({
     selector: 'add-on',
+    standalone: false,
     templateUrl: './add-on.component.html',
     styleUrls: ['./add-on.component.scss'],
     host: {

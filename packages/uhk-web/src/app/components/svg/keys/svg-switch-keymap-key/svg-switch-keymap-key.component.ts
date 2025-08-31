@@ -4,6 +4,7 @@ import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-switch-keymap-key]',
+    standalone: false,
     templateUrl: './svg-switch-keymap-key.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

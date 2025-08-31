@@ -4,6 +4,7 @@ import { UpdateInfo } from '../../models/update-info';
 
 @Component({
     selector: 'app-update-available',
+    standalone: false,
     templateUrl: './update-available.component.html',
     styleUrls: ['./update-available.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

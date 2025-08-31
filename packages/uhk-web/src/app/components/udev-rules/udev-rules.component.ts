@@ -4,6 +4,7 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'udev-rules',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './udev-rules.component.html'
 })
 export class UdevRulesComponent implements OnChanges {

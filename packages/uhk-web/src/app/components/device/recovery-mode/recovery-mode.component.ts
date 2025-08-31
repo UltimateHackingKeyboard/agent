@@ -11,6 +11,7 @@ import { RecoveryDeviceAction } from '../../../store/actions/device';
 @Component({
     selector: 'device-recovery-mode',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './recovery-mode.component.html',
     styleUrls: ['./recovery-mode.component.scss'],
     host: {

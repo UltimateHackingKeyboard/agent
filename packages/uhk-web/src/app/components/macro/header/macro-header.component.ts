@@ -17,6 +17,7 @@ import { AutoGrowInputComponent } from '../../auto-grow-input';
 
 @Component({
     selector: 'macro-header',
+    standalone: false,
     templateUrl: './macro-header.component.html',
     styleUrls: ['./macro-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -22,6 +22,7 @@ enum TabName {
 
 @Component({
     selector: 'macro-mouse-tab',
+    standalone: false,
     templateUrl: './macro-mouse.component.html',
     styleUrls: [
         '../../macro-action-editor.component.scss',

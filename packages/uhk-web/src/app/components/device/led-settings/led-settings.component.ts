@@ -12,6 +12,7 @@ import { BacklightingMode, RgbColorInterface, UHK_80_DEVICE, UserConfiguration }
 
 @Component({
     selector: 'device-led-settings',
+    standalone: false,
     templateUrl: './led-settings.component.html',
     styleUrls: ['./led-settings.component.scss'],
     host: {

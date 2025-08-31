@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'back-to',
+    standalone: false,
     template: `
         <div *ngIf="backUrl" class="my-2">
             Back to <a [routerLink]="[backUrl]" [queryParams]="queryParams">{{backText}}</a>

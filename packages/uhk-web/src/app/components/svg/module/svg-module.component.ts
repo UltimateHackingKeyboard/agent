@@ -22,6 +22,7 @@ import { AppState, getHostConnections, getMacroMap } from '../../../store';
 
 @Component({
     selector: 'g[svg-module]',
+    standalone: false,
     templateUrl: './svg-module.component.html',
     styleUrls: ['./svg-module.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -13,6 +13,7 @@ import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({
     selector: 'macro-command-tab',
+    standalone: false,
     templateUrl: './macro-command.component.html',
     styleUrls: ['./macro-command.component.scss'],
     host: { 'class': 'macro__text' }

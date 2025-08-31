@@ -3,6 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
     selector: 'editable-text',
+    standalone: false,
     templateUrl: './editable-text.component.html',
     styleUrls: ['./editable-text.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

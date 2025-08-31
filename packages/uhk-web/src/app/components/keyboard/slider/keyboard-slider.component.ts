@@ -27,6 +27,7 @@ enum LayerNames {
 
 @Component({
     selector: 'keyboard-slider',
+    standalone: false,
     templateUrl: './keyboard-slider.component.html',
     styleUrls: ['./keyboard-slider.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -6,6 +6,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
     selector: 'keymap-tab',
+    standalone: false,
     templateUrl: './keymap-tab.component.html',
     styleUrls: ['./keymap-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

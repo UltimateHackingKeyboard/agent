@@ -19,6 +19,7 @@ const noop = (_: any) => {
 
 @Component({
     selector: 'auto-grow-input',
+    standalone: false,
     templateUrl: './auto-grow-input.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [

@@ -58,6 +58,7 @@ import { SelectedMacroActionId, SelectedMacroItem, TabName } from '../../../mode
         ])
     ],
     selector: 'macro-item',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-item.component.html',
     styleUrls: ['./macro-item.component.scss'],

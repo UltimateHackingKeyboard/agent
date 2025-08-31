@@ -15,6 +15,7 @@ const SECONDARY_STYLE: CSSStyleDeclaration = {
 
 @Component({
     selector: 'g[svg-secondary-role]',
+    standalone: false,
     templateUrl: './svg-secondary-role.component.html',
     styleUrls: ['./svg-secondary-role.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

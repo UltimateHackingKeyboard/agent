@@ -11,6 +11,7 @@ const MOUSE_MOVE_VALUE_MULTIPLIER = 25;
 
 @Component({
     selector: 'device-mouse-speed',
+    standalone: false,
     templateUrl: './mouse-speed.component.html',
     styleUrls: ['./mouse-speed.component.scss'],
     host: {

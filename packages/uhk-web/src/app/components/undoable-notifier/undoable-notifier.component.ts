@@ -5,6 +5,7 @@ import { Notification } from 'uhk-common';
 
 @Component({
     selector: 'undoable-notifier',
+    standalone: false,
     templateUrl: './undoable-notifier.component.html',
     styleUrls: ['./undoable-notifier.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

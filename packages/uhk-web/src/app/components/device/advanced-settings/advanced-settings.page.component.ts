@@ -36,6 +36,7 @@ import { ActiveButton, initialState, State } from '../../../store/reducers/advan
 @Component({
     selector: 'advanced-settings',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: 'advanced-settings.page.component.html',
     host: {
         'class': 'container-fluid full-screen-component'

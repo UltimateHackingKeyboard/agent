@@ -44,6 +44,7 @@ import {
 
 @Component({
     selector: 'keymap-edit',
+    standalone: false,
     templateUrl: './keymap-edit.component.html',
     styleUrls: ['./keymap-edit.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

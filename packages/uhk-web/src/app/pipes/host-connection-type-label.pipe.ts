@@ -3,6 +3,7 @@ import { HostConnections, HOST_CONNECTION_LABELS } from 'uhk-common';
 
 @Pipe({
     name: 'hostConnectionTypeLabelPipe',
+    standalone: false,
 })
 export class HostConnectionTypeLabelPipePipe implements PipeTransform {
 

@@ -3,7 +3,8 @@ import { colord } from 'colord';
 import { RgbColorInterface } from 'uhk-common';
 
 @Pipe({
-    name: 'asHexColor'
+    name: 'asHexColor',
+    standalone: false,
 })
 export class AsHexColorPipe implements PipeTransform {
     transform(color: RgbColorInterface): string {

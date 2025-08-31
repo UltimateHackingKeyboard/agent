@@ -5,6 +5,7 @@ import { State } from '../../store/reducers/auto-update-settings';
 
 @Component({
     selector: 'auto-update-settings',
+    standalone: false,
     templateUrl: './auto-update-settings.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

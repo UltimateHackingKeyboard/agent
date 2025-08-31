@@ -20,6 +20,7 @@ import { NavigateToModuleSettings } from '../../../store/actions/user-config';
 @Component({
     selector: 'keymap-add',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './keymap-add.component.html',
     styleUrls: ['keymap-add.component.scss'],
     host: {

@@ -8,6 +8,7 @@ const noop = (_: any) => {
 @Component({
     selector: 'fade-timeout-slider',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './fade-timeout-slider.component.html',
     providers: [
         {

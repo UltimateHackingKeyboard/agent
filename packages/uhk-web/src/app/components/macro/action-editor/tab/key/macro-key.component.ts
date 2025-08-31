@@ -14,6 +14,7 @@ enum TabName {
 
 @Component({
     selector: 'macro-key-tab',
+    standalone: false,
     templateUrl: './macro-key.component.html',
     styleUrls: [
         '../../macro-action-editor.component.scss',

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DragulaService } from '@ert78gb/ng2-dragula';
+import { DragulaService } from 'ng2-dragula';
 import { faCircleExclamation, faCircleNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,7 @@ import { AppState, getEraseBleSettingsButtonState, getHostConnections, getHostCo
 
 @Component({
     selector: 'host-connections',
+    standalone: false,
     templateUrl: './host-connections.component.html',
     styleUrls: ['./host-connections.component.scss'],
     host: {

@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 const MAX_HEIGHT_OFFSET = 20;
 
 @Directive({
-    selector: 'ng-select[select-max-height]'
+    selector: 'ng-select[select-max-height]',
+    standalone: false,
 })
 export class NgSelectMaxHeight implements OnDestroy {
     private openSubscription: Subscription;

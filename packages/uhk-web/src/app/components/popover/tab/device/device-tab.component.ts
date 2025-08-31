@@ -34,6 +34,7 @@ interface HostConnectionListItem {
 
 @Component({
     selector: 'device-tab',
+    standalone: false,
     templateUrl: './device-tab.component.html',
     styleUrls: ['./device-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

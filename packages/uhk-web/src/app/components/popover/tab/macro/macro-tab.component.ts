@@ -14,6 +14,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 @Component({
     selector: 'macro-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './macro-tab.component.html',
     styleUrls: ['./macro-tab.component.scss']
 })

@@ -5,6 +5,7 @@ import { XtermLog } from '../../models/xterm-log';
 
 @Component({
     selector: 'xterm',
+    standalone: false,
     templateUrl: './xterm.component.html',
     styleUrls: ['./xterm.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

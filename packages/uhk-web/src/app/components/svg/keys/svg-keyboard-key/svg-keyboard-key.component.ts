@@ -97,6 +97,7 @@ enum LabelTypes {
         ])
     ],
     selector: 'g[svg-keyboard-key]',
+    standalone: false,
     templateUrl: './svg-keyboard-key.component.html',
     styleUrls: ['./svg-keyboard-key.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

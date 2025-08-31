@@ -4,6 +4,7 @@ import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-mouse-scroll-key]',
+    standalone: false,
     templateUrl: './svg-mouse-scroll-key.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

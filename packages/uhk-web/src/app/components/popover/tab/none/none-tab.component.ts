@@ -7,6 +7,7 @@ import { Tab } from '../tab';
 @Component({
     selector: 'none-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './none-tab.component.html',
     styleUrls: ['./none-tab.component.scss']
 })

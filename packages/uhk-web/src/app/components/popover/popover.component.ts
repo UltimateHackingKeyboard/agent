@@ -67,6 +67,7 @@ export interface TabHeader {
 
 @Component({
     selector: 'popover',
+    standalone: false,
     templateUrl: './popover.component.html',
     styleUrls: ['./popover.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

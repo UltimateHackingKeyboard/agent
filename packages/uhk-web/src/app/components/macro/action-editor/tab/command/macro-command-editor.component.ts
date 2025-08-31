@@ -43,6 +43,7 @@ interface Position {
 @Component({
     selector: 'macro-command-editor',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './macro-command-editor.component.html',
     providers: [{
         provide: NG_VALUE_ACCESSOR,
