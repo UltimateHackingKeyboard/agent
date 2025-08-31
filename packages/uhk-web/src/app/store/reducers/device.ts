@@ -12,6 +12,7 @@ import {
     LeftSlotModules,
     RightSlotModules,
     UdevRulesInfo,
+    UHK_60_DEVICE,
     UHK_DEVICE_IDS,
     UHK_DEVICE_IDS_TYPE,
     UhkDeviceProduct,
@@ -31,7 +32,7 @@ export interface State {
     dongle?: Dongle;
     isKeyboardLayoutChanging: boolean;
     isPairedWithDongle?: boolean;
-    connectedDevice?: UhkDeviceProduct;
+    connectedDevice: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
     deviceConnectionStateLoaded: boolean;
@@ -62,6 +63,7 @@ export const initialState: State = {
     isKeyboardLayoutChanging: false,
     hasPermission: true,
     bootloaderActive: false,
+    connectedDevice: UHK_60_DEVICE,
     deviceConnectionStateLoaded: false,
     hostConnectionPairState: {},
     isErasingBleSettings: false,
