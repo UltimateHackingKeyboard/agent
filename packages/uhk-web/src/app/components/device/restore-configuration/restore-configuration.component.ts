@@ -12,6 +12,7 @@ import { RestoreConfigurationState } from '../../../models/restore-configuration
     selector: 'restore-configuration',
     templateUrl: './restore-configuration.component.html',
     styleUrls: ['./restore-configuration.component.scss'],
+    standalone: false,
     host: {
         'class': 'container-fluid'
     }

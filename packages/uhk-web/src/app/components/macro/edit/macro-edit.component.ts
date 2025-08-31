@@ -34,6 +34,7 @@ import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../st
 
 @Component({
     selector: 'macro-edit',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-edit.component.html',
     styleUrls: ['./macro-edit.component.scss'],

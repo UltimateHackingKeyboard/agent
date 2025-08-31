@@ -28,6 +28,7 @@ import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPay
 
 @Component({
     selector: 'device-firmware',
+    standalone: false,
     templateUrl: './device-firmware.component.html',
     styleUrls: ['./device-firmware.component.scss'],
     host: {

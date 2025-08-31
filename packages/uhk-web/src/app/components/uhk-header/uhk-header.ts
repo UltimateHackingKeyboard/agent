@@ -8,6 +8,7 @@ import { DismissUndoNotificationAction, UndoLastAction } from '../../store/actio
 
 @Component({
     selector: 'uhk-header',
+    standalone: false,
     templateUrl: './uhk-header.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
 
 @Component({
     selector: 'firmware-upgrade-panel',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './firmware-upgrade-panel.component.html',
     styleUrls: ['./firmware-upgrade-panel.component.scss']

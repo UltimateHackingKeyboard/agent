@@ -3,7 +3,8 @@ import { Directive, ElementRef, OnDestroy } from '@angular/core';
 import { SmartMacroDocService } from '../../../services/smart-macro-doc-service';
 
 @Directive({
-    selector: 'iframe[smartMacroIframe]'
+    selector: 'iframe[smartMacroIframe]',
+    standalone: false,
 })
 export class SmartMacroDocDirective implements OnDestroy {
     constructor(private elementRef: ElementRef,

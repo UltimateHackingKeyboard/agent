@@ -6,6 +6,7 @@ import { Colors, getColorsOf } from '../../../util/get-colors-of';
 
 @Component({
     selector: 'functional-backlight-color',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: 'functional-backlight-color.component.html',
     styleUrls: ['./functional-backlight-color.component.scss']

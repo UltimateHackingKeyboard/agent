@@ -8,7 +8,7 @@ import {
     Output,
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
-import { DragulaService } from '@ert78gb/ng2-dragula';
+import { DragulaService } from 'ng2-dragula';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { KeyMacroAction, KeystrokeType, Macro, MacroAction, MacroKeySubAction } from 'uhk-common';
@@ -56,6 +56,7 @@ const CANCEL_ACTION_ANIMATION_TIMEOUT = ANIMATION_TIME + 25;
         ])
     ],
     selector: 'macro-list',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss']

@@ -12,6 +12,7 @@ import { GetAgentContributorsAction } from '../../../store/actions/contributors.
 
 @Component({
     selector: 'about-page',
+    standalone: false,
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.scss'],
     host: {

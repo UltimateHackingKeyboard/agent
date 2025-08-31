@@ -5,7 +5,8 @@ import { AppState } from '../../store';
 import { OpenUrlInNewWindowAction } from '../../store/actions/app';
 
 @Directive({
-    selector: 'a[externalUrl]'
+    selector: 'a[externalUrl]',
+    standalone: false,
 })
 export class ExternalUrlDirective {
     constructor(private el: ElementRef,

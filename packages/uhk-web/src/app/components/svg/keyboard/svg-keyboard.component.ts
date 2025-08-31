@@ -41,6 +41,7 @@ import { findModuleById } from '../../../util';
 
 @Component({
     selector: 'svg-keyboard',
+    standalone: false,
     templateUrl: './svg-keyboard.component.html',
     styleUrls: ['./svg-keyboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

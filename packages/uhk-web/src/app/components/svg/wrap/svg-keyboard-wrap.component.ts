@@ -67,6 +67,7 @@ interface NameValuePair {
 
 @Component({
     selector: 'svg-keyboard-wrap',
+    standalone: false,
     templateUrl: './svg-keyboard-wrap.component.html',
     styleUrls: ['./svg-keyboard-wrap.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

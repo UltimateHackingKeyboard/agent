@@ -12,6 +12,7 @@ import { SetUserConfigurationValueAction } from '../../../store/actions/user-con
 
 @Component({
     selector: 'typing-behavior-page',
+    standalone: false,
     templateUrl: './typing-behavior-page.component.html',
     styleUrls: ['./typing-behavior-page.component.scss'],
     host: {

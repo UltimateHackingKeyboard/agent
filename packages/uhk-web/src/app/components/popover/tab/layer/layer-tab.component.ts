@@ -9,6 +9,7 @@ export type toggleType = 'active' | 'toggle';
 @Component({
     selector: 'layer-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './layer-tab.component.html',
     styleUrls: ['./layer-tab.component.scss']
 })

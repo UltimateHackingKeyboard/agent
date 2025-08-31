@@ -32,6 +32,7 @@ const DEFAULT_TRASH_TITLE = 'Delete keymap';
 
 @Component({
     selector: 'keymap-header',
+    standalone: false,
     templateUrl: './keymap-header.component.html',
     styleUrls: ['./keymap-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

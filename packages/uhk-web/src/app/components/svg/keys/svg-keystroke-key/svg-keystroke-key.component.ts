@@ -23,6 +23,7 @@ class SvgAttributes {
 
 @Component({
     selector: 'g[svg-keystroke-key]',
+    standalone: false,
     templateUrl: './svg-keystroke-key.component.html',
     styleUrls: ['./svg-keystroke-key.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

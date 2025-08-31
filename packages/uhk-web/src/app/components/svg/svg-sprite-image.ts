@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 @Component({
     selector: 'svg-sprite-image',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     template: `
         <svg viewBox="0 0 16 16" height="1em" preserveAspectRatio="xMidYMin">
             <svg:use [attr.xlink:href]="icon">

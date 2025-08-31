@@ -22,6 +22,7 @@ import { getColorsOf } from '../../../util/get-colors-of';
 @Component({
     selector: 'color-palette-button',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: 'color-palette-button.component.html',
     host: {
         class: "btn btn-default",

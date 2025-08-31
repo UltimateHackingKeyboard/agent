@@ -34,6 +34,7 @@ interface SearchResult {
 
 @Component({
     selector: 'keypress-tab',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './keypress-tab.component.html',
     styleUrls: ['./keypress-tab.component.scss']

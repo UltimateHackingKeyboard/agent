@@ -6,6 +6,7 @@ import { getContentWidth } from '../../../../util';
 
 @Component({
     selector: 'g[svg-icon-text-key]',
+    standalone: false,
     templateUrl: './svg-icon-text-key.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

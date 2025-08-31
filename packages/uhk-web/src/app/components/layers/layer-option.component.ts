@@ -14,6 +14,7 @@ import { ConfirmCancelEvent } from 'angular-confirmation-popover/lib/confirmatio
 
 @Component({
     selector: 'layer-option',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './layer-option.component.html',
     styleUrls: ['./layer-option.component.scss']

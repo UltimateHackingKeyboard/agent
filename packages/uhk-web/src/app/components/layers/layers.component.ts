@@ -8,9 +8,10 @@ import { LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../..
 
 @Component({
     selector: 'layers',
+    standalone: false,
     templateUrl: './layers.component.html',
     styleUrls: ['./layers.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayersComponent {
     @Input() allowNewLayers: boolean;

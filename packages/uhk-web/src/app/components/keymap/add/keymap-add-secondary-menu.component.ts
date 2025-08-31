@@ -10,6 +10,7 @@ import { LoadDefaultUserConfigurationAction } from '../../../store/actions/defau
 @Component(({
     selector: 'keymap-add-secondary-menu',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './keymap-add-secondary-menu.component.html',
     styleUrls: ['./keymap-add-secondary-menu.component.scss']
 }))

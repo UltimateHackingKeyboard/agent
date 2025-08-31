@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'macro-not-found',
+    standalone: false,
     templateUrl: './macro-not-found.component.html',
     styleUrls: ['./macro-not-found.component.scss']
 })

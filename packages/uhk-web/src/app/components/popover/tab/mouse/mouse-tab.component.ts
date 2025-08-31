@@ -17,6 +17,7 @@ import { Tab } from '../tab';
 @Component({
     selector: 'mouse-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './mouse-tab.component.html',
     styleUrls: ['./mouse-tab.component.scss']
 })

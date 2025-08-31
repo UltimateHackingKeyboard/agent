@@ -8,8 +8,8 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AngularSplitModule } from 'angular-split';
-import { DragulaModule } from '@ert78gb/ng2-dragula';
-import { ColorPickerModule } from 'ngx-color-picker';
+import { DragulaModule } from 'ng2-dragula';
+import { ColorPickerDirective } from 'ngx-color-picker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -291,8 +291,8 @@ import appInitFactory from './services/app-init-factory';
     ],
     imports: [
         AngularSplitModule,
-        ColorPickerModule,
         CommonModule,
+        ColorPickerDirective,
         BrowserAnimationsModule,
         FontAwesomeModule,
         FormsModule,

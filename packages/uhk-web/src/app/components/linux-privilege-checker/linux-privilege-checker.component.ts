@@ -5,6 +5,7 @@ import { PrivilagePageSate } from '../../models/privilage-page-sate';
 @Component({
     selector: 'linux-privilege-checker',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './linux-privilege-checker.component.html',
     styleUrls: ['./linux-privilege-checker.component.scss']
 })

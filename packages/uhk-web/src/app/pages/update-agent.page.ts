@@ -18,6 +18,7 @@ import { PreviewUserConfigurationAction } from '../store/actions/user-config';
 @Component({
     selector: 'update-agent',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     template: `
         <div class="uhk-message-wrapper">
             <uhk-agent-icon class="agent-logo"></uhk-agent-icon>

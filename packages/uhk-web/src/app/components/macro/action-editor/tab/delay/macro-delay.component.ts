@@ -12,6 +12,7 @@ const INITIAL_DELAY = 0.5; // In seconds
 
 @Component({
     selector: 'macro-delay-tab',
+    standalone: false,
     templateUrl: './macro-delay.component.html',
     styleUrls: ['./macro-delay.component.scss'],
     host: { 'class': 'macro__delay' },

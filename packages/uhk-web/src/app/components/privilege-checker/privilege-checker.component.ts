@@ -10,6 +10,7 @@ import { PrivilagePageSate } from '../../models/privilage-page-sate';
 @Component({
     selector: 'privilege-checker',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     templateUrl: './privilege-checker.component.html',
     styleUrls: ['./privilege-checker.component.scss'],
 })

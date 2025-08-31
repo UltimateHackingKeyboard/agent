@@ -12,6 +12,7 @@ import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../..
 
 @Component({
     selector: 'capture-keystroke-button',
+    standalone: false,
     templateUrl: './capture-keystroke-button.component.html',
     styleUrls: ['./capture-keystroke-button.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

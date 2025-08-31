@@ -37,6 +37,7 @@ import {
 
 @Component({
     selector: 'macro-action-editor',
+    standalone: false,
     templateUrl: './macro-action-editor.component.html',
     styleUrls: ['./macro-action-editor.component.scss'],
     host: { 'class': 'macro-action-editor' }

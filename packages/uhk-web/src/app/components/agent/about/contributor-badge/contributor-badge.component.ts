@@ -7,6 +7,7 @@ import { UHKContributor } from '../../../../models/uhk-contributor';
 
 @Component({
     selector: 'contributor-badge',
+    standalone: false,
     templateUrl: './contributor-badge.component.html',
     styleUrls: ['./contributor-badge.component.scss']
 })

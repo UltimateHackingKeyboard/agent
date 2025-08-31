@@ -9,6 +9,7 @@ import { AppState, getUserConfiguration } from '../../../store/index';
 
 @Component({
     selector: 'battery-settings',
+    standalone: false,
     templateUrl: './battery-settings.component.html',
     styleUrls: ['./battery-settings.component.scss'],
     host: {

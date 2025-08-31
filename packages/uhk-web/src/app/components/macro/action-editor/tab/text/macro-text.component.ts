@@ -14,6 +14,7 @@ import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({
     selector: 'macro-text-tab',
+    standalone: false,
     templateUrl: './macro-text.component.html',
     styleUrls: ['./macro-text.component.scss'],
     host: { 'class': 'macro__text' }

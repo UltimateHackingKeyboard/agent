@@ -5,6 +5,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 
 @Component({
     selector: 'g[svg-text-icon-key]',
+    standalone: false,
     templateUrl: './svg-text-icon-key.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

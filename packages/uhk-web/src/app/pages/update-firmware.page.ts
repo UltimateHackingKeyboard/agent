@@ -8,6 +8,7 @@ import { SkipFirmwareUpgradeAction, UpdateFirmwareAction } from '../store/action
 @Component({
     selector: 'update-firmware',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false,
     template: `
         <div class="uhk-message-wrapper">
             <div class="text-center">

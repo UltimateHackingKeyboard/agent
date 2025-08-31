@@ -28,6 +28,7 @@ import {
 
 @Component({
     selector: 'device-settings',
+    standalone: false,
     templateUrl: './device-configuration.component.html',
     styleUrls: ['./device-configuration.component.scss'],
     host: {
