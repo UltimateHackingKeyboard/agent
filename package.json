@@ -54,7 +54,7 @@
     "stylelint": "16.23.1",
     "stylelint-config-standard-scss": "15.0.1",
     "svg-sprite": "2.0.4",
-    "ts-loader": "9.5.2",
+    "ts-loader": "9.5.4",
     "ts-node": "10.9.2",
     "tsx": "4.20.3",
     "typescript": "5.5.4",
