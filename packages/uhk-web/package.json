@@ -36,7 +36,7 @@
     "@angular/platform-browser-dynamic": "19.2.14",
     "@angular/router": "19.2.14",
     "@ert78gb/angular-notifier": "17.0.0",
-    "@fontsource/jetbrains-mono": "5.1.2",
+    "@fontsource/jetbrains-mono": "5.2.6",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-regular-svg-icons": "6.7.2",
