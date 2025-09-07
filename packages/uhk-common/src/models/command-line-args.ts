@@ -78,4 +78,10 @@ export interface CommandLineArgs extends DeviceIdentifier {
      * Use USB non-blocking communication
      */
     'usb-non-blocking'?: boolean;
+
+    /**
+     * Overwrite/reset the current hardware configuration and exit.
+     * The argument is the keyboard layout {ansi|iso}
+     */
+    'write-hardware-configuration'?: string;
 }

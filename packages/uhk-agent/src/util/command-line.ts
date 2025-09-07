@@ -22,6 +22,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'usb-interface', type: Number },
     { name: 'usb-non-blocking', type: Boolean },
     { name: 'vid', type: Number },
+    { name: 'write-hardware-configuration', type: String },
 ];
 
 export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true }) as CommandLineArgs;
@@ -120,7 +121,12 @@ const sections: commandLineUsage.Section[] = [
                 name: 'vid',
                 description: 'Use the specified USB vendor id. If you set it you have to set the pid too.',
                 type: Number
-            }
+            },
+            {
+                name: 'write-hardware-configuration',
+                description: 'Overwrite/reset the current hardware configuration and exit.',
+                typeLabel: 'ansi | iso'
+            },
         ]
     }
 ];

@@ -18,3 +18,4 @@ export * from './print-usb-devices';
 export * from './reenumerate-and-exit';
 export * from './save-extract-firmware';
 export * from './save-user-config-history-async';
+export * from './write-hardware-configuration';

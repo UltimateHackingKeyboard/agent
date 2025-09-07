@@ -30,8 +30,8 @@ import {
     cliUsage,
     printUsbDevices,
     printHardwareConfiguration,
-    PrintHardwareConfigurationOptions,
     reenumerateAndExit,
+    writeHardwareConfiguration,
 } from './util';
 
 if (options.help) {
@@ -196,13 +196,12 @@ if (isSecondInstance) {
         });
 } else if (options['print-hardware-configuration']) {
     printHardwareConfiguration({ logger, uhkOperations })
-        .then(() => {
-            process.exit(0);
-        })
-        .catch(error => {
-            logger.error(error.message);
-            process.exit(-1);
-        });
+} else if (options['write-hardware-configuration']) {
+    writeHardwareConfiguration({
+        logger,
+        uhkOperations,
+        commandLineArgs: options,
+    })
 } else {
 
     // This method will be called when Electron has finished
