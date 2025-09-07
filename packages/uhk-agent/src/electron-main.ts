@@ -169,6 +169,8 @@ async function createWindow() {
 
 if (isSecondInstance) {
     app.quit();
+} else if (options['print-hardware-configuration']) {
+    printHardwareConfiguration({ logger, uhkOperations })
 } else if (options['print-usb-devices']) {
     printUsbDevices()
         .then(() => {
@@ -194,8 +196,6 @@ if (isSecondInstance) {
             logger.misc('Reenumeration process finished with error. Please unplug and plug your UHK.');
             process.exit(-1);
         });
-} else if (options['print-hardware-configuration']) {
-    printHardwareConfiguration({ logger, uhkOperations })
 } else if (options['write-hardware-configuration']) {
     writeHardwareConfiguration({
         logger,
