@@ -23,9 +23,16 @@ import { SudoService } from './services/sudo.service';
 import { SmartMacroDocService } from './services/smart-macro-doc.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
-import { printUsbDevices } from './util';
 import { loadWindowState, saveWindowState } from './util/window';
-import { getWindowBackgroundColor, options, cliUsage, reenumerateAndExit } from './util';
+import {
+    getWindowBackgroundColor,
+    options,
+    cliUsage,
+    printUsbDevices,
+    printHardwareConfiguration,
+    PrintHardwareConfigurationOptions,
+    reenumerateAndExit,
+} from './util';
 
 if (options.help) {
     console.log(cliUsage);
@@ -185,6 +192,15 @@ if (isSecondInstance) {
         .catch(error => {
             logger.error(error.message);
             logger.misc('Reenumeration process finished with error. Please unplug and plug your UHK.');
+            process.exit(-1);
+        });
+} else if (options['print-hardware-configuration']) {
+    printHardwareConfiguration({ logger, uhkOperations })
+        .then(() => {
+            process.exit(0);
+        })
+        .catch(error => {
+            logger.error(error.message);
             process.exit(-1);
         });
 } else {

@@ -13,6 +13,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'pid', type: Number },
     { name: 'no-report-id', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
+    { name: 'print-hardware-configuration', type: Boolean },
     { name: 'print-usb-devices', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'report-id', type: Number },
@@ -72,6 +73,11 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'preserve-udev-rules',
                 description: 'Don\'t force udev rule update',
+                type: Boolean
+            },
+            {
+                name: 'print-hardware-configuration',
+                description: 'Print hardware configuration to the standard output and exit.',
                 type: Boolean
             },
             {

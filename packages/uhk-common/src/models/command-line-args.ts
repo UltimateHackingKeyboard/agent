@@ -57,9 +57,9 @@ export interface CommandLineArgs extends DeviceIdentifier {
      * Agent not force the udev rule update
      */
     'preserve-udev-rules'?: boolean;
-    /**
-     * Agent not force the udev rule update
-     */
+
+    'print-hardware-configuration'?: boolean;
+
     'print-usb-devices'?: boolean;
     /**
      * Reenumerate as the bootloader or BusPal, wait for the specified timeout and exit.

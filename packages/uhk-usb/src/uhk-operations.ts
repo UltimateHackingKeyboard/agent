@@ -647,6 +647,14 @@ export class UhkOperations {
         };
     }
 
+    public async getHardwareConfiguration(): Promise<HardwareConfiguration> {
+        const buffer = await this.loadConfiguration(ConfigBufferId.hardwareConfig);
+        const hardwareConfiguration = new HardwareConfiguration();
+        hardwareConfiguration.fromBinary(UhkBuffer.fromArray([...buffer]));
+
+        return hardwareConfiguration;
+    }
+
     public async getUptime(): Promise<Duration> {
         this.logService.usbOps('[DeviceOperation] USB[T]: get uptime');
         const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.Uptime]);
