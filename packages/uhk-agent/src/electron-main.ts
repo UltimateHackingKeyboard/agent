@@ -28,6 +28,7 @@ import {
     getWindowBackgroundColor,
     options,
     cliUsage,
+    printStatusBuffer,
     printUsbDevices,
     printHardwareConfiguration,
     reenumerateAndExit,
@@ -171,6 +172,8 @@ if (isSecondInstance) {
     app.quit();
 } else if (options['print-hardware-configuration']) {
     printHardwareConfiguration({ logger, uhkOperations })
+} else if (options['print-status-buffer']) {
+    printStatusBuffer({ logger, uhkOperations })
 } else if (options['print-usb-devices']) {
     printUsbDevices()
         .then(() => {

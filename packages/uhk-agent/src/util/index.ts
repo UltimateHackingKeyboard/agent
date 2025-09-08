@@ -14,6 +14,7 @@ export * from './load-user-config-from-binary-file';
 export * from './load-user-config-history-async';
 export * from './make-folder-writeable-to-user-on-linux';
 export * from './print-hardware-configuration';
+export * from './print-status-buffer';
 export * from './print-usb-devices';
 export * from './reenumerate-and-exit';
 export * from './save-extract-firmware';

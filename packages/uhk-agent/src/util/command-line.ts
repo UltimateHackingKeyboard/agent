@@ -14,6 +14,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'no-report-id', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
     { name: 'print-hardware-configuration', type: Boolean },
+    { name: 'print-status-buffer', type: Boolean },
     { name: 'print-usb-devices', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'report-id', type: Number },
@@ -79,6 +80,11 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'print-hardware-configuration',
                 description: 'Print hardware configuration to the standard output and exit.',
+                type: Boolean
+            },
+            {
+                name: 'print-status-buffer',
+                description: 'Print the status buffer of the keyboard to the standard output and exit.',
                 type: Boolean
             },
             {

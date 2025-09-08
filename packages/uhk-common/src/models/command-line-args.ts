@@ -60,6 +60,8 @@ export interface CommandLineArgs extends DeviceIdentifier {
 
     'print-hardware-configuration'?: boolean;
 
+    'print-status-buffer'?: boolean;
+
     'print-usb-devices'?: boolean;
     /**
      * Reenumerate as the bootloader or BusPal, wait for the specified timeout and exit.
