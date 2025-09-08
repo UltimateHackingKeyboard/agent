@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UhkDeviceProduct, UserConfiguration, UHK_80_DEVICE } from 'uhk-common';
+import { UhkDeviceProduct, UserConfiguration, UHK_80_DEVICE, UHK_60_USER_CONFIG, UHK_80_USER_CONFIG } from 'uhk-common';
 
 @Injectable()
 export class DefaultUserConfigurationService {
@@ -9,8 +9,7 @@ export class DefaultUserConfigurationService {
     getDefault60(): UserConfiguration {
         if (!this._defaultConfig60) {
             this._defaultConfig60 = new UserConfiguration()
-                // eslint-disable-next-line @typescript-eslint/no-require-imports
-                .fromJsonObject(require('./user-config.json'));
+                .fromJsonObject(UHK_60_USER_CONFIG);
         }
 
         return this._defaultConfig60;
@@ -19,8 +18,7 @@ export class DefaultUserConfigurationService {
     getDefault80(): UserConfiguration {
         if (!this._defaultConfig80) {
             this._defaultConfig80 = new UserConfiguration()
-                // eslint-disable-next-line @typescript-eslint/no-require-imports
-                .fromJsonObject(require('./user-config-80.json'));
+                .fromJsonObject(UHK_80_USER_CONFIG);
         }
 
         return this._defaultConfig80;

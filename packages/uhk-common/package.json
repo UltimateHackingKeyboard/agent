@@ -12,9 +12,10 @@
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
   "scripts": {
-    "build": "run-s -sn build:generate-versions build:tsc",
+    "build": "run-s -sn build:generate-versions build:user-config build:tsc",
     "build:generate-versions": "node ./scripts/generate-versions.mjs",
     "build:tsc": "tsc --project src/tsconfig.build.json",
+    "build:user-config": "tsx ./scripts/generate-user-configs.ts",
     "clean": "rimraf ./node_modules ./dist",
     "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
     "coverage": "nyc npm test",

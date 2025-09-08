@@ -4,7 +4,7 @@ import {
     KeyActionHelper,
     Module,
     UserConfiguration,
-} from "uhk-common";
+} from '../dist/index.js';
 
 const sourceFile = process.argv[2]
 const destinationFile = process.argv[3]

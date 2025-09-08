@@ -5,9 +5,9 @@ import {
     UHK_60_LEFT_MAX_KEY_ACTION_COUNT,
     UHK_60_RIGHT_MAX_KEY_ACTION_COUNT,
     UserConfiguration,
-} from "uhk-common";
+} from '../src/index';
 
-const uhk80UserConfigPath = path.join(import.meta.dirname, '../src/app/services/user-config-80.json');
+const uhk80UserConfigPath = path.join(import.meta.dirname, '../user-config-80.json');
 const uhk80UserConfigJson = JSON.parse(await fs.readFile(uhk80UserConfigPath, { encoding: 'utf8' }));
 const uhk60UserConfig = new UserConfiguration().fromJsonObject(uhk80UserConfigJson);
 
@@ -35,5 +35,5 @@ for (const keymap of uhk60UserConfig.keymaps) {
     keymap.layers = layers;
 }
 
-const uhk60UserConfigPath = path.join(import.meta.dirname, '../src/app/services/user-config.json');
+const uhk60UserConfigPath = path.join(import.meta.dirname, '../user-config.json');
 await fs.writeFile(uhk60UserConfigPath, JSON.stringify(uhk60UserConfig.toJsonObject(), null, 2), { encoding: 'utf8' });
