@@ -5,7 +5,7 @@ import {
     UHK_60_LEFT_MAX_KEY_ACTION_COUNT,
     UHK_60_RIGHT_MAX_KEY_ACTION_COUNT,
     UserConfiguration,
-} from '../src/index';
+} from '../src/config-serializer';
 
 const uhk80UserConfigPath = path.join(import.meta.dirname, '../user-config-80.json');
 const uhk80UserConfigJson = JSON.parse(await fs.readFile(uhk80UserConfigPath, { encoding: 'utf8' }));
