@@ -1,4 +1,3 @@
 .nyc_output/
 coverage/
-user-config.json
 src/util/versions.ts

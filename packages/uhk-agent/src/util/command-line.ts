@@ -16,6 +16,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'print-hardware-configuration', type: Boolean },
     { name: 'print-status-buffer', type: Boolean },
     { name: 'print-usb-devices', type: Boolean },
+    { name: 'restore-user-configuration', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'report-id', type: Number },
     { name: 'serial-number', type: String },
@@ -98,6 +99,11 @@ const sections: commandLineUsage.Section[] = [
                     'This may make Windows install the USB drivers needed for firmware update. ' +
                     'Please provide the timeout in milliseconds.',
                 typeLabel: '(bootloader|buspal),timeout'
+            },
+            {
+                name: 'restore-user-configuration',
+                description: 'Run restore user-configuration process and exit.',
+                type: Boolean,
             },
             {
                 name: 'report-id',

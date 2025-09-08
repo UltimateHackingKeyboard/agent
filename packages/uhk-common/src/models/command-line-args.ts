@@ -68,6 +68,12 @@ export interface CommandLineArgs extends DeviceIdentifier {
      * This may make Windows install the USB drivers needed for firmware update.
      */
     'reenumerate-and-exit'?: string;
+
+    /**
+     * Run restore user-configuration process and exit.
+     */
+    'restore-user-configuration'?: boolean;
+
     /**
      * Report Id that used for USB communication
      */

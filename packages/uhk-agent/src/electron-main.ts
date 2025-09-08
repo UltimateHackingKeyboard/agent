@@ -32,6 +32,7 @@ import {
     printUsbDevices,
     printHardwareConfiguration,
     reenumerateAndExit,
+    restoreUserConfiguration,
     writeHardwareConfiguration,
 } from './util';
 
@@ -199,6 +200,12 @@ if (isSecondInstance) {
             logger.misc('Reenumeration process finished with error. Please unplug and plug your UHK.');
             process.exit(-1);
         });
+} else if (options['restore-user-configuration']) {
+    restoreUserConfiguration({
+        logger,
+        uhkOperations,
+        commandLineArgs: options,
+    })
 } else if (options['write-hardware-configuration']) {
     writeHardwareConfiguration({
         logger,

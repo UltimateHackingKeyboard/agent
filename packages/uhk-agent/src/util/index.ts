@@ -17,6 +17,7 @@ export * from './print-hardware-configuration';
 export * from './print-status-buffer';
 export * from './print-usb-devices';
 export * from './reenumerate-and-exit';
+export * from './restore-user-configuration';
 export * from './save-extract-firmware';
 export * from './save-user-config-history-async';
 export * from './write-hardware-configuration';
