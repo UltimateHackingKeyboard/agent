@@ -17,7 +17,7 @@
     "build:tsc": "tsc --project src/tsconfig.build.json",
     "build:user-config": "tsx ./scripts/generate-user-configs.ts",
     "clean": "rimraf ./node_modules ./dist user-config.json",
-    "test:skip": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
+    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
     "coverage": "nyc npm test",
     "lint": "eslint"
   },

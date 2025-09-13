@@ -17,7 +17,7 @@
   "devDependencies": {
   },
   "scripts": {
-    "test:skip": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
+    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
     "clean": "rimraf ./node_modules",
     "lint": "eslint"
   }
