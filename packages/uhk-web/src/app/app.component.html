@@ -49,6 +49,14 @@
 </div>
 <notifier-container></notifier-container>
 <highlight-arrow *ngIf="firstAttemptOfSaveToKeyboard$ | async" [@highlightArrow]></highlight-arrow>
+<button *ngIf="isStatusBufferErrorHidden$ | async"
+        type="button" aria-label="Show error panel"
+        class="show-error-panel-button"
+        ngbTooltip="Show error panel"
+        (click)="showErrorPanel()"
+        >
+    <fa-icon [icon]="faArrowUp"></fa-icon>
+</button>
 <progress-button class="save-to-keyboard-button"
                  *ngIf="saveToKeyboardState.showButton"
                  [@showSaveToKeyboardButton]

@@ -102,6 +102,13 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
+        case App.ActionTypes.ShowErrorPanel: {
+            return {
+                ...state,
+                hideStatusBufferError: false,
+            };
+        }
+
         case App.ActionTypes.LoadApplicationSettingsSuccess: {
             const settings = (action as App.LoadApplicationSettingsSuccessAction).payload;
 
@@ -446,6 +453,7 @@ export const getLeftHalfDetected = (state: State) => state.leftHalfDetected;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
+export const isStatusBufferErrorHidden = (state: State) => state.statusBuffer && state.hideStatusBufferError;
 export const getStatusBuffer = (state: State) => {
     if (state.hideStatusBufferError) {
         return ''

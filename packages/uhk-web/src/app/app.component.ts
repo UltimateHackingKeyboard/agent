@@ -1,6 +1,7 @@
 import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { faPuzzlePiece, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { SplitGutterInteractionEvent } from 'angular-split';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
@@ -20,6 +21,7 @@ import {
     keypressCapturing,
     getUpdateInfo,
     firstAttemptOfSaveToKeyboard,
+    isStatusBufferErrorHidden,
     getOutOfSpaceWaringData,
     getShowFirmwareUpgradePanel
 } from './store';
@@ -27,7 +29,13 @@ import { StartDonglePairingAction } from './store/actions/dongle-pairing.action'
 import { AddNewPairedDevicesToHostConnectionsAction } from './store/actions/user-config';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
-import { CloseErrorPanelAction, ErrorPanelSizeChangedAction, KeyUpAction, KeyDownAction } from './store/actions/app';
+import {
+    CloseErrorPanelAction,
+    ShowErrorPanelAction,
+    ErrorPanelSizeChangedAction,
+    KeyUpAction,
+    KeyDownAction,
+} from './store/actions/app';
 import { BleAddingState, DonglePairingState, OutOfSpaceWarningData } from './models';
 import { filter } from 'rxjs/operators';
 import { SecondSideMenuContainerComponent } from './components/side-menu';
@@ -104,6 +112,7 @@ export class MainAppComponent implements OnDestroy {
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
     firstAttemptOfSaveToKeyboard$: Observable<boolean>;
+    isStatusBufferErrorHidden$: Observable<boolean>;
     outOfSpaceWarning: OutOfSpaceWarningData;
     secondSideMenuVisible = false;
     splitSizes = {
@@ -164,6 +173,7 @@ export class MainAppComponent implements OnDestroy {
         this.keypressCapturingSubscription = store.select(keypressCapturing)
             .subscribe(data => this.keypressCapturing = data);
         this.firstAttemptOfSaveToKeyboard$ = store.select(firstAttemptOfSaveToKeyboard);
+        this.isStatusBufferErrorHidden$ = store.select(isStatusBufferErrorHidden);
         this.outOfSpaceWarningSubscription = store.select(getOutOfSpaceWaringData)
             .subscribe(data => this.outOfSpaceWarning = data);
         this.routeDataSubscription = this.router.events.pipe(
@@ -253,6 +263,10 @@ export class MainAppComponent implements OnDestroy {
         this.store.dispatch(new CloseErrorPanelAction());
     }
 
+    showErrorPanel(): void {
+        this.store.dispatch(new ShowErrorPanelAction());
+    }
+
     updateApp() {
         this.store.dispatch(new UpdateAppAction());
     }
@@ -283,4 +297,7 @@ export class MainAppComponent implements OnDestroy {
     startDonglePairing(): void {
         this.store.dispatch(new StartDonglePairingAction());
     }
+
+    protected readonly faPuzzlePiece = faPuzzlePiece;
+    protected readonly faArrowUp = faArrowUp;
 }
