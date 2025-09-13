@@ -41,8 +41,8 @@
                 <router-outlet></router-outlet>
             </as-split-area>
             <as-split-area *ngIf="statusBuffer" [size]="splitSizes.bottom" class="error-panel" [@errorPanel]>
-                <button type="button" class="btn-close" aria-label="Close" (click)="closeErrorPanel()"></button>
                 <pre [innerHTML]="statusBuffer | newLineToBr | safeHtml"></pre>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closeErrorPanel()"></button>
             </as-split-area>
         </as-split>
     </div>
