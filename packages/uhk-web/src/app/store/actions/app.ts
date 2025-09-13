@@ -10,6 +10,7 @@ export enum ActionTypes {
     AppShowNotification = '[app] show notification',
     ApplyAppStartInfo = '[app] apply command line args',
     AppProcessStartInfo = '[app] process start info',
+    CloseErrorPanel = '[app] close error panel',
     ErrorPanelSizeChanged = '[app] errol panel size changed',
     UndoLast = '[app] undo last action',
     UndoLastSuccess = '[app] undo last action success',
@@ -42,6 +43,11 @@ export class AppBootstrappedAction implements Action {
 export class AppStartedAction implements Action {
     type = ActionTypes.AppStarted;
 }
+
+export class CloseErrorPanelAction implements Action {
+    type = ActionTypes.CloseErrorPanel;
+}
+
 
 export class ErrorPanelSizeChangedAction implements Action {
     type = ActionTypes.ErrorPanelSizeChanged;
@@ -195,6 +201,7 @@ export class NavigateTo implements Action {
 export type Actions
     = AppStartedAction
     | AppBootstrappedAction
+    | CloseErrorPanelAction
     | ErrorPanelSizeChangedAction
     | ShowNotificationAction
     | ApplyAppStartInfoAction

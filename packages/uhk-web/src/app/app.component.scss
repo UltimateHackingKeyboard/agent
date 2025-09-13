@@ -16,9 +16,16 @@
             }
 
             .error-panel {
+                position: relative;
                 background-color: var(--color-out-of-space-warning-bg);
                 color: var(--color-out-of-space-warning-text);
                 font-family: 'JetBrains Mono';
+
+                .btn-close {
+                    position: absolute;
+                    top: 2px;
+                    right: 2px;
+                }
             }
 
             &.second-menu-visible {

@@ -27,7 +27,7 @@ import { StartDonglePairingAction } from './store/actions/dongle-pairing.action'
 import { AddNewPairedDevicesToHostConnectionsAction } from './store/actions/user-config';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
-import { ErrorPanelSizeChangedAction, KeyUpAction, KeyDownAction } from './store/actions/app';
+import { CloseErrorPanelAction, ErrorPanelSizeChangedAction, KeyUpAction, KeyDownAction } from './store/actions/app';
 import { BleAddingState, DonglePairingState, OutOfSpaceWarningData } from './models';
 import { filter } from 'rxjs/operators';
 import { SecondSideMenuContainerComponent } from './components/side-menu';
@@ -247,6 +247,10 @@ export class MainAppComponent implements OnDestroy {
 
     addPairedDevicesToHostConnections() {
         this.store.dispatch(new AddNewPairedDevicesToHostConnectionsAction());
+    }
+
+    closeErrorPanel(): void {
+        this.store.dispatch(new CloseErrorPanelAction());
     }
 
     updateApp() {

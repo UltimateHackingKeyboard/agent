@@ -34,6 +34,7 @@ export interface State {
     isPairedWithDongle?: boolean;
     connectedDevice: UhkDeviceProduct;
     hasPermission: boolean;
+    hideStatusBufferError: boolean;
     bootloaderActive: boolean;
     deviceConnectionStateLoaded: boolean;
     hostConnectionPairState: Record<string, boolean>;
@@ -65,6 +66,7 @@ export const initialState: State = {
     bootloaderActive: false,
     connectedDevice: UHK_60_DEVICE,
     deviceConnectionStateLoaded: false,
+    hideStatusBufferError: false,
     hostConnectionPairState: {},
     isErasingBleSettings: false,
     keyboardHalvesAlwaysJoined: false,
@@ -92,6 +94,13 @@ export const initialState: State = {
 export function reducer(state = initialState, action: Action): State {
 
     switch (action.type) {
+
+        case App.ActionTypes.CloseErrorPanel: {
+            return {
+                ...state,
+                hideStatusBufferError: true,
+            };
+        }
 
         case App.ActionTypes.LoadApplicationSettingsSuccess: {
             const settings = (action as App.LoadApplicationSettingsSuccessAction).payload;
@@ -236,9 +245,16 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case Device.ActionTypes.StatusBufferChanged: {
+            const statusBuffer = (<Device.StatusBufferChangedAction>action).payload;
+
+            if (statusBuffer === state.statusBuffer) {
+                return state;
+            }
+
             return {
                 ...state,
-                statusBuffer: (<Device.StatusBufferChangedAction>action).payload
+                hideStatusBufferError: false,
+                statusBuffer
             };
         }
 
@@ -430,7 +446,13 @@ export const getLeftHalfDetected = (state: State) => state.leftHalfDetected;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
-export const getStatusBuffer = (state: State) => state.statusBuffer;
+export const getStatusBuffer = (state: State) => {
+    if (state.hideStatusBufferError) {
+        return ''
+    }
+
+    return state.statusBuffer;
+};
 export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
 export const getRecoveryPageState = (state: State): RecoverPageState => {
     let deviceText = 'UHK Device';
