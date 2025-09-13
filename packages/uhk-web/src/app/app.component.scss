@@ -16,9 +16,26 @@
             }
 
             .error-panel {
+                position: relative;
                 background-color: var(--color-out-of-space-warning-bg);
                 color: var(--color-out-of-space-warning-text);
                 font-family: 'JetBrains Mono';
+
+                .btn-close {
+                    position: absolute;
+                    top: 2px;
+                    right: 2px;
+                    display: inline;
+                }
+
+                pre {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    top: 0;
+                    margin: 0;
+                }
             }
 
             &.second-menu-visible {
@@ -38,6 +55,16 @@ app-update-available {
     left: 0;
     right: 0;
     z-index: 1000;
+}
+
+.show-error-panel-button {
+    position: fixed;
+    bottom: 15px;
+    left: 265px;
+    z-index: 25;
+    background-color: var(--color-out-of-space-warning-bg);
+    color: var(--color-out-of-space-warning-text);
+    border: none;
 }
 
 .save-to-keyboard-button {

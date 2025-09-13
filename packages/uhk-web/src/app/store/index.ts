@@ -302,6 +302,7 @@ export const getConnectedDevice = createSelector(deviceState, fromDevice.getConn
 export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.getSkipFirmwareUpgrade);
 export const isKeyboardLayoutChanging = createSelector(deviceState, fromDevice.isKeyboardLayoutChanging);
 export const keyboardHalvesAlwaysJoined = createSelector(deviceState, fromDevice.keyboardHalvesAlwaysJoined);
+export const isStatusBufferErrorHidden = createSelector(deviceState, fromDevice.isStatusBufferErrorHidden);
 export const getStatusBuffer = createSelector(deviceState, fromDevice.getStatusBuffer);
 export const getParsedStatusBuffer = createSelector(getMacros, getStatusBuffer, parseStatusBuffer);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
