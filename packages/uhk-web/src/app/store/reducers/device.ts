@@ -87,7 +87,7 @@ export const initialState: State = {
     readingConfigSizes: false,
     configSizes: { userConfig: 32704, hardwareConfig: 64 },
     skipFirmwareUpgrade: false,
-    statusBuffer: '',
+    statusBuffer: 'dasd',
     udevRuleInfo: UdevRulesInfo.Ok,
 };
 
