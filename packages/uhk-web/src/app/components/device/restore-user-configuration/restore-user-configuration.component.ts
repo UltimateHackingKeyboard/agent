@@ -9,15 +9,15 @@ import { ResetUserConfigurationAction, RestoreUserConfigurationFromBackupAction 
 import { RestoreConfigurationState } from '../../../models/restore-configuration-state';
 
 @Component({
-    selector: 'restore-configuration',
-    templateUrl: './restore-configuration.component.html',
-    styleUrls: ['./restore-configuration.component.scss'],
+    selector: 'restore-user-configuration',
+    templateUrl: './restore-user-configuration.component.html',
+    styleUrls: ['./restore-user-configuration.component.scss'],
     standalone: false,
     host: {
         'class': 'container-fluid'
     }
 })
-export class RestoreConfigurationComponent implements OnInit, OnDestroy {
+export class RestoreUserConfigurationComponent implements OnInit, OnDestroy {
     backupUserConfigurationInfo = BackupUserConfigurationInfo;
     state: RestoreConfigurationState;
     faExclamationCircle = faExclamationCircle;

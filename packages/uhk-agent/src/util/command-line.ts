@@ -13,7 +13,10 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'pid', type: Number },
     { name: 'no-report-id', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
+    { name: 'print-hardware-configuration', type: Boolean },
+    { name: 'print-status-buffer', type: Boolean },
     { name: 'print-usb-devices', type: Boolean },
+    { name: 'restore-user-configuration', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'report-id', type: Number },
     { name: 'serial-number', type: String },
@@ -21,6 +24,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'usb-interface', type: Number },
     { name: 'usb-non-blocking', type: Boolean },
     { name: 'vid', type: Number },
+    { name: 'write-hardware-configuration', type: String },
 ];
 
 export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true }) as CommandLineArgs;
@@ -75,6 +79,16 @@ const sections: commandLineUsage.Section[] = [
                 type: Boolean
             },
             {
+                name: 'print-hardware-configuration',
+                description: 'Print hardware configuration to the standard output and exit.',
+                type: Boolean
+            },
+            {
+                name: 'print-status-buffer',
+                description: 'Print the status buffer of the keyboard to the standard output and exit.',
+                type: Boolean
+            },
+            {
                 name: 'print-usb-devices',
                 description: 'Print usb devices to the standard output and exit.',
                 type: Boolean
@@ -85,6 +99,11 @@ const sections: commandLineUsage.Section[] = [
                     'This may make Windows install the USB drivers needed for firmware update. ' +
                     'Please provide the timeout in milliseconds.',
                 typeLabel: '(bootloader|buspal),timeout'
+            },
+            {
+                name: 'restore-user-configuration',
+                description: 'Run restore user-configuration process and exit.',
+                type: Boolean,
             },
             {
                 name: 'report-id',
@@ -114,7 +133,12 @@ const sections: commandLineUsage.Section[] = [
                 name: 'vid',
                 description: 'Use the specified USB vendor id. If you set it you have to set the pid too.',
                 type: Number
-            }
+            },
+            {
+                name: 'write-hardware-configuration',
+                description: 'Overwrite/reset the current hardware configuration and exit.',
+                typeLabel: 'ansi | iso'
+            },
         ]
     }
 ];

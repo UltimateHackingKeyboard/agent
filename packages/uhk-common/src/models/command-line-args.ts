@@ -57,15 +57,23 @@ export interface CommandLineArgs extends DeviceIdentifier {
      * Agent not force the udev rule update
      */
     'preserve-udev-rules'?: boolean;
-    /**
-     * Agent not force the udev rule update
-     */
+
+    'print-hardware-configuration'?: boolean;
+
+    'print-status-buffer'?: boolean;
+
     'print-usb-devices'?: boolean;
     /**
      * Reenumerate as the bootloader or BusPal, wait for the specified timeout and exit.
      * This may make Windows install the USB drivers needed for firmware update.
      */
     'reenumerate-and-exit'?: string;
+
+    /**
+     * Run restore user-configuration process and exit.
+     */
+    'restore-user-configuration'?: boolean;
+
     /**
      * Report Id that used for USB communication
      */
@@ -78,4 +86,10 @@ export interface CommandLineArgs extends DeviceIdentifier {
      * Use USB non-blocking communication
      */
     'usb-non-blocking'?: boolean;
+
+    /**
+     * Overwrite/reset the current hardware configuration and exit.
+     * The argument is the keyboard layout {ansi|iso}
+     */
+    'write-hardware-configuration'?: string;
 }

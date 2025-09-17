@@ -33,7 +33,7 @@ import {
     FunctionalBacklightColorComponent,
     MouseSpeedComponent,
     LEDSettingsComponent,
-    RestoreConfigurationComponent,
+    RestoreUserConfigurationComponent,
     RecoveryModeComponent,
     TypingBehaviorPage
 } from './components/device';
@@ -274,7 +274,7 @@ import appInitFactory from './services/app-init-factory';
         EditableTextComponent,
         Autofocus,
         NgSelectMaxHeight,
-        RestoreConfigurationComponent,
+        RestoreUserConfigurationComponent,
         RecoveryModeComponent,
         FileUploadComponent,
         AutoGrowInputComponent,

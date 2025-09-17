@@ -23,9 +23,18 @@ import { SudoService } from './services/sudo.service';
 import { SmartMacroDocService } from './services/smart-macro-doc.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
-import { printUsbDevices } from './util';
 import { loadWindowState, saveWindowState } from './util/window';
-import { getWindowBackgroundColor, options, cliUsage, reenumerateAndExit } from './util';
+import {
+    getWindowBackgroundColor,
+    options,
+    cliUsage,
+    printStatusBuffer,
+    printUsbDevices,
+    printHardwareConfiguration,
+    reenumerateAndExit,
+    restoreUserConfiguration,
+    writeHardwareConfiguration,
+} from './util';
 
 if (options.help) {
     console.log(cliUsage);
@@ -162,6 +171,10 @@ async function createWindow() {
 
 if (isSecondInstance) {
     app.quit();
+} else if (options['print-hardware-configuration']) {
+    printHardwareConfiguration({ logger, uhkOperations })
+} else if (options['print-status-buffer']) {
+    printStatusBuffer({ logger, uhkOperations })
 } else if (options['print-usb-devices']) {
     printUsbDevices()
         .then(() => {
@@ -187,6 +200,18 @@ if (isSecondInstance) {
             logger.misc('Reenumeration process finished with error. Please unplug and plug your UHK.');
             process.exit(-1);
         });
+} else if (options['restore-user-configuration']) {
+    restoreUserConfiguration({
+        logger,
+        uhkOperations,
+        commandLineArgs: options,
+    })
+} else if (options['write-hardware-configuration']) {
+    writeHardwareConfiguration({
+        logger,
+        uhkOperations,
+        commandLineArgs: options,
+    })
 } else {
 
     // This method will be called when Electron has finished
