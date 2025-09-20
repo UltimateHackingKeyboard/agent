@@ -99,6 +99,7 @@ import { appRoutingProviders, routing } from './app.routes';
 import { UhkAgentIconComponent } from './components/uhk-icon/uhk-agent-icon.component';
 
 import { CancelableDirective, ExternalUrlDirective } from './directives';
+import { NgxColorPickerEyeDropper } from './directives/ngx-color-picker-eye-dropper';
 import {
     AsHexColorPipe,
     EscapeHtmlPipe,
@@ -292,6 +293,7 @@ import appInitFactory from './services/app-init-factory';
     imports: [
         AngularSplitModule,
         CommonModule,
+        NgxColorPickerEyeDropper,
         ColorPickerDirective,
         BrowserAnimationsModule,
         FontAwesomeModule,
