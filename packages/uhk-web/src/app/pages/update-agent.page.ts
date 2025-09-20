@@ -24,8 +24,11 @@ import { PreviewUserConfigurationAction } from '../store/actions/user-config';
             <uhk-agent-icon class="agent-logo"></uhk-agent-icon>
             <div>
                 <h1>Update Agent</h1>
+                <ng-template #upgradeAgentTooltip>
+                    <div [innerHTML]="upgradeAgentTooltip$ | async | safeHtml"></div>
+                </ng-template>
                 <p class="mb-2">
-                    Your UHK contains a <span class="text-dotted" [ngbTooltip]="upgradeAgentTooltip$ | async">newer configuration version</span>
+                    Your UHK contains a <span class="text-dotted" [ngbTooltip]="upgradeAgentTooltip" tooltipClass="tooltip-firmware-checksum">newer configuration version</span>
                     than this Agent version can handle, so you must update Agent.
                 </p>
                 <p>
