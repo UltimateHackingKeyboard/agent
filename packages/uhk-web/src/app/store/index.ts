@@ -764,12 +764,13 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
     });
 export const upgradeAgentTooltip = createSelector(
     getNewerUserConfiguration,
-    (newUserConfiguration) => {
+    getHardwareModules,
+    (newUserConfiguration, hardwareModules) => {
         if (!newUserConfiguration) {
             return '';
         }
 
-        return `rightModule.userConfigVersion ${newUserConfiguration.newUserConfigurationVersion} minor version is larger than agent.userConfigVersion ${VERSIONS.userConfigVersion}`;
+        return `rightHalf.firmware.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} minor version is larger than agent.userConfigVersion ${VERSIONS.userConfigVersion}. <br /> <br /> rightHalf.flashedUserConfigVersion: ${newUserConfiguration.newUserConfigurationVersion}`;
     });
 export const upgradeFirmwareTooltip = createSelector(
     getHardwareModules,
