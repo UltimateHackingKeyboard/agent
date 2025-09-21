@@ -79,6 +79,18 @@ export class UhkOperations {
         await this.device.write(transfer);
     }
 
+    public async disableFirmwareVersionCheck(): Promise<void> {
+        this.logService.usbOps('[UhkHidDevice] USB[T]: Disable firmware version check.');
+        const transfer = Buffer.from([UsbCommand.SetVariable, UsbVariables.FirmwareVersionCheckEnabled, 0]);
+        await this.device.write(transfer);
+    }
+
+    public async enableFirmwareVersionCheck(): Promise<void> {
+        this.logService.usbOps('[UhkHidDevice] USB[T]: Enable firmware version check.');
+        const transfer = Buffer.from([UsbCommand.SetVariable, UsbVariables.FirmwareVersionCheckEnabled, 1]);
+        await this.device.write(transfer);
+    }
+
     public async jumpToBootloaderModule(module: ModuleSlotToId): Promise<void> {
         this.logService.usbOps(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
         const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
