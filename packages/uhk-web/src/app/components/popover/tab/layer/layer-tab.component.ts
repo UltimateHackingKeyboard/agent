@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { copyRgbColor, KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode } from 'uhk-common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { copyRgbColor, KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode, UserConfiguration } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { LayerOption } from '../../../../models';
+import { RemapInfo } from '../../../../models/remap-info';
+import { initLayerOptions } from '../../../../store/reducers/layer-options';
 
 export type toggleType = 'active' | 'toggle';
 
@@ -14,10 +16,13 @@ export type toggleType = 'active' | 'toggle';
     styleUrls: ['./layer-tab.component.scss']
 })
 export class LayerTabComponent extends Tab implements OnChanges {
+    @Input() allowRemapOnAllKeymapWarning: boolean;
     @Input() defaultKeyAction: KeyAction;
     @Input() currentLayer: LayerOption;
     @Input() allowLayerDoubleTap: boolean;
-    @Input() layerOptions: LayerOption[];
+    @Input() layerOptions: LayerOption[] = [];
+    @Input() remapInfo: RemapInfo;
+    @Input() userConfiguration: UserConfiguration;
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
@@ -36,12 +41,15 @@ export class LayerTabComponent extends Tab implements OnChanges {
 
     toggle: toggleType;
     layer: LayerName;
+    layerDisplayText: string;
     lockLayerWhenDoubleTapping: boolean;
+    showWarning= false;
 
-    constructor() {
+    constructor(private cdRef: ChangeDetectorRef) {
         super();
         this.toggle = 'active';
         this.layer = LayerName.mod;
+        this.calculateWarning();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -57,6 +65,7 @@ export class LayerTabComponent extends Tab implements OnChanges {
             this.layerData = this.layerOptions.filter(layer => layer.selected && layer.allowed);
         }
 
+        this.calculateWarning();
         this.validAction.emit(!this.isNotBase);
     }
 
@@ -117,5 +126,32 @@ export class LayerTabComponent extends Tab implements OnChanges {
 
     layerChanged(value: number) {
         this.layer = +value;
+        this.calculateWarning();
+    }
+
+    private calculateWarning() {
+        if (this.allowRemapOnAllKeymapWarning && this.userConfiguration && this.remapInfo.remapOnAllKeymap) {
+            for (const keymap of this.userConfiguration.keymaps) {
+                const layer = keymap.layers.find(layer => layer.id === this.layer);
+                if (!layer) {
+                    this.showWarning = true;
+
+                    const layerOptions = initLayerOptions();
+                    const layerOption = layerOptions.get(this.layer);
+                    this.layerDisplayText = layerOption?.name;
+
+                    break;
+                }
+            }
+        }
+        else {
+            this.showWarning = false;
+        }
+    }
+
+    remapInfoChanged(remapInfo: RemapInfo): void {
+        this.remapInfo = remapInfo;
+        this.calculateWarning();
+        this.cdRef.markForCheck();
     }
 }

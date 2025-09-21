@@ -38,6 +38,10 @@
                 <label class="form-check-label" for="lockLayerDoubleTap">Lock layer when double tapping this key.</label>
             </div>
         </div>
+
+        <div *ngIf="showWarning" class="alert alert-warning remap-warning" role="alert">
+            You're targeting the <strong>{{ layerDisplayText }}</strong> layer on all keymaps, some of which don't have this layer. This mapping will only be added to keymaps that have the <strong>{{ layerDisplayText }}</strong> layer.
+        </div>
     </div>
 </ng-template>
 <ng-template [ngIf]="isNotBase">
