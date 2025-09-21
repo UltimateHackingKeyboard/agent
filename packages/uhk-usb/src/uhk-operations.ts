@@ -18,6 +18,8 @@ import {
     LogService,
     ModuleSlotToId,
     ModuleVersionInfo,
+    OLED_DISPLAY_HEIGHT,
+    OLED_DISPLAY_WIDTH,
     UhkBuffer,
     UhkDeviceProduct,
     UhkModule,
@@ -71,6 +73,28 @@ interface GetModulePropertyArguments {
 export class UhkOperations {
     constructor(private logService: LogService,
                 private device: UhkHidDevice) {
+    }
+
+    async readOled(): Promise<Buffer> {
+        this.logService.usbOps('[UhkHidDevice] USB[T]: Capture oled.');
+        let offset = 0
+        let oledData = Buffer.alloc(0);
+
+        while (true) {
+            const transfer = Buffer.from([UsbCommand.ReadOled, offset & 0xff, offset >> 8]);
+            const readBuffer = await this.device.write(transfer);
+            const dataLength = readBuffer.readUInt8(1)
+
+            if (dataLength === 0) {
+                break;
+            }
+
+            oledData = Buffer.concat([oledData, Buffer.from(readBuffer.slice(2, dataLength + 2))]);
+
+            offset += dataLength;
+        }
+
+        return oledData
     }
 
     public async eraseBleSettings(): Promise<void> {

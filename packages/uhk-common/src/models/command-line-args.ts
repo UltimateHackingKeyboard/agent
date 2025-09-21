@@ -22,6 +22,11 @@ export interface DeviceIdentifier {
 
 export interface CommandLineArgs extends DeviceIdentifier {
     /**
+     * Capture UHK 80 OLED state as png
+     */
+    'capture-oled'?: string;
+
+    /**
      * Allow Developer Tools menu
      */
     devtools?: boolean;

@@ -25,6 +25,7 @@ import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
 import {
+    captureOled,
     getWindowBackgroundColor,
     options,
     cliUsage,
@@ -171,6 +172,12 @@ async function createWindow() {
 
 if (isSecondInstance) {
     app.quit();
+} else if (options['capture-oled']) {
+    captureOled({
+        logger,
+        commandLineArgs: options,
+        uhkOperations,
+    })
 } else if (options['print-hardware-configuration']) {
     printHardwareConfiguration({ logger, uhkOperations })
 } else if (options['print-status-buffer']) {
