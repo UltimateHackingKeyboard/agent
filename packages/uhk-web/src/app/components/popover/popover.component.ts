@@ -28,7 +28,8 @@ import {
     SecondaryRoleAction,
     UhkThemeColors,
     SwitchKeymapAction,
-    SwitchLayerAction
+    SwitchLayerAction,
+    UserConfiguration,
 } from 'uhk-common';
 
 import { SelectedKeyModel } from '../../models';
@@ -40,6 +41,7 @@ import {
     getKeymaps,
     getLayerOptions,
     getUhkThemeColors,
+    getUserConfiguration,
     macroPlaybackSupported
 } from '../../store';
 import { KeyActionRemap } from '../../models/key-action-remap';
@@ -137,6 +139,7 @@ export class PopoverComponent implements OnChanges {
     ];
     macroPlaybackSupported$: Observable<boolean>;
     layerOptions$: Observable<LayerOption[]>;
+    userConfiguration$: Observable<UserConfiguration>;
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
@@ -145,6 +148,7 @@ export class PopoverComponent implements OnChanges {
         this.keymapOptions$ = store.select(getKeymapOptions);
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
         this.layerOptions$ = store.select(getLayerOptions);
+        this.userConfiguration$ = store.select(getUserConfiguration);
     }
 
     ngOnChanges(change: SimpleChanges) {

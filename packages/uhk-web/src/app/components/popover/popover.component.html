@@ -29,10 +29,13 @@
                       (keyActionChange)="keystrokeActionChange($event)"
         ></keypress-tab>
         <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content"
+                   [allowRemapOnAllKeymapWarning]="true"
                    [defaultKeyAction]="defaultKeyAction"
                    [currentLayer]="currentLayer"
                    [allowLayerDoubleTap]="allowLayerDoubleTap"
                    [layerOptions]="layerOptions$ | async"
+                   [remapInfo]="internalRemapInfo"
+                   [userConfiguration]="userConfiguration$ | async"
                    (validAction)="setKeyActionValidState($event)"
         ></layer-tab>
         <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content"
@@ -71,7 +74,8 @@
                     <input type="checkbox" class="form-check-input"
                         id="remapOnAllKeymap"
                         name="remapOnAllKeymap"
-                        [(ngModel)]="internalRemapInfo.remapOnAllKeymap">
+                        [(ngModel)]="internalRemapInfo.remapOnAllKeymap"
+                        (ngModelChange)="remapInfoChange()">
                     <label class="form-check-label" for="remapOnAllKeymap">Remap on all keymaps</label>
                 </div>
                 <div class="form-check">
