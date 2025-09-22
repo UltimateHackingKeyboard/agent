@@ -4,6 +4,7 @@ import { CommandLineArgs } from 'uhk-common';
 import { assertCommandLineOptions } from 'uhk-usb';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
+    { name: 'capture-oled', type: String },
     { name: 'devtools', type: Boolean },
     { name: 'disable-agent-update-protection', type: Boolean },
     { name: 'error-simulation', type: String },
@@ -38,6 +39,11 @@ const sections: commandLineUsage.Section[] = [
     {
         header: 'Options',
         optionList: [
+            {
+                name: 'capture-oled',
+                description: 'Capture UHK 80 OLED content into the given path as png',
+                type: String
+            },
             {
                 name: 'devtools',
                 description: 'Allow the Developer Tools menu.',
