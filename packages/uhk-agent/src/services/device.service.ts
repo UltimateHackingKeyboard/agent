@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import { emptyDir } from 'fs-extra';
 import { cloneDeep, isEqual } from 'lodash';
 import os from 'os';
+import { UhkDeviceProduct } from 'uhk-common';
 import {
     ALL_UHK_DEVICES,
     AreBleAddressesPairedIpcResponse,
@@ -488,6 +489,8 @@ export class DeviceService {
         }
 
         let firmwarePathData: TmpFirmware;
+        let shouldEnableFirmwareVersionCheck = false;
+        let uhkDeviceProduct: UhkDeviceProduct;
 
         try {
             await this.stopPollUhkDevice();
@@ -506,7 +509,7 @@ export class DeviceService {
 
             event.sender.send(IpcEvents.device.updateFirmwareJson, packageJson);
 
-            const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
+            uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
             if (shouldUpgradeAgent(packageJson.userConfigVersion, this.disableAgentUpgrade)) {
                 response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
@@ -592,6 +595,13 @@ export class DeviceService {
                 await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevices(uhkDeviceProduct.keyboard);
+
+                if (uhkDeviceProduct.id === UHK_DEVICE_IDS.UHK80_RIGHT) {
+                    this.logService.misc('[DeviceService] Disable firmware version check.');
+                    await this.operations.disableFirmwareVersionCheck();
+                    shouldEnableFirmwareVersionCheck = true;
+                }
+
                 hardwareModules = await this.getHardwareModules(false);
                 event.sender.send(IpcEvents.device.hardwareModulesLoaded, hardwareModules);
 
@@ -763,6 +773,22 @@ export class DeviceService {
 
         if (data.uploadFile) {
             await emptyDir(firmwarePathData.tmpDirectory);
+        }
+
+        await snooze(500);
+
+        try {
+            if (shouldEnableFirmwareVersionCheck) {
+                await waitForDevices(uhkDeviceProduct.keyboard);
+                this.logService.misc('[DeviceService] Enable firmware version check.');
+                await this.operations.enableFirmwareVersionCheck();
+            }
+        }
+        catch (error) {
+            const err = { message: error.message, stack: error.stack };
+            this.logService.error('[DeviceService] error while enabling firmware version check', err);
+
+            response.error = err;
         }
 
         await snooze(500);
