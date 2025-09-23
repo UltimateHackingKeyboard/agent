@@ -202,6 +202,7 @@ export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeCo
     return  defaultUhkThemeColors(theme);
 });
 export const getPlatform = createSelector(appState, fromApp.getPlatform);
+export const isColorPickerEyeDropperEnabled = createSelector(appState, fromApp.isColorPickerEyeDropperEnabled);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
