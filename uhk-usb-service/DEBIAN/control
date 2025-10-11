@@ -1,0 +1,11 @@
+Package: uhk-usb-rebind
+Version: 1.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: Benedek Kupper <kupper.benedek@gmail.com>
+Description: Rebinds UHK USB devices on resume to fix scrolling issues
+  This package provides a script and a systemd service that put both the host and the device
+  into a known good state after resuming from suspend. This is a temporary workaround,
+  until this patch is merged into the Linux kernel:
+  https://lore.kernel.org/linux-input/20251007203544.9963-1-kupper.benedek@gmail.com/T/#u

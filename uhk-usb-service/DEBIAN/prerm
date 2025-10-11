@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+# If systemctl is available, try to disable the unit so packager removal cleans up symlinks
+if command -v systemctl >/dev/null 2>&1; then
+    # Try to stop the service (ignore failures)
+    systemctl stop uhk-usb-rebind.service || true
+    # Disable the unit (remove symlink)
+    systemctl disable uhk-usb-rebind.service || true
+    # Reload daemon so the removal is recognized
+    systemctl daemon-reload || true
+fi
+
+exit 0
