@@ -9,7 +9,7 @@ import { logUserConfigHelper, LogService, LogRegExps, UserConfiguration } from '
  * - on Linux: ~/.config/<app name>/uhk-agent.log
  * - on OS X: ~/Library/Logs/<app name>/uhk-agent.log
  * - on Windows: %USERPROFILE%\AppData\Roaming\<app name>\uhk-agent.log
- * The app name: UHK Agent. The up to date value in the scripts/release.js file.
+ * The app name: UHK Agent. The up to date value in the scripts/release.mjs file.
  */
 log.initialize({})
 log.transports.console.level = 'silly';
