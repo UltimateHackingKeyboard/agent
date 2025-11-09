@@ -171,12 +171,11 @@ export const backlightingColorPalette = createSelector(userConfigState, fromUser
 export const isBacklightingColoring = createSelector(userConfigState, fromUserConfig.isBacklightingColoring);
 export const selectedBacklightingColor = createSelector(userConfigState, fromUserConfig.selectedBacklightingColor);
 export const selectedBacklightingColorIndex = createSelector(userConfigState, fromUserConfig.selectedBacklightingColorIndex);
-export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
+export const getKeymapOptions = createSelector(getKeymaps, (keymaps): SelectOptionData[] => {
     return keymaps.map(keymap => {
         return {
             id: keymap.abbreviation,
             text: keymap.name,
-            disabled: keymap.abbreviation === selectedKeymap.abbreviation
         };
     });
 });

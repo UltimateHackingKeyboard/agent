@@ -13,6 +13,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 })
 export class KeymapTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
+    @Input() keymap: Keymap;
     @Input() keymaps: Keymap[];
     @Input() keymapOptions: SelectOptionData[];
     @Input() uhkThemeColors: UhkThemeColors;

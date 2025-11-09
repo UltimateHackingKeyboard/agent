@@ -40,6 +40,7 @@ import {
     getKeymapOptions,
     getKeymaps,
     getLayerOptions,
+    getSelectedKeymap,
     getUhkThemeColors,
     getUserConfiguration,
     macroPlaybackSupported
@@ -95,6 +96,7 @@ export class PopoverComponent implements OnChanges {
     keyActionValid: boolean;
     activeTab: TabName;
     uhkThemeColors$: Observable<UhkThemeColors>;
+    keymap$: Observable<Keymap>;
     keymaps$: Observable<Keymap[]>;
     keymapOptions$: Observable<SelectOptionData[]>;
     shadowKeyAction: KeyAction;
@@ -144,6 +146,7 @@ export class PopoverComponent implements OnChanges {
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
         this.uhkThemeColors$ = store.select(getUhkThemeColors);
+        this.keymap$ = store.select(getSelectedKeymap);
         this.keymaps$ = store.select(getKeymaps);
         this.keymapOptions$ = store.select(getKeymapOptions);
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);

@@ -53,6 +53,7 @@
         ></macro-tab>
         <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content"
                     [defaultKeyAction]="defaultKeyAction"
+                    [keymap]="keymap$ | async"
                     [keymaps]="keymaps$ | async"
                     [keymapOptions]="keymapOptions$ | async"
                     [uhkThemeColors]="uhkThemeColors$ | async"
