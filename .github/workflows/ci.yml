@@ -121,7 +121,7 @@ jobs:
         env:
           VERSION: ${{ env.TAG_VERSION }}
         run: |
-          cd firmware
+          cd agent
           DELIMITER=$(openssl rand -hex 16)
           echo "content<<$DELIMITER" >> $GITHUB_OUTPUT
           sed -n "/^## \\[${VERSION}\\]/,/^## \\[/p" CHANGELOG.md | sed '$d' | tail -n +3 >> $GITHUB_OUTPUT
