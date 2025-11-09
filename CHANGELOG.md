@@ -6,6 +6,26 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [8.0.1] - 2025-11-09
+
+Firmware: 15.3.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v15.3.0)] | Device Protocol: 4.15.0 | User Config: 12.0.0 | Hardware Config: 1.0.0
+
+**Windows users! Auto-update won't update to this version because the digital signature of the installer has changed. Update manually this time, and auto-update will work again.**
+
+- Upgrade to the latest Electron to make Agent run seamlessly on macOs Tahoe.
+- Make the error panel closeable by clicking on the close button.
+- Make machine wide installation on Windows possible.
+- Allow switching to the same keymap, which is useful from overridden, descendant keymaps.
+- Fix the handling of non-alphanumeric characters in keymap abbreviations.
+- Fix the filling out of the scancode field of newly created macro items when capturing keystrokes.
+- Show warning when creating layer switch action on all keymaps targeting a non-existing layer.
+- Enhance the version information tooltip of Agent upgrade page.
+- Add `--print-hardware-configuration` command line argument.
+- Add `--write-hardware-configuration` command line argument.
+- Add `--print-status-buffer` command line argument.
+- Add `--restore-user-configuration` command line argument.
+- Add `--capture-oled` command line argument.
+
 ## [8.0.0] - 2025-07-10
 
 Firmware: 15.0.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v15.0.1)] | Device Protocol: 4.15.0 | User Config: **12.0.0** | Hardware Config: 1.0.0
