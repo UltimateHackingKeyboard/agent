@@ -14,6 +14,7 @@ Firmware: 15.3.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/
 
 - Upgrade to the latest Electron to make Agent run seamlessly on macOs Tahoe.
 - Make the error panel closeable by clicking on the close button.
+- Prevent firmware version checks during firmware upgrades.
 - Make machine wide installation on Windows possible.
 - Allow switching to the same keymap, which is useful from overridden, descendant keymaps.
 - Fix the handling of non-alphanumeric characters in keymap abbreviations.
