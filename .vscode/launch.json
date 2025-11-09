@@ -7,7 +7,7 @@
     {
       "name": "Release",
       "cwd": "${workspaceFolder}",
-      "program": "${workspaceFolder}/scripts/release.js",
+      "program": "${workspaceFolder}/scripts/release.mjs",
       "request": "launch",
       "skipFiles": [
         "<node_internals>/**"
