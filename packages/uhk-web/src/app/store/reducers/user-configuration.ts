@@ -1433,7 +1433,6 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
     const newKeyAction = keyActionRemap.action;
     const newKeymap: Keymap = payload.keymap;
     const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
-    const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
     const oldKeyAction = newKeymap
         .layers.find(layer => layer.id === layerIndex)
         .modules.find(findModuleById(moduleIndex)).keyActions[keyIndex];
@@ -1441,11 +1440,6 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
 
     const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), userConfig);
     userConfiguration.keymaps = userConfig.keymaps.map(keymap => {
-        // SwitchKeymapAction not allow to refer to itself
-        if (isSwitchKeymapAction && keymap.abbreviation === (newKeyAction as any).keymapAbbreviation) {
-            return keymap;
-        }
-
         if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
             keymap = Object.assign(new Keymap, keymap);
             keymap.layers = keymap.layers.map(layer => {
