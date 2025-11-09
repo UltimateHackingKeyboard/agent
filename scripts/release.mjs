@@ -124,6 +124,9 @@ async function release () {
             linux: {
                 extraResources
             },
+            nsis: {
+              oneClick: false,
+            },
             publish: 'github',
             artifactName,
             files: [
