@@ -54,6 +54,9 @@ if (process.platform === 'darwin') {
     artifactName += '-${arch}.${ext}';
     extraResources.push('rules/setup-rules.sh');
     extraResources.push('rules/50-uhk60.rules');
+    extraResources.push('uhk-usb-service/manual-install.sh');
+    extraResources.push('uhk-usb-service/usr/lib/systemd/system/uhk-usb-rebind.service');
+    extraResources.push('uhk-usb-service/usr/local/bin/uhk-usb-rebind.sh');
 } else {
     console.error(`I dunno how to publish a release for ${process.platform} :(`);
     process.exit(1);
