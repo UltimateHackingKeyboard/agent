@@ -3,37 +3,71 @@
 </ng-template>
 <ng-template [ngIf]="macroOptions.length > 0">
     <p *ngIf="!macroPlaybackSupported"><i>Please note that macro playback is not implemented yet. You can bind macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
-    <div class="macro-selector">
-        <b> Play macro: </b>
-        <ng-select
-            select-max-height
-            [items]="macroOptions"
-            [ngModel]="macroOptions[selectedMacroIndex]?.id"
-            (ngModelChange)="onChange($event)"
-            [clearable]="false"
-            bindLabel="text"
-            bindValue="id"
-        >
-            <ng-template ng-option-tmp let-option="item">
-                <span [ngClass]="{'indent-dropdown-item':option.id !== '-1'}">
-                    <span>{{ option.text }}</span>
-                    <span class="scancode--searchterm">
-                        {{ option.additional?.explanation}}
-                    </span>
-                </span>
-            </ng-template>
-        </ng-select>
-        <a class="btn btn-link" [routerLink]="['/macro', macros[selectedMacroIndex]?.id]"
-           [queryParams]="jumpToMacroQueryParams"
-           ngbTooltip="Jump to macro">
-            <fa-icon [icon]="faUpRightFromSquare"
-                 aria-hidden="true"></fa-icon>
-        </a>
-        <button class="btn btn-default" (click)="assignNewMacro.emit()" ngbTooltip="Create new macro for this key">
-        <fa-icon [icon]="faPlus"
-                 aria-hidden="true"></fa-icon>
-        </button>
-    </div>
+    <table class="macro-controls-table">
+        <tbody>
+            <tr>
+                <td class="col-label">
+                    <b> Play macro: </b>
+                </td>
+                <td class="col-input">
+                    <ng-select
+                        select-max-height
+                        [items]="macroOptions"
+                        [ngModel]="macroOptions[selectedMacroIndex]?.id"
+                        (ngModelChange)="onChange($event)"
+                        [clearable]="false"
+                        bindLabel="text"
+                        bindValue="id"
+                    >
+                        <ng-template ng-option-tmp let-option="item">
+                            <span [ngClass]="{'indent-dropdown-item':option.id !== '-1'}">
+                                <span>{{ option.text }}</span>
+                                <span class="scancode--searchterm">
+                                    {{ option.additional?.explanation}}
+                                </span>
+                            </span>
+                        </ng-template>
+                    </ng-select>
+                </td>
+                <td class="col-controls">
+                    <a class="btn btn-link" [routerLink]="['/macro', macros[selectedMacroIndex]?.id]"
+                       [queryParams]="jumpToMacroQueryParams"
+                       ngbTooltip="Jump to macro">
+                        <fa-icon [icon]="faUpRightFromSquare"
+                                 aria-hidden="true"></fa-icon>
+                    </a>
+                    <button class="btn btn-default" [class.active]="showMacroArguments" (click)="toggleMacroArguments()" [ngbTooltip]="showMacroArgumentsTooltip" type="button" [attr.aria-pressed]="showMacroArguments">
+                        <fa-icon [icon]="faBracketsWithDots"
+                                 aria-hidden="true" />
+                    </button>
+                    <button class="btn btn-default" (click)="assignNewMacro.emit()" ngbTooltip="Create new macro for this key" type="button">
+                        <fa-icon [icon]="faPlus"
+                                 aria-hidden="true"></fa-icon>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngFor="let macroArgument of playMacroAction.macroArguments; let i = index; let last = last; trackBy:trackByMacroArgumentsFn">
+                <td class="col-label">
+                    $macroArg.{{i + 1}}
+                </td>
+                <td class="col-input">
+                    <input type="text" class="form-control" [ngModel]="macroArgument.value" (ngModelChange)="onMacroArgumentChange($event, i)">
+                </td>
+                <td class="col-controls arguments">
+                    <fa-icon [icon]="faCircleMinus"
+                             aria-hidden="true"
+                             role="button"
+                             (click)="removeMacroArgument(i)"
+                    />
+                    <fa-icon *ngIf="last" [icon]="faCirclePlus"
+                             aria-hidden="true"
+                             role="button"
+                             (click)="addNewMacroArgument()"
+                    />
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <div class="macro-action-container">
         <div class="list-group">
             <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions"

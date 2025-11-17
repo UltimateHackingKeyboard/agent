@@ -4,13 +4,14 @@ import { ConnectionsAction } from './connections-action.js';
 import { Macro } from '../macro.js';
 import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
+import { KeyLabelAction } from './key-label-action.js';
 import { KeystrokeAction } from './keystroke-action.js';
 import { NoneBlockAction } from './none-block-action.js';
 import { OtherAction } from './other-action.js';
 import { SwitchLayerAction } from './switch-layer-action.js';
 import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action.js';
 import { MouseAction } from './mouse-action.js';
-import { PlayMacroAction } from './play-macro-action.js';
+import { MacroArgumentAction, PlayMacroAction } from './play-macro-action.js';
 import { NoneAction } from './none-action.js';
 import { isAllowedScancode } from '../scancode-checker.js';
 
@@ -62,6 +63,10 @@ export class Helper {
         switch (keyActionFirstByte) {
             case KeyActionId.ConnectionsAction:
                 return new ConnectionsAction().fromBinary(buffer, serialisationInfo);
+            case KeyActionId.KeyLabelAction:
+                return new KeyLabelAction().fromBinary(buffer);
+            case KeyActionId.MacroArgumentAction:
+                return new MacroArgumentAction().fromBinary(buffer);
             case KeyActionId.NoneAction:
                 return new NoneAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.SwitchLayerAction:
@@ -85,8 +90,12 @@ export class Helper {
         let newKeyAction: KeyAction;
         if (keyAction instanceof ConnectionsAction) {
             newKeyAction = new ConnectionsAction(keyAction);
+        } else if (keyAction instanceof KeyLabelAction) {
+            newKeyAction = new KeyLabelAction(keyAction);
         } else if (keyAction instanceof KeystrokeAction) {
             newKeyAction = new KeystrokeAction(keyAction);
+        } else if (keyAction instanceof MacroArgumentAction) {
+            newKeyAction = new MacroArgumentAction(keyAction);
         } else if (keyAction instanceof SwitchLayerAction) {
             newKeyAction = new SwitchLayerAction(keyAction);
         } else if (keyAction instanceof SwitchKeymapAction) {
@@ -134,6 +143,8 @@ export class Helper {
         switch (keyAction.keyActionType) {
             case keyActionType.ConnectionsAction:
                 return new ConnectionsAction().fromJsonObject(keyAction, serialisationInfo);
+            case keyActionType.KeyLabelAction:
+                return new KeyLabelAction().fromJsonObject(keyAction)
             case keyActionType.KeystrokeAction: {
                 const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction, serialisationInfo);
                 if (isValidKeystrokeAction(keystrokeAction)) {
@@ -142,6 +153,8 @@ export class Helper {
 
                 return new NoneAction();
             }
+            case keyActionType.MacroArgumentAction:
+                return new MacroArgumentAction().fromJsonObject(keyAction);
             case keyActionType.SwitchLayerAction:
                 return new SwitchLayerAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.SwitchKeymapAction:
