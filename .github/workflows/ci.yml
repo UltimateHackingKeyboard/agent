@@ -23,7 +23,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-13]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js (.nvmrc)
         uses: actions/setup-node@v4
