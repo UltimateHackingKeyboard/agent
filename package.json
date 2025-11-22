@@ -26,7 +26,7 @@
     "@types/file-saver": "2.0.7",
     "@types/jasmine": "5.1.13",
     "@types/lodash": "4.17.20",
-    "@types/node": "22.18.0",
+    "@types/node": "22.19.1",
     "@types/tmp": "0.2.6",
     "@types/yargs": "17.0.33",
     "check-node-version": "4.2.1",
