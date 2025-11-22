@@ -774,7 +774,7 @@ export const upgradeAgentTooltip = createSelector(
 export const upgradeFirmwareTooltip = createSelector(
     getHardwareModules,
     (hardwareModules:HardwareModules) => {
-        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} patch version is less than agent.userConfigVersion ${VERSIONS.userConfigVersion}`;
+        return `rightHalf.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} patch version is less than agent.userConfigVersion ${VERSIONS.userConfigVersion}`;
     });
 export const defaultUserConfigState = (state: AppState) => state.defaultUserConfiguration;
 export const getDefaultUserConfiguration = createSelector(
