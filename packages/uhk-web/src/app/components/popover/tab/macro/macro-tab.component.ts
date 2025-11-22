@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnD
 import { faCirclePlus, faCircleMinus, faPlus, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { MacroArgumentAction } from 'uhk-common';
-import { copyRgbColor, KeyAction, Keymap, Macro, PlayMacroAction } from 'uhk-common';
+import { copyRgbColor, KeyAction, Keymap, Macro, MacroArgumentAction, PlayMacroAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { faBracketsWithDots } from '../../../../custom-fa-icons/index';
@@ -27,7 +26,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     @Input() remapInfo: RemapInfo;
     @Input() selectedKey: SelectedKeyModel;
 
-    @Output() assignNewMacro = new EventEmitter<void>();
+    @Output() assignNewMacro = new EventEmitter<KeyAction>();
 
     faBracketsWithDots = faBracketsWithDots;
     faCirclePlus = faCirclePlus;

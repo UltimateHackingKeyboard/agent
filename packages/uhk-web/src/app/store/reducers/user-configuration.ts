@@ -634,7 +634,10 @@ export function reducer(
 
             if (payload.keyAction.assignNewMacro) {
                 newState = addNewMacroToState(state);
-                const newAction = new PlayMacroAction();
+                const originalPlayMacroAction: PlayMacroAction = payload.keyAction.action instanceof PlayMacroAction
+                    ? payload.keyAction.action
+                    : undefined;
+                const newAction = new PlayMacroAction(originalPlayMacroAction);
                 newAction.macroId = newState.selectedMacroId;
 
                 processedAction = {
