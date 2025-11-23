@@ -54,7 +54,7 @@
     "bootstrap": "5.3.8",
     "colord": "2.9.3",
     "dragula": "3.7.3",
-    "jasmine-core": "5.9.0",
+    "jasmine-core": "5.12.1",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.4",
     "karma-chrome-launcher": "3.2.0",
