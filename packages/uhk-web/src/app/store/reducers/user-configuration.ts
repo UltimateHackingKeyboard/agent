@@ -631,12 +631,12 @@ export function reducer(
             const moduleIndex: number = payload.module;
 
             let newState = state;
+            const originalPlayMacroAction: PlayMacroAction = payload.keyAction.action instanceof PlayMacroAction
+                ? payload.keyAction.action
+                : undefined;
 
             if (payload.keyAction.assignNewMacro) {
                 newState = addNewMacroToState(state);
-                const originalPlayMacroAction: PlayMacroAction = payload.keyAction.action instanceof PlayMacroAction
-                    ? payload.keyAction.action
-                    : undefined;
                 const newAction = new PlayMacroAction(originalPlayMacroAction);
                 newAction.macroId = newState.selectedMacroId;
 
@@ -650,6 +650,12 @@ export function reducer(
                         }
                     }
                 };
+            }
+            else if (originalPlayMacroAction && payload.keyAction.navigateToMacro) {
+                newState = {
+                    ...newState,
+                    selectedMacroId: originalPlayMacroAction.macroId
+                }
             }
 
             return {

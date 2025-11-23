@@ -26,14 +26,14 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     @Input() remapInfo: RemapInfo;
     @Input() selectedKey: SelectedKeyModel;
 
-    @Output() assignNewMacro = new EventEmitter<KeyAction>();
+    @Output() assignNewMacro = new EventEmitter();
+    @Output() navigateToMacro = new EventEmitter();
 
     faBracketsWithDots = faBracketsWithDots;
     faCirclePlus = faCirclePlus;
     faCircleMinus = faCircleMinus;
     faPlus = faPlus;
     faUpRightFromSquare = faUpRightFromSquare;
-    jumpToMacroQueryParams = {};
     macros: Macro[];
     macroOptions: Array<SelectOptionData>;
     playMacroAction: PlayMacroAction;
@@ -63,19 +63,6 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
         if (changes.defaultKeyAction) {
             this.fromKeyAction(this.defaultKeyAction);
             this.validAction.emit(true);
-        }
-
-        if (changes.currentKeymap || changes.selectedKey) {
-            let remapQueryParams = '';
-
-            if (this.remapInfo) {
-                remapQueryParams = `&remapOnAllKeymap=${this.remapInfo.remapOnAllKeymap}&remapOnAllLayer=${this.remapInfo.remapOnAllLayer}`;
-            }
-
-            this.jumpToMacroQueryParams = {
-                backUrl: `/keymap/${encodeURIComponent(this.currentKeymap.abbreviation)}?layer=${this.selectedKey.layerId}&module=${this.selectedKey.moduleId}&key=${this.selectedKey.keyId}${remapQueryParams}`,
-                backText: `"${this.currentKeymap.name}" keymap`,
-            };
         }
     }
 
