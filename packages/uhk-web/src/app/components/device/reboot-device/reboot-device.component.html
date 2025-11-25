@@ -1,0 +1,19 @@
+<h1>
+    <fa-icon [icon]="faPowerOff"></fa-icon>
+    <span>Reboot device</span>
+</h1>
+
+<p>
+    This will restart your UHK without changing its stored configuration. Your computer may briefly lose connection
+    to the keyboard while it reboots.
+</p>
+
+<button class="btn btn-danger"
+        mwlConfirmationPopover
+        popoverTitle="Are you sure?"
+        placement="bottom"
+        confirmText="Yes"
+        cancelText="No"
+        (confirm)="onRebootDevice()">
+    Reboot device
+</button>

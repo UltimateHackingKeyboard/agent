@@ -116,6 +116,13 @@
                         </div>
                     </li>
                     <li class="sidebar__level-2--item"
+                        *ngIf="!state.restoreUserConfiguration">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/device/reboot-reset']"
+                               [class.disabled]="state.updatingFirmware">Reboot device</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item"
                         *ngIf="state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/restore-user-configuration']">Fix configuration</a>

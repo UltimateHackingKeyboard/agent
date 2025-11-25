@@ -151,6 +151,10 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.enableUsbStackTest);
     }
 
+    rebootDevice(): void {
+        this.ipcRenderer.send(IpcEvents.device.rebootDevice);
+    }
+
     readConfigSizes(): void {
         this.ipcRenderer.send(IpcEvents.device.readConfigSizes);
     }

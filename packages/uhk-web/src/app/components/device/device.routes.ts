@@ -5,6 +5,7 @@ import { BatterySettingsComponent } from './battery-settings/battery-settings.co
 import { DeviceConfigurationComponent } from './configuration/device-configuration.component';
 import { DeviceFirmwareComponent } from './firmware/device-firmware.component';
 import { MouseSpeedComponent } from './mouse-speed/mouse-speed.component';
+import { RebootDeviceComponent } from './reboot-device/reboot-device.component';
 import { LEDSettingsComponent } from './led-settings/led-settings.component';
 import { RestoreUserConfigurationComponent } from './restore-user-configuration/restore-user-configuration.component';
 import { HostConnectionsComponent } from './host-connections/host-connections.component';
@@ -30,6 +31,10 @@ export const deviceRoutes: Routes = [
             {
                 path: 'configuration',
                 component: DeviceConfigurationComponent
+            },
+            {
+                path: 'reboot-reset',
+                component: RebootDeviceComponent
             },
             {
                 path: 'mouse-key-speed',

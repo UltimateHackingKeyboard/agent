@@ -1,6 +1,7 @@
 export * from './advanced-settings/advanced-settings.page.component';
 export * from './battery-settings/battery-settings.component';
 export * from './configuration/device-configuration.component';
+export * from './reboot-device/reboot-device.component';
 export * from './firmware/device-firmware.component';
 export * from './mouse-speed/mouse-speed.component';
 export * from './led-settings/functional-backlight-color.component';

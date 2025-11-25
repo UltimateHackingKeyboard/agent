@@ -56,6 +56,7 @@ export class Device {
     public static readonly recoveryModule = 'device-module';
     public static readonly recoveryModuleReply = 'device-module-reply';
     public static readonly enableUsbStackTest = 'enable-usb-stack-test';
+    public static readonly rebootDevice = 'device-reboot-device';
     public static readonly readConfigSizes = 'device-read-config-sizes';
     public static readonly readConfigSizesReply = 'device-read-config-sizes-reply';
     public static readonly loadUserConfigHistory = 'device-load-user-config-history';

@@ -35,6 +35,7 @@ import {
     LEDSettingsComponent,
     RestoreUserConfigurationComponent,
     RecoveryModeComponent,
+    RebootDeviceComponent,
     TypingBehaviorPage
 } from './components/device';
 import {
@@ -276,6 +277,7 @@ import appInitFactory from './services/app-init-factory';
         NgSelectMaxHeight,
         RestoreUserConfigurationComponent,
         RecoveryModeComponent,
+        RebootDeviceComponent,
         FileUploadComponent,
         AutoGrowInputComponent,
         HelpPageComponent,

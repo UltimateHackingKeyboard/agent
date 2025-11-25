@@ -305,6 +305,15 @@ export class DeviceService {
             });
         });
 
+        ipcMain.on(IpcEvents.device.rebootDevice, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.rebootDevice,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
         ipcMain.on(IpcEvents.device.getUserConfigFromHistory, this.getUserConfigFromHistory.bind(this));
         ipcMain.on(IpcEvents.device.deleteUserConfigHistory, this.deleteUserConfigHistory.bind(this));
         ipcMain.on(IpcEvents.device.loadUserConfigHistory, this.loadUserConfigFromHistory.bind(this));
@@ -904,6 +913,17 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
             await this.operations.enableUsbStackTest();
+        } finally {
+            this.startPollUhkDevice();
+        }
+    }
+
+    public async rebootDevice(event: Electron.Event): Promise<void> {
+        this.logService.misc('[DeviceService] reboot device requested');
+
+        try {
+            await this.stopPollUhkDevice();
+            await this.forceReenumerateDevice();
         } finally {
             this.startPollUhkDevice();
         }

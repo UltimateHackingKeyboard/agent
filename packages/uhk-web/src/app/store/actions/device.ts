@@ -61,6 +61,7 @@ export enum ActionTypes {
     RecoveryModule = '[device] Recovery module',
     RecoveryModuleReply = '[device] Recovery module reply',
     EnableUsbStackTest = '[device] USB stack test',
+    RebootDevice = '[device] Reboot device',
     StartConnectionPoller = '[device] Start connection poller',
     StatusBufferChanged = '[device] Status buffer changed',
     ReadConfigSizes = '[device] Read config sizes',
@@ -294,6 +295,10 @@ export class EnableUsbStackTestAction implements Action {
     type = ActionTypes.EnableUsbStackTest;
 }
 
+export class RebootDeviceAction implements Action {
+    type = ActionTypes.RebootDevice;
+}
+
 export class StartConnectionPollerAction implements Action {
     type = ActionTypes.StartConnectionPoller;
 }
@@ -357,6 +362,7 @@ export type Actions
     | RecoveryDeviceReplyAction
     | RecoveryModuleAction
     | EnableUsbStackTestAction
+    | RebootDeviceAction
     | StartConnectionPollerAction
     | StatusBufferChangedAction
     | ReadConfigSizesAction

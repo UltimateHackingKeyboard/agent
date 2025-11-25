@@ -45,6 +45,7 @@ import {
     SetPrivilegeOnLinuxReplyAction,
     SkipFirmwareUpgradeAction,
     StartConnectionPollerAction,
+    RebootDeviceAction,
     UpdateFirmwareAction,
     UpdateFirmwareFailedAction,
     UpdateFirmwareNotSupportedAction,
@@ -512,6 +513,14 @@ export class DeviceEffects {
         .pipe(
             ofType<EnableUsbStackTestAction>(ActionTypes.EnableUsbStackTest),
             tap(() => this.deviceRendererService.enableUsbStackTest())
+        ),
+    { dispatch: false }
+    );
+
+    rebootDevice$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<RebootDeviceAction>(ActionTypes.RebootDevice),
+            tap(() => this.deviceRendererService.rebootDevice())
         ),
     { dispatch: false }
     );
