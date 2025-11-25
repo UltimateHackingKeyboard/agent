@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { faCirclePlus, faCircleMinus, faPlus, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -42,7 +42,8 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     showMacroArgumentsTooltip: string;
     private subscription: Subscription;
 
-    constructor(store: Store<AppState>) {
+    constructor(private store: Store<AppState>,
+                private cdRef: ChangeDetectorRef) {
         super();
         this.subscription = store.select(getMacros)
             .subscribe((macros: Macro[]) => this.macros = macros);
@@ -77,6 +78,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     fromKeyAction(keyAction: KeyAction): boolean {
         if (!(keyAction instanceof PlayMacroAction)) {
             this.playMacroAction = new PlayMacroAction();
+            this.calculateMacroArgumentsTooltip();
             return false;
         }
         this.playMacroAction = new PlayMacroAction(keyAction);
@@ -132,12 +134,13 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     }
 
     onMacroArgumentChange(value: string, index: number): void {
-        const macroArgument = new MacroArgumentAction(this.playMacroAction.macroArguments[index])
+        const macroArgument = new MacroArgumentAction(this.playMacroAction.macroArguments[index]);
         macroArgument.value = value;
         this.playMacroAction.macroArguments[index] = macroArgument;
     }
 
     private calculateMacroArgumentsTooltip(): void {
-        this.showMacroArgumentsTooltip = this.showMacroArguments ? null : 'Add macro argument'
+        this.showMacroArgumentsTooltip = this.showMacroArguments ? null : 'Add macro argument';
+        this.cdRef.detectChanges();
     }
 }
