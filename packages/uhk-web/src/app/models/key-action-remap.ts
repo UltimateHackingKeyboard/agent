@@ -5,4 +5,5 @@ export interface KeyActionRemap {
     remapOnAllLayer: boolean;
     action?: KeyAction;
     assignNewMacro?: boolean;
+    navigateToMacro?: boolean;
 }

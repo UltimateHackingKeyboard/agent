@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { faPlus, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { faCirclePlus, faCircleMinus, faPlus, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { copyRgbColor, KeyAction, Keymap, Macro, PlayMacroAction } from 'uhk-common';
+import { copyRgbColor, KeyAction, Keymap, Macro, MacroArgumentAction, PlayMacroAction } from 'uhk-common';
 
 import { Tab } from '../tab';
+import { faBracketsWithDots } from '../../../../custom-fa-icons/index';
 
 import { AppState, getMacros } from '../../../../store';
 import { SelectedKeyModel } from '../../../../models';
@@ -25,17 +26,24 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     @Input() remapInfo: RemapInfo;
     @Input() selectedKey: SelectedKeyModel;
 
-    @Output() assignNewMacro = new EventEmitter<void>();
+    @Output() assignNewMacro = new EventEmitter();
+    @Output() navigateToMacro = new EventEmitter();
 
+    faBracketsWithDots = faBracketsWithDots;
+    faCirclePlus = faCirclePlus;
+    faCircleMinus = faCircleMinus;
     faPlus = faPlus;
     faUpRightFromSquare = faUpRightFromSquare;
-    jumpToMacroQueryParams = {};
     macros: Macro[];
     macroOptions: Array<SelectOptionData>;
+    playMacroAction: PlayMacroAction;
     selectedMacroIndex: number;
+    showMacroArguments = false;
+    showMacroArgumentsTooltip: string;
     private subscription: Subscription;
 
-    constructor(store: Store<AppState>) {
+    constructor(private store: Store<AppState>,
+                private cdRef: ChangeDetectorRef) {
         super();
         this.subscription = store.select(getMacros)
             .subscribe((macros: Macro[]) => this.macros = macros);
@@ -53,20 +61,9 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.fromKeyAction(this.defaultKeyAction);
-        this.validAction.emit(true);
-
-        if (changes.currentKeymap || changes.selectedKey) {
-            let remapQueryParams = '';
-
-            if (this.remapInfo) {
-                remapQueryParams = `&remapOnAllKeymap=${this.remapInfo.remapOnAllKeymap}&remapOnAllLayer=${this.remapInfo.remapOnAllLayer}`;
-            }
-
-            this.jumpToMacroQueryParams = {
-                backUrl: `/keymap/${encodeURIComponent(this.currentKeymap.abbreviation)}?layer=${this.selectedKey.layerId}&module=${this.selectedKey.moduleId}&key=${this.selectedKey.keyId}${remapQueryParams}`,
-                backText: `"${this.currentKeymap.name}" keymap`,
-            };
+        if (changes.defaultKeyAction) {
+            this.fromKeyAction(this.defaultKeyAction);
+            this.validAction.emit(true);
         }
     }
 
@@ -80,10 +77,16 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
 
     fromKeyAction(keyAction: KeyAction): boolean {
         if (!(keyAction instanceof PlayMacroAction)) {
+            this.playMacroAction = new PlayMacroAction();
+            this.calculateMacroArgumentsTooltip();
             return false;
         }
-        const playMacroAction: PlayMacroAction = <PlayMacroAction>keyAction;
-        this.selectedMacroIndex = this.macros.findIndex(macro => playMacroAction.macroId === macro.id);
+        this.playMacroAction = new PlayMacroAction(keyAction);
+        this.selectedMacroIndex = this.macros.findIndex(macro => this.playMacroAction.macroId === macro.id);
+
+        this.showMacroArguments = this.playMacroAction.macroArguments.length > 0
+        this.calculateMacroArgumentsTooltip();
+
         return true;
     }
 
@@ -93,12 +96,51 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
         }
 
         const keymapAction = new PlayMacroAction();
-        copyRgbColor(this.defaultKeyAction, keymapAction);
+        keymapAction.macroArguments = this.playMacroAction.macroArguments;
+        copyRgbColor(this.playMacroAction, keymapAction);
         keymapAction.macroId = this.macros[this.selectedMacroIndex].id;
         return keymapAction;
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    addNewMacroArgument(): void {
+        const macroArgument = new MacroArgumentAction();
+        macroArgument.value = '';
+        this.playMacroAction.macroArguments.push(macroArgument);
+    }
+
+    removeMacroArgument(index: number): void {
+        this.playMacroAction.macroArguments = this.playMacroAction.macroArguments.filter((arg: MacroArgumentAction, idx: number) => idx != index);
+        if (this.playMacroAction.macroArguments.length === 0) {
+            this.showMacroArguments = false;
+            this.calculateMacroArgumentsTooltip();
+        }
+    }
+
+    toggleMacroArguments() {
+        this.showMacroArguments = !this.showMacroArguments;
+        this.calculateMacroArgumentsTooltip();
+
+        if (this.showMacroArguments && this.playMacroAction.macroArguments.length === 0) {
+            this.addNewMacroArgument();
+        }
+    }
+
+    trackByMacroArgumentsFn(index: number): string {
+        return index.toString();
+    }
+
+    onMacroArgumentChange(value: string, index: number): void {
+        const macroArgument = new MacroArgumentAction(this.playMacroAction.macroArguments[index]);
+        macroArgument.value = value;
+        this.playMacroAction.macroArguments[index] = macroArgument;
+    }
+
+    private calculateMacroArgumentsTooltip(): void {
+        this.showMacroArgumentsTooltip = this.showMacroArguments ? null : 'Add macro argument';
+        this.cdRef.detectChanges();
     }
 }

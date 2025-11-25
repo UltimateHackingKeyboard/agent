@@ -51,7 +51,7 @@ export class MacroEffects {
             ofType<Keymaps.SaveKeyAction>(Keymaps.ActionTypes.SaveKey),
             withLatestFrom(this.store.select(getSelectedMacro)),
             tap(([action, newMacro]) => {
-                if (action.payload.keyAction.assignNewMacro) {
+                if (action.payload.keyAction.assignNewMacro || action.payload.keyAction.navigateToMacro) {
                     this.navigateToNewMacro(newMacro, action);
                 }
             }),

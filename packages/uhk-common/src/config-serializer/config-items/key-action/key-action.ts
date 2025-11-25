@@ -24,6 +24,8 @@ export enum KeyActionId {
     ConnectionsAction            = 36,
     OtherAction                  = 37,
     NoneBlockAction              = 38,
+    KeyLabelAction               = 39,
+    MacroArgumentAction          = 40,
 }
 
 export let keyActionType = {
@@ -36,6 +38,8 @@ export let keyActionType = {
     PlayMacroAction              : 'playMacro',
     ConnectionsAction            : 'connections',
     OtherAction                  : 'other',
+    KeyLabelAction               : 'keyLabel',
+    MacroArgumentAction          : 'macroArgument',
 };
 
 const DEFAULT_RGB_COLOR = defaultRgbColor()

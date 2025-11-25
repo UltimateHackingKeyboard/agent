@@ -1,5 +1,6 @@
 export * from './connections-action.js';
 export * from './key-action.js';
+export * from './key-label-action.js';
 export * from './keystroke-action.js';
 export * from './keystroke-type.js';
 export * from './mouse-action.js';

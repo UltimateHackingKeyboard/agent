@@ -1,6 +1,14 @@
 import { assertUInt8 } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
-import { KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action/index.js';
+import {
+    KeyActionHelper,
+    KeyAction,
+    NoneAction,
+    MacroArgumentAction,
+    PlayMacroAction,
+    SwitchKeymapAction,
+} from './key-action/index.js';
+import { KeyLabelAction } from './key-action/key-label-action.js';
 import { NoneBlockAction } from './key-action/none-block-action.js';
 import { Macro } from './macro.js';
 import { SerialisationInfo } from './serialisation-info.js';
@@ -84,7 +92,7 @@ export class Module {
 
     toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo, userConfiguration: UserConfiguration): void {
         buffer.writeUInt8(this.id);
-        buffer.writeCompactLength(this.keyActions.length); // write the original key actions length and not the compressed !!!
+        buffer.writeCompactLength(this.getKeyActionsCount());
 
         const keyActions = this.getCompressedKeyActions()
         for (const keyAction of keyActions) {
@@ -129,10 +137,25 @@ export class Module {
         this.id = buffer.readUInt8();
         const keyActionsLength: number = buffer.readCompactLength();
         this.keyActions = [];
+        let lastKeyAction: KeyAction;
+        let processedKeyActionsCount = 0
 
-        while (this.keyActions.length < keyActionsLength) {
+        while (processedKeyActionsCount < keyActionsLength) {
             const keyAction = KeyActionHelper.createKeyAction(buffer, macros, serialisationInfo)
-            if (keyAction instanceof NoneBlockAction) {
+
+            if (KeyLabelAction instanceof KeyLabelAction) {
+                // TODO: implement it in other PR
+                //  related to https://github.com/UltimateHackingKeyboard/agent/issues/2289
+            }
+            else if (keyAction instanceof MacroArgumentAction) {
+                if (lastKeyAction instanceof PlayMacroAction) {
+                    lastKeyAction.macroArguments.push(keyAction);
+                }
+                else {
+                    throw Error(`${processedKeyActionsCount} key action is not PlayMacroAction`);
+                }
+            }
+            else if (keyAction instanceof NoneBlockAction) {
                 for (let i = 0; i < keyAction.blockCount; i++) {
                     const noneAction = new NoneAction();
                     noneAction.r = keyAction.r;
@@ -140,11 +163,17 @@ export class Module {
                     noneAction.b = keyAction.b;
 
                     this.keyActions.push(noneAction);
+                    processedKeyActionsCount++
                 }
+                // minus 1 because we add +1 at the end of the loop
+                processedKeyActionsCount--
             }
             else {
+                lastKeyAction = keyAction;
                 this.keyActions.push(keyAction);
             }
+
+            processedKeyActionsCount++
         }
     }
 
@@ -195,4 +224,21 @@ export class Module {
 
         return result;
     }
+
+    getKeyActionsCount(): number {
+        let count  = 0
+
+        for (let keyAction of this.keyActions) {
+            count++;
+
+            if (keyAction instanceof PlayMacroAction) {
+                count += keyAction.macroArguments.length;
+            }
+
+            // TODO: Extend when implement KeyLabelAction
+        }
+
+        return count;
+    }
+
 }
