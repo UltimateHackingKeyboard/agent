@@ -20,6 +20,12 @@ promises.push(
         path.join(__dirname, '../tmp/smart-macro-docs'),
         copyOptions)
 );
+promises.push(
+    fse.copy(
+        path.join(__dirname, '../uhk-usb-service'),
+        path.join(__dirname, '../tmp/uhk-usb-service'),
+        copyOptions)
+);
 
 Promise
     .all(promises)
