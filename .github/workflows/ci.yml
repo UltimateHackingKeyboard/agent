@@ -20,13 +20,13 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js (.nvmrc)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -121,7 +121,6 @@ jobs:
         env:
           VERSION: ${{ env.TAG_VERSION }}
         run: |
-          cd firmware
           DELIMITER=$(openssl rand -hex 16)
           echo "content<<$DELIMITER" >> $GITHUB_OUTPUT
           sed -n "/^## \\[${VERSION}\\]/,/^## \\[/p" CHANGELOG.md | sed '$d' | tail -n +3 >> $GITHUB_OUTPUT
@@ -129,7 +128,8 @@ jobs:
 
       - name: Update GH release description
         if: github.ref_type == 'tag' && runner.os == 'Linux'
-        run: gh release edit ${{ github.ref_name }} --notes="${{ steps.changelog.outputs.content }}"
+        run: printf '%s' "$RELEASE_NOTES" | gh release edit ${{ github.ref_name }} --notes-file -
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_NOTES: ${{ steps.changelog.outputs.content }}
       # end Update GH release notes
