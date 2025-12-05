@@ -6,7 +6,6 @@ import {
     Component,
     EventEmitter,
     forwardRef,
-    HostListener,
     Inject,
     Input,
     OnChanges,
@@ -27,7 +26,6 @@ import { LogService } from 'uhk-common';
 import { SelectedMacroActionId } from '../../../../../models';
 import { MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID } from '../../../../../services/monaco-editor-uhk-setup.service';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
-import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
 
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
@@ -186,15 +184,6 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     private onChanged = (_: any) => {};
     private onTouched = () => {};
 
-    @HostListener('paste', [])
-    onPaste(): void {
-        if (!this.editor) {
-            return;
-        }
-
-        this.removeNonAsciiCharachters();
-    }
-
     onEditorInit(editor: MonacoStandaloneCodeEditor) {
         this.logService.misc('[MacroCommandEditorComponent] editor initialized.');
 
@@ -211,11 +200,6 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                 this.ctrlEnterKeyDown.emit();
 
                 return;
-            }
-
-            if (hasNonAsciiCharacters(event.browserEvent.key)) {
-                event.preventDefault();
-                event.stopPropagation();
             }
         });
 
@@ -276,11 +260,6 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     onValueChanged(value: string): void {
         if (!this.isFocused && !this.insertingMacro) {
-            return;
-        }
-
-        if (hasNonAsciiCharacters(value)) {
-            this.removeNonAsciiCharachters();
             return;
         }
 
@@ -405,13 +384,6 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         if (cursorPosition) {
             this.editor.setPosition(cursorPosition);
         }
-    }
-
-    private removeNonAsciiCharachters() {
-        const cursorPosition = this.editor.getPosition();
-        const value = this.editor.getValue().replace(NON_ASCII_REGEXP, '');
-        this.editor.setValue(value);
-        this.editor.setPosition(cursorPosition);
     }
 
     private setMacroCommand(data: string): void {

@@ -199,25 +199,19 @@ export class PopoverComponent implements OnChanges {
         }
     }
 
-    onAssignNewMacro(): void {
-        this.remap.emit({
-            remapOnAllKeymap: this.internalRemapInfo.remapOnAllKeymap,
-            remapOnAllLayer: this.internalRemapInfo.remapOnAllLayer,
-            assignNewMacro: true
-        });
-    }
-
     onCancelClick(): void {
         this.cancel.emit(undefined);
     }
 
-    onRemapKey(): void {
+    onRemapKey(assignNewMacro?: boolean, navigateToMacro?: boolean): void {
         if (this.keyActionValid) {
             try {
                 this.remap.emit({
                     remapOnAllKeymap: this.internalRemapInfo.remapOnAllKeymap,
                     remapOnAllLayer: this.internalRemapInfo.remapOnAllLayer,
-                    action: this.selectedTab.toKeyAction()
+                    action: this.selectedTab.toKeyAction(),
+                    assignNewMacro: assignNewMacro,
+                    navigateToMacro: navigateToMacro,
                 });
             } catch (e) {
                 // TODO: show error dialog

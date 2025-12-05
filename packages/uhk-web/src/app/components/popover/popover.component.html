@@ -48,7 +48,8 @@
                    [defaultKeyAction]="defaultKeyAction"
                    [macroPlaybackSupported]="macroPlaybackSupported$ | async"
                    [remapInfo]="internalRemapInfo"
-                   (assignNewMacro)="onAssignNewMacro()"
+                   (assignNewMacro)="onRemapKey(true)"
+                   (navigateToMacro)="onRemapKey(undefined, true)"
                    (validAction)="setKeyActionValidState($event)"
         ></macro-tab>
         <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content"

@@ -6,19 +6,33 @@
         text-align: center;
     }
 
-    .macro-selector {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-        margin-top: 2px;
-
-        b {
-            display: flex;
-            align-items: center;
+    .macro-controls-table {
+        tr:not(:last-of-type) {
+            td {
+                padding-bottom: 0.5em;
+            }
         }
 
-        ng-select {
-            flex: 1;
+        .col-label {
+            min-width: 110px;
+        }
+
+        .col-input {
+            width: 100%;
+
+            .form-control {
+                padding: 2px 10px;
+            }
+        }
+
+        .col-controls {
+            min-width: 130px;
+
+            &.arguments {
+                fa-icon {
+                    margin-left: 0.5em;
+                }
+            }
         }
     }
 
