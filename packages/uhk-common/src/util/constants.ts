@@ -5,3 +5,5 @@ export namespace Constants {
     export const MAX_ALLOWED_MACROS = 255;
     export const MAX_ALLOWED_MACROS_TOOLTIP = `No more than ${MAX_ALLOWED_MACROS} macros are supported.`;
 }
+
+export const UHK_EEPROM_SIZE = 32768;

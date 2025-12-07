@@ -15,11 +15,13 @@ import {
     ConfigurationReply,
     LogService,
     NotificationType,
+    RightModuleInfo,
     UHK_60_DEVICE,
     UhkBuffer,
     UhkDeviceProduct,
     UHK_MODULES,
-    UserConfiguration
+    UserConfiguration,
+    VERSIONS,
 } from 'uhk-common';
 
 import { EmptyAction } from '../actions/app';
@@ -42,6 +44,7 @@ import { Uhk80MigratorService } from '../../services/uhk80-migrator.service';
 import {
     AppState,
     getConnectedDevice,
+    getHardwareModules,
     getPrevUserConfiguration,
     getRouterState,
     getUserConfiguration,
@@ -283,9 +286,10 @@ export class UserConfigEffects {
     saveUserConfigInJsonFile$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SaveUserConfigInJsonFile),
-            withLatestFrom(this.store.select(getUserConfiguration)),
-            tap(([action, userConfiguration]) => {
-                const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
+            withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getHardwareModules)),
+            tap(([action, userConfiguration, hardwareModules]) => {
+                const newUserConfiguration= updateUserConfigurationWithLastSaveInfo(userConfiguration, hardwareModules.rightModuleInfo);
+                const asString = JSON.stringify(newUserConfiguration.toJsonObject(), null, 2);
                 const asBlob = new Blob([asString], { type: 'text/plain' });
                 saveAs(asBlob, 'UserConfiguration.json');
             })
@@ -296,10 +300,11 @@ export class UserConfigEffects {
     saveUserConfigInBinFile$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SaveUserConfigInBinFile),
-            withLatestFrom(this.store.select(getUserConfiguration)),
-            tap(([action, userConfiguration]) => {
+            withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getHardwareModules)),
+            tap(([action, userConfiguration, hardwareModules]) => {
+                const newUserConfiguration= updateUserConfigurationWithLastSaveInfo(userConfiguration, hardwareModules.rightModuleInfo);
                 const uhkBuffer = new UhkBuffer();
-                userConfiguration.toBinary(uhkBuffer);
+                newUserConfiguration.toBinary(uhkBuffer);
                 const blob = new Blob([uhkBuffer.getBufferContent()]);
                 saveAs(blob, 'UserConfiguration.bin');
             })
@@ -445,4 +450,13 @@ export class UserConfigEffects {
                 })
             );
     }
+}
+
+function updateUserConfigurationWithLastSaveInfo(userConfiguration: UserConfiguration, rightModuleInfo: RightModuleInfo) {
+    const newUserConfiguration = userConfiguration.clone()
+    newUserConfiguration.lastSaveAgentTag = `${VERSIONS.agentRepo}/${VERSIONS.agentTag}`;
+    newUserConfiguration.lastSaveFirmwareTag = `${rightModuleInfo.firmwareGitRepo}/${rightModuleInfo.firmwareGitTag}`
+    newUserConfiguration.recalculateConfigurationLength();
+
+    return newUserConfiguration;
 }

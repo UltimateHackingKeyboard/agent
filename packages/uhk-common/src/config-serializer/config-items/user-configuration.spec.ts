@@ -8,9 +8,11 @@ describe('user-configuration', () => {
 
     it('should transform an empty config', () => {
         jsonTester({
-            userConfigMajorVersion: 12,
-            userConfigMinorVersion: 1,
+            userConfigMajorVersion: 13,
+            userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
+            lastSaveAgentTag: '',
+            lastSaveFirmwareTag: '',
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
             perKeyRgbPresent: false,

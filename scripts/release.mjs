@@ -1,5 +1,7 @@
 import { exec, execSync } from 'node:child_process';
 
+import getGithubTag from './get-github-tag.mjs';
+
 const __dirname = import.meta.dirname;
 const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machine
 
@@ -154,12 +156,6 @@ async function afterPack(context) {
     const chromeSandbox = path.join(context.appOutDir, 'chrome-sandbox');
 
     fs.chmodSync(chromeSandbox, '4755')
-}
-
-function getGithubTag() {
-    const result = /^refs\/tags\/(v\d+\.\d+\.\d+)$/.exec(process.env.GITHUB_REF);
-
-    return result && result[1];
 }
 
 async function getReleaseNotes() {

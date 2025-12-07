@@ -2,6 +2,7 @@
 import { Buffer } from '../buffer.js';
 
 import { HardwareConfiguration, UhkBuffer, UserConfiguration } from '../config-serializer/index.js';
+import { UHK_EEPROM_SIZE } from './constants.js';
 import { shouldUpgradeAgent } from './should-upgrade-agent.js';
 
 export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfiguration => {
@@ -85,7 +86,7 @@ export const getUserConfigFromJsonObject = (data: any): UserConfiguration  => {
 export const mapObjectToUserConfigBinaryBuffer = (obj: any): Buffer => {
     const configuration = new UserConfiguration();
     configuration.fromJsonObject(obj);
-    const buffer = new UhkBuffer(32768);
+    const buffer = new UhkBuffer(UHK_EEPROM_SIZE);
     configuration.toBinary(buffer);
 
     return buffer.getBufferContent();
