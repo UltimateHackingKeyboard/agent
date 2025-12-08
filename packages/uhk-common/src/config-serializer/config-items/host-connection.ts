@@ -74,6 +74,7 @@ export class HostConnection {
             case 9:
             case 11:
             case 12:
+            case 13:
                 return this.fromJsonObjectV9(jsonObject, serialisationInfo);
 
             default:
@@ -89,6 +90,7 @@ export class HostConnection {
             case 9:
             case 11:
             case 12:
+            case 13:
                 return this.fromJsonBinaryV9(buffer, serialisationInfo);
 
             default:

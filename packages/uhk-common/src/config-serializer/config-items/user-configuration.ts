@@ -34,6 +34,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16 userConfigPatchVersion: number;
 
+    lastSaveAgentTag : string;
+
+    lastSaveFirmwareTag : string;
+
     @assertUInt32 userConfigurationLength: number;
 
     deviceName: string;
@@ -176,6 +180,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMinorVersion = jsonObject.userConfigMinorVersion;
         this.userConfigPatchVersion = jsonObject.userConfigPatchVersion;
 
+        if (this.userConfigMajorVersion >= 13) {
+            this.lastSaveAgentTag  = jsonObject.lastSaveAgentTag ;
+            this.lastSaveFirmwareTag = jsonObject.lastSaveFirmwareTag;
+        }
+
         switch (this.userConfigMajorVersion) {
             case 1:
             case 2:
@@ -200,6 +209,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromJsonObjectV9(jsonObject);
                 break;
 
@@ -222,6 +232,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV11();
         this.migrateToV12();
         this.migrateToV12_1();
+        this.migrateToV13();
 
         this.recalculateConfigurationLength();
 
@@ -232,6 +243,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMajorVersion = buffer.readUInt16();
         this.userConfigMinorVersion = buffer.readUInt16();
         this.userConfigPatchVersion = buffer.readUInt16();
+
+        if (this.userConfigMajorVersion >= 13) {
+            this.lastSaveAgentTag = buffer.readString();
+            this.lastSaveFirmwareTag = buffer.readString();
+        }
 
         switch (this.userConfigMajorVersion) {
             case 1:
@@ -257,6 +273,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromBinaryV9(buffer);
                 break;
 
@@ -321,6 +338,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             this.userConfigurationLength = 0;
         }
 
+        if (this.migrateToV13()) {
+            this.userConfigurationLength = 0;
+        }
+
         if (this.userConfigurationLength === 0) {
             this.recalculateConfigurationLength();
         }
@@ -333,6 +354,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             userConfigMajorVersion: this.userConfigMajorVersion,
             userConfigMinorVersion: this.userConfigMinorVersion,
             userConfigPatchVersion: this.userConfigPatchVersion,
+            lastSaveAgentTag: this.lastSaveAgentTag,
+            lastSaveFirmwareTag: this.lastSaveFirmwareTag,
             deviceName: this.deviceName,
             doubleTapSwitchLayerTimeout: this.doubleTapSwitchLayerTimeout,
             perKeyRgbPresent: this.perKeyRgbPresent,
@@ -392,6 +415,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt16(this.userConfigMajorVersion);
         buffer.writeUInt16(this.userConfigMinorVersion);
         buffer.writeUInt16(this.userConfigPatchVersion);
+        buffer.writeString(this.lastSaveAgentTag);
+        buffer.writeString(this.lastSaveFirmwareTag);
         buffer.writeUInt32(this.userConfigurationLength);
         buffer.writeString(this.deviceName);
         buffer.writeUInt16(this.doubleTapSwitchLayerTimeout);
@@ -474,6 +499,12 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         const buffer = new UhkBuffer();
         this.toBinary(buffer);
         this.userConfigurationLength = buffer.offset;
+    }
+
+    setAgentAndFirmwareVersion(agentTag: string, firmwareTag: string): void {
+        this.lastSaveAgentTag = agentTag;
+        this.lastSaveFirmwareTag = firmwareTag;
+        this.recalculateConfigurationLength()
     }
 
     private setDefaultDeviceName(): void {
@@ -1376,6 +1407,19 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMinorVersion = 1;
 
         return true;
+    }
+
+    private migrateToV13(): boolean {
+        if (this.userConfigMajorVersion > 12) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 13;
+        this.userConfigMinorVersion = 0;
+        this.userConfigPatchVersion = 0;
+        // We don't know it. We will update it before save user config to the keyboard
+        this.lastSaveAgentTag = '';
+        this.lastSaveFirmwareTag = '';
     }
 
     private getSerialisationInfo(): SerialisationInfo {

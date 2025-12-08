@@ -27,6 +27,7 @@ export class TextMacroAction extends MacroAction {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
@@ -50,6 +51,7 @@ export class TextMacroAction extends MacroAction {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromBinaryV1(buffer);
                 break;
 

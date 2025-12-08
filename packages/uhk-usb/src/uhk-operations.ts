@@ -22,10 +22,13 @@ import {
     OLED_DISPLAY_WIDTH,
     UhkBuffer,
     UhkDeviceProduct,
+    UHK_EEPROM_SIZE,
     UhkModule,
     UHK_MODULE_IDS_TYPE,
     UHK_MODULE_IDS,
     UNKNOWN_DEVICE,
+    UserConfiguration,
+    VERSIONS,
 } from 'uhk-common';
 import { promisify } from 'util';
 import semver from 'semver';
@@ -394,7 +397,33 @@ export class UhkOperations {
     public async saveUserConfiguration(buffer: Buffer): Promise<void> {
         try {
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to keyboard');
-            await this.sendConfigToKeyboard(buffer, true);
+            let shouldRecalculateLength = false;
+            const uhkBuffer = UhkBuffer.fromArray(buffer as any)
+            const userConfiguration = new UserConfiguration()
+            userConfiguration.fromBinary(uhkBuffer)
+
+            const agentTag = `${VERSIONS.agentRepo}/${VERSIONS.agentTag}`;
+            if (userConfiguration.lastSaveAgentTag !== agentTag) {
+                this.logService.misc(`[DeviceOperation] Update userConfig.lastSaveAgentTag. ${userConfiguration.lastSaveAgentTag} => ${agentTag}`);
+                userConfiguration.lastSaveAgentTag = agentTag;
+                shouldRecalculateLength = true;
+            }
+
+            const deviceVersionInfo = await this.getDeviceVersionInfo()
+            const firmwareTag = `${deviceVersionInfo.firmwareGitRepo}/${deviceVersionInfo.firmwareGitTag}`;
+            if (userConfiguration.lastSaveFirmwareTag !== firmwareTag) {
+                this.logService.misc(`[DeviceOperation] Update userConfig.lastSaveFirmwareTag. ${userConfiguration.lastSaveFirmwareTag} => ${firmwareTag}`);
+                userConfiguration.lastSaveFirmwareTag = firmwareTag;
+                shouldRecalculateLength = true;
+            }
+
+            if (shouldRecalculateLength) {
+                userConfiguration.recalculateConfigurationLength();
+            }
+
+            const resultBuffer = new UhkBuffer(UHK_EEPROM_SIZE)
+            userConfiguration.toBinary(resultBuffer)
+            await this.sendConfigToKeyboard(resultBuffer.getBufferContent(), true);
             await this.applyConfiguration();
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);

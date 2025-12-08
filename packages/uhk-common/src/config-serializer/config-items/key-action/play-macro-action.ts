@@ -95,6 +95,7 @@ export class PlayMacroAction extends KeyAction {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromJsonObjectV6(jsonObject, macros, serialisationInfo);
                 break;
 
@@ -121,6 +122,7 @@ export class PlayMacroAction extends KeyAction {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromBinaryV6(buffer, macros, serialisationInfo);
                 break;
 

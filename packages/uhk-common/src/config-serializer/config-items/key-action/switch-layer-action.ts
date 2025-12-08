@@ -73,6 +73,7 @@ export class SwitchLayerAction extends KeyAction {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromJsonObjectV6(jsonObject, serialisationInfo);
                 break;
 
@@ -99,6 +100,7 @@ export class SwitchLayerAction extends KeyAction {
             case 9:
             case 11:
             case 12:
+            case 13:
                 this.fromBinaryV6(buffer, serialisationInfo);
                 break;
 
