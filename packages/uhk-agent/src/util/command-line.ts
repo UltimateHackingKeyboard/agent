@@ -21,6 +21,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'reenumerate-and-exit', type: String },
     { name: 'report-id', type: Number },
     { name: 'serial-number', type: String },
+    { name: 'simulate-invalid-codesign-signature', type: Boolean },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
     { name: 'usb-interface', type: Number },
     { name: 'usb-non-blocking', type: Boolean },
@@ -119,6 +120,11 @@ const sections: commandLineUsage.Section[] = [
                 name: 'serial-number',
                 description: 'Use the specified USB device that serial-number is matching.',
                 type: String
+            },
+            {
+                name: 'simulate-invalid-codesign-signature',
+                description: 'Agent shows the invalid code sign signature error 10 seconds after start',
+                type: Boolean
             },
             {
                 name: 'spe',

@@ -3,8 +3,15 @@ import { autoUpdater } from 'electron-updater';
 import { UpdateInfo, ProgressInfo } from 'builder-util-runtime';
 import isDev from 'electron-is-dev';
 import storage from 'electron-settings';
+import { inspect } from 'node:util';
 
-import { ApplicationSettings, IpcEvents, LogService } from 'uhk-common';
+import {
+    ApplicationSettings,
+    CommandLineArgs,
+    ERR_UPDATER_INVALID_SIGNATURE,
+    IpcEvents,
+    LogService,
+} from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 import { getUpdaterLoggerService } from '../util';
 
@@ -16,13 +23,20 @@ export class AppUpdateService extends MainServiceBase {
 
     constructor(protected logService: LogService,
                 protected win: Electron.BrowserWindow,
-                private app: Electron.App) {
+                private options: CommandLineArgs) {
         super(logService, win);
 
         autoUpdater.logger = getUpdaterLoggerService(logService);
 
         this.initListeners();
         logService.misc('[AppUpdateService] init success');
+
+        if (options['simulate-invalid-codesign-signature']) {
+            logService.misc('[AppUpdateService] init simulate invalid codesign timer');
+            setTimeout(() => {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, ERR_UPDATER_INVALID_SIGNATURE);
+            }, 10000)
+        }
     }
 
     private initListeners() {
@@ -44,11 +58,17 @@ export class AppUpdateService extends MainServiceBase {
             }
         });
 
-        autoUpdater.on('error', (ev: any, err: string) => {
-            this.logService.error('[AppUpdateService] error', err);
+        autoUpdater.on('error', (error: Error, message: string) => {
+            this.logService.error('[AppUpdateService] error', inspect(error));
+            this.logService.error('[AppUpdateService] error message', message);
+            if ((error as NodeJS.ErrnoException)?.code === ERR_UPDATER_INVALID_SIGNATURE) {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, ERR_UPDATER_INVALID_SIGNATURE);
+                return
+            }
+
             let msg = 'Electron updater error';
-            if (err) {
-                msg = err.substr(0, 100);
+            if (message) {
+                msg = message.substring(0, 100);
             }
 
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, msg);

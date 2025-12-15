@@ -1,11 +1,15 @@
 import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { NotifierService } from '@ert78gb/angular-notifier';
 import { faPuzzlePiece, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { Actions, ofType } from '@ngrx/effects';
 import { SplitGutterInteractionEvent } from 'angular-split';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
+import { ERR_UPDATER_INVALID_SIGNATURE } from 'uhk-common';
 
+import { ActionTypes as AppUpdateActionTypes } from './store/actions/app-update.action';
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
 import { EnableUsbStackTestAction, UpdateFirmwareAction } from './store/actions/device';
 import {
@@ -102,6 +106,7 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
 })
 export class MainAppComponent implements OnDestroy {
     @ViewChild(SecondSideMenuContainerComponent) secondarySideMenuContainer: SecondSideMenuContainerComponent;
+    @ViewChild('manuallyUpdateNotification', { static: true }) manuallyUpdateNotificationTmpl;
 
     donglePairingState: DonglePairingState;
     newPairedDevicesState: BleAddingState;
@@ -120,6 +125,7 @@ export class MainAppComponent implements OnDestroy {
         bottom: 0
     };
     statusBuffer: string;
+    private actionsSubscription: Subscription;
     private donglePairingStateSubscription: Subscription;
     private newPairedDevicesStateSubscription: Subscription;
     private errorPanelHeightSubscription: Subscription;
@@ -136,7 +142,22 @@ export class MainAppComponent implements OnDestroy {
     constructor(private store: Store<AppState>,
                 private route: ActivatedRoute,
                 private router: Router,
-                private cdRef: ChangeDetectorRef) {
+                private cdRef: ChangeDetectorRef,
+                private actions$: Actions,
+                private notificationService: NotifierService,
+        ) {
+        this.actionsSubscription = actions$.pipe(
+            ofType(AppUpdateActionTypes.InvalidCodesignSignature)
+        )
+        .subscribe(() => {
+            notificationService.show({
+                message: '',
+                type: 'info',
+                template: this.manuallyUpdateNotificationTmpl,
+                id: ERR_UPDATER_INVALID_SIGNATURE,
+            })
+        })
+
         this.donglePairingStateSubscription = store.select(getDonglePairingState)
             .subscribe(data => {
                 this.donglePairingState = data;
@@ -211,6 +232,7 @@ export class MainAppComponent implements OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.actionsSubscription.unsubscribe();
         this.donglePairingStateSubscription.unsubscribe();
         this.newPairedDevicesStateSubscription.unsubscribe();
         this.errorPanelHeightSubscription.unsubscribe();
@@ -261,6 +283,10 @@ export class MainAppComponent implements OnDestroy {
 
     closeErrorPanel(): void {
         this.store.dispatch(new CloseErrorPanelAction());
+    }
+
+    dismissUpdateErrorNotification(): void {
+        this.notificationService.hide(ERR_UPDATER_INVALID_SIGNATURE);
     }
 
     showErrorPanel(): void {

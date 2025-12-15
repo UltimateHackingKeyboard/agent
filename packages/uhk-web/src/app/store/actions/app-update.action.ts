@@ -4,6 +4,7 @@ import { UpdateInfo } from '../../models/update-info';
 
 export enum ActionTypes {
     ForceUpdate = '[app-update] force update',
+    InvalidCodesignSignature = '[app-update] invalid codesign signature',
     UpdateAvailable = '[app-update] update available',
     UpdateApp = '[app-update] update app',
     DoNotUpdateApp = '[app-update] do not update app',
@@ -14,6 +15,10 @@ export enum ActionTypes {
 
 export class ForceUpdateAction implements Action {
     type = ActionTypes.ForceUpdate;
+}
+
+export class InvalidCodesignSignatureAction implements Action {
+    type = ActionTypes.InvalidCodesignSignature;
 }
 
 export class UpdateAvailableAction implements Action {
@@ -48,6 +53,7 @@ export class UpdateErrorAction implements Action {
 
 export type Actions
     = UpdateAvailableAction
+    | InvalidCodesignSignatureAction
     | UpdateAppAction
     | DoNotUpdateAppAction
     | UpdateDownloadedAction

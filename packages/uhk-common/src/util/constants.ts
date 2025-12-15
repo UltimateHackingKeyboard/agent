@@ -7,3 +7,4 @@ export namespace Constants {
 }
 
 export const UHK_EEPROM_SIZE = 32768;
+export const ERR_UPDATER_INVALID_SIGNATURE = 'ERR_UPDATER_INVALID_SIGNATURE'
