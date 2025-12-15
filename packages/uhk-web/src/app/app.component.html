@@ -65,3 +65,18 @@
 <out-of-space-warning *ngIf="outOfSpaceWarning.show"
                       [@showOutOfSpaceWarning]
                       [state]="outOfSpaceWarning"></out-of-space-warning>
+<ng-template #manuallyUpdateNotification>
+    <p class="notifier__notification-message">
+    Agent's digital signature has changed. Please  <a href="https://uhk.io/agent" class="alert-link" externalUrl>update it manually</a> this time. Agent will auto-update afterward.
+    </p>
+    <button
+        class="notifier__notification-button"
+        type="button"
+        title="dismiss"
+        (click)="dismissUpdateErrorNotification()"
+    >
+        <svg class="notifier__notification-button-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+        </svg>
+    </button>
+</ng-template>

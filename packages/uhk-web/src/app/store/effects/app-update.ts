@@ -4,11 +4,12 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { first, map, tap, withLatestFrom } from 'rxjs/operators';
 
-import { LogService, NotificationType } from 'uhk-common';
+import { ERR_UPDATER_INVALID_SIGNATURE, LogService, NotificationType } from 'uhk-common';
 
 import {
     ActionTypes,
     ForceUpdateAction,
+    InvalidCodesignSignatureAction,
     UpdateAppAction,
     UpdateAvailableAction,
     UpdateErrorAction
@@ -74,6 +75,10 @@ export class AppUpdateEffect {
             ofType<UpdateErrorAction>(ActionTypes.UpdateError),
             map(action => action.payload),
             map((message: string) => {
+                if (message === ERR_UPDATER_INVALID_SIGNATURE) {
+                    return new InvalidCodesignSignatureAction();
+                }
+
                 return new ShowNotificationAction({
                     type: NotificationType.Error,
                     message

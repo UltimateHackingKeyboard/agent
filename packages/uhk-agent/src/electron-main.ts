@@ -118,7 +118,7 @@ async function createWindow() {
 
     setMenu(win, options.devtools);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, options, packagesDir);
-    appUpdateService = new AppUpdateService(logger, win, app);
+    appUpdateService = new AppUpdateService(logger, win, options);
     appService = new AppService(logger, win, deviceService, options, packagesDir);
     sudoService = new SudoService(logger, options, deviceService, packagesDir);
     // and load the index.html of the app.
