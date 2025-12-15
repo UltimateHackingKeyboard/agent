@@ -41,7 +41,6 @@ import {
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
     RightSlotModules,
     SaveUserConfigurationData,
-    shouldUpgradeAgent,
     shouldUpgradeFirmware,
     simulateInvalidUserConfigError,
     UHK_80_DEVICE,
@@ -511,12 +510,6 @@ export class DeviceService {
 
             uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
-            if (shouldUpgradeAgent(packageJson.userConfigVersion, this.disableAgentUpgrade)) {
-                response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
-                this.logService.error(`[DeviceService] The firmware contains ${packageJson.userConfigVersion} user config version, which is newer than ${VERSIONS.userConfigVersion} which this Agent supports. Minor version check is used.`);
-
-                return event.sender.send(IpcEvents.device.updateFirmwareReply, response);
-            }
 
             let dongleHid = await getCurrentUhkDongleHID();
             if (dongleHid) {
