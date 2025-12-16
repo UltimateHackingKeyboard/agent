@@ -14,10 +14,8 @@ import {
     convertBleStringToNumberArray,
     CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
-    disableAgentUpgradeProtection,
     findUhkModuleById,
     FIRMWARE_UPGRADE_METHODS,
-    FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
@@ -107,7 +105,6 @@ export class DeviceService {
     private _pollerAllowed: boolean;
     private _uhkDevicePolling: boolean;
     private _checkStatusBuffer: boolean;
-    private disableAgentUpgrade = false;
     private dongleZephyrLogService: ZephyrLogService;
     private leftHalfZephyrLogService: ZephyrLogService;
     private queueManager = new QueueManager();
@@ -123,8 +120,6 @@ export class DeviceService {
                 private options: CommandLineArgs,
                 private rootDir: string
     ) {
-        this.disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
-
         this.dongleZephyrLogService =  new ZephyrLogService({
             cliArgs: this.options,
             currentDeviceFn: getCurrentUhkDongleHID,
