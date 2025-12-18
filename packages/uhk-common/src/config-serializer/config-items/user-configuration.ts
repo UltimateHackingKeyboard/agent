@@ -180,11 +180,6 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMinorVersion = jsonObject.userConfigMinorVersion;
         this.userConfigPatchVersion = jsonObject.userConfigPatchVersion;
 
-        if (this.userConfigMajorVersion >= 13) {
-            this.lastSaveAgentTag  = jsonObject.lastSaveAgentTag ;
-            this.lastSaveFirmwareTag = jsonObject.lastSaveFirmwareTag;
-        }
-
         switch (this.userConfigMajorVersion) {
             case 1:
             case 2:
@@ -243,11 +238,6 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMajorVersion = buffer.readUInt16();
         this.userConfigMinorVersion = buffer.readUInt16();
         this.userConfigPatchVersion = buffer.readUInt16();
-
-        if (this.userConfigMajorVersion >= 13) {
-            this.lastSaveAgentTag = buffer.readString();
-            this.lastSaveFirmwareTag = buffer.readString();
-        }
 
         switch (this.userConfigMajorVersion) {
             case 1:
@@ -415,8 +405,6 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt16(this.userConfigMajorVersion);
         buffer.writeUInt16(this.userConfigMinorVersion);
         buffer.writeUInt16(this.userConfigPatchVersion);
-        buffer.writeString(this.lastSaveAgentTag);
-        buffer.writeString(this.lastSaveFirmwareTag);
         buffer.writeUInt32(this.userConfigurationLength);
         buffer.writeString(this.deviceName);
         buffer.writeUInt16(this.doubleTapSwitchLayerTimeout);
@@ -476,6 +464,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
             keymap.toBinary(uhkBuffer, this.getSerialisationInfo(), this);
         });
+        buffer.writeString(this.lastSaveAgentTag);
+        buffer.writeString(this.lastSaveFirmwareTag);
     }
 
     toString(): string {
@@ -819,6 +809,12 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             return macro;
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
+
+        if (this.userConfigMajorVersion >= 13) {
+            this.lastSaveAgentTag = buffer.readString();
+            this.lastSaveFirmwareTag = buffer.readString();
+        }
+
         ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
 
     }
@@ -1096,6 +1092,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.keymaps = jsonObject.keymaps.map((keymap: any) => {
             return new Keymap().fromJsonObject(keymap, this.macros, serialisationInfo);
         });
+
+        if (this.userConfigMajorVersion >= 13) {
+            this.lastSaveAgentTag  = jsonObject.lastSaveAgentTag ;
+            this.lastSaveFirmwareTag = jsonObject.lastSaveFirmwareTag;
+        }
     }
 
     private migrateToV5(): boolean {
