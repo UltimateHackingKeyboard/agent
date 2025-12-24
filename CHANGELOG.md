@@ -6,15 +6,24 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [9.0.0] - 2025-12-24
+
+Firmware: 16.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v16.0.0)] | Device Protocol: 4.17.0 | User Config: **13.0.0** | Hardware Config: 1.0.0
+
+- Handle macro arguments. `USERCONFIG:MINOR`
+- Save Agent and firmware version information to the user configuration for debugging purposes. `USERCONFIG:MAJOR`
+- Display user-friendly warning when the digital signature of Agent is invalid.
+- Relax builtFirmwareUserConfig version constraints to make firmware versions work with a wider range of Agent versions.
+
 ## [8.0.1] - 2025-11-09
 
-Firmware: 15.3.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v15.3.0)] | Device Protocol: 4.15.0 | User Config: 12.0.0 | Hardware Config: 1.0.0
+Firmware: 15.3.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v15.3.0)] | Device Protocol: 4.**17.0** | User Config: 13.0.0 | Hardware Config: 1.0.0
 
 **Windows users! Auto-update won't update to this version because the digital signature of the installer has changed. Update manually this time, and auto-update will work again.**
 
 - Upgrade to the latest Electron to make Agent run seamlessly on macOs Tahoe.
 - Make the error panel closeable by clicking on the close button.
-- Prevent firmware version checks during firmware upgrades.
+- Prevent firmware version checks during firmware upgrades. `DEVICEPROTOCOL:MINOR`
 - Make machine wide installation on Windows possible.
 - Allow switching to the same keymap, which is useful from overridden, descendant keymaps.
 - Fix the handling of non-alphanumeric characters in keymap abbreviations.
