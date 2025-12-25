@@ -21,6 +21,7 @@ export interface State {
     appTheme: AppTheme;
     animationEnabled: boolean;
     errorPanelHeight: number;
+    isRunningOnWayland: boolean;
     started: boolean;
     commandLineArgs: CommandLineArgs;
     undoableNotification?: Notification;
@@ -42,6 +43,7 @@ export const initialState: State = {
     appTheme: AppTheme.System,
     animationEnabled: true,
     errorPanelHeight: DEFAULT_ERROR_PANEL_HEIGHT,
+    isRunningOnWayland: false,
     started: false,
     commandLineArgs: {},
     navigationCountAfterNotification: 0,
@@ -70,6 +72,7 @@ export function reducer(
             return {
                 ...state,
                 commandLineArgs: payload.commandLineArgs,
+                isRunningOnWayland: payload.isRunningOnWayland,
                 platform: payload.platform,
                 osVersion: payload.osVersion,
                 udevFileContent: payload.udevFileContent
@@ -252,3 +255,4 @@ export const getAnimationEnabled = (state: State): boolean => state.animationEna
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
 export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;
 export const getPlatform = (state: State): string => state.platform;
+export const isColorPickerEyeDropperEnabled = (state: State): boolean => !state.isRunningOnWayland;
