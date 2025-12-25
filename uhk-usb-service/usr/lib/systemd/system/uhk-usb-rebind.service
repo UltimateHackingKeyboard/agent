@@ -1,0 +1,10 @@
+[Unit]
+Description=UHK USB reset after resume
+After=suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/uhk-usb-rebind.sh
+
+[Install]
+WantedBy=suspend.target
