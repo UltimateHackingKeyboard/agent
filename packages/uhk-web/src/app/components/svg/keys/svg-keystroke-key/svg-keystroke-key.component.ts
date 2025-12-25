@@ -91,8 +91,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
             if (this.labelSource) {
                 this.labelType = 'icon';
             } else {
-                let newLabelSource: string[];
-                newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
+                const newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
                 if (newLabelSource) {
                     if (this.secondaryText && newLabelSource.length === 2) {
                         if (isRectangleAsSecondaryRole || bottomSideMode) {

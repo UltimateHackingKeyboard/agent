@@ -280,7 +280,7 @@ export class ModuleConfiguration {
         this.navigationModeFn4Layer = buffer.readUInt8();
         this.navigationModeFn5Layer = buffer.readUInt8();
 
-        let numberOfProperties = buffer.readUInt8();
+        const numberOfProperties = buffer.readUInt8();
 
         for(let index = 0; index < numberOfProperties; index++){
             const property = buffer.readUInt8();

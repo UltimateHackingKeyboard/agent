@@ -35,7 +35,6 @@ export const typescriptRules = {
     'no-async-promise-executor': 'off',
     'no-case-declarations': 'off',
     'no-prototype-builtins': 'off',
-    'prefer-const': 'off',
 }
 
 export default [

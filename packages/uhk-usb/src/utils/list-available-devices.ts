@@ -35,7 +35,7 @@ export async function listAvailableDevices(options: ListAvailableDevicesOptions)
         prevDevice.state = UsbDeviceConnectionStates.Unknown;
     }
 
-    let hidDevices = options.hidDevices ?? await getUhkHidDevices();
+    const hidDevices = options.hidDevices ?? await getUhkHidDevices();
     for (const hidDevice of hidDevices) {
         const id = `h-${hidDevice.vendorId}-${hidDevice.productId}-${hidDevice.interface}`
         const existingPrevDevice = prevDevices.get(id);
@@ -53,7 +53,7 @@ export async function listAvailableDevices(options: ListAvailableDevicesOptions)
         }
     }
 
-    let serialDevices = options.serialDevices ?? await SerialPort.list();
+    const serialDevices = options.serialDevices ?? await SerialPort.list();
     for (const serialDevice of serialDevices) {
         const id = `s-${serialDevice.vendorId}-${serialDevice.productId}-${serialDevice.path}`
         const existingPrevDevice = prevDevices.get(id);

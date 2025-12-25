@@ -28,7 +28,7 @@ export enum KeyActionId {
     MacroArgumentAction          = 40,
 }
 
-export let keyActionType = {
+export const keyActionType = {
     NoneAction                   : 'none',
     KeystrokeAction              : 'keystroke',
     SwitchLayerAction            : 'switchLayer',

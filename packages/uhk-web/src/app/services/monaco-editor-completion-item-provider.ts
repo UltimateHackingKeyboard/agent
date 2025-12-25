@@ -75,7 +75,7 @@ export class MonacoEditorCompletionItemProvider implements monaco.languages.Comp
         }
 
         const monacoSuggestions: monaco.languages.CompletionItem[] = nelaSuggestions.map(it => {
-            let kind = this.guessKind(it.suggestion, it.originRule);
+            const kind = this.guessKind(it.suggestion, it.originRule);
 
             return {
                 insertText: it.text(),
