@@ -67,7 +67,7 @@ export async function getBackupUserConfigurationContent(logService: LogService, 
 }
 
 export async function getCompatibleUserConfigFromHistory(logService: LogService, uniqueId: number): Promise<BackupUserConfiguration> {
-    let history = await loadUserConfigHistoryAsync();
+    const history = await loadUserConfigHistoryAsync();
 
     const deviceHistory = history.devices.find(device => device.uniqueId === uniqueId);
 

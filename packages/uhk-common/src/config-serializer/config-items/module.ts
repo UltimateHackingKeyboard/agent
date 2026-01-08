@@ -230,7 +230,7 @@ export class Module {
     getKeyActionsCount(): number {
         let count  = 0
 
-        for (let keyAction of this.keyActions) {
+        for (const keyAction of this.keyActions) {
             count++;
 
             if (keyAction instanceof PlayMacroAction) {

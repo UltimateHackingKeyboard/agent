@@ -1306,7 +1306,7 @@ function generateName(items: { name: string }[], name: string) {
 
 function generateMacroId(macros: Macro[]) {
     let newId = 0;
-    let usedMacroIds = new Set();
+    const usedMacroIds = new Set();
 
     macros.forEach((macro: Macro) => {
         if (macro.id > newId) {

@@ -36,7 +36,7 @@ export enum MacroMouseSubAction {
     release = 2
 }
 
-export let macroActionType = {
+export const macroActionType = {
     KeyMacroAction                  : 'key',
     MouseButtonMacroAction          : 'mouseButton',
     MoveMouseMacroAction            : 'moveMouse',
