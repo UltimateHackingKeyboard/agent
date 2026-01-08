@@ -537,7 +537,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 text = 'Previous'
             }
             else {
-                iconText = this.keyAction.hostConnectionId.toString(10);
+                iconText = (this.keyAction.hostConnectionId + 1).toString(10);
                 const hostConnection = this.hostConnections[this.keyAction.hostConnectionId];
                 text = hostConnection?.name || 'unassigned'
             }

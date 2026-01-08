@@ -178,7 +178,7 @@ export class DeviceTabComponent extends Tab implements OnChanges, OnDestroy, OnI
                 const name = hostConnection.name || 'unassigned';
 
                 return {
-                    name: `${index}: ${name}`,
+                    name: `${index + 1}: ${name}`,
                     command: ConnectionCommands.switchByHostConnectionId,
                     connectionId: index,
                 }
