@@ -90,7 +90,7 @@ export class KeyboardSvgExportService {
             const value = computedStyle.getPropertyValue(prop);
 
             // Only add non-empty values that aren't default/initial
-            if (value && value !== 'none' && value !== 'normal' && value !== 'auto') {
+            if (prop !== 'font-family' && value && value !== 'none' && value !== 'normal' && value !== 'auto') {
                 styleString += `${prop}:${value};`;
             }
         }
@@ -221,6 +221,7 @@ export class KeyboardSvgExportService {
         // Add base class if we have common properties
         if (baseClassProps.size > 0) {
             css += '.st-base { ';
+            css += 'font-family: Helvetica;';
             for (const [prop, value] of baseClassProps.entries()) {
                 css += `${prop}:${value};`;
             }
