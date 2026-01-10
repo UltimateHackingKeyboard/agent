@@ -9,6 +9,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { ERR_UPDATER_INVALID_SIGNATURE } from 'uhk-common';
 
+import { KeyboardSvgExportService } from './services/keyboard-svg-export.service';
 import { ActionTypes as AppUpdateActionTypes } from './store/actions/app-update.action';
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
 import { EnableUsbStackTestAction, UpdateFirmwareAction } from './store/actions/device';
@@ -144,6 +145,7 @@ export class MainAppComponent implements OnDestroy {
                 private router: Router,
                 private cdRef: ChangeDetectorRef,
                 private actions$: Actions,
+                private keyboardSvgExportService: KeyboardSvgExportService,
                 private notificationService: NotifierService,
         ) {
         this.actionsSubscription = actions$.pipe(
@@ -247,6 +249,17 @@ export class MainAppComponent implements OnDestroy {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
+        // It should be before the CTRL + S to prevent the conflict with the SaveToKeyboard shortcut
+        if (event.ctrlKey &&
+            event.altKey &&
+            event.shiftKey &&
+            event.code === 'KeyS' &&
+            !event.defaultPrevented &&
+            !this.keypressCapturing) {
+            this.keyboardSvgExportService.downloadSvgKeyboard();
+            event.preventDefault();
+        }
+
         if (this.saveToKeyboardState.showButton &&
             event.ctrlKey &&
             event.key === 's' &&
