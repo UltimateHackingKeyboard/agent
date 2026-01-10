@@ -55,6 +55,7 @@ export class KeyboardSliderComponent implements OnChanges {
         center: true
     };
     bLayerCssClasses: LayerAnimationCssClasses = {};
+    LayerNames = LayerNames;
     visibleLayerName = LayerNames.A;
 
     ngOnChanges(changes: SimpleChanges) {

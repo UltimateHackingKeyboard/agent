@@ -1,5 +1,6 @@
 <svg-keyboard [ngClass]="aLayerCssClasses"
               id="svg-keyboard-a"
+              [attr.isKeyboardVisible]="visibleLayerName === LayerNames.A"
               [attr.layerId]="aLayer.id"
               [backlightingMode]="backlightingMode"
               [moduleConfig]="aLayer.modules"
@@ -23,6 +24,7 @@
 
 <svg-keyboard *ngIf="bLayer"
               id="svg-keyboard-b"
+              [attr.isKeyboardVisible]="visibleLayerName === LayerNames.B"
               [attr.layerId]="bLayer.id"
               [backlightingMode]="backlightingMode"
               [ngClass]="bLayerCssClasses"
