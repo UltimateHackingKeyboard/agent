@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 import * as path from 'path';
-import * as sudo from 'sudo-prompt';
+import * as sudo from '@vscode/sudo-prompt';
 import { dirSync } from 'tmp';
 import { emptyDir, copy } from 'fs-extra';
 
