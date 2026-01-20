@@ -1,7 +1,7 @@
-import { isNullOrUndefined } from 'util';
 import { pack } from 'byte-data';
 
 import { CommandOption } from '../../models/command-option.js';
+import { isNullOrUndefined } from '../is-null-or-undefined.js';
 
 /**
  * Encode the USB Command.

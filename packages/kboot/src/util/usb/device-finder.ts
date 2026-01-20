@@ -1,4 +1,3 @@
-import { isNullOrUndefined } from 'util';
 import { Device } from 'node-hid';
 
 import { USB } from '../../models/usb.js';
