@@ -42,6 +42,7 @@ if (options.help) {
     process.exit(0);
 }
 
+const isMac = process.platform === "darwin";
 const logger = new ElectronLogService();
 logger.setLogOptions(getLogOptions(options));
 logger.misc('[Electron Main] command line arguments', options);
@@ -162,6 +163,35 @@ async function createWindow() {
 
     win.webContents.on('did-finish-load', () => {
     });
+
+    // monaco-editor electron 34+ paste workaround https://github.com/microsoft/monaco-editor/issues/4855#issuecomment-3184259279
+    win.webContents.on("before-input-event", (event, input) => {
+        const isCmdOrCtrl = isMac ? input.meta === true : input.control === true;
+
+        const hasShift =
+            input.shift === true ||
+            input.modifiers.includes("shift");
+
+        const hasAlt =
+            input.alt === true ||
+            input.modifiers.includes("alt");
+
+        // Prefer code (layout-agnostic)
+        const isV = input.code === "KeyV" || input.key === "v";
+
+        const shouldPaste =
+            input.type === 'keyDown' &&
+            isCmdOrCtrl &&
+            !hasShift &&
+            !hasAlt &&
+            isV;
+
+        if (shouldPaste) {
+            // Native paste path (works with Monaco)
+            win.webContents.paste();
+            event.preventDefault();
+        }
+    })
 
     win.webContents.on('render-process-gone', (event, details) => {
         logger.misc(`[Electron Main] render-process-gone, reason: ${details.reason} exitCode: ${details.exitCode}`);
