@@ -44,7 +44,7 @@ export class Uhk80MigratorService implements OnDestroy {
             return userConfig;
         }
 
-        let hasConfiguredExcessKey = this.hasUhk80ConfiguredExcessKey(userConfig);
+        const hasConfiguredExcessKey = this.hasUhk80ConfiguredExcessKey(userConfig);
 
         if (hasConfiguredExcessKey) {
             return userConfig;

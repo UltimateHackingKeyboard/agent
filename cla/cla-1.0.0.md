@@ -101,6 +101,7 @@ I have read this Agreement, and fully agree to it by signing it with my GitHub u
 - @attilacsanyi
 - @cokert
 - @csanyiarpad
+- @dandrake
 - @danpalmer
 - @dgyimesi
 - @eltang

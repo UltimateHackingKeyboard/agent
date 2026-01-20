@@ -115,6 +115,7 @@ async function release () {
                 gatekeeperAssess: false,
                 entitlements: path.join(__dirname, 'entitlements.mac.plist'),
                 entitlementsInherit: path.join(__dirname, 'entitlements.mac.plist'),
+                x64ArchFiles: '**/node-hid/**'
             },
             win: {
                 extraResources,

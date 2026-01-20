@@ -483,7 +483,7 @@ export class UhkHidDevice {
 
         while (new Date().getTime() - startTime.getTime() < waitTimeout) {
             iteration++;
-            let allDevice = [];
+            const allDevice = [];
             for (const vidPid of vidPidPairs) {
 
                 if (enumerationMode === EnumerationModes.Bootloader && device.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
