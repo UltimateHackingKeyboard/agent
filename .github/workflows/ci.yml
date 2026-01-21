@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v6
@@ -73,12 +73,21 @@ jobs:
           compression-level: 0
           retention-days: 30
 
-      - name: Upload Linux AppImage artifact
-        if: runner.os == 'Linux'
+      - name: Upload Linux x64 AppImage artifact
+        if: runner.os == 'Linux' && runner.arch == 'X64'
         uses: actions/upload-artifact@v4
         with:
           name: UHK.Agent-linux-x86_64.AppImage
           path: dist/UHK.Agent-*-linux-x86_64.AppImage
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload Linux arm64 AppImage artifact
+        if: runner.os == 'Linux' && runner.arch == 'ARM64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: UHK.Agent-linux-arm64.AppImage
+          path: dist/UHK.Agent-*-linux-arm64.AppImage
           compression-level: 0
           retention-days: 30
 
@@ -99,7 +108,7 @@ jobs:
         uses: UltimateHackingKeyboard/build-archiver@v0.0.4
         if: github.ref == 'refs/heads/master' && github.event.repository.fork == false
         with:
-          FILE_PATTERN: "dist/UHK.Agent-*-linux-x86_64.AppImage\ndist/UHK.Agent-*-mac.dmg\ndist/UHK.Agent-*-win*.exe"
+          FILE_PATTERN: "dist/UHK.Agent-*-linux-x86_64.AppImage\ndist/UHK.Agent-*-linux-arm64.AppImage\ndist/UHK.Agent-*-mac.dmg\ndist/UHK.Agent-*-win*.exe"
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           S3_ACCESS_KEY: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_SECRET }}
           S3_ACCESS_KEY_ID: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_KEY }}
@@ -107,9 +116,13 @@ jobs:
           S3_KEY_PREFIX: "agent/"
           S3_REGION: "eu-central-1"
 
-      # Update GH release notes
+  updateReleaseNotes:
+    name: Update release notes
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref_type == 'tag'
+    steps:
       - name: Strip `v` from git tag and
-        if: github.ref_type == 'tag' && runner.os == 'Linux'
         run: |
           TAG_VERSION=${{ github.ref_name }}
           TAG_VERSION=${TAG_VERSION#v}
@@ -117,7 +130,6 @@ jobs:
 
       - name: Extract changelog
         id: changelog
-        if: github.ref_type == 'tag' && runner.os == 'Linux'
         env:
           VERSION: ${{ env.TAG_VERSION }}
         run: |
@@ -127,9 +139,7 @@ jobs:
           echo "$DELIMITER" >> $GITHUB_OUTPUT
 
       - name: Update GH release description
-        if: github.ref_type == 'tag' && runner.os == 'Linux'
         run: printf '%s' "$RELEASE_NOTES" | gh release edit ${{ github.ref_name }} --notes-file -
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_NOTES: ${{ steps.changelog.outputs.content }}
-      # end Update GH release notes
