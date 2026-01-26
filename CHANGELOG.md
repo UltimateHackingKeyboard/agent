@@ -6,6 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [9.0.1] - 2025-12-26
+
+Firmware: 16.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v16.1.1)] | Device Protocol: 4.17.0 | User Config: 13.0.0 | Hardware Config: 1.0.0
+
+- Make pasting work.
+- Generate build for ARM64.
+- Escape macro names in the status buffer parser. Thanks for reporting, @hasteful!
+- Support new status buffer format in which the error message is more than 4 lines, starting from firmware 16.1.0
+- Index host connections from 1 instead of 0.
+- Allow saving the current layer as SVG.
+
 ## [9.0.0] - 2025-12-24
 
 Firmware: 16.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v16.0.0)] | Device Protocol: 4.17.0 | User Config: **13.0.0** | Hardware Config: 1.0.0
@@ -21,7 +32,7 @@ Firmware: 15.3.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/
 
 **Windows users! Auto-update won't update to this version because the digital signature of the installer has changed. Update manually this time, and auto-update will work again.**
 
-- Upgrade to the latest Electron to make Agent run seamlessly on macOs Tahoe.
+- Upgrade to the latest Electron to make Agent run seamlessly on macOS Tahoe.
 - Make the error panel closeable by clicking on the close button.
 - Prevent firmware version checks during firmware upgrades. `DEVICEPROTOCOL:MINOR`
 - Make machine wide installation on Windows possible.
