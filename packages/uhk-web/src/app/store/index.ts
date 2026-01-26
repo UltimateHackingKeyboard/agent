@@ -57,6 +57,7 @@ import {
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
 import { defaultUhkThemeColors } from '../util/default-uhk-theme-colors';
+import { escapeHtml } from '../util/escape-html';
 import { parseStatusBuffer } from '../util/status-buffer-parser';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 
@@ -769,7 +770,7 @@ export const upgradeAgentTooltip = createSelector(
             return '';
         }
 
-        return `rightHalf.firmware.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} minor version is larger than agent.userConfigVersion ${VERSIONS.userConfigVersion}. <br /> <br /> rightHalf.flashedUserConfigVersion: ${newUserConfiguration.newUserConfigurationVersion}`;
+        return `rightHalf.firmware.userConfigVersion ${escapeHtml(hardwareModules.rightModuleInfo.userConfigVersion)} minor version is larger than agent.userConfigVersion ${VERSIONS.userConfigVersion}. <br /> <br /> rightHalf.flashedUserConfigVersion: ${escapeHtml(newUserConfiguration.newUserConfigurationVersion)}`;
     });
 export const upgradeFirmwareTooltip = createSelector(
     getHardwareModules,
