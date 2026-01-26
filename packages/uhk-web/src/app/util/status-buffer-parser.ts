@@ -36,7 +36,7 @@ function splitToErrorBlocks(text: string): string[] {
 
 function transformToErrorBlock(macros: Macro[], block: string): any {
     const lines = block.split('\n');
-    if (lines.length !== 4) {
+    if (lines.length < 4) {
         return escapeHtml(block);
     }
 
