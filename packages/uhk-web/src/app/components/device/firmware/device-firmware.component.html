@@ -10,7 +10,7 @@
             <ul class="list-unstyled">
                 <li *ngFor="let state of firmwareUpgradeStates.modules; trackBy:firmwareUpgradeStateTrackByFn;">
                     <ng-template #htmlTooltipTemplate>
-                        <div [innerHTML]="state.checksumTooltip | safeHtml"></div>
+                        <div [innerHTML]="state.checksumTooltip | escapeHtml | safeHtml"></div>
                     </ng-template>
                     <span class="upgrading"
                           [ngbTooltip]="htmlTooltipTemplate"
