@@ -12,7 +12,7 @@ Firmware: 16.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/
 
 - Make pasting work.
 - Generate build for ARM64.
-- Escape macro names in the status buffer parser. Thanks for reporting, @hasteful!
+- Escape macro names in the status buffer parser. Thanks for reporting, [@hastefuI](https://github.com/hastefuI)!
 - Support new status buffer format in which the error message is more than 4 lines, starting from firmware 16.1.0
 - Index host connections from 1 instead of 0.
 - Allow saving the current layer as SVG.
