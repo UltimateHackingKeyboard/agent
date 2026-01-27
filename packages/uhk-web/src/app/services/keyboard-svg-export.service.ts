@@ -11,7 +11,7 @@ export class KeyboardSvgExportService {
                 private logService: LogService) {
     }
 
-    public downloadSvgKeyboard(): void {
+    public async downloadSvgKeyboard(): Promise<void> {
         this.logService.misc('[KeyboardSvgExportService] start to export.');
         const svgKeyboard = this.document.querySelector('svg-keyboard[isKeyboardVisible="true"] > svg');
 
@@ -34,6 +34,9 @@ export class KeyboardSvgExportService {
 
         this.logService.misc('[KeyboardSvgExportService] convert custom elements to svg group.');
         this.convertCustomElementsToGroups(clonedSvgKeyboard);
+
+        this.logService.misc('[KeyboardSvgExportService] embed external svg references.');
+        await this.embedExternalSvgReferences(clonedSvgKeyboard);
 
         this.logService.misc('[KeyboardSvgExportService] optimize styles.');
         this.optimizeStyles(clonedSvgKeyboard);
@@ -98,6 +101,161 @@ export class KeyboardSvgExportService {
         if (styleString) {
             element.setAttribute('style', styleString);
         }
+    }
+
+    /**
+     * Embed external SVG references by extracting sprites and adding them to defs
+     */
+    private async embedExternalSvgReferences(svgElement: SVGElement): Promise<void> {
+        // Track which sprite files and IDs we've already processed
+        const spriteCache = new Map<string, Document>(); // URL -> parsed SVG document
+        const embeddedIds = new Set<string>(); // Track which IDs we've already embedded
+
+        // Ensure we have a <defs> element
+        let defsElement = svgElement.querySelector('defs');
+        if (!defsElement) {
+            defsElement = this.document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            svgElement.insertBefore(defsElement, svgElement.firstChild);
+        }
+
+        // Find all elements with xlink:href attributes
+        const useElements = svgElement.querySelectorAll('[*|href]');
+
+        for(let i = 0; i < useElements.length; i++) {
+            const useElement = useElements[i];
+            const href = useElement.getAttributeNS('http://www.w3.org/1999/xlink', 'href')
+                || useElement.getAttribute('href');
+
+            if (!href) {
+                continue;
+            }
+
+            // Parse the href to separate URL and fragment identifier
+            // Format: "path/to/sprite.svg#icon-id"
+            const {spriteUrl, fragmentId} = this.parseSpriteHref(href);
+
+            if (!spriteUrl || !fragmentId) {
+                continue; // Not a sprite reference or already internal
+            }
+
+            try {
+                // Check if we've already embedded this specific icon
+                if (embeddedIds.has(fragmentId)) {
+                    // Just update the reference to point to the embedded version
+                    useElement.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${fragmentId}`);
+                    useElement.setAttribute('href', `#${fragmentId}`);
+                    continue;
+                }
+
+                let spriteDoc = spriteCache.get(spriteUrl);
+
+                if (!spriteDoc) {
+                    spriteDoc = await this.fetchAndParseSvgSprite(spriteUrl);
+                    spriteCache.set(spriteUrl, spriteDoc);
+                }
+
+                // Extract the specific symbol/element from the sprite
+                const spriteElement = this.extractSpriteElement(spriteDoc, fragmentId);
+
+                if (spriteElement) {
+                    // Add the sprite element to defs
+                    const clonedElement = spriteElement.cloneNode(true) as Element;
+                    defsElement.appendChild(clonedElement);
+                    embeddedIds.add(fragmentId);
+
+                    // Update the reference to point to the embedded version
+                    useElement.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${fragmentId}`);
+                    useElement.setAttribute('href', `#${fragmentId}`);
+
+                    this.logService.misc(`[KeyboardSvgExportService] Embedded sprite element: ${fragmentId}`);
+                } else {
+                    this.logService.error(`[KeyboardSvgExportService] Sprite element not found: ${fragmentId} in ${spriteUrl}`);
+                }
+            } catch (error) {
+                this.logService.error(`[KeyboardSvgExportService] Failed to embed sprite: ${href}`, error);
+            }
+        }
+    }
+
+    /**
+     * Parse sprite href to extract URL and fragment ID
+     * @param href - e.g., "assets/sprite.svg#icon-name" or "#icon-name"
+     * @returns {{spriteUrl?: string, fragmentId?: string}}
+     */
+    private parseSpriteHref(href: string): {spriteUrl?: string, fragmentId?: string} {
+        if (href.startsWith('#')) {
+            return {}; // Internal reference, no external sprite
+        }
+
+        const hashIndex = href.indexOf('#');
+        if (hashIndex === -1) {
+            return {}; // No fragment identifier
+        }
+
+        const spriteUrl = href.substring(0, hashIndex);
+        const fragmentId = href.substring(hashIndex + 1);
+
+        return {spriteUrl, fragmentId};
+    }
+
+    /**
+     * Fetch and parse external SVG sprite file
+     */
+    private async fetchAndParseSvgSprite(url: string): Promise<Document> {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            this.logService.error(`[KeyboardSvgExportService] Failed to fetch ${url}: ${response.statusText}`);
+            throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+        }
+
+        const svgText = await response.text();
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+
+        // Check for parsing errors
+        const parserError = svgDoc.querySelector('parsererror');
+        if (parserError) {
+            this.logService.error(`[KeyboardSvgExportService] Failed to parse SVG from ${url}`);
+            this.logService.error(`[KeyboardSvgExportService] svgText: ${svgText}`);
+            throw new Error(`Failed to parse SVG from ${url}`);
+        }
+
+        return svgDoc;
+    }
+
+    /**
+     * Extract a specific element (symbol, g, or other) from a sprite document
+     */
+    private extractSpriteElement(spriteDoc: Document, id: string): Element {
+        // Try to find the element by ID
+        const element = spriteDoc.getElementById(id);
+
+        if (!element) {
+            return;
+        }
+
+        // If it's a <symbol>, convert it to <g> for better compatibility
+        if (element.tagName.toLowerCase() !== 'symbol') {
+            return element;
+        }
+
+        const g = this.document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+        // Copy all other attributes except xmlns
+        for (let i = 0; i < element.attributes.length; i++) {
+            const attr = element.attributes[i];
+            if (!attr.name.startsWith('xmlns')) {
+                g.setAttribute(attr.name, attr.value);
+            }
+        }
+
+        for (let i = 0; i < element.children.length; i++) {
+            const child = element.children[i];
+            g.appendChild(child.cloneNode(true));
+        }
+
+        return g;
     }
 
     /**
