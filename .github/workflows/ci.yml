@@ -121,7 +121,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     if: github.ref_type == 'tag'
+
     steps:
+      - uses: actions/checkout@v6
+
       - name: Strip `v` from git tag and
         run: |
           TAG_VERSION=${{ github.ref_name }}
