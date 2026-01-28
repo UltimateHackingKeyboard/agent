@@ -5,4 +5,5 @@ export interface AppStartInfo {
     platform: string;
     osVersion: string;
     udevFileContent: string;
+    isRunningOnWayland: boolean;
 }

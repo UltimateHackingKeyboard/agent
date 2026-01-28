@@ -5,7 +5,7 @@ import * as os from 'os';
 import { AppStartInfo, CommandLineArgs, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
-import { getUdevFileContentAsync } from '../util';
+import { getUdevFileContentAsync, isRunningOnWayland } from '../util';
 
 export class AppService extends MainServiceBase {
     constructor(protected logService: LogService,
@@ -43,6 +43,7 @@ export class AppService extends MainServiceBase {
                     'disable-agent-update-protection': this.options['disable-agent-update-protection'] || false,
                     log: this.options.log
                 },
+                isRunningOnWayland: isRunningOnWayland(),
                 platform: process.platform as string,
                 osVersion: os.release(),
                 udevFileContent: await getUdevFileContentAsync(this.rootDir)
