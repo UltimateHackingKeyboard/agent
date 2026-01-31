@@ -18,8 +18,6 @@
   ],
   "exclude": [
     "main-renderer.ts",
-    "renderer",
-    "test.ts",
-    "**/*.spec.ts"
+    "renderer"
   ]
 }

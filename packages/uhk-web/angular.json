@@ -97,26 +97,6 @@
             "buildTarget": "uhk-web:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "styles": [
-              "node_modules/nouislider/dist/nouislider.min.css",
-              "src/styles.scss"
-            ],
-            "scripts": [
-              "node_modules/nouislider/dist/nouislider.js"
-            ],
-            "assets": [
-              "src/assets",
-              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" }
-            ]
-          }
-        },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
