@@ -16,13 +16,13 @@
   "devDependencies": {
   },
   "dependencies": {
-    "@uhk/mcumgr": "0.0.0",
-    "kboot": "0.0.0",
+    "@uhk/mcumgr": "file:../mcumgr",
+    "kboot": "file:../kboot",
     "is-root": "3.0.0",
     "nrf-intel-hex": "1.4.0",
     "tslib": "2.8.1",
     "semver": "7.7.3",
-    "uhk-common": "1.0.0"
+    "uhk-common": "file:../uhk-common"
   },
   "peerDependencies": {
     "node-hid": ">= 3.2.0",

@@ -61,7 +61,7 @@
     "nouislider": "15.8.1",
     "rxjs": "7.8.1",
     "ts-keycode-enum": "1.0.6",
-    "uhk-common": "1.0.0",
+    "uhk-common": "file:../uhk-common",
     "xml-loader": "1.2.1",
     "zone.js": "0.15.1"
   },

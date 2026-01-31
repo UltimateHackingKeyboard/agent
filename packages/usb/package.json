@@ -8,10 +8,10 @@
   "dependencies": {
     "desm": "1.2.0",
     "yargs": "17.7.2",
-    "kboot": "0.0.0",
+    "kboot": "file:../kboot",
     "node-hid": "3.2.0",
-    "uhk-common": "1.0.0",
-    "uhk-usb": "1.0.0"
+    "uhk-common": "file:../uhk-common",
+    "uhk-usb": "file:../uhk-usb"
   },
   "scripts": {
     "clean": "rimraf ./node_modules"

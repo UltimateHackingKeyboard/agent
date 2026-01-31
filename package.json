@@ -19,7 +19,9 @@
     "npm": ">=11.6.2 <12.0.0"
   },
   "devDependencies": {
-    "@lerna/legacy-package-management": "8.2.4",
+    "@lerna-lite/cli": "4.11.0",
+    "@lerna-lite/exec": "4.11.1",
+    "@lerna-lite/run": "4.11.1",
     "@types/command-line-args": "5.2.3",
     "@types/command-line-usage": "5.0.4",
     "@types/decompress": "4.2.7",
@@ -43,7 +45,6 @@
     "eslint": "9.39.2",
     "fs-extra": "11.3.2",
     "jasmine": "5.12.0",
-    "lerna": "8.2.4",
     "lodash": "4.17.23",
     "node-hid": "3.2.0",
     "npm-run-all": "4.1.5",
@@ -65,7 +66,7 @@
     "webpack-cli": "6.0.1"
   },
   "scripts": {
-    "postinstall": "lerna bootstrap",
+    "postinstall": "lerna exec npm ci",
     "test": "lerna run test",
     "lint": "lerna run lint",
     "e2e": "lerna run e2e --scope uhk-web",
