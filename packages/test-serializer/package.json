@@ -12,7 +12,7 @@
   },
   "license": "See in LICENSE",
   "dependencies": {
-    "uhk-common": "1.0.0"
+    "uhk-common": "file:../uhk-common"
   },
   "devDependencies": {
   },
