@@ -512,9 +512,24 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             const keyAction: PlayMacroAction = this.keyAction as PlayMacroAction;
             const macro: Macro = this.macroMap.get(keyAction.macroId);
             this.labelType = LabelTypes.IconText;
+            let macroName = macro.name;
+
+            if (keyAction.macroArguments.length > 0) {
+                macroName += '(';
+                let first = true;
+                for (const macroArgument of keyAction.macroArguments) {
+                    if (!first) {
+                        macroName +=  ', ';
+                    }
+                    macroName += macroArgument.value;
+                    first = false;
+                }
+                macroName += ')';
+            }
+
             this.labelSource = {
                 icon: this.mapper.getIcon('macro'),
-                text: macro.name
+                text: macroName
             };
         } else if (this.keyAction instanceof MouseAction) {
             this.labelType = LabelTypes.MouseKey;
