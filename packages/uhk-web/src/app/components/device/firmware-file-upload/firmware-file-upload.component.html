@@ -13,11 +13,11 @@
     (confirm)="onForceClick()"
     (isOpenChange)="onOpenChange($event)"
 >
-    Flash firmware from file (uhk-firmware-*.tar.gz)
+    Flash firmware from file (uhk-firmware-*.tar.gz, firmware*.zip)
 </button>
 <input #inputControl
        class="d-none"
        type="file"
-       accept=".bz2,.gz"
+       accept=".bz2,.gz,.zip"
        [disabled]="disabled"
        (change)="changeFile($event)">
