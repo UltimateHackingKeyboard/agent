@@ -4,6 +4,7 @@ export * from './duration.js';
 export * from './i2c-baud-rate.js';
 export * from './i2c-error-buffer.js';
 export * from './load-configurations-result.js';
+export * from './module-flash-state.js';
 export * from './pairing-info.js';
 export * from './reenumerate-option.js';
 export * from './reenumerate-result.js';
