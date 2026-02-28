@@ -318,13 +318,6 @@ export class UhkOperations {
         module: UhkModule
     ): Promise<void> {
         this.logService.misc(`[UhkOperations][kboot-native] Start flashing "${module.name}" module firmware`);
-        await this.device.reenumerate({
-            device,
-            enumerationMode: EnumerationModes.NormalKeyboard,
-        });
-        await this.device.close();
-        await snooze(1000);
-
         const configData = await readFile(firmwarePath) as any;
         this.logService.misc('[UhkOperations][kboot-native] sending firmware to the keyboard');
         await this.sendConfigToKeyboard(configData, UsbCommand.WriteModuleFirmware);
