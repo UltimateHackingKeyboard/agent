@@ -87,7 +87,9 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
         this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
             .subscribe(connectedDevice => {
                 this.isHalvesPairingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
-                this.isZephyrLoggingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.isZephyrLoggingAllowed = connectedDevice?.id === UHK_80_DEVICE.id
+                    || connectedDevice?.id === UHK_60_DEVICE.id
+                    || connectedDevice?.id === UHK_60_V2_DEVICE.id;
                 this.showI2CRecoverButton = connectedDevice?.id === UHK_60_DEVICE.id ||  connectedDevice?.id === UHK_60_V2_DEVICE.id;
                 this.cdRef.detectChanges();
             });
