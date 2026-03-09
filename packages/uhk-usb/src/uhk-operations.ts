@@ -16,6 +16,7 @@ import {
     isDeviceProtocolSupportGitInfo,
     LEFT_HALF_MODULE,
     LogService,
+    ModuleSlotToI2cAddress,
     ModuleSlotToId,
     ModuleVersionInfo,
     OLED_DISPLAY_HEIGHT,
@@ -229,8 +230,8 @@ export class UhkOperations {
         await this.jumpToBootloaderModule(module.slotId);
         await this.device.close();
 
-        const moduleBricked = await this.waitForKbootIdle(module.name);
-        if (!moduleBricked) {
+        const connectedAddress = await this.waitForKbootIdle(module.name, module.i2cAddress);
+        if (!connectedAddress) {
             const msg = `[UhkOperations] Couldn't connect to the "${module.name}".`;
             this.logService.error(msg);
             throw new Error(msg);
@@ -250,9 +251,9 @@ export class UhkOperations {
         let connected = false;
         while (new Date().getTime() - startTime.getTime() < 30000) {
             try {
-                this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}"`);
+                this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}" at I2C address 0x${connectedAddress.toString(16)}`);
                 kboot = new KBoot(usbPeripheral);
-                await kboot.configureI2c(module.i2cAddress);
+                await kboot.configureI2c(connectedAddress);
                 await kboot.getProperty(Properties.BootloaderVersion);
                 connected = true;
                 break;
@@ -272,14 +273,14 @@ export class UhkOperations {
         await snooze(1000);
 
         this.logService.misc(`[UhkOperations] Flash erase all on "${module.name}" keyboard`);
-        await kboot.configureI2c(module.i2cAddress);
+        await kboot.configureI2c(connectedAddress);
         await kboot.flashEraseAllUnsecure();
 
         this.logService.misc(`[UhkOperations] Read "${module.name}" firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
 
         this.logService.misc('[UhkOperations] Write memory');
-        await kboot.configureI2c(module.i2cAddress);
+        await kboot.configureI2c(connectedAddress);
         await kboot.writeMemory({ startAddress: 0, data: configData });
 
         this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
@@ -483,16 +484,34 @@ export class UhkOperations {
         }
     }
 
-    public async waitForKbootIdle(moduleName: string): Promise<boolean> {
+    public async waitForKbootIdle(moduleName: string, assignedAddress: ModuleSlotToI2cAddress): Promise<number> {
+        const DEFAULT_BOOTLOADER_I2C_ADDRESS = 0x10;
+        const ADDRESS_SWITCH_INTERVAL_MS = 10000;
+        const startTime = new Date();
+        let currentAddress: number = assignedAddress;
+
         while (true) {
             const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
             await this.device.close();
 
             if (buffer[1] === 0) {
-                return true;
+                return currentAddress;
             }
 
-            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
+            const elapsedMs = new Date().getTime() - startTime.getTime();
+            const useDefaultAddress = Math.floor(elapsedMs / ADDRESS_SWITCH_INTERVAL_MS) % 2 === 1;
+            const desiredAddress = useDefaultAddress ? DEFAULT_BOOTLOADER_I2C_ADDRESS : assignedAddress;
+
+            if (desiredAddress !== currentAddress) {
+                this.logService.misc(`[DeviceOperation] Switching kboot ping address from 0x${currentAddress.toString(16)} to 0x${desiredAddress.toString(16)}`);
+                await this.device.sendKbootCommandToModule(desiredAddress as ModuleSlotToI2cAddress, KbootCommands.idle);
+                await this.device.close();
+                await this.device.sendKbootCommandToModule(desiredAddress as ModuleSlotToI2cAddress, KbootCommands.ping, 100);
+                await this.device.close();
+                currentAddress = desiredAddress;
+            }
+
+            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader at address 0x${currentAddress.toString(16)}. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
 
             await snooze(1000);
         }
