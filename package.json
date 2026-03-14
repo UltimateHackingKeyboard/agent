@@ -19,6 +19,7 @@
     "npm": ">=11.6.2 <12.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@lerna-lite/cli": "4.11.5",
     "@lerna-lite/exec": "4.11.5",
     "@lerna-lite/run": "4.11.5",
@@ -42,8 +43,9 @@
     "electron-log": "5.4.3",
     "electron-settings": "4.0.4",
     "electron-updater": "6.8.3",
-    "eslint": "9.39.2",
+    "eslint": "10.0.3",
     "fs-extra": "11.3.4",
+    "globals": "17.4.0",
     "jasmine": "5.12.0",
     "lodash": "4.17.23",
     "node-hid": "3.2.0",

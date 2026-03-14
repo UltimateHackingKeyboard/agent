@@ -76,6 +76,7 @@ if (!areServicesInited) {
     uhkOperations = new UhkOperations(logger, uhkHidDeviceService);
     smartMacroDocService = new SmartMacroDocService(logger, packagesDir);
 
+    // eslint-disable-next-line no-useless-assignment
     areServicesInited = true;
 }
 
