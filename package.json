@@ -59,7 +59,7 @@
     "svg-sprite": "3.0.0-rc3",
     "ts-loader": "9.5.4",
     "ts-node": "10.9.2",
-    "tsx": "4.20.5",
+    "tsx": "4.21.0",
     "typescript": "5.9.2",
     "typescript-eslint": "8.54.0",
     "webpack": "5.104.1",
