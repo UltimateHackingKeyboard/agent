@@ -20,7 +20,7 @@
     "decompress-bzip2": "4.0.0",
     "decompress-targz": "4.1.1",
     "fastify": "5.6.2",
-    "fs-extra": "11.3.2",
+    "fs-extra": "11.3.4",
     "get-port": "7.1.0",
     "node-hid": "3.2.0",
     "p-limit": "7.1.1",
