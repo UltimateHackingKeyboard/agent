@@ -1,5 +1,6 @@
 import globals from 'globals';
 import eslint from '@eslint/js';
+import {defineConfig} from 'eslint/config'
 import tsEslint from 'typescript-eslint';
 
 const globalIgnores = [
@@ -35,9 +36,10 @@ export const typescriptRules = {
     'no-async-promise-executor': 'off',
     'no-case-declarations': 'off',
     'no-prototype-builtins': 'off',
+    'preserve-caught-error': 'off',
 }
 
-export default [
+export default defineConfig([
     { ignores: globalIgnores },
     {
         ...eslint.configs.recommended,
@@ -73,4 +75,4 @@ export default [
             rules: typescriptRules
         },
     ),
-]
+])
