@@ -613,8 +613,9 @@ export class UhkHidDevice {
         const activeLayerNumber = buffer[6] & 0x7f;
 
         return {
-            isEepromBusy: buffer[1] !== 0,
+            isEepromBusy: isBitSet(buffer[1], 0),
             isMacroStatusDirty: buffer[7] !== 0,
+            isModuleFlashBusy: isBitSet(buffer[1], 1),
             areHalvesMerged: isBitSet(buffer[2], 0),
             isLeftHalfConnected: buffer[3] !== 0,
             activeLayerNumber,
