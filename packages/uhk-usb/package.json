@@ -25,7 +25,7 @@
     "uhk-common": "file:../uhk-common"
   },
   "peerDependencies": {
-    "node-hid": ">= 3.2.0",
+    "node-hid": ">= 3.3.0",
     "serialport": ">= 13.0.0"
   }
 }
