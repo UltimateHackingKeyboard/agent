@@ -23,7 +23,7 @@
     "fs-extra": "11.3.4",
     "get-port": "7.1.0",
     "node-hid": "3.2.0",
-    "p-limit": "7.1.1",
+    "p-limit": "7.3.0",
     "serialport": "13.0.0",
     "tmp": "0.2.5",
     "tslib": "2.8.1",
