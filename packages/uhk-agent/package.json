@@ -14,7 +14,7 @@
     "@fastify/static": "9.0.0",
     "@vscode/sudo-prompt": "9.3.2",
     "command-line-args": "6.0.1",
-    "command-line-usage": "7.0.3",
+    "command-line-usage": "7.0.4",
     "electron-is-dev": "3.0.1",
     "decompress": "4.2.1",
     "decompress-bzip2": "4.0.0",
