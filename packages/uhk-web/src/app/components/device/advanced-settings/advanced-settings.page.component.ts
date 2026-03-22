@@ -30,7 +30,12 @@ import {
     ToggleRightHalfZephyrLoggingAction,
     ToggleZephyrLoggingAction,
 } from '../../../store/actions/advance-settings.action';
-import { ChangeKeyboardLayoutAction } from '../../../store/actions/device';
+import {
+    ChangeKeyboardLayoutAction,
+    ExecShellCommandOnDongleAction,
+    ExecShellCommandOnLeftHalfAction,
+    ExecShellCommandOnRightHalfAction,
+} from '../../../store/actions/device';
 import { ActiveButton, initialState, State } from '../../../store/reducers/advanced-settings.reducer';
 
 @Component({
@@ -53,9 +58,13 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     isZephyrLoggingAllowed: boolean;
     keyboardLayout: KeyboardLayout;
     keyboardLayoutEnum = KeyboardLayout;
-    showDongleZephyrLogCheckbox: boolean;
+    shellCommand = ''
+    execShellCommandOnDongle = false;
+    execShellCommandOnLeftHalf = false;
+    execShellCommandOnRightHalf = true;
+    isDongleConnected: boolean;
     showI2CRecoverButton: boolean;
-    showLeftHalfZephyrLogCheckbox: boolean;
+    isLeftHalfConnected: boolean;
     state: State;
 
     private i2cErrorsLength = 0;
@@ -93,7 +102,7 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
             });
         this.dongleSubscription = this.store.select(getDongle)
             .subscribe(dongle => {
-                this.showDongleZephyrLogCheckbox = !!dongle.serialNumber;
+                this.isDongleConnected = !!dongle?.serialNumber;
                 this.cdRef.detectChanges();
             })
         this.keyboardLayoutSubscription = this.store.select(getKeyboardLayout)
@@ -103,7 +112,7 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
             });
         this.leftHalfDetectedSubscription = this.store.select(getLeftHalfDetected)
             .subscribe(leftHalfDetected => {
-                this.showLeftHalfZephyrLogCheckbox = leftHalfDetected;
+                this.isLeftHalfConnected = leftHalfDetected;
                 this.cdRef.detectChanges();
             });
         this.stateSubscription = this.store.select(advanceSettingsState)
@@ -129,6 +138,20 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
         }
 
         this.store.dispatch(new ChangeKeyboardLayoutAction(layout));
+    }
+
+    onExecShellCommand(): void {
+        if (this.isDongleConnected && this.execShellCommandOnDongle) {
+            this.store.dispatch(new ExecShellCommandOnDongleAction(this.shellCommand));
+        }
+
+        if (this.isLeftHalfConnected && this.execShellCommandOnLeftHalf) {
+            this.store.dispatch(new ExecShellCommandOnLeftHalfAction(this.shellCommand));
+        }
+
+        if (this.execShellCommandOnRightHalf) {
+            this.store.dispatch(new ExecShellCommandOnRightHalfAction(this.shellCommand));
+        }
     }
 
     onToggleI2cDebug(): void {

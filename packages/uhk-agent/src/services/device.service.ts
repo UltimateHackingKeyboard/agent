@@ -125,6 +125,7 @@ export class DeviceService {
             currentDeviceFn: getCurrentUhkDongleHID,
             logService: this.logService,
             ipcEvents: {
+                execShellCommand: IpcEvents.device.execShellCommandOnDongle,
                 isZephyrLoggingEnabled: IpcEvents.device.isDongleZephyrLoggingEnabled,
                 isZephyrLoggingEnabledReply: IpcEvents.device.isDongleZephyrLoggingEnabledReply,
                 toggleZephyrLogging: IpcEvents.device.toggleDongleZephyrLogging,
@@ -138,6 +139,7 @@ export class DeviceService {
             currentDeviceFn: getCurrenUhk80LeftHID,
             logService: this.logService,
             ipcEvents: {
+                execShellCommand: IpcEvents.device.execShellCommandOnLeftHalf,
                 isZephyrLoggingEnabled: IpcEvents.device.isLeftHalfZephyrLoggingEnabled,
                 isZephyrLoggingEnabledReply: IpcEvents.device.isLeftHalfZephyrLoggingEnabledReply,
                 toggleZephyrLogging: IpcEvents.device.toggleLeftHalfZephyrLogging,
@@ -189,6 +191,15 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.eraseBleSettings, (...args) => {
             this.queueManager.add({
                 method: this.eraseBleSettings,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.execShellCommandOnRightHalf, (...args) => {
+            this.queueManager.add({
+                method: this.execShellCommand,
                 bind: this,
                 params: args,
                 asynchronous: true
@@ -971,6 +982,22 @@ export class DeviceService {
         }
 
         event.sender.send(IpcEvents.device.eraseBleSettingsReply, response);
+    }
+
+    public async execShellCommand(_: Electron.IpcMainEvent, [command]): Promise<void> {
+        this.logService.misc(`[DeviceService] execute shell command: ${command}`);
+
+        try {
+            await this.stopPollUhkDevice();
+            await this.operations.execShellCommand(command);
+            this.logService.misc('[DeviceService] execute shell command success');
+        }
+        catch(error) {
+            this.logService.error('[DeviceService] execute shell command failed', error);
+        }
+        finally {
+            this.startPollUhkDevice();
+        }
     }
 
     public async startDonglePairing(event: Electron.IpcMainEvent): Promise<void> {

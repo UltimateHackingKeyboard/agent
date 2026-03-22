@@ -936,4 +936,18 @@ export class UhkOperations {
 
         await this.device.write(buffer);
     }
+
+    public async execShellCommand(cmd: string): Promise<void> {
+        this.logService.usbOps('[DeviceOperation] USB[T]: Execute Shell Command');
+        const b1 = Buffer.from([UsbCommand.ExecShellCommand]);
+        const b2 = Buffer.from(cmd);
+        const b0 = Buffer.from([0x00]);
+        const buffer = Buffer.concat([b1, b2, b0]);
+
+        if (buffer.length > MAX_USB_PAYLOAD_SIZE) {
+            throw new Error('Shel command is too long. At most 61 characters are supported.')
+        }
+
+        await this.device.write(buffer);
+    }
 }

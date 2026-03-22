@@ -11,6 +11,7 @@ export interface ZephyrLogServiceOptions {
     currentDeviceFn: typeof getCurrenUhk80LeftHID | typeof getCurrentUhkDongleHID;
     logService: LogService;
     ipcEvents: {
+        execShellCommand: string;
         isZephyrLoggingEnabled: string;
         isZephyrLoggingEnabledReply: string;
         toggleZephyrLogging: string;
@@ -31,6 +32,15 @@ export class ZephyrLogService {
     private operationLimiter = pLimit(1);
 
     constructor(private options: ZephyrLogServiceOptions) {
+        ipcMain.on(options.ipcEvents.execShellCommand, (...args) => {
+            this.queueManager.add({
+                method: this.execShellCommand,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
         ipcMain.on(options.ipcEvents.isZephyrLoggingEnabled, (...args) => {
             this.queueManager.add({
                 method: this.isZephyrLoggingEnabled,
@@ -79,6 +89,27 @@ export class ZephyrLogService {
         await this.waitUntilPollerStopped()
         await this.releaseOperations()
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Disabled`);
+    }
+
+    private async execShellCommand(_: Electron.IpcMainEvent, [command]): Promise<void> {
+        try {
+            await this.pauseLogging();
+
+            const operations = await this.getOperations();
+            if (!operations) {
+                const logEntry: ZephyrLogEntry = {
+                    log: "Device is not connected. Can't execute shell command",
+                    level: 'error',
+                    device: this.options.uhkDeviceProduct.logName,
+                }
+                this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+                return;
+            }
+            await operations.execShellCommand(command);
+        }
+        finally {
+            await this.resumeLogging();
+        }
     }
 
     private async getOperations(logEarlierInited = true): Promise<UhkOperations> {

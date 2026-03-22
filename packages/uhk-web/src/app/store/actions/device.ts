@@ -30,6 +30,9 @@ export enum ActionTypes {
     DongleVersionInfoLoaded = '[device] dongle version info loaded',
     EraseBleSettings = '[device] erase ble settings',
     EraseBleSettingsReply = '[device] erase ble settings reply',
+    ExecShellCommandOnDongle = '[device] exec shell command on dongle',
+    ExecShellCommandOnLeftHalf = '[device] exec shell command on left half',
+    ExecShellCommandOnRightHalf = '[device] exec shell command on right half',
     SetPrivilegeOnLinux = '[device] set privilege on linux',
     SetPrivilegeOnLinuxReply = '[device] set privilege on linux reply',
     ConnectionStateChanged = '[device] connection state changed',
@@ -110,6 +113,24 @@ export class EraseBleSettingReplyAction implements Action {
     type = ActionTypes.EraseBleSettingsReply;
 
     constructor(public payload: IpcResponse) {}
+}
+
+export class ExecShellCommandOnDongleAction implements Action {
+    type = ActionTypes.ExecShellCommandOnDongle;
+
+    constructor(public payload: string) {}
+}
+
+export class ExecShellCommandOnLeftHalfAction implements Action {
+    type = ActionTypes.ExecShellCommandOnLeftHalf;
+
+    constructor(public payload: string) {}
+}
+
+export class ExecShellCommandOnRightHalfAction implements Action {
+    type = ActionTypes.ExecShellCommandOnRightHalf;
+
+    constructor(public payload: string) {}
 }
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -328,6 +349,9 @@ export type Actions
     | DongleVersionInfoLoadedAction
     | EraseBleSettingAction
     | EraseBleSettingReplyAction
+    | ExecShellCommandOnDongleAction
+    | ExecShellCommandOnLeftHalfAction
+    | ExecShellCommandOnRightHalfAction
     | SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction
