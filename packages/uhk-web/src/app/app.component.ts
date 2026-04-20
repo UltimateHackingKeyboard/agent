@@ -251,9 +251,8 @@ export class MainAppComponent implements OnDestroy {
     onKeyDown(event: KeyboardEvent) {
         // It should be before the CTRL + S to prevent the conflict with the SaveToKeyboard shortcut
         if (event.ctrlKey &&
-            event.altKey &&
             event.shiftKey &&
-            event.code === 'KeyS' &&
+            event.key === 'S' &&
             !event.defaultPrevented &&
             !this.keypressCapturing) {
             this.keyboardSvgExportService.downloadSvgKeyboard();
