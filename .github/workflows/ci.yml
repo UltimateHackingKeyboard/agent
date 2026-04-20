@@ -66,7 +66,7 @@ jobs:
 
       - name: Upload Mac installer artifact
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: UHK.Agent-mac-installer
           path: dist/UHK.Agent-*-mac.dmg
@@ -75,7 +75,7 @@ jobs:
 
       - name: Upload Linux x64 AppImage artifact
         if: runner.os == 'Linux' && runner.arch == 'X64'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: UHK.Agent-linux-x86_64.AppImage
           path: dist/UHK.Agent-*-linux-x86_64.AppImage
@@ -84,7 +84,7 @@ jobs:
 
       - name: Upload Linux arm64 AppImage artifact
         if: runner.os == 'Linux' && runner.arch == 'ARM64'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: UHK.Agent-linux-arm64.AppImage
           path: dist/UHK.Agent-*-linux-arm64.AppImage
@@ -97,7 +97,7 @@ jobs:
 
       - name: Upload Windows installer artifacts
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: UHK.Agent-windows-installers
           path: dist/UHK.Agent-*-win*.exe
