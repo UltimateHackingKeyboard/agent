@@ -136,14 +136,6 @@ export class Keymap {
             for (let keyActionId = 0; keyActionId < baseModule.keyActions.length; keyActionId++) {
                 const baseKeyAction = baseModule.keyActions[keyActionId];
 
-                if (baseKeyAction instanceof SwitchLayerAction) {
-                    const destinationLayerId = baseKeyAction.layer + 1;
-                    if (this.layers.length < destinationLayerId) {
-                        // TODO: What should we do???
-                        console.error(`${this.name} has not enough layer. Need: ${destinationLayerId}`);
-                    }
-                }
-
                 for (let currentLayerId = 1; currentLayerId < this.layers.length; currentLayerId++) {
                     const currentLayer = this.layers[currentLayerId];
                     if (currentLayer.modules.length < moduleId) {
