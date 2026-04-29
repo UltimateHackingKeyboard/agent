@@ -6,7 +6,6 @@
   "description": "Agent USB scripts",
   "license": "See in LICENSE",
   "dependencies": {
-    "desm": "1.2.0",
     "yargs": "17.7.2",
     "kboot": "file:../kboot",
     "node-hid": "3.3.0",

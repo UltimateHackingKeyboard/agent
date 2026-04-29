@@ -2,7 +2,7 @@
 
 import { UhkBuffer, UserConfiguration } from 'uhk-common';
 import * as fs from 'fs';
-import { join } from 'desm';
+import * as path from 'path';
 
 import { yargs } from './src/index.js';
 
@@ -23,7 +23,7 @@ if (userConfigType !== 'uhk60' && userConfigType !== 'uhk80') {
 }
 
 const inputFileName = userConfigType === 'uhk60' ? 'user-config.json' : 'user-config-80.json';
-const inputFile = join(import.meta.url, '..', 'uhk-common', inputFileName);
+const inputFile = path.join(import.meta.dirname, '..', 'uhk-common', inputFileName);
 const config1Js = JSON.parse(fs.readFileSync(inputFile).toString());
 const config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(config1Js);
 const config1Buffer = new UhkBuffer();

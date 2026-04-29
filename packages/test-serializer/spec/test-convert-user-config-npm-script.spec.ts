@@ -1,4 +1,3 @@
-import * as desm from 'desm';
 import { spawnSync } from 'child_process';
 import { remove, ensureDir, pathExists } from 'fs-extra';
 import path from 'path';
@@ -9,8 +8,8 @@ describe('convert-user-config-to-bin npm script', () => {
     let tmpConfigPath;
 
     beforeAll(async () => {
-        rootDirPath = desm.join(import.meta.url, '..', '..', '..');
-        tmpDirPath = desm.join(import.meta.url, '..', 'tmp');
+        rootDirPath = path.join(import.meta.dirname, '..', '..', '..');
+        tmpDirPath = path.join(import.meta.dirname, '..', 'tmp');
         tmpConfigPath = path.join(tmpDirPath, 'test-config.bin');
 
         await ensureDir(tmpDirPath);

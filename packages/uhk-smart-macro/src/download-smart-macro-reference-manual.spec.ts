@@ -1,4 +1,3 @@
-import * as desm from 'desm';
 import * as fs from 'fs-extra';
 import { stat as statPromise } from 'fs/promises';
 import { readdir } from 'fs/promises';
@@ -8,7 +7,7 @@ import { downloadSmartMacroReferenceManual } from './download-smart-macro-refere
 
 describe('downloadSmartMacroReferenceManual', () => {
     it('should download the reference manual', async () => {
-        const directory = desm.join(import.meta.url, '..', 'tmp', 'doc', 'doc-dev');
+        const directory = path.join(import.meta.dirname, '..', 'tmp', 'doc', 'doc-dev');
         await fs.remove(directory);
 
         await downloadSmartMacroReferenceManual({

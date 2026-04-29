@@ -1,4 +1,4 @@
-import { join } from 'desm';
+import * as path from 'path';
 import { getLogOptions, LogService } from 'uhk-common';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 
@@ -9,7 +9,7 @@ export interface Uhk {
     operations: UhkOperations;
 }
 
-const rootDir = join(import.meta.url, '../../tmp');
+const rootDir = path.join(import.meta.url, '../../tmp');
 
 export default function (argv: any): Uhk {
     const logger = new LogService();
