@@ -63,7 +63,7 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.0",
     "webpack": "5.106.2",
-    "webpack-cli": "6.0.1"
+    "webpack-cli": "7.0.2"
   },
   "scripts": {
     "postinstall": "lerna exec npm ci",
