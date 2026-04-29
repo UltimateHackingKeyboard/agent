@@ -1,9 +1,9 @@
 import * as path from 'path';
-import { pipeline } from 'stream/promises';
 import urlJoin from 'url-join';
 import fs from 'fs-extra';
-import got from 'got';
 import { Octokit } from '@octokit/rest';
+
+import { downloadFile } from './download-file.js';
 
 export interface DownloadTreeToFolderOptions {
     commitSha: string;
@@ -47,9 +47,6 @@ export async function downloadTreeToFolder(options: DownloadTreeToFolderOptions)
         );
 
         const filePath = path.join(options.downloadDirectory, node.path);
-        await pipeline(
-            got.stream(githubRawUrl),
-            fs.createWriteStream(filePath)
-        );
+        await downloadFile(githubRawUrl, filePath);
     }
 }
