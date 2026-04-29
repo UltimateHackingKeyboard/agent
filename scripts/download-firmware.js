@@ -16,11 +16,15 @@ async function downloadFirmware(version) {
 
     await downloadFile(url, output);
 
-    return Promise.resolve(output);
+    return output;
 }
 
 async function downloadFile(url, output) {
     const res = await fetch(url);
+
+    if (!res.ok)
+        throw new Error(`Failed to download firmware: ${res.status} ${res.statusText}`);
+
     await pipeline(Readable.fromWeb(res.body), fs.createWriteStream(output));
 }
 
