@@ -17,8 +17,7 @@
     "build:tsc": "tsc --project src/tsconfig.build.json",
     "build:user-config": "tsx ./scripts/generate-user-configs.ts",
     "clean": "rimraf ./node_modules ./dist user-config.json",
-    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
-    "coverage": "nyc npm test",
+    "test": "node --loader=ts-node/esm --test \"**/*.test.ts\"",
     "lint": "eslint"
   },
   "dependencies": {
@@ -29,19 +28,5 @@
     "semver": "7.7.3",
     "tslib": "2.8.1"
   },
-  "license": "GPL-3.0",
-  "nyc": {
-    "extension": [
-      ".ts"
-    ],
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "src/**/*.spec.ts"
-    ],
-    "reporter": [
-      "lcov"
-    ]
-  }
+  "license": "GPL-3.0"
 }

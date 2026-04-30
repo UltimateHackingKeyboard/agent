@@ -1,0 +1,14 @@
+import { describe, it } from 'node:test';
+
+import { decodeCommandResponse, ResponseCodes, ResponseTags } from '../../../src/index.js';
+
+describe('decodeCommandResponse', () => {
+    it('should parse the command', ({ assert }) => {
+        const arr = [0x03, 0x00, 0x0c, 0x00, 0xa0, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+        const buffer = Buffer.from(arr);
+        const response = decodeCommandResponse(buffer);
+
+        assert.strictEqual(response.code, ResponseCodes.Success);
+        assert.strictEqual(response.tag, ResponseTags.Generic);
+    });
+});

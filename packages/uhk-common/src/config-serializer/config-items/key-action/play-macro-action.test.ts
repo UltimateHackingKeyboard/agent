@@ -1,3 +1,5 @@
+import { describe, it } from 'node:test';
+
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
 import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { PlayMacroAction } from './play-macro-action.js';
@@ -7,37 +9,37 @@ describe('play-action', () => {
     const macros = [{id: 1}, {id: 2}];
     const userConfiguration = {macros};
 
-    it('should be instantiate', () => {
+    it('should be instantiate', ({ assert }) => {
         const action = new PlayMacroAction();
-        expect(action).toBeTruthy();
+        assert.ok(action);
     });
 
     describe('toString', () => {
-        it('should return <PlayMacroAction macroId="1">', () => {
+        it('should return <PlayMacroAction macroId="1">', ({ assert }) => {
             const action = new PlayMacroAction();
             action.macroId = 1;
-            expect(action.toString()).toEqual('<PlayMacroAction macroId="1">');
+            assert.strictEqual(action.toString(), '<PlayMacroAction macroId="1">');
         });
     });
 
     describe('getName', () => {
-        it('should return with "PlayMacroAction"', () => {
+        it('should return with "PlayMacroAction"', ({ assert }) => {
             const action = new PlayMacroAction();
-            expect(action.getName()).toEqual('PlayMacroAction');
+            assert.strictEqual(action.getName(), 'PlayMacroAction');
         });
     });
 
     describe('full serialization', () => {
-        it('should json match', () => {
+        it('should json match', ({ assert }) => {
             const action = new PlayMacroAction();
             action.macroId = 1;
-            jsonDefaultHelper(action, DEFAULT_SERIALISATION_INFO, macros, macros);
+            jsonDefaultHelper(assert, action, DEFAULT_SERIALISATION_INFO, macros, macros);
         });
 
-        it('should binary match', () => {
+        it('should binary match', ({ assert }) => {
             const action = new PlayMacroAction();
             action.macroId = 1;
-            binaryDefaultHelper(action, DEFAULT_SERIALISATION_INFO, userConfiguration, macros);
+            binaryDefaultHelper(assert, action, DEFAULT_SERIALISATION_INFO, userConfiguration, macros);
         });
     });
 });

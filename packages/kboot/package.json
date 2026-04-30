@@ -22,6 +22,7 @@
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
     "clean": "rimraf ./node_modules ./dist",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:skip": "node --loader=ts-node/esm --test --test-concurrency=1 \"**/*.test.ts\""
   }
 }

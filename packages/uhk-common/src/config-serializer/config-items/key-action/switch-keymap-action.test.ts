@@ -1,3 +1,5 @@
+import { describe, it } from 'node:test';
+
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
 import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { SwitchKeymapAction } from './switch-keymap-action.js';
@@ -11,34 +13,34 @@ describe('switch-keymap-action', () => {
         ]
     };
 
-    it('should be instantiate', () => {
+    it('should be instantiate', ({ assert }) => {
         const action = new SwitchKeymapAction();
-        expect(action).toBeTruthy();
+        assert.ok(action);
     });
 
     describe('toString', () => {
-        it('should return <SwitchKeymapAction keymapAbbreviation="ABB">', () => {
+        it('should return <SwitchKeymapAction keymapAbbreviation="ABB">', ({ assert }) => {
             const action = new SwitchKeymapAction('ABB');
-            expect(action.toString()).toEqual('<SwitchKeymapAction keymapAbbreviation="ABB">');
+            assert.strictEqual(action.toString(), '<SwitchKeymapAction keymapAbbreviation="ABB">');
         });
     });
 
     describe('getName', () => {
-        it('should return with "SwitchKeymapAction"', () => {
+        it('should return with "SwitchKeymapAction"', ({ assert }) => {
             const action = new SwitchKeymapAction();
-            expect(action.getName()).toEqual('SwitchKeymapAction');
+            assert.strictEqual(action.getName(), 'SwitchKeymapAction');
         });
     });
 
     describe('full serialization', () => {
-        it('should json match', () => {
+        it('should json match', ({ assert }) => {
             const action = new SwitchKeymapAction('AB1');
-            jsonDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
+            jsonDefaultHelper(assert, action, DEFAULT_SERIALISATION_INFO);
         });
 
-        xit('should binary match', () => {
+        it.skip('should binary match', ({ assert }) => {
             const action = new SwitchKeymapAction('AB1');
-            binaryDefaultHelper(action, DEFAULT_SERIALISATION_INFO, userConfiguration, userConfiguration);
+            binaryDefaultHelper(assert, action, DEFAULT_SERIALISATION_INFO, userConfiguration, userConfiguration);
         });
     });
 });

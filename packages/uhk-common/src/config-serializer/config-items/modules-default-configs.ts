@@ -1,5 +1,6 @@
-import { LeftSlotModules, RightSlotModules } from '../../models/index.js';
 import { Module } from './module.js';
+import { LeftSlotModules } from '../../models/left-slot-modules.js';
+import { RightSlotModules } from '../../models/right-slot-modules.js';
 import { DEFAULT_SERIALISATION_INFO } from './serialisation-info.js';
 
 export type ModulesDefaultConfigs = { [K in LeftSlotModules | RightSlotModules]?: Module };

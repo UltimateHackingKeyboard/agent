@@ -1,3 +1,5 @@
+import { describe, it } from 'node:test';
+
 import { UhkBuffer } from '../uhk-buffer.js';
 import { KeyActionId } from './key-action/key-action.js';
 import { NoneAction } from './key-action/none-action.js';
@@ -6,12 +8,12 @@ import { DEFAULT_SERIALISATION_INFO } from './serialisation-info.js';
 import { UserConfiguration } from './user-configuration.js';
 
 describe('module', () => {
-    it('should be instantiate', () => {
+    it('should be instantiate', ({ assert }) => {
         const module = new Module();
-        expect(module).toBeTruthy();
+        assert.ok(module);
     })
 
-    it('should not compress 1 NoneAction', () => {
+    it('should not compress 1 NoneAction', ({ assert }) => {
         const module = new Module();
         module.id = 1;
         module.keyActions = [
@@ -26,10 +28,10 @@ describe('module', () => {
         expected.writeUInt8(1); // keyActions array length
         expected.writeUInt8(KeyActionId.NoneAction);
 
-        expect(buffer).toEqual(expected);
+        assert.deepStrictEqual(buffer, expected);
     })
 
-    it ('should compress 2 NoneAction', () => {
+    it('should compress 2 NoneAction', ({ assert }) => {
         const module = new Module();
         module.id = 1;
         module.keyActions = [
@@ -46,10 +48,10 @@ describe('module', () => {
         expected.writeUInt8(KeyActionId.NoneBlockAction);
         expected.writeUInt8(2);
 
-        expect(buffer).toEqual(expected)
+        assert.deepStrictEqual(buffer, expected)
     })
 
-    it ('should compress 2 NoneAction with per key backlighting', () => {
+    it('should compress 2 NoneAction with per key backlighting', ({ assert }) => {
         const noneAction1 = new NoneAction();
         noneAction1.r = 1
         noneAction1.g = 2
@@ -84,6 +86,6 @@ describe('module', () => {
         expected.writeUInt8(2); // green color
         expected.writeUInt8(3); // blue color
 
-        expect(buffer).toEqual(expected)
+        assert.deepStrictEqual(buffer, expected)
     })
 })

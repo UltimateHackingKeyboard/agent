@@ -8,7 +8,7 @@
     "build": "tsc --project ./src/tsconfig.json",
     "clean": "rimraf ./node_modules ./dist",
     "lint": "eslint",
-    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json"
+    "test": "node --loader=ts-node/esm --test \"**/*.test.ts\""
   },
   "keywords": [
     "mcu",

@@ -5,6 +5,6 @@
     "outDir": "../dist"
   },
   "exclude": [
-    "**/*.spec.ts"
+    "**/*.test.ts"
   ]
 }

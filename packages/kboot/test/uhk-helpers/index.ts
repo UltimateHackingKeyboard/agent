@@ -10,7 +10,7 @@ export enum UhkReenumerationModes {
     CompatibleKeyboard = 'compatibleKeyboard'
 }
 
-const USB_SCRIPTS_DIR = join(__dirname, '../../../usb');
+const USB_SCRIPTS_DIR = join(import.meta.dirname, '../../../usb');
 export const reenumerate = (mode: UhkReenumerationModes): void => {
     const reenumerateScriptFile = join(USB_SCRIPTS_DIR, 'reenumerate.ts');
     const command = [reenumerateScriptFile, mode.toString()].join(' ');
@@ -25,7 +25,7 @@ export const reenumerate = (mode: UhkReenumerationModes): void => {
 };
 
 export const readBootloaderFirmwareFromHexFile = (): Map<any, any> => {
-    const hexFilePath = join(__dirname, '../../../../tmp/packages/firmware/devices/uhk60-right/firmware.hex');
+    const hexFilePath = join(import.meta.dirname, '../../../../tmp/packages/firmware/devices/uhk60-right/firmware.hex');
     const fileContent = readFileSync(hexFilePath, { encoding: 'utf8' });
     const memoryMap = MemoryMap.fromHex(fileContent);
 

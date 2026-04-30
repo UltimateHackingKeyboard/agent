@@ -1,7 +1,9 @@
+import { afterEach, beforeEach, describe, it } from 'node:test';
+
 import { reenumerate, UhkReenumerationModes, readBootloaderFirmwareFromHexFile } from './uhk-helpers/index.js';
 import { BootloaderVersion,  DataOption, KBoot, UsbPeripheral } from '../src/index.js';
 
-xdescribe('UHK Integration tests', () => {
+describe.skip('UHK Integration tests', () => {
     describe('bootloader', () => {
         let usb: UsbPeripheral;
         let kboot: KBoot;
@@ -21,7 +23,7 @@ xdescribe('UHK Integration tests', () => {
             }
         });
 
-        it('get bootloader version', async () => {
+        it('get bootloader version', async ({ assert }) => {
             const expectedVersion: BootloaderVersion = {
                 protocolName: 'K',
                 major: 2,
@@ -30,37 +32,37 @@ xdescribe('UHK Integration tests', () => {
             };
             const version = await kboot.getBootloaderVersion();
 
-            expect(version).toEqual(expectedVersion);
+            assert.deepStrictEqual(version, expectedVersion);
         });
 
-        it('disable flash security', () => {
+        it('disable flash security', ({ assert }) => {
             const backdoorKey = [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08];
 
             return kboot
                 .flashSecurityDisable(backdoorKey)
                 .catch(err => {
-                    expect(err).toBeFalsy();
+                    assert.nok(err);
                 });
         });
 
-        it('flash erase region', () => {
+        it('flash erase region', ({ assert }) => {
             return kboot
                 .flashEraseRegion(0xc000, 475136)
                 .catch(err => {
-                    expect(err).toBeFalsy();
+                    assert.nok(err);
                 });
         });
 
-        it('read memory', () => {
+        it('read memory', ({ assert }) => {
             const dataLength = 128;
             return kboot
                 .readMemory(0xc000, dataLength)
                 .then((data: Buffer) => {
-                    expect(data).toBeTruthy();
-                    expect(data.length).toEqual(dataLength);
+                    assert.ok(data);
+                    assert.strictEqual(data.length, dataLength);
                 })
                 .catch(err => {
-                    expect(err).toBeFalsy();
+                    assert.nok(err);
                 });
         });
 

@@ -14,8 +14,7 @@
   "scripts": {
     "build": "tsc --project src/tsconfig.build.json",
     "clean": "rimraf ./node_modules ./dist",
-    "test:skip": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
-    "coverage": "nyc npm test",
+    "test:skip": "node --loader=ts-node/esm --test --test-concurrency=1 \"**/*.test.ts\"",
     "lint": "eslint"
   },
   "dependencies": {

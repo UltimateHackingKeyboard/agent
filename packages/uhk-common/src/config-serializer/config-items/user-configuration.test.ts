@@ -1,13 +1,16 @@
+import { TestContextAssert } from 'node:test';
+import { describe, it } from 'node:test';
+
 import { UserConfiguration } from './user-configuration.js';
 
 describe('user-configuration', () => {
-    it('should be instantiate', () => {
+    it('should be instantiate', ({ assert }) => {
         const config = new UserConfiguration();
-        expect(config).toBeTruthy();
+        assert.ok(config);
     });
 
-    it('should transform an empty config', () => {
-        jsonTester({
+    it('should transform an empty config', ({ assert }) => {
+        jsonTester( assert, {
             userConfigMajorVersion: 14,
             userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
@@ -232,7 +235,7 @@ describe('user-configuration', () => {
         });
     });
 
-    it('Should set the device name to "My UHK" if not exists in the config', () => {
+    it('Should set the device name to "My UHK" if not exists in the config', ({ assert }) => {
         const original = {
             userConfigMajorVersion: 1,
             moduleConfigurations: [],
@@ -243,17 +246,17 @@ describe('user-configuration', () => {
         const config = new UserConfiguration();
         config.fromJsonObject(original);
 
-        expect(config.deviceName).toEqual('My UHK');
+        assert.strictEqual(config.deviceName, 'My UHK');
     });
 
 });
 
-function jsonTester(json: any): void {
+function jsonTester(assert: TestContextAssert, json: any): void {
     const orig = JSON.parse(JSON.stringify(json));
     const config = new UserConfiguration();
     config.fromJsonObject(json);
-    expect(json).toEqual(orig); // check the input json is not mutated
+    assert.deepStrictEqual(json, orig); // check the input json is not mutated
     const newJson = config.toJsonObject();
-    expect(json).toEqual(orig); // check the input json is not mutated
-    expect(newJson).toEqual(json);
+    assert.deepStrictEqual(json, orig); // check the input json is not mutated
+    assert.deepStrictEqual(newJson, json);
 }

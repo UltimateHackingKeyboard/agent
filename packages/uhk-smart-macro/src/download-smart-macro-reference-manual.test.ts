@@ -1,15 +1,16 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
 import { readdir, stat as statPromise } from 'fs/promises';
+import * as path from 'path';
+import { describe, it } from 'node:test';
 
-import { downloadSmartMacroDoc } from './download-smart-macro-doc.js';
+import { downloadSmartMacroReferenceManual } from './download-smart-macro-reference-manual.js';
 
-describe('downloadSmartMacroDoc', () => {
-    it('should download the doc directory', async () => {
-        const directory = path.join(import.meta.dirname, '..', 'tmp', 'doc');
+describe('downloadSmartMacroReferenceManual', () => {
+    it('should download the reference manual', { timeout: 30000 }, async ({ assert }) => {
+        const directory = path.join(import.meta.dirname, '..', 'tmp', 'doc', 'doc-dev');
         await fs.remove(directory);
 
-        await downloadSmartMacroDoc({
+        await downloadSmartMacroReferenceManual({
             owner: 'UltimateHackingKeyboard',
             repo: 'firmware',
             ref: '885a92a',
@@ -28,6 +29,6 @@ describe('downloadSmartMacroDoc', () => {
             }
         }
 
-        expect(nrOfFilesInDownloadDir).toEqual(13);
-    }, 30000);
+        assert.strictEqual(nrOfFilesInDownloadDir, 1);
+    });
 });

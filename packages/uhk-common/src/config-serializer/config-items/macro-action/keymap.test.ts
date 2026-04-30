@@ -1,7 +1,9 @@
+import { describe, it } from 'node:test';
+
 import { UserConfiguration } from '../user-configuration.js';
 
-xdescribe('keymap', () => {
-    it('should normalize SwitchLayerAction if non base layer action is not SwitchLayerAction', () => {
+describe.skip('keymap', () => {
+    it('should normalize SwitchLayerAction if non base layer action is not SwitchLayerAction', ({ assert, mock }) => {
         const inputJsonConfig = {
             userConfigMajorVersion: 3,
             userConfigMinorVersion: 0,
@@ -348,14 +350,14 @@ xdescribe('keymap', () => {
                 }
             ]
         };
-        spyOn(console, 'warn');
+        const consoleMock = mock.method(console, 'warn');
         const inputUserConfig = new UserConfiguration().fromJsonObject(inputJsonConfig);
 
-        expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
-        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
+        assert.deepStrictEqual(inputUserConfig.toJsonObject(), expectedJsonConfig);
+        assert.strictEqual(consoleMock.mock.calls[0].arguments[0], 'QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
     });
 
-    it('should normalize SwitchLayerAction if non base layer action is other SwitchLayerAction', () => {
+    it('should normalize SwitchLayerAction if non base layer action is other SwitchLayerAction', ({ assert, mock }) => {
         const inputJsonConfig = {
             userConfigMajorVersion: 3,
             userConfigMinorVersion: 0,
@@ -702,10 +704,10 @@ xdescribe('keymap', () => {
                 }
             ]
         };
-        spyOn(console, 'warn');
+        const consoleMock = mock.method(console, 'warn');
         const inputUserConfig = new UserConfiguration().fromJsonObject(inputJsonConfig);
 
-        expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
-        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. <SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
+        assert.deepStrictEqual(inputUserConfig.toJsonObject(), expectedJsonConfig);
+        assert.strictEqual(consoleMock.mock.calls[0].arguments[0], 'QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. <SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
     });
 });
