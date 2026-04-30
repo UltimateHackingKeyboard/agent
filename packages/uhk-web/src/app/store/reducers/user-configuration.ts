@@ -9,6 +9,7 @@ import {
     ConnectionsAction,
     Constants,
     CUSTOM_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET_NAME,
+    CUSTOM_ADVANCED_SECONDARY_ROLE_TOOLTIP,
     emptyHostConnection,
     getDefaultHalvesInfo,
     HalvesInfo,
@@ -1369,6 +1370,7 @@ export const calculateTypingBehaviorPresets = (state: State): TypingBehaviorPres
     result.push({
         name: CUSTOM_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET_NAME,
         strategy: SecondaryRoleStrategy.Advanced,
+        tooltip: CUSTOM_ADVANCED_SECONDARY_ROLE_TOOLTIP,
         configuration: currentConfiguration,
         selected: !hasMatches,
     })

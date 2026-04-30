@@ -64,11 +64,11 @@ export class TypingBehaviorPage implements AdvancedSecondaryRoleConfiguration, O
     timeoutActionTypeDropdownOptions = [
         {
             id: SecondaryRoleAdvancedStrategyTimeoutType.Active,
-            text: 'Immediately (active)'
+            text: 'activated immediately'
         },
         {
             id: SecondaryRoleAdvancedStrategyTimeoutType.Passive,
-            text: 'Only after Key release (passive)'
+            text: 'on uninterrupted release'
         },
     ]
 

@@ -28,6 +28,16 @@
                     {{ preset.name }}
                 </button>
             </div>
+            <circle-tooltip class="mt-2 ms-1"
+                            [tooltip]="presetsTooltip"
+                            [width]="380"/>
+            <ng-template #presetsTooltip>
+                <ng-container *ngFor="let preset of typingBehaviorPresets; trackBy: trackPresets; let isLast = last">
+                    <p [class.mb-0]="isLast">
+                        <span class="fw-bold">{{ preset.name }}</span> - {{ preset.tooltip }}
+                    </p>
+                </ng-container>
+            </ng-template>
         </div>
     </div>
 </div>
@@ -81,8 +91,8 @@
                                     [width]="380"/>
                     <ng-template #timeoutTypeTooltip>
                         <p>Assume timeout leads to Primary or None:</p>
-                        <p>Active: timeout action is applied immediately when timeout is reached. Secondary role can no longer be activated after timeout was reached.</p>
-                        Passive: timeout action is delayed until release. Secondary role can still be triggered until key release.
+                        <p>activated immediately: timeout action is applied immediately when timeout is reached. Secondary role can no longer be activated after timeout was reached. Correspondence macro value: Active</p>
+                        on uninterrupted release: timeout action is delayed until release. Secondary role can still be triggered until key release. Correspondence macro value: Passive
                     </ng-template>
                 </td>
                 <td>
@@ -97,10 +107,6 @@
                                 bindValue="id"
                             />
                         </div>
-
-                        <span>
-                            activated
-                        </span>
 
                         <div class="timeout-action-type-container">
                             <ng-select
@@ -209,7 +215,7 @@
                 </td>
             </tr>
             <tr class="separator">
-                <td>Refuse triggers from same half
+                <td>Suppress same-side triggers
                     <circle-tooltip tooltip="When checked, same half keys don't trigger currently pressed secondary role keys."
                                     [width]="250"/>
                 </td>
