@@ -1,10 +1,10 @@
 import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { NotifierService } from '@ert78gb/angular-notifier';
 import { faPuzzlePiece, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { Actions, ofType } from '@ngrx/effects';
 import { SplitGutterInteractionEvent } from 'angular-split';
+import { NotifierService } from 'gramli-angular-notifier';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { ERR_UPDATER_INVALID_SIGNATURE } from 'uhk-common';

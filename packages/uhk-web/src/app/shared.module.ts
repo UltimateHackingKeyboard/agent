@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { NotifierModule } from '@ert78gb/angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NotifierModule } from 'gramli-angular-notifier';
 
 import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from 'ng2-dragula';

@@ -1,4 +1,4 @@
-import { NotifierOptions } from '@ert78gb/angular-notifier';
+import { NotifierOptions } from 'gramli-angular-notifier';
 
 export const angularNotifierConfig: NotifierOptions = {
     behaviour: {
