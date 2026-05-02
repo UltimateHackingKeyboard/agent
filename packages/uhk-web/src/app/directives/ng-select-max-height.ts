@@ -1,6 +1,5 @@
-import { OnDestroy, Directive } from '@angular/core';
+import { OnDestroy, Directive, OutputRefSubscription } from '@angular/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { Subscription } from 'rxjs';
 
 const MAX_HEIGHT_OFFSET = 20;
 
@@ -9,7 +8,7 @@ const MAX_HEIGHT_OFFSET = 20;
     standalone: false,
 })
 export class NgSelectMaxHeight implements OnDestroy {
-    private openSubscription: Subscription;
+    private openSubscription: OutputRefSubscription;
 
     constructor(private host: NgSelectComponent) {
         this.openSubscription = host.openEvent.subscribe(() => {

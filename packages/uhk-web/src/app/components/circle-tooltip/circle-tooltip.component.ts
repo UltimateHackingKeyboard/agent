@@ -1,7 +1,7 @@
 import { HostBinding } from '@angular/core';
 import { Component, Input, TemplateRef } from '@angular/core';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import { PlacementArray } from '@ng-bootstrap/ng-bootstrap/util/positioning';
+import { PlacementArray } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'circle-tooltip',

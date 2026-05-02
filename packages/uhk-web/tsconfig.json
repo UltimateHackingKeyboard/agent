@@ -4,10 +4,10 @@
     "outDir": "../uhk-agent/dist/out-tsc",
     "declaration": false,
     "module": "es2015",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "ES2021",
     "lib": [
-      "dom",
+      "dom"
     ]
   },
   "angularCompilerOptions": {

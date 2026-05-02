@@ -10,7 +10,11 @@ import {
 } from '@angular/core';
 
 import { LayerOption } from '../../models';
-import { ConfirmCancelEvent } from 'angular-confirmation-popover/lib/confirmation-popover.directive';
+
+// TODO: Open a PR to expose it from angular-confirmation-popover
+export interface ConfirmCancelEvent {
+    clickEvent: MouseEvent;
+}
 
 @Component({
     selector: 'layer-option',
