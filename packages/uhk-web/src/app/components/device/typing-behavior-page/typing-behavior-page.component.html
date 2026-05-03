@@ -32,7 +32,7 @@
                             [tooltip]="presetsTooltip"
                             [width]="450"/>
             <ng-template #presetsTooltip>
-                <ul class="presets-tooltip-list">
+                <ul class="no-indent text-start gap-035">
                     <li *ngFor="let preset of typingBehaviorPresets; trackBy: trackPresets">
                         <span class="fw-bold">{{ preset.name }}</span>: {{ preset.tooltip }}
                     </li>

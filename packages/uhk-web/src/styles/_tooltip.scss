@@ -5,16 +5,6 @@
     .tooltip-inner {
         border: $tooltip-border-width solid $tooltip-border-color;
         max-width: var(--tooltip-max-width);
-
-        .presets-tooltip-list {
-            margin: 0;
-            padding-left: 1.25rem;
-            text-align: left;
-
-            li + li {
-                margin-top: 0.35rem;
-            }
-        }
     }
 
     .tooltip-arrow {

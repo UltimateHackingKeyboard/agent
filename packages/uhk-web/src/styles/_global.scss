@@ -73,6 +73,12 @@ ul.no-indent {
     margin-bottom: 0;
 }
 
+ul.gap-035 {
+    li + li {
+        margin-top: 0.35rem;
+    }
+}
+
 .h1, .h2, .h3, h1, h2, h3 {
     padding-top: 10px;
 }
