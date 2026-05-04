@@ -54,7 +54,7 @@ export const SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: AdvancedSecond
         secondaryRoleAdvancedStrategySafetyMargin: 0,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: false,
         secondaryRoleAdvancedStrategyTriggerByMouse: true,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
@@ -71,7 +71,7 @@ export const HRM_TIMEOUT_CANCEL_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: Ad
         secondaryRoleAdvancedStrategySafetyMargin: -40,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: true,
         secondaryRoleAdvancedStrategyTriggerByMouse: true,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
@@ -88,7 +88,7 @@ export const HRM_TIMEOUT_SECONDARY_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET:
         secondaryRoleAdvancedStrategySafetyMargin: 1,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: true,
         secondaryRoleAdvancedStrategyTriggerByMouse: false,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
@@ -105,7 +105,7 @@ export const TIMEOUT_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: AdvancedSecon
         secondaryRoleAdvancedStrategySafetyMargin: 0,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: true,
         secondaryRoleAdvancedStrategyTriggerByMouse: true,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
