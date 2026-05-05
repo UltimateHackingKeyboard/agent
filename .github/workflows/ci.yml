@@ -105,7 +105,7 @@ jobs:
           retention-days: 30
 
       - name: Run build-archiver
-        uses: UltimateHackingKeyboard/build-archiver@v0.0.4
+        uses: UltimateHackingKeyboard/build-archiver@v0.0.7
         if: github.ref == 'refs/heads/master' && github.event.repository.fork == false
         with:
           FILE_PATTERN: "dist/UHK.Agent-*-linux-x86_64.AppImage\ndist/UHK.Agent-*-linux-arm64.AppImage\ndist/UHK.Agent-*-mac.dmg\ndist/UHK.Agent-*-win*.exe"
