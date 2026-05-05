@@ -5,7 +5,8 @@
     "declaration": false,
     "module": "es2015",
     "moduleResolution": "bundler",
-    "target": "ES2021",
+    "target": "ES2022",
+    "useDefineForClassFields": false,
     "lib": [
       "dom"
     ]
