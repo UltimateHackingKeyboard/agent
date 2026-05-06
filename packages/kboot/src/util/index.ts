@@ -3,7 +3,7 @@ export * from './response-parser.js';
 export * from './usb/index.js';
 export * from './snooze.js';
 
-export const convertToHexString = (arr: number[] | Buffer): string => {
+export const convertToHexString = (arr: number[] | Buffer | Uint8Array): string => {
     let str = '';
 
     for (const n of arr) {

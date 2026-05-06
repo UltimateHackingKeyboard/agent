@@ -1,6 +1,6 @@
 let canvas: HTMLCanvasElement;
 
-export function getContentWidth(style: CSSStyleDeclaration, text: string): number {
+export function getContentWidth(style: Partial<CSSStyleDeclaration>, text: string): number {
     if (!text) {
         return 0;
     }

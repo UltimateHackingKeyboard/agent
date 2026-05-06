@@ -19,6 +19,7 @@ export class SecondSideMenuContainerComponent {
     constructor(private componentFactoryResolver: ComponentFactoryResolver,
                 private cdRef: ChangeDetectorRef) { }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolveComponent(component: any): void {
         this.container.clear();
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);

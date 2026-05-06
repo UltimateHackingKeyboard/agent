@@ -194,7 +194,7 @@ export class SerialPeripheral implements Peripheral {
         });
     }
 
-    async #_write(data: any): Promise<void> {
+    async #_write(data: unknown): Promise<void> {
         await this.open();
 
         logger('Write packet %o', data);

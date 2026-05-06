@@ -286,13 +286,13 @@ export class DeviceEffects {
         .pipe(
             ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SetPrivilegeOnLinuxReply),
             map(action => action.payload),
-            switchMap((response: any) => {
+            switchMap((response) => {
                 if (response.success) {
                     this.appRendererService.getAppStartInfo();
                     return EMPTY;
                 }
 
-                return of(new SetupPermissionErrorAction(response.error));
+                return of(new SetupPermissionErrorAction(response.error.message));
             })
         )
     );

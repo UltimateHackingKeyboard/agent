@@ -31,7 +31,7 @@ export const encodeCommandOption = (option: CommandOption): number[] => {
     return [...header, ...payload, ...placeholders];
 };
 
-export const validateCommandParams = (params: any[]): void => {
+export const validateCommandParams = (params: number[]): void => {
     if (isNullOrUndefined(params)) {
         return;
     }

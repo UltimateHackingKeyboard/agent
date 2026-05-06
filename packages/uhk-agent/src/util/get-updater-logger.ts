@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LogService } from 'uhk-common';
 
 export function getUpdaterLoggerService(logService: LogService) {

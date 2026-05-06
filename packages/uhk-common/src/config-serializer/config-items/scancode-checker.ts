@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { KeystrokeAction, KeystrokeType, SCANCODES } from './index.js';
 
 let scancodeMap: Map<number, any>;

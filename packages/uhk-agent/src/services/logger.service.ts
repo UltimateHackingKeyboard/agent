@@ -29,10 +29,12 @@ export class ElectronLogService extends LogService {
         logUserConfigHelper(this.log, message, config);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error(...args: any[]): void {
         log.error(...args);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     misc(...args: any[]): void {
         if (!this._options.misc) {
             return;
@@ -41,6 +43,7 @@ export class ElectronLogService extends LogService {
         this.log(...args);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     usb(...args: any[]): void {
         if (!this._options.usb) {
             return;
@@ -75,6 +78,7 @@ export class ElectronLogService extends LogService {
         this.log('%c' + args.join(' '), 'color:orange');
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected log(...args: any[]): void {
         log.log(...args);
     }

@@ -1,5 +1,6 @@
 import { toHexString } from 'uhk-common';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function usbDeviceJsonFormatter(key: any, value: any): any {
     if (value === undefined || value === null) {
         return value

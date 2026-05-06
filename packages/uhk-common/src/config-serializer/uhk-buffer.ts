@@ -4,6 +4,7 @@ import { Buffer } from '../buffer.js';
 export class UhkBuffer {
 
     static simpleElementWriter<T>(buffer: UhkBuffer, element: T): void {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (<any>element).toBinary(buffer); // TODO: Remove any
     }
 
@@ -245,7 +246,7 @@ export class UhkBuffer {
         this._enableDump = value;
     }
 
-    dump(value: any) {
+    dump(value: string) {
         if (!this.enableDump) {
             return;
         }

@@ -21,6 +21,7 @@ export interface RestoreUserConfigurationOptions {
 export async function restoreUserConfiguration(options: RestoreUserConfigurationOptions): Promise<void> {
     try {
         const device = await getCurrentUhkDeviceProduct(options.commandLineArgs);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let userConfigJson: any;
 
         if (!device) {

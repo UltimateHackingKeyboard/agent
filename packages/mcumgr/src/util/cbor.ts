@@ -13,7 +13,7 @@ const POW_2_24 = 5.960464477539063e-8,
     POW_2_32 = 4294967296,
     POW_2_53 = 9007199254740992;
 
-export function encode(value: any) {
+export function encode(value: unknown) {
     let data = new ArrayBuffer(256);
     let dataView = new DataView(data);
     let lastLength: number;
@@ -36,7 +36,7 @@ export function encode(value: any) {
         lastLength = length;
         return dataView;
     }
-    function commitWrite(x?: any) {
+    function commitWrite(_?: unknown) {
         offset += lastLength;
     }
     function writeFloat64(value) {
@@ -169,7 +169,7 @@ export function encode(value: any) {
     return ret;
 }
 
-export function decode(data: any, tagger?: Function, simpleValue?: Function) {
+export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function, simpleValue?: Function) {
     const dataView = new DataView(data);
     let offset = 0;
 

@@ -70,6 +70,7 @@ export class SmartMacroDocService implements OnDestroy {
      * Send message to the Smart Macro Doc.
      * If the smart macro has not been initialised then the message will be dropped
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sendMessage(message: any): void {
         if (!this.iframe?.contentWindow) {
             return;
@@ -111,6 +112,7 @@ export class SmartMacroDocService implements OnDestroy {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private dispatchSmartMacroDocCommand(action: SmartMacroDocCommandAction, data: any): void {
         if (!this.selectedMacroAction) {
             return;

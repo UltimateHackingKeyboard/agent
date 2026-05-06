@@ -1,5 +1,5 @@
 export interface DataOption {
     startAddress: number;
-    data: Buffer;
+    data: Buffer | Uint8Array;
     timeout?: number;
 }

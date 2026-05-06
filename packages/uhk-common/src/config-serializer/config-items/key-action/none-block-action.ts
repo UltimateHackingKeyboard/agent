@@ -22,6 +22,7 @@ export class NoneBlockAction extends KeyAction {
         this.blockCount = other.blockCount
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): NoneBlockAction {
         this.assertKeyActionType(jsonObject);
         this.blockCount = jsonObject.blockCount;
@@ -38,6 +39,7 @@ export class NoneBlockAction extends KeyAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(serialisationInfo: SerialisationInfo): any {
         return {
             keyActionType: keyActionType.NoneBlockAction,

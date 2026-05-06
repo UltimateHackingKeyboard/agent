@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LogOptions } from '../models/log-options.js';
 import { UserConfiguration } from '../config-serializer/config-items/user-configuration.js';
 import { logUserConfigHelper } from './log-user-config-helper.js';

@@ -84,7 +84,7 @@ export class ProcessAppStartInfoAction implements Action {
 export class UndoLastAction implements Action {
     type = ActionTypes.UndoLast;
 
-    constructor(public payload: any) {
+    constructor(public payload: unknown) {
     }
 }
 

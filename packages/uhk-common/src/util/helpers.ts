@@ -72,6 +72,7 @@ export const getUserConfigFromDeviceResponse = (json: string): ParsedUserConfigu
     }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUserConfigFromJsonObject = (data: any): UserConfiguration  => {
     const userConfig = new UserConfiguration();
     userConfig.fromJsonObject(data);
@@ -83,6 +84,7 @@ export const getUserConfigFromJsonObject = (data: any): UserConfiguration  => {
     throw Error('JSON string is an invalid user configuration');
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mapObjectToUserConfigBinaryBuffer = (obj: any): Buffer => {
     const configuration = new UserConfiguration();
     configuration.fromJsonObject(obj);

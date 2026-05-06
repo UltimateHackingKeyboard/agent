@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApplicationSettings, IpcEvents, UhkDeviceProduct, UserConfiguration } from 'uhk-common';
 import { Observable, from, of } from 'rxjs';
 

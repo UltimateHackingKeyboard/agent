@@ -28,6 +28,7 @@ export const getDefaultWindowState = () => ({
 export const loadWindowState = (logger: LogService): Partial<WindowState> => {
     logger.misc('[WindowState] load settings');
     try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const loadedState = settings.getSync(WINDOWS_SETTINGS_KEY) as any;
         logger.misc('[WindowState] loaded settings', loadedState);
 
@@ -58,6 +59,7 @@ export const loadWindowState = (logger: LogService): Partial<WindowState> => {
 
 export const saveWindowState = (win: electron.BrowserWindow, logger: LogService) => {
     const winBounds = win.isMaximized() || win.isFullScreen()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ? loadWindowState(logger) as any
         : win.getBounds();
 
@@ -68,6 +70,7 @@ export const saveWindowState = (win: electron.BrowserWindow, logger: LogService)
     };
 
     logger.misc('[WindowState] save settings:', state);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     settings.setSync(WINDOWS_SETTINGS_KEY, state as any);
     logger.misc('[WindowState] save settings success');
 };

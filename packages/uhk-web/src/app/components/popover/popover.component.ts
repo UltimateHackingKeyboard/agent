@@ -87,7 +87,7 @@ export class PopoverComponent implements OnChanges {
     @Input() secondaryRoleOptions: SelectOptionData[];
     @Input() selectedKey: SelectedKeyModel;
 
-    @Output() cancel = new EventEmitter<any>();
+    @Output() cancel = new EventEmitter<void>();
     @Output() remap = new EventEmitter<KeyActionRemap>();
 
     @ViewChild('tab', { static: false }) selectedTab: Tab;
@@ -200,7 +200,7 @@ export class PopoverComponent implements OnChanges {
     }
 
     onCancelClick(): void {
-        this.cancel.emit(undefined);
+        this.cancel.emit();
     }
 
     onRemapKey(assignNewMacro?: boolean, navigateToMacro?: boolean): void {

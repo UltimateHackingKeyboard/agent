@@ -15,6 +15,7 @@ export class DelayMacroAction extends MacroAction {
         this.delay = other.delay;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): DelayMacroAction {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -65,6 +66,7 @@ export class DelayMacroAction extends MacroAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
         return {
             macroActionType: macroActionType.DelayMacroAction,
@@ -85,6 +87,7 @@ export class DelayMacroAction extends MacroAction {
         return 'DelayMacroAction';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV1(jsObject: any): void {
         this.assertMacroActionType(jsObject);
         this.delay = jsObject.delay;

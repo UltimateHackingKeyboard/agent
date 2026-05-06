@@ -57,6 +57,7 @@ export class SwitchLayerAction extends KeyAction {
         this.layer = other.layer;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): SwitchLayerAction {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -113,6 +114,7 @@ export class SwitchLayerAction extends KeyAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(serialisationInfo: SerialisationInfo): any {
         return {
             keyActionType: keyActionType.SwitchLayerAction,
@@ -137,6 +139,7 @@ export class SwitchLayerAction extends KeyAction {
         return 'SwitchLayerAction';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV1(jsonObject: any): void {
         this.assertKeyActionType(jsonObject);
         this.layer = LayerName[<string>jsonObject.layer];
@@ -150,6 +153,7 @@ export class SwitchLayerAction extends KeyAction {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV6(jsonObject: any, serialisationInfo: SerialisationInfo): void {
         this.fromJsonObjectV1(jsonObject);
         this.rgbColorFromJson(jsonObject, serialisationInfo);

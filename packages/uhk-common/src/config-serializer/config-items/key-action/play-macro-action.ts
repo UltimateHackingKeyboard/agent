@@ -18,6 +18,7 @@ export class MacroArgumentAction extends KeyAction {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any): MacroArgumentAction {
         this.assertKeyActionType(jsonObject);
         this.value = jsonObject.value;
@@ -32,6 +33,7 @@ export class MacroArgumentAction extends KeyAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
         return {
             keyActionType: keyActionType.MacroArgumentAction,
@@ -79,6 +81,7 @@ export class PlayMacroAction extends KeyAction {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo, macros: Macro[]): PlayMacroAction {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -135,6 +138,7 @@ export class PlayMacroAction extends KeyAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(serialisationInfo: SerialisationInfo, macros: Macro[]): any {
         return {
             keyActionType: keyActionType.PlayMacroAction,
@@ -162,12 +166,14 @@ export class PlayMacroAction extends KeyAction {
         return 'PlayMacroAction';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV1(jsonObject: any, macros: Macro[]): PlayMacroAction {
         this.assertKeyActionType(jsonObject);
         this.macroId = macros[jsonObject.macroIndex].id;
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV6(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.fromJsonObjectV1(jsonObject, macros);
         this.rgbColorFromJson(jsonObject, serialisationInfo);

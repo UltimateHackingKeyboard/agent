@@ -55,7 +55,7 @@ describe('keystroke-action', () => {
 
         it('should not change the "type" to "shortMedia" when is "longMedia" if scancode < 256', ({ assert }) => {
             const action = new KeystrokeAction();
-            action.type = KeystrokeType.longMedia as any;
+            action.type = KeystrokeType.longMedia;
             action.scancode = 125;
             assert.strictEqual(action.type, KeystrokeType.shortMedia);
         });
@@ -70,7 +70,7 @@ describe('keystroke-action', () => {
 
         it('should not change the "type" to "longMedia" when is "shortMedia" if scancode >= 256', ({ assert }) => {
             const action = new KeystrokeAction();
-            action.type = KeystrokeType.shortMedia as any;
+            action.type = KeystrokeType.shortMedia;
             action.scancode = 256;
             assert.strictEqual(action.type, KeystrokeType.longMedia);
         });
@@ -148,7 +148,7 @@ describe('keystroke-action', () => {
         });
 
         it('should change the value to "longMedia" if scancode >= 256 and value "shortMedia"', ({ assert }) => {
-            const value = KeystrokeType.shortMedia as any;
+            const value = KeystrokeType.shortMedia;
             const scancode = 256;
             const action = new KeystrokeAction();
             action.scancode = scancode;
@@ -168,7 +168,7 @@ describe('keystroke-action', () => {
         });
 
         it('should change the value to "shortMedia" if scancode < 256 and value "longMedia"', ({ assert }) => {
-            const value = KeystrokeType.longMedia as any;
+            const value = KeystrokeType.longMedia;
             const scancode = 100;
             const action = new KeystrokeAction();
             action.scancode = scancode;

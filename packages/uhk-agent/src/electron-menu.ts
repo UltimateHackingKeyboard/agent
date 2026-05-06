@@ -29,9 +29,9 @@ export const setMenu = (win: BrowserWindow, allowDevTools): void => {
 
     if (process.platform === 'darwin') {
         // hide "Start Dictation" submenu item in Edit menu
-        systemPreferences.setUserDefault('NSDisabledDictationMenuItem', 'boolean', true as any);
+        systemPreferences.setUserDefault('NSDisabledDictationMenuItem', 'boolean', true);
         // hide "Emoji & Symbols" submenu item in Edit menu
-        systemPreferences.setUserDefault('NSDisabledCharacterPaletteMenuItem', 'boolean', false as any);
+        systemPreferences.setUserDefault('NSDisabledCharacterPaletteMenuItem', 'boolean', false);
     }
 
     const menu = Menu.buildFromTemplate(template);

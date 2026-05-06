@@ -19,7 +19,7 @@ export class UhkHeader {
         this.undoableNotification$ = this.store.select(getUndoableNotification);
     }
 
-    onUndoLastNotification(data: any): void {
+    onUndoLastNotification(data: unknown): void {
         this.store.dispatch(new UndoLastAction(data));
     }
 

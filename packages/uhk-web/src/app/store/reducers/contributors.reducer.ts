@@ -4,7 +4,7 @@ import { UHKContributor } from '../../models/uhk-contributor';
 export interface State {
     isLoading: boolean;
     contributors: UHKContributor[];
-    error?: any;
+    error?: unknown;
 }
 
 export const initialState: State = {

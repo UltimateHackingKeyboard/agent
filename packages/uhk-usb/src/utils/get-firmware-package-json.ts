@@ -22,6 +22,7 @@ export async function getFirmwarePackageJson(firmwarePathData: TmpFirmware): Pro
     return packageJson;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function checkPackageJsonSection(packageJson: any, sectionName: string, firmwareDir: string): Promise<void> {
     const section = packageJson[sectionName];
 

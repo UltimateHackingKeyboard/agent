@@ -29,7 +29,9 @@ import { AppState, getHostConnections, getMacroMap } from '../../../store';
 })
 export class SvgModuleComponent implements OnDestroy {
     @Input() backlightingMode: BacklightingMode;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() coverages: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() circles: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
@@ -39,7 +41,9 @@ export class SvgModuleComponent implements OnDestroy {
     @Input() capturingEnabled: boolean;
     @Input() lastEdited: boolean;
     @Input() lastEditedKey: LastEditedKey;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() moduleNavCircle: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() moduleNavPath: any;
     @Output() keyClick = new EventEmitter<SvgModuleKeyClickEvent>();
     @Output() keyHover = new EventEmitter();

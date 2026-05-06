@@ -234,6 +234,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     private setMouseMoveScrollActionContent(action: MacroAction): void {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let typedAction: any;
         if (action instanceof MoveMouseMacroAction) {
             // Move mouse pointer

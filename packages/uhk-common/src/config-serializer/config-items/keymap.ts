@@ -29,6 +29,7 @@ export class Keymap {
         this.layers = keymap.layers.map(layer => new Layer(layer));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): Keymap {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -83,6 +84,7 @@ export class Keymap {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(serialisationInfo: SerialisationInfo, macros?: Macro[]): any {
         return {
             isDefault: this.isDefault,
@@ -179,12 +181,13 @@ export class Keymap {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV1(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.isDefault = jsonObject.isDefault;
         this.abbreviation = jsonObject.abbreviation;
         this.name = jsonObject.name;
         this.description = jsonObject.description;
-        this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer, macros, serialisationInfo));
+        this.layers = jsonObject.layers.map((layer) => new Layer().fromJsonObject(layer, macros, serialisationInfo));
     }
 
     private fromBinaryV1(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): void {

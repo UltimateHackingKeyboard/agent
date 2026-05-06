@@ -53,9 +53,9 @@ export class SvgIconTextKeyComponent implements OnChanges {
         }
 
         if (this.iconText) {
-            const style: CSSStyleDeclaration = {
+            const style: Partial<CSSStyleDeclaration> = {
                 font: `${this.iconTextFontSize}px Helvetica`
-            } as any;
+            };
 
             iconTextWidth = getContentWidth(style, this.iconText);
         }
@@ -128,9 +128,9 @@ export class SvgIconTextKeyComponent implements OnChanges {
     }
 
     private getText(startPosition: number): string {
-        const style: CSSStyleDeclaration = {
+        const style: Partial<CSSStyleDeclaration> = {
             font: `${this.fontSize}px Helvetica`
-        } as any;
+        };
 
         let result = '';
         let lastSpacePosition = 0;

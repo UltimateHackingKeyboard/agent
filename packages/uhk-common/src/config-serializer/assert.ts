@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export function assertUInt8(target: any, key: string) {
     return assertInteger(target, key, 0, 0xFF);
 }

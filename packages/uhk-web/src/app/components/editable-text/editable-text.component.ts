@@ -34,7 +34,7 @@ export class EditableTextComponent implements ControlValueAccessor {
 
     }
 
-    writeValue(obj: any): void {
+    writeValue(obj: string): void {
         if (this.text === obj) {
             return;
         }
@@ -43,11 +43,11 @@ export class EditableTextComponent implements ControlValueAccessor {
         this.cdr.markForCheck();
     }
 
-    registerOnChange(fn: any): void {
+    registerOnChange(fn: Function): void {
         this.textChange = fn;
     }
 
-    registerOnTouched(fn: any): void {
+    registerOnTouched(fn: Function): void {
     }
 
     saveText(): void {
@@ -82,6 +82,6 @@ export class EditableTextComponent implements ControlValueAccessor {
         return !this.editing && !!this.text;
     }
 
-    private textChange: any = () => {
+    private textChange: Function = () => {
     };
 }

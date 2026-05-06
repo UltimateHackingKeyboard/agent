@@ -251,6 +251,7 @@ describe('user-configuration', () => {
 
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function jsonTester(assert: TestContextAssert, json: any): void {
     const orig = JSON.parse(JSON.stringify(json));
     const config = new UserConfiguration();

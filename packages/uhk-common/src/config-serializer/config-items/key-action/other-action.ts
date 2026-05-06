@@ -21,6 +21,7 @@ export class OtherAction extends KeyAction {
         this.actionSubtype = other.actionSubtype
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): OtherAction {
         this.assertKeyActionType(jsonObject);
         this.actionSubtype = OtherActionSubTypes[<string>jsonObject.actionSubtype];

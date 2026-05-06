@@ -1,6 +1,6 @@
 import isEqual from 'lodash.isequal';
 
-export const isEqualArray = (arr1: Array<any>, arr2: Array<any>): boolean => {
+export const isEqualArray = (arr1: Array<unknown>, arr2: Array<unknown>): boolean => {
     if (arr1.length !== arr2.length) {
         return false;
     }
