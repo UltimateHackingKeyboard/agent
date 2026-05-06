@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faCopy, faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Constants, Macro } from 'uhk-common';
+import { Macro, MAX_ALLOWED_MACROS_TOOLTIP } from 'uhk-common';
 
 import { DuplicateMacroAction, EditMacroNameAction, RemoveMacroAction } from '../../../store/actions/macro';
 import { AppState } from '../../../store';
@@ -32,7 +32,7 @@ export class MacroHeaderComponent implements OnChanges {
     faCopy = faCopy;
     faPlay = faPlay;
     faTrash = faTrash;
-    maxAllowedMacrosTooltip = Constants.MAX_ALLOWED_MACROS_TOOLTIP;
+    maxAllowedMacrosTooltip = MAX_ALLOWED_MACROS_TOOLTIP;
 
     constructor(private store: Store<AppState>) {
     }

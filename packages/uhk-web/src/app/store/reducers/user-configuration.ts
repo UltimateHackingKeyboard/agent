@@ -7,7 +7,6 @@ import {
     BUILTIN_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESETS,
     BacklightingMode,
     ConnectionsAction,
-    Constants,
     CUSTOM_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET_NAME,
     CUSTOM_ADVANCED_SECONDARY_ROLE_TOOLTIP,
     emptyHostConnection,
@@ -26,6 +25,7 @@ import {
     LeftSlotModules,
     Macro,
     MacroActionHelper,
+    MAX_ALLOWED_MACROS,
     MODIFIER_LAYER_NAMES,
     Module,
     ModuleConfiguration,
@@ -1436,10 +1436,10 @@ function generateMacroId(macros: Macro[]) {
 
     newId += 1;
 
-    if (newId <= Constants.MAX_ALLOWED_MACROS)
+    if (newId <= MAX_ALLOWED_MACROS)
         return newId;
 
-    for (let i = 0; i <= Constants.MAX_ALLOWED_MACROS; i++) {
+    for (let i = 0; i <= MAX_ALLOWED_MACROS; i++) {
         if (!usedMacroIds.has(i)) {
             return i;
         }

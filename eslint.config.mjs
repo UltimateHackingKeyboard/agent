@@ -14,7 +14,6 @@ export const typescriptRules = {
     '@typescript-eslint/no-empty-object-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
-    '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-redundant-type-constituents': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',
     '@typescript-eslint/no-unsafe-argument': 'off',

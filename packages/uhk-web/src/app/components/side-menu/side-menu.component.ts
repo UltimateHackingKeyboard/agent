@@ -28,7 +28,7 @@ import {
 import { Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs';
-import { Constants, UHK_80_DEVICE } from 'uhk-common';
+import { MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
 
 import { AppState, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
@@ -109,7 +109,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     faPuzzlePiece = faPuzzlePiece;
     faSlidersH = faSlidersH;
     faStar = faStar;
-    maxAllowedMacrosTooltip = Constants.MAX_ALLOWED_MACROS_TOOLTIP;
+    maxAllowedMacrosTooltip = MAX_ALLOWED_MACROS_TOOLTIP;
 
     private stateSubscription: Subscription;
 

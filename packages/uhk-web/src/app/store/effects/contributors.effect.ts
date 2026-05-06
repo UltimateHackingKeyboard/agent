@@ -6,7 +6,7 @@ import { Action, Store } from '@ngrx/store';
 import { from, Observable, of } from 'rxjs';
 import { map, switchMap, catchError, reduce, mergeMap, withLatestFrom } from 'rxjs/operators';
 
-import { Constants } from 'uhk-common';
+import { AGENT_CONTRIBUTORS_GITHUB_API_URL } from 'uhk-common';
 
 import { AppState, contributors } from '../index';
 import { UHKContributor } from '../../models/uhk-contributor';
@@ -36,7 +36,7 @@ export class ContributorsEffect {
     fetchContributors$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType<FetchAgentContributorsAction>(ActionTypes.FetchAgentContributors),
-            mergeMap(() => this.http.get<UHKContributor[]>(Constants.AGENT_CONTRIBUTORS_GITHUB_API_URL)),
+            mergeMap(() => this.http.get<UHKContributor[]>(AGENT_CONTRIBUTORS_GITHUB_API_URL)),
             switchMap((response: UHKContributor[]) => {
                 return from(response).pipe(
                     mergeMap(
