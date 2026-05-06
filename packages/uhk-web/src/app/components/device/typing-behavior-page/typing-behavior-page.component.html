@@ -11,7 +11,7 @@
                             [tooltip]="secondaryRolesTooltip"
                             [width]="380"/>
             <ng-template #secondaryRolesTooltip>
-                <p>Secondary role keys, also dual-role keys, are keys that act depending on context.</p>
+                <p>Secondary role keys, also called dual-role keys, are keys that act depending on context.</p>
                 For instance, a key may act as an escape key when tapped alone, but act as a mouse layer switcher when used with another key (which is then executed in the mouse layer).
             </ng-template>
         </div>
@@ -55,7 +55,7 @@
             </tr>
             <tr class="separator">
                 <td>Minimum hold time
-                    <circle-tooltip tooltip="The minimum time that a dual-role key must be held before it is allowed to trigger as secondary role."
+                    <circle-tooltip tooltip="The minimum time that a dual-role key must be held before it is allowed to trigger its secondary role. Taps shorter than this time will always trigger the primary role."
                                     [width]="250"/>
                 </td>
                 <td>
@@ -71,7 +71,7 @@
             </tr>
             <tr class="separator">
                 <td>Timeout
-                    <circle-tooltip tooltip="If an dual-role key is held for at least this amount of time, the Timeout Action is activated even when there is no other activity."
+                    <circle-tooltip tooltip="If a dual-role key is held for this amount of time, the Timeout action is activated independently of any Trigger keys."
                                     [width]="250"/>
                 </td>
                 <td>
@@ -90,9 +90,8 @@
                     <circle-tooltip [tooltip]="timeoutTypeTooltip"
                                     [width]="380"/>
                     <ng-template #timeoutTypeTooltip>
-                        <p>Assume timeout leads to Primary or None:</p>
-                        <p>activated immediately: timeout action is applied immediately when timeout is reached. Secondary role can no longer be activated after timeout was reached. Correspondence macro value: Active</p>
-                        on uninterrupted release: timeout action is delayed until release. Secondary role can still be triggered until key release. Correspondence macro value: Passive
+                        <p><b>activated immediately:</b> Timeout action is applied immediately when the timeout is reached. The role of the key is then fixed and cannot change anymore. (Equivalent to <code>set secondaryRole.advanced.timeoutType active</code>)</p>
+                        <p><b>on uninterrupted release:</b> Timeout action is delayed until release. Secondary role can still be triggered by other Trigger keys until the dual-role key is released. (Equivalent to <code>set secondaryRole.advanced.timeoutType passive</code>)</p>
                     </ng-template>
                 </td>
                 <td>
@@ -127,7 +126,8 @@
                                     [width]="250"/>
                     <ng-template #doubleTapPrimaryTooltip>
                         <p>If the dual-role key is double-tapped, the primary role is activated.</p>
-                        Useful for keys that need to be held, such as space.
+                        <p>Tap-and-Hold (hold on the second tap) to keep the primary role held down.</p>
+                        Useful when you want to trigger auto-repeat of primary roles on keys such as space.
                     </ng-template>
                 </td>
                 <td>
@@ -147,7 +147,7 @@
             <tr>
                 <td colspan="2">
                     <h5 class="fw-bold d-inline-block">Trigger keys</h5>
-                    <circle-tooltip tooltip="Secondary role settings that relate to the actions that decide the dual-role key behavior. Usually the first key that is pressed after the dual-role key has been pressed."
+                    <circle-tooltip tooltip="Secondary role settings that relate to other keys influencing the dual-role key behavior. Usually, the next key pressed after the dual-role key determines the primary/secondary role."
                                     [width]="250"/>
                 </td>
             </tr>
@@ -156,7 +156,7 @@
                     <circle-tooltip [tooltip]="triggerSafetyMarginTooltip"
                                     [width]="380"/>
                     <ng-template #triggerSafetyMarginTooltip>
-                        <p>This virtually offsets the release time of the dual-role key. Thus positive values fine-tune the dual-role resolution sensitivity towards the primary role, while negative values fine-tune the dual-role resolution sensitivity towards the secondary role.</p>
+                        <p>This virtually offsets the release time of the dual-role key. Positive values fine-tune the dual-role resolution sensitivity towards the primary role, and negative values fine-tune the dual-role resolution sensitivity towards the secondary role.</p>
                         Intended to be used with the Trigger by release option.
                     </ng-template>
                 </td>
@@ -176,9 +176,9 @@
                     <circle-tooltip [tooltip]="triggeringEventTooltip"
                                     [width]="350"/>
                     <ng-template #triggeringEventTooltip>
-                        <p>Press: just as with simple strategy, secondary role activated immediately when another key is pressed.</p>
-                        <p>Release: secondary role is activated when another key is released while the dual-role key is pressed. Thus the role is determined by the release order of the two keys.</p>
-                        None: secondary role key is triggered only by timeout.
+                        <p><b>Press:</b> Secondary role is activated immediately when another key is pressed.</p>
+                        <p><b>Release:</b> Secondary role is activated when another key is released while the dual-role key is held down. Thus, the role is determined by the release order of the two keys.</p>
+                        <b>None:</b> Secondary role is triggered only by timeout.
                     </ng-template>
                 </td>
                 <td>
@@ -215,8 +215,8 @@
                 </td>
             </tr>
             <tr class="separator">
-                <td>Suppress same-side triggers
-                    <circle-tooltip tooltip="When checked, same half keys don't trigger currently pressed secondary role keys."
+                <td>Allow same-side triggers
+                    <circle-tooltip tooltip="When checked, keys on the same half of the keyboard can trigger secondary roles. Turning this off helps avoiding spurious unwanted activations of secondary roles during quick typing and finger rolls. <br/><em>Note:</em> Secondary roles can still be triggered by timeout (or mouse movement). Keeping the dual-role key held down beyond the timeout allows combining it with same-side keys even if this option is turned off."
                                     [width]="250"/>
                 </td>
                 <td>
@@ -228,7 +228,7 @@
             </tr>
             <tr class="separator">
                 <td>Trigger by mouse
-                    <circle-tooltip tooltip="When checked, secondary role (usually a modifier in this context) is immediately activated by any mouse movement."
+                    <circle-tooltip tooltip="When checked, the secondary role (usually a modifier in this context) is immediately activated by any mouse movement."
                                     [width]="250"/>
                 </td>
                 <td>
@@ -274,8 +274,8 @@
                     <circle-tooltip [tooltip]="keyStrokeDelayTooltip"
                                     [width]="380"/>
                     <ng-template #keyStrokeDelayTooltip>
-                        <p>Minimum delay between two consecutive USB reports. Thus, it's possible to slow down keyboard output in case of fast bursts (for example, from the macro engine).</p>
-                        This improves compatibility as many programs (especially RDP clients) have problems accepting too fast input. On the flip side, this limits caret navigation mode sensitivity and introduces (possibly undesired) delays.
+                        <p>Minimum delay between two consecutive USB reports. This allows slowing down keyboard output in case of fast bursts (for example, from the macro engine).</p>
+                        It improves compatibility as many programs (especially RDP clients) have problems accepting too fast input. On the flip side, this limits caret navigation mode sensitivity and introduces (possibly undesired) delays.
                     </ng-template>
                 </td>
                 <td>
