@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getPackageJsonFromPathAsync = async (filePath: string): Promise<any> => {
     return new Promise((resolve, reject) => {
         fs.readFile(filePath, {encoding: 'utf-8'}, (err, data) => {
@@ -7,6 +8,7 @@ export const getPackageJsonFromPathAsync = async (filePath: string): Promise<any
                 return reject(err);
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let json: any;
             try {
                 json = JSON.parse(data);

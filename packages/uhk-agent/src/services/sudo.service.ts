@@ -60,7 +60,7 @@ export class SudoService {
         };
         const command = `sh ${scriptPath}`;
         this.logService.misc('[SudoService] Set privilege command: ', command);
-        sudo.exec(command, options, async (error: any) => {
+        sudo.exec(command, options, async (error: Error) => {
             const response = new IpcResponse();
 
             if (error) {

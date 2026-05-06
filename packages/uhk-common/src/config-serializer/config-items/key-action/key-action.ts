@@ -56,6 +56,7 @@ export abstract class KeyAction implements RgbColorInterface {
         this.r = keyAction?.r ?? DEFAULT_RGB_COLOR.r;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     assertKeyActionType(jsObject: any): void {
         const keyActionClassname: string = this.getName();
         const keyActionTypeString: string = keyActionType[keyActionClassname];
@@ -78,6 +79,7 @@ export abstract class KeyAction implements RgbColorInterface {
         return readKeyActionId;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     abstract toJsonObject(serialisationInfo: SerialisationInfo, macros?: Macro[]): any;
 
     abstract toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo, userConfiguration?: UserConfiguration): void;
@@ -96,6 +98,7 @@ export abstract class KeyAction implements RgbColorInterface {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rgbColorFromJson(jsonObject: any, serialisationInfo: SerialisationInfo): void {
         if (serialisationInfo.isUserConfigContainsRgbColors) {
             this.b = jsonObject.b;

@@ -5,7 +5,7 @@ import { LogService } from 'uhk-common';
 export class ElectronErrorHandlerService implements ErrorHandler {
     constructor(private logService: LogService) { }
 
-    handleError(error: any) {
+    handleError(error: unknown) {
         this.logService.error(error);
     }
 }

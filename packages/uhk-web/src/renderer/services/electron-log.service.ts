@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log/renderer';
 import { LogService, logUserConfigHelper, UserConfiguration } from 'uhk-common';

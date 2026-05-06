@@ -132,6 +132,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
                 let parent = element.parentElement;
 
                 while (parent) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     if (parent !== this.lefButtonDownOptions.element as any &&
                         parent.hasAttribute('svg-keyboard-key')
                     ) {
@@ -178,6 +179,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.setDropElementFillColor(this.dropElement.getAttribute(ORIGINAL_FILL_COLOR_ATTRIBUTE));
     }
 
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     private setDropElementFillColor(fillColor: string): void {
         const colorPaletteIndex = this.dropElement.getAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE);
         if (colorPaletteIndex === 'new') {
@@ -189,6 +191,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
             (this.dropElement as any).style.fill = fillColor;
         }
     }
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     private dragElement(): void {
         if (this.dragging) {

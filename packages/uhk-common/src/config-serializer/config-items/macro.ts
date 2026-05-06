@@ -27,6 +27,7 @@ export class Macro {
         this.macroActions = other.macroActions.map(macroAction => MacroActionHelper.fromMacroAction(macroAction));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): Macro {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -77,6 +78,7 @@ export class Macro {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
         return {
             isLooped: this.isLooped,
@@ -97,11 +99,12 @@ export class Macro {
         return `<Macro id="${this.id}" name="${this.name}">`;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV1(jsonObject: any, serialisationInfo: SerialisationInfo): void {
         this.isLooped = jsonObject.isLooped;
         this.isPrivate = jsonObject.isPrivate;
         this.name = jsonObject.name;
-        this.macroActions = jsonObject.macroActions.map((macroAction: any) => {
+        this.macroActions = jsonObject.macroActions.map((macroAction) => {
             return MacroActionHelper.createMacroAction(macroAction, serialisationInfo);
         });
     }

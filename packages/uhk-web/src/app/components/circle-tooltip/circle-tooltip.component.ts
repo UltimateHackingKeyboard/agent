@@ -11,7 +11,7 @@ import { PlacementArray } from '@ng-bootstrap/ng-bootstrap';
 export default class CircleTooltipComponent {
     @Input() container: string | null | undefined;
     @Input() placement: PlacementArray = ['bottom', 'top'];
-    @Input() tooltip: string | TemplateRef<any> | null | undefined;
+    @Input() tooltip: string | TemplateRef<unknown> | null | undefined;
     @Input() tooltipClass: string | null | undefined;
     @Input() width: number | null | undefined;
 

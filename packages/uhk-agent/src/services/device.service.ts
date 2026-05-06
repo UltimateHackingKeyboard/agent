@@ -159,7 +159,7 @@ export class DeviceService {
                 this.logService.misc('[DeviceService] Cannot query udev info:', error);
             });
 
-        ipcMain.on(IpcEvents.device.areBleAddressesPaired, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.areBleAddressesPaired, (...args) => {
             this.queueManager.add({
                 method: this.areBleAddressesPaired,
                 bind: this,
@@ -168,7 +168,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.changeKeyboardLayout, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.changeKeyboardLayout, (...args) => {
             this.queueManager.add({
                 method: this.changeKeyboardLayout,
                 bind: this,
@@ -177,7 +177,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.deleteHostConnection, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.deleteHostConnection, (...args) => {
             this.queueManager.add({
                 method: this.deleteHostConnection,
                 bind: this,
@@ -186,7 +186,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.eraseBleSettings, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.eraseBleSettings, (...args) => {
             this.queueManager.add({
                 method: this.eraseBleSettings,
                 bind: this,
@@ -197,7 +197,7 @@ export class DeviceService {
 
         ipcMain.on(IpcEvents.device.toggleI2cDebugging, this.toggleI2cDebugging.bind(this));
 
-        ipcMain.on(IpcEvents.device.isRightHalfZephyrLoggingEnabled, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.isRightHalfZephyrLoggingEnabled, (...args) => {
             this.queueManager.add({
                 method: this.isRightHalfZephyrLoggingEnabled,
                 bind: this,
@@ -206,7 +206,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.toggleRightHalfZephyrLogging, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.toggleRightHalfZephyrLogging, (...args) => {
             this.queueManager.add({
                 method: this.toggleRightHalfZephyrLogging,
                 bind: this,
@@ -215,7 +215,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args) => {
             this.queueManager.add({
                 method: this.saveUserConfiguration,
                 bind: this,
@@ -224,7 +224,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.loadConfigurations, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.loadConfigurations, (...args) => {
             this.queueManager.add({
                 method: this.loadConfigurations,
                 bind: this,
@@ -233,7 +233,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.updateFirmware, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.updateFirmware, (...args) => {
             this.queueManager.add({
                 method: this.updateFirmware,
                 bind: this,
@@ -244,7 +244,7 @@ export class DeviceService {
 
         ipcMain.on(IpcEvents.device.startConnectionPoller, this.startPollUhkDevice.bind(this));
 
-        ipcMain.on(IpcEvents.device.startDonglePairing, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.startDonglePairing, (...args) => {
             this.queueManager.add({
                 method: this.startDonglePairing,
                 bind: this,
@@ -253,7 +253,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.startLeftHalfPairing, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.startLeftHalfPairing, (...args) => {
             this.queueManager.add({
                 method: this.startLeftHalfPairing,
                 bind: this,
@@ -263,7 +263,7 @@ export class DeviceService {
         });
 
 
-        ipcMain.on(IpcEvents.device.recoveryDevice, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.recoveryDevice, (...args) => {
             this.queueManager.add({
                 method: this.recoveryDevice,
                 bind: this,
@@ -272,7 +272,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.recoveryModule, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.recoveryModule, (...args) => {
             this.queueManager.add({
                 method: this.recoveryModule,
                 bind: this,
@@ -281,7 +281,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.enableUsbStackTest, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.enableUsbStackTest, (...args) => {
             this.queueManager.add({
                 method: this.enableUsbStackTest,
                 bind: this,
@@ -290,7 +290,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.readConfigSizes, (...args: any[]) => {
+        ipcMain.on(IpcEvents.device.readConfigSizes, (...args) => {
             this.queueManager.add({
                 method: this.readConfigSizes,
                 bind: this,
@@ -306,7 +306,7 @@ export class DeviceService {
         logService.misc('[DeviceService] init success');
     }
 
-    public async areBleAddressesPaired(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+    public async areBleAddressesPaired(event: Electron.IpcMainEvent, args): Promise<void> {
         this.logService.misc('[DeviceService] Check BLE Addresses are paired');
 
         const response: AreBleAddressesPairedIpcResponse = {
@@ -341,7 +341,7 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+    public async loadConfigurations(event: Electron.IpcMainEvent, args): Promise<void> {
         this.logService.misc('[DeviceService] load user configuration');
 
         let response: ConfigurationReply;
@@ -789,7 +789,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
-    public async recoveryDevice(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+    public async recoveryDevice(event: Electron.IpcMainEvent, args): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
         };
@@ -845,7 +845,7 @@ export class DeviceService {
         this.startPollUhkDevice();
     }
 
-    public async recoveryModule(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+    public async recoveryModule(event: Electron.IpcMainEvent, args): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
         };
@@ -907,7 +907,7 @@ export class DeviceService {
         }
     }
 
-    public async deleteHostConnection(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+    public async deleteHostConnection(event: Electron.IpcMainEvent, args): Promise<void> {
         const {isConnectedDongleAddress, index, address} = args[0];
         this.logService.misc('[DeviceService] delete host connection', { isConnectedDongleAddress, index, address });
 

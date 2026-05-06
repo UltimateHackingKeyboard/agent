@@ -126,6 +126,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     recording: boolean;
     labelType: LabelTypes;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     labelSource: any;
     secondaryText: string;
     textColor: string;

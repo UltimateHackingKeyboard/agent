@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { assertEnum, assertFloat, assertInt16, assertUInt16, assertUInt32, assertUInt8 } from '../assert.js';
 import { resolveSwitchKeymapActions } from '../resolve-switch-keymap-actions.js';
 import { UhkBuffer } from '../uhk-buffer.js';

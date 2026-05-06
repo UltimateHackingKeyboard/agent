@@ -58,7 +58,7 @@ export function bufferToString(buffer: Array<number> | Buffer | globalThis.Buffe
     return str;
 }
 
-export async function retry(command: Function, maxTry = 3, logService?: LogService): Promise<any> {
+export async function retry(command: Function, maxTry = 3, logService?: LogService): Promise<void> {
     let retryCount = 0;
 
     while (true) {
@@ -119,7 +119,7 @@ export const getFileContentAsync = async (filePath: string): Promise<Array<strin
         .filter(x => !x.startsWith('#') && x.length > 0);
 };
 
-export const readBootloaderFirmwareFromHexFileAsync = async (hexFilePath: string): Promise<Map<any, any>> => {
+export const readBootloaderFirmwareFromHexFileAsync = async (hexFilePath: string): Promise<MemoryMap> => {
     const fileContent = await fse.readFile(hexFilePath, { encoding: 'utf8' });
 
     const memoryMap = MemoryMap.fromHex(fileContent);

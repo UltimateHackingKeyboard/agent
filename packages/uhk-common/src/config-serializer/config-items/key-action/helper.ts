@@ -17,6 +17,7 @@ import { isAllowedScancode } from '../scancode-checker.js';
 
 export class Helper {
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static createKeyAction(source: KeyAction | UhkBuffer | any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
@@ -117,6 +118,7 @@ export class Helper {
         return newKeyAction;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static fromJSONObject(keyAction: any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -139,6 +141,7 @@ export class Helper {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private static fromJSONObjectV1(keyAction: any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         if (!keyAction) {
             return new NoneAction();

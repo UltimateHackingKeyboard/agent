@@ -2,14 +2,18 @@ import { SvgKeyboardKey } from '../keys';
 
 export class SvgModule {
     // circle svg elements that not programmable. Part of the coverages
-    circles: any[] = [];
-    coverages: any[] = [];
+    circles = [];
+    coverages = [];
     keyboardKeys: SvgKeyboardKey[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     attributes: any;
     id: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleNavCircle: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleNavPath: any;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(obj: { rect: any[], path: any[], $: Object, circle?: any[], g?: any[] }) {
         this.keyboardKeys = [];
         if (obj.rect) {
@@ -149,7 +153,7 @@ function parseStyle(style: string): Record<string, string> | undefined {
 
     return style
         .split(';')
-        .reduce((result: any, value: string) => {
+        .reduce((result: unknown, value: string) => {
             const split = value.split(':');
             if (split.length < 2) {
                 return result;

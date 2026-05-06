@@ -129,7 +129,7 @@ async function createWindow() {
         slashes: true
     }));
 
-    win.on('page-title-updated', (event: any) => {
+    win.on('page-title-updated', (event) => {
         event.preventDefault();
     });
 

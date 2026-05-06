@@ -18,6 +18,7 @@ export class MacroEffects {
     macroNavigated$ = createEffect(() => this.actions$
         .pipe(
             ofType(routerNavigatedAction),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map(action => (action.payload.routerState as any).params.macroId),
             distinctUntilChanged(),
             map(macroId => new SelectMacroAction(+macroId))

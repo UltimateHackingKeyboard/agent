@@ -389,6 +389,7 @@ export class UserConfigEffects {
     moduleConfigurationNavigated$ = createEffect(() => this.actions$
         .pipe(
             ofType(routerNavigatedAction),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map<RouterNavigatedAction, RouterState>(action => action.payload.routerState as any),
             filter(routerState => routerState.url.startsWith('/add-on')),
             map(routerState => {

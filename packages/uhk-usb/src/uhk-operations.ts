@@ -398,6 +398,7 @@ export class UhkOperations {
         try {
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to keyboard');
             let shouldRecalculateLength = false;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const uhkBuffer = UhkBuffer.fromArray(buffer as any)
             const userConfiguration = new UserConfiguration()
             userConfiguration.fromBinary(uhkBuffer)

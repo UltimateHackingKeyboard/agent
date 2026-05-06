@@ -43,6 +43,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
     option: SvgAttributes;
     command: SvgAttributes;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     labelSource: any;
     labelType: 'empty' | 'one-line' | 'two-line' | 'icon' | 'icon-text' | 'text-icon';
 

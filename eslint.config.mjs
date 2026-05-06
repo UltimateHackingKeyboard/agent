@@ -11,7 +11,6 @@ const globalIgnores = [
 
 export const typescriptRules = {
     '@typescript-eslint/no-base-to-string': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-redundant-type-constituents': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',

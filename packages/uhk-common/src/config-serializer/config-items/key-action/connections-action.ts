@@ -28,6 +28,7 @@ export class ConnectionsAction extends KeyAction {
         this.hostConnectionId = other.hostConnectionId;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): ConnectionsAction {
         this.assertKeyActionType(jsonObject);
         this.command = ConnectionCommands[<string>jsonObject.command]

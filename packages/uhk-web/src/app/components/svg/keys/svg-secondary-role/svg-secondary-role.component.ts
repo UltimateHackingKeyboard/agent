@@ -9,9 +9,9 @@ import {
 
 import { getContentWidth } from '../../../../util';
 
-const SECONDARY_STYLE: CSSStyleDeclaration = {
+const SECONDARY_STYLE: Partial<CSSStyleDeclaration> = {
     font: '12px Helvetica'
-} as any;
+};
 
 @Component({
     selector: 'g[svg-secondary-role]',

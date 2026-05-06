@@ -96,7 +96,7 @@ export class AppUpdateService extends MainServiceBase {
             }
         });
 
-        ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, (event: Electron.Event, args: any[]) => {
+        ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, (event: Electron.Event, args) => {
             const allowPrerelease: boolean = args[0];
             const logMsg = `[AppUpdateService] checkForUpdate request from renderer process. Allow prerelease: ${allowPrerelease}`;
             this.logService.misc(logMsg);

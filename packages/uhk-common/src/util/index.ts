@@ -42,5 +42,6 @@ export function capitalizeFirstLetter(text: string): string {
 }
 
 export function runInElectron(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return !!(window as any)?.electron;
 }

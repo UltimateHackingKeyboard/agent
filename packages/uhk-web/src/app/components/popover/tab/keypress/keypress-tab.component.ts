@@ -24,6 +24,7 @@ interface FlatOptions {
     id: string;
     text: string;
     group?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     additional?: any;
 }
 

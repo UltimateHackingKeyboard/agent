@@ -79,6 +79,7 @@ export class MouseButtonMacroAction extends MacroAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
         return {
             macroActionType: macroActionType.MouseButtonMacroAction,

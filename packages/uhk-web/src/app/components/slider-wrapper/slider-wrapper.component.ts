@@ -31,6 +31,7 @@ export interface SliderProps {
 })
 export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     @ViewChild(NouisliderComponent, { static: false }) slider: NouisliderComponent;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() config: any = {};
     @Input() label: string;
     @Input() tooltip: string;
@@ -39,7 +40,9 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     @Input() max: number;
     @Input() step: number;
     @Input() pips: SliderPips;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() range: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() tooltips: Array<any> = [true];
     @Input() valueFormatter: Function;
     @Input() valueUnit: string;
@@ -65,7 +68,7 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
             : value;
     }
 
-    registerOnChange(fn: any): void {
+    registerOnChange(fn: Function): void {
         this.propagateChange = fn;
     }
 
@@ -105,5 +108,5 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
         return this.sanitizer.bypassSecurityTrustHtml(this.tooltip);
     }
 
-    private propagateChange: any = () => {};
+    private propagateChange: Function = () => {};
 }

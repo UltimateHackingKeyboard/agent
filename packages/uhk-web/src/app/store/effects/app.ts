@@ -164,7 +164,9 @@ export class ApplicationEffects {
             ofType<SetAppThemeAction>(ActionTypes.SetAppTheme),
             map(action => action.payload),
             tap(theme => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 if ((window as any).setUhkTheme) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (window as any).setUhkTheme(theme);
                 }
             })

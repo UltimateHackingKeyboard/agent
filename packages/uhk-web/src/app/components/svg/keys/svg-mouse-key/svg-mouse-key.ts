@@ -11,6 +11,7 @@ import { MouseAction, MouseActionParam } from 'uhk-common';
 export class SvgMouseKeyComponent implements OnChanges {
     @Input() mouseAction: MouseAction;
     type: 'click' | 'scroll' | 'move' | 'speed';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     param: any;
 
     constructor() { }

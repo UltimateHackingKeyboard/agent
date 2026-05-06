@@ -31,7 +31,7 @@ export class ZephyrLogService {
     private operationLimiter = pLimit(1);
 
     constructor(private options: ZephyrLogServiceOptions) {
-        ipcMain.on(options.ipcEvents.isZephyrLoggingEnabled, (...args: any[]) => {
+        ipcMain.on(options.ipcEvents.isZephyrLoggingEnabled, (...args) => {
             this.queueManager.add({
                 method: this.isZephyrLoggingEnabled,
                 bind: this,
@@ -40,7 +40,7 @@ export class ZephyrLogService {
             });
         });
 
-        ipcMain.on(options.ipcEvents.toggleZephyrLogging, (...args: any[]) => {
+        ipcMain.on(options.ipcEvents.toggleZephyrLogging, (...args) => {
             this.queueManager.add({
                 method: this.toggleZephyrLogging,
                 bind: this,

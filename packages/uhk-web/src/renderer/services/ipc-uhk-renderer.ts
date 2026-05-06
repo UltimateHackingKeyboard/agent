@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IpcCommonRenderer } from '../../app/services/ipc-common-renderer';
 
 export class IpcUhkRenderer implements IpcCommonRenderer {

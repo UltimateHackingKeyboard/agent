@@ -1,5 +1,6 @@
 import { UhkThemeColors } from 'uhk-common';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function defaultUhkThemeColors(theme = (window as any).getUhkTheme()): UhkThemeColors {
     if (theme === 'dark') {
         return {

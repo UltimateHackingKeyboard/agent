@@ -97,6 +97,7 @@ export class KeyMacroAction extends MacroAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
         const jsObject: JsObjectKeyMacroAction = {
             macroActionType: macroActionType.KeyMacroAction,

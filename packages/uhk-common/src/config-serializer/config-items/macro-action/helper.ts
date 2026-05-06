@@ -11,6 +11,7 @@ import { CommandMacroAction } from './command-macro-action.js';
 
 export class Helper {
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static createMacroAction(source: MacroAction | UhkBuffer | any, serialisationInfo: SerialisationInfo): MacroAction {
         if (source instanceof MacroAction) {
             return Helper.fromMacroAction(source);
@@ -69,6 +70,7 @@ export class Helper {
         return newMacroAction;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static fromJSONObject(macroAction: any, serialisationInfo: SerialisationInfo): MacroAction {
         switch (macroAction.macroActionType) {
             case macroActionType.KeyMacroAction:

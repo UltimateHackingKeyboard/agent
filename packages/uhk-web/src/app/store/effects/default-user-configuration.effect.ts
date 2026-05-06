@@ -33,6 +33,7 @@ export class DefaultUserConfigurationEffect {
     addKeymapNavigated$ = createEffect(() => this.actions$
         .pipe(
             ofType<RouterNavigatedAction>(ROUTER_NAVIGATED),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map<RouterNavigatedAction, RouterState>(action => action.payload.routerState as any),
             filter(routerState => routerState.url.startsWith('/add-keymap')),
             map(routerState => routerState.params.newKeymapAbbr),

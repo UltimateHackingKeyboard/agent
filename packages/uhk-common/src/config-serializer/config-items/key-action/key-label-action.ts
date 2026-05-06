@@ -15,6 +15,7 @@ export class KeyLabelAction extends KeyAction {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any): KeyLabelAction {
         this.assertKeyActionType(jsonObject);
         this.label = jsonObject.label;
@@ -29,6 +30,7 @@ export class KeyLabelAction extends KeyAction {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
         return {
             keyActionType: keyActionType.KeyLabelAction,

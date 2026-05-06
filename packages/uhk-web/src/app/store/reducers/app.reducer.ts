@@ -31,7 +31,7 @@ export interface State {
     configLoading: boolean;
     hardwareConfig?: HardwareConfiguration;
     privilegeWhatWillThisDoClicked: boolean;
-    permissionError?: any;
+    permissionError?: unknown;
     platform?: string;
     osVersion?: string;
     keypressCapturing: boolean;

@@ -64,9 +64,9 @@ export class McuManager {
     /**
      * Query images from the device
      * TODO: Implement response structure
-     * @returns {Promise<*>}
+     * @returns {Promise<NmpResponse<unknown>>}
      */
-    async imageReadState():Promise<any> {
+    async imageReadState():Promise<NmpResponse<unknown>> {
         logger('Start send image read state command');
         return this.sendCommand(MGMT_OP.READ, MGMT_GROUP.IMAGE, IMAGE_OPERATION.STATE);
     }
@@ -118,7 +118,7 @@ export class McuManager {
     /**
      * Send command to the microcontroller
      */
-    async sendCommand<T>(op: MGMT_OP_TYPE, group: MGMT_GROUP_TYPE, id: MGMT_OPERATION_TYPE, data?: any): Promise<NmpResponse<T>> {
+    async sendCommand<T>(op: MGMT_OP_TYPE, group: MGMT_GROUP_TYPE, id: MGMT_OPERATION_TYPE, data?: unknown): Promise<NmpResponse<T>> {
         logger('Start send command: %o', {op, group, id, data});
 
         let encodedData = [];
@@ -156,7 +156,7 @@ export class McuManager {
     #parseNmpMessage<T>(buffer: Buffer): NmpResponse<T> {
         const [op, flags, length_hi, length_lo, group_hi, group_lo, seq, id] = buffer;
 
-        let data: any;
+        let data: unknown;
 
         // the buffer contains data
         // TODO: Maybe worth validate the length of the data section = header.length
@@ -173,6 +173,7 @@ export class McuManager {
             seq,
             id,
             data,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any;
     }
 

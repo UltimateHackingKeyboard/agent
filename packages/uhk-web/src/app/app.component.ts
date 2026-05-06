@@ -138,7 +138,7 @@ export class MainAppComponent implements OnDestroy {
     private outOfSpaceWarningSubscription: Subscription;
     private routeDataSubscription: Subscription;
     private statusBufferSubscription: Subscription;
-    private secondSideMenuComponent: any;
+    private secondSideMenuComponent: unknown;
 
     constructor(private store: Store<AppState>,
                 private route: ActivatedRoute,

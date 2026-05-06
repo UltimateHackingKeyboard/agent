@@ -47,6 +47,7 @@ export const macroActionType = {
 };
 
 export abstract class MacroAction {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     assertMacroActionType(jsObject: any) {
         const macroActionClassname = this.getName();
         const macroActionTypeString = macroActionType[macroActionClassname];
@@ -74,6 +75,7 @@ export abstract class MacroAction {
         return readMacroActionId;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     abstract toJsonObject(): any;
 
     abstract toBinary(buffer: UhkBuffer): void;

@@ -80,6 +80,7 @@ export class ModuleConfiguration {
         this.touchpadPinchToZoom = other.touchpadPinchToZoom;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): ModuleConfiguration {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -134,7 +135,9 @@ export class ModuleConfiguration {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const json: any = {
             id: ModuleId[this.id],
 
@@ -235,6 +238,7 @@ export class ModuleConfiguration {
         return `<ModuleConfiguration id="${this.id}" >`;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV7(jsonObject: any): void {
         this.id = ModuleId[jsonObject.id as string];
 

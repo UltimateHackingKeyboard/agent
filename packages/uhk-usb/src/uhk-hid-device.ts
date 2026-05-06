@@ -590,7 +590,7 @@ export class UhkHidDevice {
         throw new Error(`Could not reenumerate as ${reenumMode}`);
     }
 
-    async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
+    async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<void> {
         let transfer;
         this.logService.usbOps(`[UhkHidDevice] USB[T]: Send KbootCommand ${mapI2cAddressToModuleName(module)} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
@@ -781,7 +781,7 @@ export class UhkHidDevice {
             const device = await HIDAsync.open(this._deviceInfo.path);
             if (this.options['usb-non-blocking']) {
                 this.logService.misc('[UhkHidDevice] set non blocking communication mode');
-                await this._device.setNonBlocking(1 as any);
+                await this._device.setNonBlocking(true);
             }
             this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(this._deviceInfo, usbDeviceJsonFormatter));
             return device;

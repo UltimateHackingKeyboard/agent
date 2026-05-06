@@ -29,7 +29,7 @@ export class SmartMacroDocService {
     constructor(private logService: LogService,
                 private rootDir: string) {
         this.rootPath = getSmartMacroDocRootPath();
-        ipcMain.on(IpcEvents.app.getAppStartInfo, (...args: any[]) => {
+        ipcMain.on(IpcEvents.app.getAppStartInfo, (...args) => {
             this.queueManager.add({
                 method: this.handleAppStartInfo,
                 bind: this,
@@ -37,7 +37,7 @@ export class SmartMacroDocService {
                 asynchronous: true
             });
         });
-        ipcMain.on(IpcEvents.smartMacroDoc.downloadDocumentation, (...args: any[]) => {
+        ipcMain.on(IpcEvents.smartMacroDoc.downloadDocumentation, (...args) => {
             this.queueManager.add({
                 method: this.handleDownloadDocumentation,
                 bind: this,
@@ -156,7 +156,7 @@ export class SmartMacroDocService {
         event.sender.send(IpcEvents.smartMacroDoc.serviceListening, this.port);
     }
 
-    private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+    private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args): Promise<void> {
         try {
             const firmwareRepoInfo: FirmwareRepoInfo = args[0];
             if (!firmwareRepoInfo.firmwareGitRepo || !firmwareRepoInfo.firmwareGitTag) {

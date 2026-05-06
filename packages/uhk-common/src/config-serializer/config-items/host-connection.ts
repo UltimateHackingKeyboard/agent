@@ -66,6 +66,7 @@ export class HostConnection {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 8:
@@ -99,8 +100,9 @@ export class HostConnection {
                 throw new Error(`HostConnection configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
     }
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const json: any = {
             type: HostConnections[this.type],
         };
@@ -187,6 +189,7 @@ export class HostConnection {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV8(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
         this.type = HostConnections[<string>jsonObject.type];
         if (this.hasAddress()) {
@@ -213,6 +216,7 @@ export class HostConnection {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV9(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
         this.type = HostConnections[<string>jsonObject.type];
         if (this.hasAddress()) {

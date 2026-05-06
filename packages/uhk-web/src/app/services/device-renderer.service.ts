@@ -204,7 +204,7 @@ export class DeviceRendererService {
             this.dispachStoreAction(new DongleVersionInfoLoadedAction(response));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.deleteHostConnectionSuccess, (event: string, data: any) => {
+        this.ipcRenderer.on(IpcEvents.device.deleteHostConnectionSuccess, (event: string, data: {index: number; address: string}) => {
             this.dispachStoreAction(new DeleteHostConnectionSuccessAction(data));
         });
 

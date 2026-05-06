@@ -30,6 +30,7 @@ import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../..
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'uhk-light';
 }
 
@@ -181,8 +182,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.subscriptions.unsubscribe();
     }
 
-    private onChanged = (_: any) => {};
-    private onTouched = () => {};
+    private onChanged: Function = () => {};
+    private onTouched: Function = () => {};
 
     onEditorInit(editor: MonacoStandaloneCodeEditor) {
         this.logService.misc('[MacroCommandEditorComponent] editor initialized.');
@@ -285,11 +286,11 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.changeObserver$.next(value);
     }
 
-    registerOnChange(fn: any): void {
+    registerOnChange(fn: Function): void {
         this.onChanged = fn;
     }
 
-    registerOnTouched(fn: any): void {
+    registerOnTouched(fn: Function): void {
         this.onTouched = fn;
     }
 

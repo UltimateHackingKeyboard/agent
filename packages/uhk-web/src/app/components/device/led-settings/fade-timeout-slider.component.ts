@@ -2,7 +2,7 @@ import { forwardRef } from '@angular/core';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-const noop = (_: any) => {
+const noop: Function = () => {
 };
 
 @Component({
@@ -100,7 +100,7 @@ export class FadeTimeoutSliderComponent implements ControlValueAccessor{
     constructor(private _cdRef: ChangeDetectorRef) {
     }
 
-    writeValue(obj: any): void {
+    writeValue(obj: string): void {
         if (this.model === obj) {
             return;
         }
@@ -108,11 +108,11 @@ export class FadeTimeoutSliderComponent implements ControlValueAccessor{
         this._model = obj;
     }
 
-    registerOnChange(fn: any): void {
+    registerOnChange(fn: Function): void {
         this._onChanged = fn;
     }
 
-    registerOnTouched(fn: any): void {
+    registerOnTouched(fn: Function): void {
         this._onTouched = fn;
     }
 

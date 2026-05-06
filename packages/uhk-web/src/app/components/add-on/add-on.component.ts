@@ -99,6 +99,7 @@ export class AddOnComponent implements OnDestroy {
         this.subscription.unsubscribe();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSetModuleConfigurationValue(propertyName: string, value: any) {
         this.store.dispatch(new SetModuleConfigurationValueAction({
             moduleId: this.moduleConfiguration.id,

@@ -31,6 +31,7 @@ export class Module {
         this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.fromKeyAction(keyAction));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): Module {
         switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
@@ -81,6 +82,7 @@ export class Module {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(serialisationInfo: SerialisationInfo, macros?: Macro[]): any {
         return {
             id: this.id,
@@ -130,9 +132,10 @@ export class Module {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObjectV1(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.id = jsonObject.id;
-        this.keyActions = jsonObject.keyActions.map((keyAction: any) => {
+        this.keyActions = jsonObject.keyActions.map((keyAction) => {
             return KeyActionHelper.fromJSONObject(keyAction, macros, serialisationInfo);
         });
     }

@@ -21,6 +21,7 @@ export class HardwareConfiguration {
 
     isIso: boolean;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any): HardwareConfiguration {
         this.signature = jsonObject.signature;
         this.majorVersion = jsonObject.majorVersion;
@@ -51,6 +52,7 @@ export class HardwareConfiguration {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJsonObject(): any {
         return {
             signature: this.signature,

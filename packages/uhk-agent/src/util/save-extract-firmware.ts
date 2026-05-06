@@ -43,6 +43,7 @@ export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirm
             }
 
             return saveTmpFirmware({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 data: unzippedFiles[0].data as any,
                 filename: path.basename(unzippedFiles[0].path),
                 saveInHistory: fileData.saveInHistory,

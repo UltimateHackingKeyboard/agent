@@ -31,7 +31,7 @@ export class CheckForUpdateSuccessAction implements Action {
 export class CheckForUpdateFailedAction implements Action {
     type = ActionTypes.CheckForUpdateFailed;
 
-    constructor(public payload: any) {
+    constructor(public payload: unknown) {
     }
 }
 

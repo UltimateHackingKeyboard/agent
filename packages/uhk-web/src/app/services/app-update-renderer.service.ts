@@ -38,6 +38,7 @@ export class AppUpdateRendererService {
     }
 
     private registerEvents() {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.ipcRenderer.on(IpcEvents.autoUpdater.updateAvailable, (event: string, arg: any) => {
             this.logService.misc(IpcEvents.autoUpdater.updateAvailable, arg);
         });
@@ -47,20 +48,25 @@ export class AppUpdateRendererService {
             this.dispatchStoreAction(new CheckForUpdateSuccessAction('No update available'));
         });
 
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateError, (event: string, arg: any) => {
             this.logService.misc(IpcEvents.autoUpdater.autoUpdateError, arg);
             this.dispatchStoreAction(new UpdateErrorAction(arg));
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloadProgress, (event: string, arg: any) => {
             this.logService.misc(IpcEvents.autoUpdater.autoUpdateDownloadProgress, arg);
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloaded, (event: string, arg: any) => {
             this.logService.misc(IpcEvents.autoUpdater.autoUpdateDownloaded, arg);
             this.dispatchStoreAction(new UpdateDownloadedAction(arg));
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.ipcRenderer.on(IpcEvents.autoUpdater.checkForUpdateNotAvailable, (event: string, arg: any) => {
             this.logService.misc(IpcEvents.autoUpdater.checkForUpdateNotAvailable, arg);
             this.dispatchStoreAction(new CheckForUpdateFailedAction(arg));

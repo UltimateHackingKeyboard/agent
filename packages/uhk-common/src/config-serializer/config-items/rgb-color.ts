@@ -22,6 +22,7 @@ export class RgbColor {
         return 'RgbColor';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, version: number): RgbColor {
         switch (version) {
             case 1:
@@ -96,6 +97,7 @@ export class RgbColor {
         this.b = buffer.readUInt8();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonV6(jsonObject: any): void {
         this.b = jsonObject.b;
         this.g = jsonObject.g;

@@ -932,8 +932,10 @@ export function reducer(
 
             for (const fieldName of ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_NAMES) {
                 // Save the old typings behavior config
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (customAdvancedSecondaryRoleConfiguration[fieldName] as any) = userConfiguration[fieldName];
                 // Apply the loaded typings behavior config
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (userConfiguration[fieldName] as any) = presetConfiguration[fieldName];
             }
 
@@ -1328,6 +1330,7 @@ export const selectedBacklightingColor = (state: State): RgbColorInterface => st
 export const selectedBacklightingColorIndex = (state: State): number => state.selectedBacklightingColorIndex;
 export const calculateTypingBehaviorPresets = (state: State): TypingBehaviorPreset[] => {
     const currentConfiguration = ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_NAMES.reduce((config, fieldName) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (config[fieldName] as any) = state.userConfiguration[fieldName];
 
         return config;
@@ -1467,6 +1470,7 @@ function insertItemInNameOrder<T extends { name: string }>(
     return newItems;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function checkExistence(layers: Layer[], property: string, value: any): Layer[] {
     const keyActionsToClear: {
         layerIdx: number,
