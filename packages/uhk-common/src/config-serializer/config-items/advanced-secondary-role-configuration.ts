@@ -54,7 +54,7 @@ export const SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: AdvancedSecond
         secondaryRoleAdvancedStrategySafetyMargin: 0,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: false,
         secondaryRoleAdvancedStrategyTriggerByMouse: true,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
@@ -69,9 +69,9 @@ export const HRM_TIMEOUT_CANCEL_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: Ad
         secondaryRoleAdvancedStrategyTimeoutType: SecondaryRoleAdvancedStrategyTimeoutType.Passive,
         secondaryRoleAdvancedStrategyTrigger: SecondaryRoleAdvancedStrategyTriggeringEvent.Release,
         secondaryRoleAdvancedStrategySafetyMargin: -40,
-        secondaryRoleAdvancedStrategyDoubletapToPrimary: true,
+        secondaryRoleAdvancedStrategyDoubletapToPrimary: false,
         secondaryRoleAdvancedStrategyTriggerByMouse: true,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
@@ -86,9 +86,9 @@ export const HRM_TIMEOUT_SECONDARY_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET:
         secondaryRoleAdvancedStrategyTimeoutType: SecondaryRoleAdvancedStrategyTimeoutType.Active,
         secondaryRoleAdvancedStrategyTrigger: SecondaryRoleAdvancedStrategyTriggeringEvent.Release,
         secondaryRoleAdvancedStrategySafetyMargin: 1,
-        secondaryRoleAdvancedStrategyDoubletapToPrimary: true,
+        secondaryRoleAdvancedStrategyDoubletapToPrimary: false,
         secondaryRoleAdvancedStrategyTriggerByMouse: false,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
@@ -105,7 +105,7 @@ export const TIMEOUT_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: AdvancedSecon
         secondaryRoleAdvancedStrategySafetyMargin: 0,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: true,
         secondaryRoleAdvancedStrategyTriggerByMouse: true,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
 
