@@ -1,6 +1,6 @@
-import { DeviceModuleRecord } from './device-module-record.js';
+import { DeviceModule } from './device-module.js';
 import { DeviceVersionInformation } from './device-version-information.js';
 
 export interface RightModuleInfo extends DeviceVersionInformation {
-    modules: DeviceModuleRecord;
+    modules: Record<number, DeviceModule>;
 }
