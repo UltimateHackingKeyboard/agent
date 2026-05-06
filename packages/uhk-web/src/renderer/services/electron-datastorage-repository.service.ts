@@ -1,5 +1,3 @@
-import { ipcRenderer } from 'electron';
-
 import { ApplicationSettings, IpcEvents, UhkDeviceProduct, UserConfiguration } from 'uhk-common';
 import { Observable, from, of } from 'rxjs';
 
@@ -7,7 +5,7 @@ import { DataStorageRepositoryService } from '../../app/services/datastorage-rep
 
 export class ElectronDataStorageRepositoryService extends DataStorageRepositoryService {
     static async getValue(key: string): Promise<any> {
-        const value = await ipcRenderer.invoke(IpcEvents.app.getConfig, key);
+        const value = await (window as any).electron.ipcRenderer.invoke(IpcEvents.app.getConfig, key);
         if (!value) {
             return null;
         }
@@ -16,7 +14,7 @@ export class ElectronDataStorageRepositoryService extends DataStorageRepositoryS
     }
 
     static async saveValue(key: string, value: any): Promise<null> {
-        await ipcRenderer.invoke(IpcEvents.app.setConfig, key, JSON.stringify(value));
+        await (window as any).electron.ipcRenderer.invoke(IpcEvents.app.setConfig, key, JSON.stringify(value));
 
         return null;
     }

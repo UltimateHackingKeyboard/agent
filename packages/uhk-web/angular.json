@@ -120,15 +120,8 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "customWebpackConfig": {
-              "path": "./webpack.config.js",
-              "mergeStrategies": {
-                "target": "replace",
-                "node": "replace"
-              }
-            },
             "baseHref": "",
             "optimization": false,
             "sourceMap": true,
