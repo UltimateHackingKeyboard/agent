@@ -1,5 +1,5 @@
 import { assertEnum, assertFloat, assertInt16, assertUInt16, assertUInt32, assertUInt8 } from '../assert.js';
-import { ConfigSerializer } from '../config-serializer.js';
+import { resolveSwitchKeymapActions } from '../resolve-switch-keymap-actions.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { AdvancedSecondaryRoleConfiguration } from './advanced-secondary-role-configuration.js';
 import { BacklightingMode } from './backlighting-mode.js';
@@ -598,7 +598,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             return macro;
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
-        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+        resolveSwitchKeymapActions(this.keymaps);
 
     }
 
@@ -641,7 +641,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             return macro;
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
-        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+        resolveSwitchKeymapActions(this.keymaps);
 
     }
 
@@ -698,7 +698,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             return macro;
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
-        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+        resolveSwitchKeymapActions(this.keymaps);
 
     }
 
@@ -770,7 +770,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             return macro;
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
-        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+        resolveSwitchKeymapActions(this.keymaps);
 
     }
 
@@ -867,7 +867,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             this.lastSaveFirmwareTag = buffer.readString();
         }
 
-        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+        resolveSwitchKeymapActions(this.keymaps);
 
     }
 

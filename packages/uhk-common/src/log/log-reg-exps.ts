@@ -1,4 +1,2 @@
-export namespace LogRegExps {
-    export const writeRegExp = /USB\[W]:/;
-    export const readRegExp = /USB\[R]:/;
-}
+export const LOG_WRITE_REG_EXP = /USB\[W]:/;
+export const LOG_READ_REG_EXP = /USB\[R]:/;

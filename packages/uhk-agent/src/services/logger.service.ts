@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as log from 'electron-log/main';
-import { logUserConfigHelper, LogService, LogRegExps, UserConfiguration } from 'uhk-common';
+import { logUserConfigHelper, LogService, LOG_READ_REG_EXP, LOG_WRITE_REG_EXP, UserConfiguration } from 'uhk-common';
 
 /**
  * This service use the electron-log package to write log in file.
@@ -46,9 +46,9 @@ export class ElectronLogService extends LogService {
             return;
         }
 
-        if (LogRegExps.writeRegExp.test(args[0])) {
+        if (LOG_WRITE_REG_EXP.test(args[0])) {
             this.log('%c' + args.join(' '), 'color:blue');
-        } else if (LogRegExps.readRegExp.test(args[0])) {
+        } else if (LOG_READ_REG_EXP.test(args[0])) {
             let errorCodeStartIndex = 0;
             let errorCodeEndIndex = 2;
 
