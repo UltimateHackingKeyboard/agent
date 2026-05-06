@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "ES2023",
+    "target": "ES2024",
     "importHelpers": true,
     "resolveJsonModule": true
   },
