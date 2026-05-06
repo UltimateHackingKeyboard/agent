@@ -41,6 +41,6 @@ export function capitalizeFirstLetter(text: string): string {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-export function runInElectron() {
-    return window && (<any>window).process && (<any>window).process.type;
+export function runInElectron(): boolean {
+    return !!(window as any)?.electron;
 }

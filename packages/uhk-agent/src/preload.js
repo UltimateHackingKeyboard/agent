@@ -1,5 +1,9 @@
 const { ipcRenderer } =  require('electron')
 
+window.electron = {
+    ipcRenderer
+}
+
 ipcRenderer
     .invoke('app-get-config', 'application-settings')
     .then(appSettings => {
