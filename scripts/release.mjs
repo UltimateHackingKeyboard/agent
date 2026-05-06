@@ -24,11 +24,6 @@ console.log({ gitTag, isCI, repoName, githubRef, githubEventName });
 
 const isReleaseCommit = TEST_BUILD || isCI && repoName === 'UltimateHackingKeyboard/agent';
 
-if (!isReleaseCommit) {
-    console.log('It is not a release task. Skipping publish.');
-    process.exit(0)
-}
-
 import path from 'node:path';
 import {setTimeout} from 'node:timers/promises';
 import builder from 'electron-builder';
@@ -64,10 +59,13 @@ if (process.platform === 'darwin') {
 let macCertificatePath;
 
 if (process.env.CERT_IV && process.env.CERT_KEY) {
-    if (process.platform === 'darwin') {
+    if (process.platform === 'darwin' && isReleaseCommit) {
         const encryptedFile = path.join(__dirname, './certs/mac-cert.p12.enc');
         macCertificatePath = path.join(__dirname, './certs/mac-cert.p12');
         exec(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${macCertificatePath} -d`);
+    }
+    else {
+        console.info('Not decrypting certificate for non-official repo.')
     }
 } else {
     console.info('CERT_IV and CERT_KEY env variables are not set. Skipping certificate decryption.');
@@ -84,6 +82,15 @@ extraResources.push({ from: path.join(__dirname, '../tmp/smart-macro-docs'), to:
 
 const APPLE_TEAM_ID = 'CMXCBCFHDG'
 process.env.APPLE_TEAM_ID = APPLE_TEAM_ID
+
+let winSigntoolOptions
+
+if (isReleaseCommit) {
+    winSigntoolOptions = {
+        publisherName: 'ULTIMATE GADGET LABORATORIES KFT.',
+        sign: configuration => azureKeyvaultSign(configuration.path),
+    }
+}
 
 release()
     .then(() => {
@@ -119,10 +126,7 @@ async function release () {
             },
             win: {
                 extraResources,
-                signtoolOptions: {
-                    publisherName: 'ULTIMATE GADGET LABORATORIES KFT.',
-                    sign: configuration => azureKeyvaultSign(configuration.path),
-                },
+                signtoolOptions: winSigntoolOptions,
             },
             linux: {
                 extraResources
