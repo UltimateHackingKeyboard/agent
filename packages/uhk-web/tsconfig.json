@@ -3,7 +3,6 @@
   "compilerOptions": {
     "outDir": "../uhk-agent/dist/out-tsc",
     "declaration": false,
-    "module": "es2015",
     "moduleResolution": "bundler",
     "useDefineForClassFields": false,
     "lib": [
