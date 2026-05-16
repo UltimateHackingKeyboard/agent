@@ -24,7 +24,7 @@ For everyone else, use the appropriate package manager for your OS.
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
-npm ci
+npm ci --ignore-scripts
 npm run build
 npm run electron
 ```
@@ -34,7 +34,8 @@ At this point, Agent should be running on your machine.
 ## Install dependencies
 
 npm workspace installs dependencies in hoisted mode, it is not really suitable for us.
-If you add or update a dependency of a package then navigate to the directory edit the package.json and run `npm install`
+If you add or update a dependency of a package then navigate to the directory edit the package.json and run `npm install --ignore-scripts`
+Try to avoid from packages that has install scripts
 
 ## Developing the web application
 
