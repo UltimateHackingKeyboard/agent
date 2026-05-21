@@ -125,8 +125,8 @@
                     <circle-tooltip [tooltip]="doubleTapPrimaryTooltip"
                                     [width]="250"/>
                     <ng-template #doubleTapPrimaryTooltip>
-                        <p>If the dual-role key is double-tapped, the primary role is activated.</p>
-                        <p>Tap-and-Hold (hold on the second tap) to keep the primary role held down.</p>
+                        <p>If the dual-role key is double-tapped, the primary role is activated.
+                        Tap-and-Hold (hold on the second tap) to keep the primary role held down.</p>
                         Useful when you want to trigger auto-repeat of primary roles on keys such as space.
                     </ng-template>
                 </td>
@@ -216,8 +216,12 @@
             </tr>
             <tr class="separator">
                 <td>Allow same-side triggers
-                    <circle-tooltip tooltip="When checked, keys on the same half of the keyboard can trigger secondary roles. Turning this off helps avoiding spurious unwanted activations of secondary roles during quick typing and finger rolls. <br/><em>Note:</em> Secondary roles can still be triggered by timeout (or mouse movement). Keeping the dual-role key held down beyond the timeout allows combining it with same-side keys even if this option is turned off."
-                                    [width]="250"/>
+                    <circle-tooltip [tooltip]="sameSideTriggersTooltip"
+                                    [width]="450"/>
+                    <ng-template #sameSideTriggersTooltip>
+                        <p>When checked, keys on the same half of the keyboard can trigger secondary roles. Turning this off helps avoiding spurious unwanted activations of secondary roles during quick typing and finger rolls.</p>
+                        <em>Note:</em> Secondary roles can still be triggered by timeout (or mouse movement). Keeping the dual-role key held down beyond the timeout allows combining it with same-side keys even if this option is turned off.
+                    </ng-template>
                 </td>
                 <td>
                     <input type="checkbox"
@@ -255,8 +259,11 @@
             </tr>
             <tr class="separator">
                 <td>Double tap timeout
-                    <circle-tooltip tooltip="Configures the timeout for most doubletap behaviors in the firmware. (Layer switcher doubletaps, secondary role doubletaps, the `ifDoubletap` macro condition...)"
-                                    [width]="250"/>
+                    <circle-tooltip [tooltip]="doubletapTimeoutTooltip"
+                                    [width]="300"/>
+                    <ng-template #doubletapTimeoutTooltip>
+                        Configures the timeout for most doubletap behaviors in the firmware. (Layer switcher doubletaps, secondary role doubletaps, the <code>ifDoubletap</code> macro condition...)
+                    </ng-template>
                 </td>
                 <td>
                     <slider-wrapper

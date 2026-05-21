@@ -71,7 +71,7 @@ export const HRM_TIMEOUT_CANCEL_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: Ad
         secondaryRoleAdvancedStrategySafetyMargin: -40,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: false,
         secondaryRoleAdvancedStrategyTriggerByMouse: true,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
     }
 }
 
@@ -86,9 +86,9 @@ export const HRM_TIMEOUT_SECONDARY_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET:
         secondaryRoleAdvancedStrategyTimeoutType: SecondaryRoleAdvancedStrategyTimeoutType.Active,
         secondaryRoleAdvancedStrategyTrigger: SecondaryRoleAdvancedStrategyTriggeringEvent.Release,
         secondaryRoleAdvancedStrategySafetyMargin: 1,
-        secondaryRoleAdvancedStrategyDoubletapToPrimary: false,
+        secondaryRoleAdvancedStrategyDoubletapToPrimary: true,
         secondaryRoleAdvancedStrategyTriggerByMouse: false,
-        secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
+        secondaryRoleAdvancedStrategyTriggerFromSameHalf: false,
     }
 }
 
@@ -108,7 +108,6 @@ export const TIMEOUT_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: AdvancedSecon
         secondaryRoleAdvancedStrategyTriggerFromSameHalf: true,
     }
 }
-
 
 export const BUILTIN_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESETS: AdvancedSecondaryRoleConfigurationPreset[] = [
     SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET,
