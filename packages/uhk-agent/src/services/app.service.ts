@@ -23,6 +23,7 @@ export class AppService extends MainServiceBase {
             logService.misc(`[AppService] get-config: ${key}`);
 
             const config = await settings.get(key);
+            // eslint-disable-next-line @typescript-eslint/no-base-to-string
             logService.misc(`[AppService] get-config of "${key}": ${config}`);
 
             return config;

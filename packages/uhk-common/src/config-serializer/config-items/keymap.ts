@@ -162,6 +162,7 @@ export class Keymap {
                                 console.warn(error);
                             } else {
                                 const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
                                     ` is not switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
                                 console.warn(error);
                             }

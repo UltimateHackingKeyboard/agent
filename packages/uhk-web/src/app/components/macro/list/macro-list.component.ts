@@ -201,6 +201,7 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
 
     macroActionTrackByFn(index: number, macroAction: MacroAction): string {
         if (this.isMacroReordering) {
+            // eslint-disable-next-line @typescript-eslint/no-base-to-string
             return index.toString() + macroAction.toString();
         }
 
