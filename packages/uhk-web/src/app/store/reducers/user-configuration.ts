@@ -36,6 +36,7 @@ import {
     RgbColorInterface,
     RightSlotModules,
     SecondaryRoleStrategy,
+    SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET,
     SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET_NAME,
     SwitchKeymapAction,
     SwitchLayerAction,
@@ -169,8 +170,19 @@ export function reducer(
             newState.newerUserConfiguration = undefined;
             newState.selectedKeymapAbbr = undefined;
             newState.layerOptions = calculateLayerOptions(newState);
-            newState.customAdvancedSecondaryRoleConfiguration = undefined;
-            newState.isCustomPresetTheLastLoadedPreset = false;
+
+            // If the secondary role strategy is simple, then always set the simple preset values.
+            // It prevents the UI inconsistency when we change the values of the Simple strategy and the UI shows different values.
+            if (newState.userConfiguration.secondaryRoleStrategy === SecondaryRoleStrategy.Simple) {
+                applyAdvancedSecondaryRoleConfiguration(newState.userConfiguration, SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET.configuration);
+            }
+            else {
+                const advancedSecondaryRoleConfiguration = extractAdvancedSecondaryRoleConfiguration(newState.userConfiguration);
+                newState.isCustomPresetTheLastLoadedPreset = !BUILTIN_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESETS.find(preset => isEqual(preset.configuration, advancedSecondaryRoleConfiguration))
+                if (newState.isCustomPresetTheLastLoadedPreset) {
+                    newState.customAdvancedSecondaryRoleConfiguration = advancedSecondaryRoleConfiguration;
+                }
+            }
 
             return newState;
         }
@@ -927,17 +939,7 @@ export function reducer(
                 newState.isCustomPresetTheLastLoadedPreset = false;
             }
 
-            const customAdvancedSecondaryRoleConfiguration = {} as AdvancedSecondaryRoleConfiguration;
-            newState.customAdvancedSecondaryRoleConfiguration = customAdvancedSecondaryRoleConfiguration;
-
-            for (const fieldName of ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_NAMES) {
-                // Save the old typings behavior config
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (customAdvancedSecondaryRoleConfiguration[fieldName] as any) = userConfiguration[fieldName];
-                // Apply the loaded typings behavior config
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (userConfiguration[fieldName] as any) = presetConfiguration[fieldName];
-            }
+            applyAdvancedSecondaryRoleConfiguration(userConfiguration, presetConfiguration);
 
             return newState
         }
@@ -1087,11 +1089,14 @@ export function reducer(
         case UserConfig.ActionTypes.SetUserConfigurationValue: {
             const payload = (action as UserConfig.SetUserConfigurationValueAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            const newState = {
+                ...state,
+                userConfiguration,
+            };
             userConfiguration[payload.propertyName] = payload.value;
-            let selectedBacklightingColorIndex = state.selectedBacklightingColorIndex;
 
             if (payload.propertyName === 'backlightingMode') {
-                selectedBacklightingColorIndex = -1;
+                newState.selectedBacklightingColorIndex = -1;
                 if (payload.value === BacklightingMode.PerKeyBacklighting) {
                     userConfiguration.perKeyRgbPresent = true;
                 }
@@ -1100,13 +1105,16 @@ export function reducer(
 
             if (ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_SET.has(payload.propertyName as keyof AdvancedSecondaryRoleConfiguration)) {
                 userConfiguration.secondaryRoleStrategy = SecondaryRoleStrategy.Advanced;
+
+                newState.isCustomPresetTheLastLoadedPreset = true
+                newState.customAdvancedSecondaryRoleConfiguration = {} as AdvancedSecondaryRoleConfiguration;
+                for (const fieldName of ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_NAMES) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (newState.customAdvancedSecondaryRoleConfiguration[fieldName] as any )= userConfiguration[fieldName];
+                }
             }
 
-            return {
-                ...state,
-                selectedBacklightingColorIndex,
-                userConfiguration
-            };
+            return newState;
         }
 
         case KeymapActions.ActionTypes.EditDescription: {
@@ -1329,32 +1337,19 @@ export const isBacklightingColoring = (state: State): boolean => state.selectedB
 export const selectedBacklightingColor = (state: State): RgbColorInterface => state.backlightingColorPalette[state.selectedBacklightingColorIndex];
 export const selectedBacklightingColorIndex = (state: State): number => state.selectedBacklightingColorIndex;
 export const calculateTypingBehaviorPresets = (state: State): TypingBehaviorPreset[] => {
-    const currentConfiguration = ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_NAMES.reduce((config, fieldName) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (config[fieldName] as any) = state.userConfiguration[fieldName];
-
-        return config;
-    }, {} as AdvancedSecondaryRoleConfiguration)
+    const currentConfiguration = extractAdvancedSecondaryRoleConfiguration(state.userConfiguration);
 
     let hasMatches = false;
 
     const result: TypingBehaviorPreset[] =  BUILTIN_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESETS.map(preset => {
         if (preset.name === SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET_NAME) {
-            hasMatches = state.userConfiguration.secondaryRoleStrategy === SecondaryRoleStrategy.Simple;
+            hasMatches = !state.isCustomPresetTheLastLoadedPreset && state.userConfiguration.secondaryRoleStrategy === SecondaryRoleStrategy.Simple;
 
             return {
                 ...preset,
                 selected: hasMatches,
             }
         }
-
-        if (state.userConfiguration.secondaryRoleStrategy === SecondaryRoleStrategy.Simple) {
-            return {
-                ...preset,
-                selected: false,
-            }
-        }
-
 
         if (!state.isCustomPresetTheLastLoadedPreset && isEqual(preset.configuration, currentConfiguration)) {
             hasMatches = true;
@@ -1665,4 +1660,21 @@ function generateHostConnectionName(hostConnections: HostConnection[], baseName:
 
         iter++;
     }
+}
+
+function applyAdvancedSecondaryRoleConfiguration(userConfiguration: UserConfiguration, advancedSecondaryRoleConfiguration: AdvancedSecondaryRoleConfiguration) {
+    for (const fieldName of ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_NAMES) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (userConfiguration[fieldName] as any) = advancedSecondaryRoleConfiguration[fieldName];
+    }
+
+}
+
+function extractAdvancedSecondaryRoleConfiguration(userConfiguration: UserConfiguration): AdvancedSecondaryRoleConfiguration {
+    return ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_NAMES.reduce((config, fieldName) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (config[fieldName] as any) = userConfiguration[fieldName];
+
+        return config;
+    }, {} as AdvancedSecondaryRoleConfiguration);
 }

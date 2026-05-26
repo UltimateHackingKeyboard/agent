@@ -16,7 +16,7 @@
     "build:generate-versions": "node ./scripts/generate-versions.mjs",
     "build:tsc": "tsc --project src/tsconfig.build.json",
     "build:user-config": "tsx ./scripts/generate-user-configs.ts",
-    "clean": "rimraf ./node_modules ./dist user-config.json",
+    "clean": "rimraf ./node_modules ./dist user-config.json ./src/user-config-60.ts ./src/user-config-80.ts",
     "test": "node --loader=ts-node/esm --test \"**/*.test.ts\"",
     "lint": "eslint"
   },
