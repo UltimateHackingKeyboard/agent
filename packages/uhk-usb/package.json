@@ -21,7 +21,6 @@
     "is-root": "3.0.0",
     "nrf-intel-hex": "1.4.0",
     "tslib": "2.8.1",
-    "semver": "7.7.3",
     "uhk-common": "file:../uhk-common"
   },
   "peerDependencies": {

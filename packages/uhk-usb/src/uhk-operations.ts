@@ -14,6 +14,7 @@ import {
     HardwareConfiguration,
     isDeviceProtocolSupportFirmwareChecksum,
     isDeviceProtocolSupportGitInfo,
+    isVersionLt,
     LEFT_HALF_MODULE,
     LogService,
     ModuleSlotToId,
@@ -31,7 +32,6 @@ import {
     VERSIONS,
 } from 'uhk-common';
 import { promisify } from 'util';
-import semver from 'semver';
 import {
     ConfigBufferId,
     DevicePropertyIds,
@@ -610,7 +610,7 @@ export class UhkOperations {
             };
 
         if (isDeviceProtocolSupportFirmwareChecksum(deviceVersionInformation.deviceProtocolVersion)) {
-            if (semver.lt(deviceVersionInformation.deviceProtocolVersion, '4.14.1')) {
+            if (isVersionLt(deviceVersionInformation.deviceProtocolVersion, '4.14.1')) {
                 moduleId = UHK_MODULE_IDS.RIGHT_HALF;
             }
 
