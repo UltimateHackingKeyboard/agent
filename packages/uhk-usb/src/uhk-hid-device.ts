@@ -2,7 +2,6 @@ import fse from 'fs-extra';
 import isRoot from 'is-root';
 import { Device, HIDAsync } from 'node-hid';
 import * as path from 'path';
-import semver from 'semver';
 import { SerialPort } from 'serialport';
 import {
     ALL_UHK_DEVICES,
@@ -15,6 +14,7 @@ import {
     HalvesInfo,
     isBitSet,
     isEqualArray,
+    isVersionLt,
     LeftSlotModules,
     LogService,
     mapI2cAddressToModuleName,
@@ -281,7 +281,7 @@ export class UhkHidDevice {
     public async isDeviceSupportWirelessUSBCommands(): Promise<boolean> {
         const protocolVersions = await this.getProtocolVersions();
 
-        if (semver.lt(protocolVersions.deviceProtocolVersion, '4.11.0')) {
+        if (isVersionLt(protocolVersions.deviceProtocolVersion, '4.11.0')) {
             return false;
         }
 

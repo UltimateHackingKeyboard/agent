@@ -1,7 +1,6 @@
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { gt } from 'semver';
 import {
     ApplicationSettings,
     AppTheme,
@@ -14,7 +13,8 @@ import {
     HardwareModules,
     HistoryFileInfo as CommonHistoryFileInfo,
     HostConnections,
-    isVersionGte,
+    isVersionGt,
+    isVersionGteV1CanUndefined,
     Keymap,
     LayerName,
     LEFT_HALF_MODULE,
@@ -605,21 +605,21 @@ export const getSideMenuPageState = createSelector(
 export const maxMacroCountReached = createSelector(getSideMenuPageState, sideMenuState => sideMenuState.maxMacroCountReached);
 
 export const macroPlaybackSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
-    return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
+    return isVersionGteV1CanUndefined(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
 });
 export const layerDoubleTapSupported = createSelector(
     getHardwareModules,
     (hardwareModules: HardwareModules): boolean => {
-        return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
+        return isVersionGteV1CanUndefined(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
     }
 );
 
 export const extraLEDCharactersSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
-    return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '4.2.0');
+    return isVersionGteV1CanUndefined(hardwareModules.rightModuleInfo.userConfigVersion, '4.2.0');
 });
 
 export const isMacroCommandSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
-    return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '5.0.0');
+    return isVersionGteV1CanUndefined(hardwareModules.rightModuleInfo.userConfigVersion, '5.0.0');
 });
 
 export const getShowFirmwareUpgradePanel = createSelector(
@@ -628,7 +628,7 @@ export const getShowFirmwareUpgradePanel = createSelector(
         return inElectron
             && skipFirmwareUpgrade
             && hardwareModules.rightModuleInfo.userConfigVersion
-            && gt(VERSIONS.userConfigVersion, hardwareModules.rightModuleInfo.userConfigVersion);
+            && isVersionGt(VERSIONS.userConfigVersion, hardwareModules.rightModuleInfo.userConfigVersion);
     });
 
 export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;

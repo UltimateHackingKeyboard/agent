@@ -8,7 +8,7 @@ import {
     getDefaultHalvesInfo,
     HalvesInfo,
     HardwareModules,
-    isVersionGte,
+    isVersionGteV1CanUndefined,
     LeftSlotModules,
     RightSlotModules,
     UdevRulesInfo,
@@ -401,7 +401,7 @@ export const getEraseBleSettingsButtonState = (state: State): EraseBleSettingsBu
     return {
         disabled: state.isErasingBleSettings,
         erasing: state.isErasingBleSettings,
-        visible: isVersionGte(state.modules.rightModuleInfo.deviceProtocolVersion, '4.14.0')
+        visible: isVersionGteV1CanUndefined(state.modules.rightModuleInfo.deviceProtocolVersion, '4.14.0')
     };
 };
 export const getHardwareModules = (state: State) => state.modules;
