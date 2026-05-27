@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import { mkdir } from 'node:fs/promises';
 import path from 'path';
 import urlJoin from 'url-join';
 
@@ -9,7 +9,7 @@ import { DownloadSmartMacroDocOptions } from './download-smart-macro-doc.js';
 export const REFERENCE_MANUAL_FILE_NAME = 'reference-manual.md';
 
 export async function downloadSmartMacroReferenceManual(options: DownloadSmartMacroDocOptions): Promise<void> {
-    await fs.ensureDir(options.directory);
+    await mkdir(options.directory, { recursive: true });
 
     const githubRawUrl = urlJoin(
         'https://raw.githubusercontent.com',
