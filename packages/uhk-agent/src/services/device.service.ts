@@ -1,5 +1,4 @@
 import { ipcMain } from 'electron';
-import { emptyDir } from 'fs-extra';
 import { cloneDeep, isEqual } from 'lodash';
 import os from 'os';
 import { UhkDeviceProduct } from 'uhk-common';
@@ -52,6 +51,7 @@ import {
     VERSIONS,
     ZephyrLogEntry,
 } from 'uhk-common';
+import { emptyDir } from 'uhk-fs'
 import {
     checkFirmwareAndDeviceCompatibility,
     ConfigBufferId,

@@ -1,5 +1,5 @@
-const fse = require('fs-extra');
-const path = require('path');
+const fs = require('node:fs/promises');
+const path = require('node:path');
 
 const copyOptions = {
     overwrite: true,
@@ -9,13 +9,13 @@ const copyOptions = {
 const promises = [];
 
 promises.push(
-    fse.copy(
+    fs.cp(
         path.join(__dirname, '../rules'),
         path.join(__dirname, '../tmp/rules'),
         copyOptions)
 );
 promises.push(
-    fse.copy(
+    fs.cp(
         path.join(__dirname, '../smart-macro-docs'),
         path.join(__dirname, '../tmp/smart-macro-docs'),
         copyOptions)
