@@ -1,10 +1,12 @@
 import { ipcMain } from 'electron';
-import * as path from 'path';
+import { cp } from 'node:fs/promises';
+import * as path from 'node:path';
 import * as sudo from '@vscode/sudo-prompt';
 import { dirSync } from 'tmp';
-import { emptyDir, copy } from 'fs-extra';
 
 import { CommandLineArgs, IpcEvents, LogService, IpcResponse } from 'uhk-common';
+import { emptyDir } from 'uhk-fs';
+
 import { DeviceService } from './device.service';
 
 export class SudoService {
@@ -51,7 +53,7 @@ export class SudoService {
         const tmpDirectory = dirSync();
         const rulesDir = path.join(this.rootDir, 'rules');
         this.logService.misc('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
-        await copy(rulesDir, tmpDirectory.name);
+        await cp(rulesDir, tmpDirectory.name, { recursive: true, force: true });
 
         const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
 

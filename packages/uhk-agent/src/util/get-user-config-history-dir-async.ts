@@ -1,11 +1,11 @@
 import { app } from 'electron';
-import { ensureDir } from 'fs-extra';
-import { join } from 'path';
+import { mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
 
 export async function getUserConfigHistoryDirAsync(): Promise<string> {
     const dir = join(app.getPath('userData'), 'user-configs');
 
-    await ensureDir(dir);
+    await mkdir(dir, { recursive: true });
 
     return dir;
 }

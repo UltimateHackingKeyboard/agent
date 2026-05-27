@@ -24,10 +24,10 @@ console.log({ gitTag, isCI, repoName, githubRef, githubEventName });
 
 const isReleaseCommit = TEST_BUILD || isCI && repoName === 'UltimateHackingKeyboard/agent';
 
+import fs from 'node:fs';
 import path from 'node:path';
 import {setTimeout} from 'node:timers/promises';
 import builder from 'electron-builder';
-import fs from 'fs-extra';
 import pThrottle from 'p-throttle';
 import pRetry from 'p-retry';
 
@@ -72,7 +72,8 @@ if (process.env.CERT_IV && process.env.CERT_KEY) {
 }
 
 const rootJsonPath = path.join(__dirname, '../package.json');
-const rootJson = fs.readJsonSync(rootJsonPath);
+const rootJsonContent = fs.readFileSync(rootJsonPath, {encoding: 'utf8'});
+const rootJson = JSON.parse(rootJsonContent);
 update2ndPackageJson(rootJson);
 
 // Add firmware to extra resources
@@ -144,7 +145,7 @@ async function release () {
                 appimage: '1.0.2',
             },
             releaseInfo: {
-                releaseNotes: await getReleaseNotes()
+                releaseNotes: getReleaseNotes()
             }
         },
     })
@@ -152,10 +153,11 @@ async function release () {
 
 function update2ndPackageJson(rootJson) {
     const jsonPath = path.join(__dirname, '../packages/uhk-agent/dist/package.json');
-    const json = fs.readJsonSync(jsonPath);
+    const jsonFileContent = fs.readFileSync(jsonPath, {encoding: 'utf8'});
+    const json = JSON.parse(jsonFileContent);
 
     json.version = rootJson.version;
-    fs.writeJsonSync(jsonPath, json, { spaces: 2 })
+    fs.writeFileSync(jsonPath, JSON.stringify(json, null, 2), {encoding: 'utf8'});
 }
 
 async function afterPack(context) {
@@ -167,14 +169,14 @@ async function afterPack(context) {
     fs.chmodSync(chromeSandbox, '4755')
 }
 
-async function getReleaseNotes() {
+function getReleaseNotes() {
     if(!gitTag) {
         return
     }
 
     const version = gitTag.slice(1)
     const changeLogPath = path.join(__dirname, '..', 'CHANGELOG.md');
-    const changelogContent = await fs.readFile(changeLogPath, { encoding: 'utf8' });
+    const changelogContent = fs.readFileSync(changeLogPath, { encoding: 'utf8' });
     const lines = changelogContent.split('\n');
 
     let capturing = false;
