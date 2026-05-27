@@ -1,6 +1,6 @@
+import { mkdir } from 'node:fs/promises';
 import * as path from 'path';
 import urlJoin from 'url-join';
-import fs from 'fs-extra';
 import { Octokit } from '@octokit/rest';
 
 import { downloadFile } from './download-file.js';
@@ -15,7 +15,7 @@ export interface DownloadTreeToFolderOptions {
 }
 
 export async function downloadTreeToFolder(options: DownloadTreeToFolderOptions): Promise<void> {
-    await fs.ensureDir(options.downloadDirectory);
+    await mkdir(options.downloadDirectory, { recursive: true });
 
     const octokit = new Octokit();
 
@@ -34,7 +34,7 @@ export async function downloadTreeToFolder(options: DownloadTreeToFolderOptions)
 
         if (pathSplit.length > 1) {
             const subDir = path.join(options.downloadDirectory, ...pathSplit.slice(0, -1));
-            await fs.ensureDir(subDir);
+            await mkdir(subDir, { recursive: true });
         }
 
         const githubRawUrl = urlJoin(
