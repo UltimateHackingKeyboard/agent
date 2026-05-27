@@ -9,5 +9,5 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(WebModule, {
-    preserveWhitespaces: true
+    preserveWhitespaces: true,
 });
