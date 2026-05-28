@@ -1,11 +1,10 @@
 import { ipcMain } from 'electron';
-import { cp } from 'node:fs/promises';
-import * as path from 'node:path';
+import { cp, rm } from 'node:fs/promises';
+import path from 'node:path';
 import * as sudo from '@vscode/sudo-prompt';
-import { dirSync } from 'tmp';
 
 import { CommandLineArgs, IpcEvents, LogService, IpcResponse } from 'uhk-common';
-import { emptyDir } from 'uhk-fs';
+import { makeTmpDir } from 'uhk-fs';
 
 import { DeviceService } from './device.service';
 
@@ -50,12 +49,12 @@ export class SudoService {
 
     private async setPrivilegeOnLinux(event: Electron.IpcMainEvent) {
         await this.deviceService.stopPollUhkDevice();
-        const tmpDirectory = dirSync();
+        const tmpDirectory = await makeTmpDir();
         const rulesDir = path.join(this.rootDir, 'rules');
-        this.logService.misc('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
-        await cp(rulesDir, tmpDirectory.name, { recursive: true, force: true });
+        this.logService.misc('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory});
+        await cp(rulesDir, tmpDirectory, { recursive: true, force: true });
 
-        const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
+        const scriptPath = path.join(tmpDirectory, 'setup-rules.sh');
 
         const options = {
             name: 'Setting UHK access rules'
@@ -73,7 +72,7 @@ export class SudoService {
                 response.success = true;
             }
 
-            await emptyDir(tmpDirectory.name);
+            await rm(tmpDirectory, { recursive: true, force: true });
             this.deviceService.startPollUhkDevice();
             event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
         });

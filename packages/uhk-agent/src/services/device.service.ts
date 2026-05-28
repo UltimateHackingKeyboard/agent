@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
-import os from 'os';
+import { rm } from 'node:fs/promises';
+import os from 'node:os';
 import { UhkDeviceProduct } from 'uhk-common';
 import {
     ALL_UHK_DEVICES,
@@ -51,7 +52,6 @@ import {
     VERSIONS,
     ZephyrLogEntry,
 } from 'uhk-common';
-import { emptyDir } from 'uhk-fs'
 import {
     checkFirmwareAndDeviceCompatibility,
     ConfigBufferId,
@@ -760,7 +760,7 @@ export class DeviceService {
         }
 
         if (data.uploadFile) {
-            await emptyDir(firmwarePathData.tmpDirectory);
+            await rm(firmwarePathData.tmpDirectory, { recursive: true, force: true });
         }
 
         await snooze(500);

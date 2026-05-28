@@ -28,7 +28,6 @@
     "@types/file-saver": "2.0.7",
     "@types/lodash": "4.17.24",
     "@types/node": "24.12.2",
-    "@types/tmp": "0.2.6",
     "@types/yargs": "17.0.33",
     "check-node-version": "4.2.1",
     "copy-webpack-plugin": "14.0.0",
