@@ -142,7 +142,7 @@ async function release () {
             ],
             toolsets: {
                 // Use statically linked AppImage to prevent the installation of libfuse2 on newer linux distros
-                appimage: '1.0.2',
+                appimage: '1.0.3',
             },
             releaseInfo: {
                 releaseNotes: getReleaseNotes()
