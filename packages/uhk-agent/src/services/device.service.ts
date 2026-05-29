@@ -1420,12 +1420,13 @@ export class DeviceService {
 
     private async readZephyrLog(): Promise<void> {
         try {
+            const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             const log = await this.operations.getVariable(UsbVariables.ShellBuffer)
             this.logService.misc(`[DeviceService] Right half zephyr log: ${log}`);
             const logEntry: ZephyrLogEntry = {
                 log: log as string,
                 level: 'info',
-                device: UHK_80_DEVICE.logName,
+                device: uhkDeviceProduct.logName,
             }
             this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
         }
