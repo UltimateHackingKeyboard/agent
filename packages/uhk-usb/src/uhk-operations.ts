@@ -19,8 +19,6 @@ import {
     LogService,
     ModuleSlotToId,
     ModuleVersionInfo,
-    OLED_DISPLAY_HEIGHT,
-    OLED_DISPLAY_WIDTH,
     UhkBuffer,
     UhkDeviceProduct,
     UHK_EEPROM_SIZE,
