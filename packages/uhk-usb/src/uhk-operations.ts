@@ -747,7 +747,10 @@ export class UhkOperations {
                 message += await this.getVariable(variableId, iteration + 1);
             }
 
-            if (iteration === 0) {
+            // The shell buffer carries a raw VT100 stream (colors, cursor control) that must be
+            // forwarded verbatim to the terminal emulator. Only the macro status buffer gets the
+            // dedup/reorder normalization.
+            if (iteration === 0 && variableId === UsbVariables.statusBuffer) {
                 message = normalizeStatusBuffer(message);
             }
 
