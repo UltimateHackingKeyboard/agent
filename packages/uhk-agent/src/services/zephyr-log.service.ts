@@ -1,6 +1,13 @@
 import { ipcMain } from 'electron';
 import pLimit from 'p-limit';
-import { CommandLineArgs, IpcEvents, LogService, UhkDeviceProduct, ZephyrLogEntry } from 'uhk-common'
+import {
+    CommandLineArgs,
+    escapeZephyrControlChars,
+    IpcEvents,
+    LogService,
+    UhkDeviceProduct,
+    ZephyrLogEntry,
+} from 'uhk-common'
 import { UsbVariables } from 'uhk-usb';
 import { getCurrentUhkDongleHID, getCurrenUhk80LeftHID, snooze, UhkHidDevice, UhkOperations, } from 'uhk-usb'
 
@@ -106,6 +113,10 @@ export class ZephyrLogService {
                 return;
             }
             await operations.execShellCommand(command);
+            this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] execute shell command success`);
+            // give some time for the command to complete
+            await snooze(5);
+            await this.readZephyrLog(operations);
         }
         finally {
             await this.resumeLogging();
@@ -192,6 +203,28 @@ export class ZephyrLogService {
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] paused logging`);
     }
 
+    private async readZephyrLog(operations: UhkOperations): Promise<void> {
+        try {
+            const log = (await operations.getVariable(UsbVariables.ShellBuffer)) as string;
+            this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Zephyr log (escaped): ${escapeZephyrControlChars(log)}`);
+            const logEntry: ZephyrLogEntry = {
+                log: log as string,
+                level: 'info',
+                device: this.options.uhkDeviceProduct.logName,
+            }
+            this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+        }
+        catch (error) {
+            this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] can't read zephyr log`, error);
+            const logEntry: ZephyrLogEntry = {
+                log: error.message as string,
+                level: 'error',
+                device: this.options.uhkDeviceProduct.logName,
+            }
+            this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+        }
+    }
+
     private async resumeLogging(): Promise<void> {
         if (!this.isPaused) {
             return;
@@ -219,18 +252,11 @@ export class ZephyrLogService {
                 const deviceState = await this.uhkHidDevice.getDeviceState();
 
                 if (deviceState.isZephyrLogAvailable) {
-                    const log = await operations.getVariable(UsbVariables.ShellBuffer)
-                    this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Zephyr log: ${log}`);
-                    const logEntry: ZephyrLogEntry = {
-                        log: log as string,
-                        level: 'info',
-                        device: this.options.uhkDeviceProduct.logName,
-                    }
-                    this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+                    await this.readZephyrLog(operations);
                 }
             }
             catch (error) {
-                this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Can't read log`, error);
+                this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Can't poll log`, error);
                 const logEntry: ZephyrLogEntry = {
                     log: error.message,
                     level: 'error',

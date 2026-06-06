@@ -1,1 +1,8 @@
-<div class="zephyr-terminal" #terminal></div>
+<div class="zephyr-term-container">
+    <div class="zephyr-term-wrapper">
+        <div #terminal
+             class="zephyr-terminal"
+             (ngxResize)="onResized()"
+        ></div>
+    </div>
+</div>

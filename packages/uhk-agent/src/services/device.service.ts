@@ -2,7 +2,6 @@ import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
 import { rm } from 'node:fs/promises';
 import os from 'node:os';
-import { UhkDeviceProduct } from 'uhk-common';
 import {
     ALL_UHK_DEVICES,
     AreBleAddressesPairedIpcResponse,
@@ -14,6 +13,7 @@ import {
     convertBleStringToNumberArray,
     CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
+    escapeZephyrControlChars,
     findUhkModuleById,
     FIRMWARE_UPGRADE_METHODS,
     FirmwareUpgradeIpcResponse,
@@ -47,6 +47,7 @@ import {
     UHK_DONGLE,
     UHK_MODULE_IDS,
     UHK_MODULES,
+    UhkDeviceProduct,
     UpdateFirmwareData,
     UploadFileData,
     VERSIONS,
@@ -991,6 +992,9 @@ export class DeviceService {
             await this.stopPollUhkDevice();
             await this.operations.execShellCommand(command);
             this.logService.misc('[DeviceService] execute shell command success');
+            // give some time for the command to complete
+            await snooze(5);
+            await this.readZephyrLog();
         }
         catch(error) {
             this.logService.error('[DeviceService] execute shell command failed', error);
@@ -1445,36 +1449,11 @@ export class DeviceService {
         }
     }
 
-    /**
-     * Render a chunk so every control/whitespace byte is visible in the log. Printable chars pass
-     * through; common controls get named escapes (\r \n \t \e), everything else control-range
-     * becomes \xNN, and the chunk is wrapped in ⟦…⟧ so leading/trailing spaces are obvious.
-     */
-    private escapeControlChars(input: string): string {
-        let out = '';
-        for (const ch of input) {
-            const code = ch.charCodeAt(0);
-            switch (ch) {
-                case '\x1b': out += '\\e'; break;
-                case '\r': out += '\\r'; break;
-                case '\n': out += '\\n'; break;
-                case '\t': out += '\\t'; break;
-                case '\\': out += '\\\\'; break;
-                default:
-                    out += code < 0x20 || code === 0x7f
-                        ? '\\x' + code.toString(16).padStart(2, '0')
-                        : ch;
-            }
-        }
-
-        return out;
-    }
-
     private async readZephyrLog(): Promise<void> {
         try {
             const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             const log = await this.operations.getVariable(UsbVariables.ShellBuffer)
-            this.logService.misc(`[DeviceService] Right half zephyr log (escaped): ⟦${this.escapeControlChars(log as string)}⟧`);
+            this.logService.misc(`[DeviceService] Right half zephyr log (escaped): ⟦${escapeZephyrControlChars(log as string)}⟧`);
             const logEntry: ZephyrLogEntry = {
                 log: log as string,
                 level: 'info',

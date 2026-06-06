@@ -10,7 +10,15 @@ import {
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { KeyboardLayout, UHK_60_DEVICE, UHK_60_V2_DEVICE, UHK_80_DEVICE } from 'uhk-common';
+import {
+    KeyboardLayout,
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
+    UHK_80_DEVICE,
+    UHK_80_DEVICE_LEFT,
+    UHK_DONGLE,
+    UhkDeviceProduct,
+} from 'uhk-common';
 import {
     advanceSettingsState,
     AppState,
@@ -32,9 +40,6 @@ import {
 } from '../../../store/actions/advance-settings.action';
 import {
     ChangeKeyboardLayoutAction,
-    ExecShellCommandOnDongleAction,
-    ExecShellCommandOnLeftHalfAction,
-    ExecShellCommandOnRightHalfAction,
 } from '../../../store/actions/device';
 import { ActiveButton, initialState, State } from '../../../store/reducers/advanced-settings.reducer';
 
@@ -53,19 +58,19 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     @ViewChild('audioPlayer', {static: true,}) audioPlayer: ElementRef<HTMLAudioElement>;
 
+    connectedDevice: UhkDeviceProduct;
     isKeyboardLayoutChanging$: Observable<boolean>;
     isHalvesPairingAllowed: boolean;
     isZephyrLoggingAllowed: boolean;
     keyboardLayout: KeyboardLayout;
     keyboardLayoutEnum = KeyboardLayout;
-    shellCommand = ''
-    execShellCommandOnDongle = false;
-    execShellCommandOnLeftHalf = false;
-    execShellCommandOnRightHalf = true;
     isDongleConnected: boolean;
     showI2CRecoverButton: boolean;
     isLeftHalfConnected: boolean;
     state: State;
+
+    UHK_DONGLE = UHK_DONGLE;
+    UHK_80_DEVICE_LEFT = UHK_80_DEVICE_LEFT;
 
     private i2cErrorsLength = 0;
     private stateSubscription: Subscription;
@@ -95,6 +100,7 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
             .subscribe(connectedDevice => {
+                this.connectedDevice = connectedDevice;
                 this.isHalvesPairingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
                 this.isZephyrLoggingAllowed = !!connectedDevice;
                 this.showI2CRecoverButton = connectedDevice?.id === UHK_60_DEVICE.id ||  connectedDevice?.id === UHK_60_V2_DEVICE.id;
@@ -138,20 +144,6 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
         }
 
         this.store.dispatch(new ChangeKeyboardLayoutAction(layout));
-    }
-
-    onExecShellCommand(): void {
-        if (this.isDongleConnected && this.execShellCommandOnDongle) {
-            this.store.dispatch(new ExecShellCommandOnDongleAction(this.shellCommand));
-        }
-
-        if (this.isLeftHalfConnected && this.execShellCommandOnLeftHalf) {
-            this.store.dispatch(new ExecShellCommandOnLeftHalfAction(this.shellCommand));
-        }
-
-        if (this.execShellCommandOnRightHalf) {
-            this.store.dispatch(new ExecShellCommandOnRightHalfAction(this.shellCommand));
-        }
     }
 
     onToggleI2cDebug(): void {

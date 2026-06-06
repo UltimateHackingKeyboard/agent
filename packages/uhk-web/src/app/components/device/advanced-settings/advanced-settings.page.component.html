@@ -102,41 +102,22 @@
         </div>
 
         <div class="flex-grow mt-3">
-            <zephyr-terminal *ngIf="state.activeButton === ActiveButton.ShowZephyrLogs"></zephyr-terminal>
-            <xterm *ngIf="state.activeButton !== ActiveButton.ShowZephyrLogs" [logs]="state.i2cLogs"></xterm>
+            <as-split *ngIf="state.activeButton === ActiveButton.ShowZephyrLogs" direction="horizontal">
+                <as-split-area *ngIf="state.isLeftHalfZephyrLoggingEnabled">
+                    <zephyr-terminal [uhkDevice]="UHK_80_DEVICE_LEFT"/>
+                </as-split-area>
+
+                <as-split-area *ngIf="state.isRightHalfZephyrLoggingEnabled">
+                    <zephyr-terminal [uhkDevice]="connectedDevice"/>
+                </as-split-area>
+
+                <as-split-area *ngIf="state.isDongleZephyrLoggingEnabled">
+                    <zephyr-terminal [uhkDevice]="UHK_DONGLE"/>
+                </as-split-area>
+            </as-split>
+            <xterm *ngIf="state.activeButton !== ActiveButton.ShowZephyrLogs" [logs]="state.i2cLogs" />
         </div>
 
-        <div *ngIf="state.activeButton === ActiveButton.ShowZephyrLogs" class="d-flex flex-column mb-0 mt-3 gap-3">
-            <form (ngSubmit)="onExecShellCommand()">
-                <div class="checkbox d-flex mb-3 gap-3">
-                    <label *ngIf="isLeftHalfConnected" class="d-inline-flex align-items-center gap-1">
-                        <input type="checkbox"
-                               name="execShellCommandOnLeftHalf"
-                               [(ngModel)]="execShellCommandOnLeftHalf"
-                        > Left half
-                    </label>
-
-                    <label class="d-inline-flex align-items-center gap-1">
-                        <input type="checkbox"
-                               name="execShellCommandOnRightHalf"
-                               [(ngModel)]="execShellCommandOnRightHalf"
-                        > Right half
-                    </label>
-
-                    <label *ngIf="isDongleConnected" class="d-inline-flex align-items-center gap-1">
-                        <input type="checkbox"
-                               name="execShellCommandOnDongle"
-                               [(ngModel)]="execShellCommandOnDongle"
-                        > Dongle
-                    </label>
-                </div>
-
-                <div class="d-flex gap-3">
-                    <input type="text" class="form-control flex-grow-1" [(ngModel)]="shellCommand" name="shellCommand" maxlength="59">
-                    <button type="submit" class="btn btn-primary">Execute</button>
-                </div>
-            </form>
-        </div>
         <audio #audioPlayer src="assets/beep.mp3" preload="auto"></audio>
         <div class="flex-footer">
         </div>
