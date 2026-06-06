@@ -4,7 +4,9 @@ import {
     Component,
     ElementRef,
     Input,
+    OnChanges,
     OnDestroy,
+    SimpleChanges,
     ViewChild,
 } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
@@ -15,6 +17,7 @@ import { Subscription } from 'rxjs';
 import {
     UhkDeviceProduct,
     UHK_DEVICE_IDS,
+    ZephyrLogEntry,
 } from 'uhk-common';
 
 import { AppState } from '../../store';
@@ -42,10 +45,13 @@ import {
     styleUrls: ['./zephyr-terminal.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZephyrTerminalComponent implements AfterViewInit, OnDestroy {
+export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDestroy {
     @Input() uhkDevice: UhkDeviceProduct;
+    @Input() zephyrLogs: ZephyrLogEntry[] = [];
+
     @ViewChild('terminal', { static: true }) terminalElement: ElementRef<HTMLDivElement>;
 
+    private isLogRestored = false;
     private terminal: Terminal;
     private fitAddon: FitAddon;
     private logSubscription: Subscription;
@@ -69,25 +75,12 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnDestroy {
             this.fitAddon.fit();
         }, 1);
 
-        // Forward every keystroke (raw bytes, incl. ESC sequences) to the right half.
+        // Forward every keystroke (raw bytes, incl. ESC sequences).
         this.terminal.onData((data: string) => {
-            switch (this.uhkDevice?.id) {
-                case UHK_DEVICE_IDS.UHK_DONGLE: {
-                    this.store.dispatch(new ExecShellCommandOnDongleAction(data));
-                    break;
-                }
-
-                case UHK_DEVICE_IDS.UHK80_LEFT: {
-                    this.store.dispatch(new ExecShellCommandOnLeftHalfAction(data));
-                    break;
-                }
-
-                case UHK_DEVICE_IDS.UHK80_RIGHT: {
-                    this.store.dispatch(new ExecShellCommandOnRightHalfAction(data));
-                    break;
-                }
-            }
+            this.dispatchTerminalInput(data);
         });
+
+        this.restoreLogHistory();
 
         // Write raw shell output coming from the right half straight into the terminal.
         this.logSubscription = this.actions$
@@ -97,7 +90,12 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnDestroy {
                     this.terminal.write(action.payload.log);
                 }
             });
+    }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes.zephyrLogs?.firstChange) {
+            this.restoreLogHistory();
+        }
     }
 
     ngOnDestroy(): void {
@@ -107,5 +105,35 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnDestroy {
 
     onResized() {
         this.fitAddon?.fit()
+    }
+
+    private dispatchTerminalInput(data: string): void {
+        switch (this.uhkDevice?.id) {
+            case UHK_DEVICE_IDS.UHK_DONGLE: {
+                this.store.dispatch(new ExecShellCommandOnDongleAction(data));
+                break;
+            }
+
+            case UHK_DEVICE_IDS.UHK80_LEFT: {
+                this.store.dispatch(new ExecShellCommandOnLeftHalfAction(data));
+                break;
+            }
+
+            case UHK_DEVICE_IDS.UHK80_RIGHT: {
+                this.store.dispatch(new ExecShellCommandOnRightHalfAction(data));
+                break;
+            }
+        }
+    }
+
+    private restoreLogHistory(): void {
+        if (this.terminal && this.uhkDevice && !this.isLogRestored) {
+            this.isLogRestored = true;
+            for (const log of this.zephyrLogs) {
+                if (log.device === this.uhkDevice.logName) {
+                    this.terminal.write(log.log);
+                }
+            }
+        }
     }
 }

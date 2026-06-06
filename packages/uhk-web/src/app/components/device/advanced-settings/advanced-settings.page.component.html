@@ -106,19 +106,25 @@
             <as-split direction="horizontal">
                 @if (state.isLeftHalfZephyrLoggingEnabled) {
                 <as-split-area>
-                    <zephyr-terminal [uhkDevice]="UHK_80_DEVICE_LEFT"/>
+                    <zephyr-terminal [uhkDevice]="UHK_80_DEVICE_LEFT"
+                                     [zephyrLogs]="state.zephyrLogs"
+                    />
                 </as-split-area>
                 }
 
                 @if (state.isRightHalfZephyrLoggingEnabled) {
                 <as-split-area>
-                    <zephyr-terminal [uhkDevice]="connectedDevice" />
+                    <zephyr-terminal [uhkDevice]="connectedDevice"
+                                     [zephyrLogs]="state.zephyrLogs"
+                    />
                 </as-split-area>
                 }
 
                 @if (state.isDongleZephyrLoggingEnabled) {
                 <as-split-area>
-                    <zephyr-terminal [uhkDevice]="UHK_DONGLE"/>
+                    <zephyr-terminal [uhkDevice]="UHK_DONGLE"
+                                     [zephyrLogs]="state.zephyrLogs"
+                    />
                 </as-split-area>
                 }
             </as-split>
