@@ -102,20 +102,31 @@
         </div>
 
         <div class="flex-grow mt-3">
-            <as-split *ngIf="state.activeButton === ActiveButton.ShowZephyrLogs" direction="horizontal">
-                <as-split-area *ngIf="state.isLeftHalfZephyrLoggingEnabled">
+            @if (state.activeButton === ActiveButton.ShowZephyrLogs) {
+            <as-split direction="horizontal">
+                @if (state.isLeftHalfZephyrLoggingEnabled) {
+                <as-split-area>
                     <zephyr-terminal [uhkDevice]="UHK_80_DEVICE_LEFT"/>
                 </as-split-area>
+                }
 
-                <as-split-area *ngIf="state.isRightHalfZephyrLoggingEnabled">
-                    <zephyr-terminal [uhkDevice]="connectedDevice"/>
+                @if (state.isRightHalfZephyrLoggingEnabled) {
+                <as-split-area>
+                    <zephyr-terminal [uhkDevice]="connectedDevice" />
                 </as-split-area>
+                }
 
-                <as-split-area *ngIf="state.isDongleZephyrLoggingEnabled">
+                @if (state.isDongleZephyrLoggingEnabled) {
+                <as-split-area>
                     <zephyr-terminal [uhkDevice]="UHK_DONGLE"/>
                 </as-split-area>
+                }
             </as-split>
-            <xterm *ngIf="state.activeButton !== ActiveButton.ShowZephyrLogs" [logs]="state.i2cLogs" />
+            }
+            @else
+            {
+            <xterm [logs]="state.i2cLogs" />
+            }
         </div>
 
         <audio #audioPlayer src="assets/beep.mp3" preload="auto"></audio>
