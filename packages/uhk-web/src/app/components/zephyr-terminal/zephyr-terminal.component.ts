@@ -52,7 +52,7 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         this.terminal = new Terminal({
             convertEol: false,
-            fontFamily: 'monospace',
+            fontFamily: 'JetBrains Mono',
             cursorBlink: true,
             scrollback: 10000,
         });
