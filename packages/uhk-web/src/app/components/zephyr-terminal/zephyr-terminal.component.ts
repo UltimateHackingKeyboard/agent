@@ -129,10 +129,20 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
     private restoreLogHistory(): void {
         if (this.terminal && this.uhkDevice && !this.isLogRestored) {
             this.isLogRestored = true;
+
+            let foundHistory = false;
+
             for (const log of this.zephyrLogs) {
                 if (log.device === this.uhkDevice.logName) {
                     this.terminal.write(log.log);
+                    foundHistory = true;
                 }
+            }
+
+            // initialize the terminal if no history found
+            // it will write the correct prompt
+            if (!foundHistory) {
+                this.dispatchTerminalInput('clear\n')
             }
         }
     }
