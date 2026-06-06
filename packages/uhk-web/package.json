@@ -43,12 +43,15 @@
     "@ngrx/store": "20.1.0",
     "@ngrx/store-devtools": "20.1.0",
     "@perfectmemory/ngx-contextmenu": "20.0.0",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0",
     "angular-confirmation-popover": "7.0.0",
     "angular-eslint": "20.7.0",
     "angular-split": "20.0.0",
     "bootstrap": "5.3.8",
     "colord": "2.9.3",
     "dragula": "3.7.3",
+    "file-saver": "2.0.5",
     "gramli-angular-notifier": "18.0.0",
     "monaco-editor": "0.55.1",
     "naive-autocompletion-parser": "1.1.9",
@@ -63,10 +66,5 @@
     "uhk-common": "file:../uhk-common",
     "xml-loader": "1.2.1",
     "zone.js": "0.15.1"
-  },
-  "dependencies": {
-    "@xterm/addon-fit": "^0.11.0",
-    "@xterm/xterm": "^6.0.0",
-    "file-saver": "2.0.5"
   }
 }
