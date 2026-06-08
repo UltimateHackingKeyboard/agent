@@ -118,6 +118,9 @@ export class ZephyrLogService {
             await snooze(5);
             await this.readZephyrLog(operations);
         }
+        catch (error) {
+            this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] execute shell command failed`, error);
+        }
         finally {
             await this.resumeLogging();
         }
@@ -182,6 +185,9 @@ export class ZephyrLogService {
             this.isShellEnabled = enabled
             this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Is zephyr logging enabled: ${enabled}`);
             event.sender.send(this.options.ipcEvents.isZephyrLoggingEnabledReply, enabled);
+        }
+        catch (error) {
+            this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] check zephyr logging enabled failed`, error);
         }
         finally {
             await this.resumeLogging();
@@ -299,6 +305,9 @@ export class ZephyrLogService {
             await operations.setVariable(UsbVariables.ShellEnabled, enabled);
             this.isShellEnabled = enabled;
             this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Set zephyr logging => ${enabled}`);
+        }
+        catch (error) {
+            this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] toggle zephyr logging failed`, error);
         }
         finally {
             await this.resumeLogging();
