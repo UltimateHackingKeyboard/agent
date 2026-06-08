@@ -119,6 +119,8 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
                 break;
             }
 
+            case UHK_DEVICE_IDS.UHK60V1_RIGHT:
+            case UHK_DEVICE_IDS.UHK60V2_RIGHT:
             case UHK_DEVICE_IDS.UHK80_RIGHT: {
                 this.store.dispatch(new ExecShellCommandOnRightHalfAction(data));
                 break;
