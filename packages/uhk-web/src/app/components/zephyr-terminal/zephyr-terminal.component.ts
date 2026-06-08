@@ -139,10 +139,10 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
                 }
             }
 
-            // initialize the terminal if no history found
+            // initialize the terminal if no history found,
             // it will write the correct prompt
             if (!foundHistory) {
-                this.dispatchTerminalInput('clear\n')
+                this.dispatchTerminalInput('\n')
             }
         }
     }
