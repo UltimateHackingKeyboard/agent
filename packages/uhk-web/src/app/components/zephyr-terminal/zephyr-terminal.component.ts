@@ -54,7 +54,8 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
 
     @ViewChild('terminal', { static: true }) terminalElement: ElementRef<HTMLDivElement>;
 
-    private isLogRestored = false;
+    private isLogRestored = false
+    private isPasting = false;
     private terminal: Terminal;
     private fitAddon: FitAddon;
     private logSubscription: Subscription;
@@ -85,7 +86,7 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
             // Handle CTRL + SHIFT + C as copy to clipboard
             // It copies only the selected text.
             // Does not copy the whole terminal content when no text is selected like Copy To Clipboard icon
-            if (event.ctrlKey && event.shiftKey && event.code === 'KeyC' && event.type === 'keydown') {
+            if (event.ctrlKey && event.shiftKey && event.key === 'C' && event.type === 'keydown') {
                 const selection = this.terminal.getSelection();
                 if (selection) {
                     navigator.clipboard.writeText(selection)
@@ -97,19 +98,19 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
                 }
             }
             // Handle CTRL + SHIFT + V as paste from clipboard
-            else if (event.ctrlKey && event.shiftKey && event.code === 'KeyV' && event.type === 'keydown') {
+            else if (event.ctrlKey && event.shiftKey && event.key === 'V' && event.type === 'keydown') {
+                this.isPasting = true;
                 navigator.clipboard.readText()
                     .then((text) => {
                         this.dispatchTerminalInput(text);
                     })
                     .catch((error) => {
                         this.logService.error('Failed to paste text from clipboard', error);
+                    })
+                    .finally(() => {
+                        this.isPasting = false;
                     });
 
-                return false;
-            }
-            // Prevent double paste on Windows and Linux
-            else if (event.ctrlKey && event.code === 'KeyV') {
                 return false;
             }
 
@@ -118,6 +119,10 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
 
         // Forward every keystroke (raw bytes, incl. ESC sequences).
         this.terminal.onData((data: string) => {
+            if (this.isPasting) {
+                return;
+            }
+
             this.dispatchTerminalInput(data);
         });
 
