@@ -6,6 +6,7 @@ import {
     escapeZephyrControlChars,
     IpcEvents,
     LogService,
+    SHELL_COMMAND_TOO_LONG_ERROR,
     UhkDeviceProduct,
     ZephyrLogEntry,
 } from 'uhk-common'
@@ -125,7 +126,18 @@ export class ZephyrLogService {
         }
         catch (error) {
             this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] execute shell command failed`, error);
-            await this.releaseOperations();
+
+            if (error.message === SHELL_COMMAND_TOO_LONG_ERROR) {
+                const logEntry: ZephyrLogEntry = {
+                    log: "Device is not connected. Can't execute shell command",
+                    level: 'error',
+                    device: this.options.uhkDeviceProduct.logName,
+                }
+                this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+            }
+            else {
+                await this.releaseOperations();
+            }
         }
         finally {
             await this.resumeLogging(250);

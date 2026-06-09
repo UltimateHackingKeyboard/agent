@@ -13,9 +13,11 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { FitAddon } from '@xterm/addon-fit';
+import { ClipboardAddon } from '@xterm/addon-clipboard';
 import { Terminal } from '@xterm/xterm';
 import { Subscription } from 'rxjs';
 import {
+    SHELL_COMMAND_TOO_LONG_ERROR,
     UhkDeviceProduct,
     UHK_DEVICE_IDS,
     ZephyrLogEntry,
@@ -57,6 +59,8 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
     private fitAddon: FitAddon;
     private logSubscription: Subscription;
 
+    protected readonly faCopy = faCopy;
+
     constructor(
         private store: Store<AppState>,
         private actions$: Actions,
@@ -71,6 +75,8 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
         });
         this.fitAddon = new FitAddon();
         this.terminal.loadAddon(this.fitAddon);
+        const clipboardAddon = new ClipboardAddon();
+        this.terminal.loadAddon(clipboardAddon);
         this.terminal.open(this.terminalElement.nativeElement);
         setTimeout(() => {
             this.fitAddon.fit();
@@ -88,7 +94,14 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
             .pipe(ofType<ZephyrLogAction>(AdvancedSettingsActionTypes.zephyrLog))
             .subscribe((action: ZephyrLogAction) => {
                  if (action.payload.device === this.uhkDevice?.logName) {
-                    this.terminal.write(action.payload.log);
+                     if (action.payload.log === SHELL_COMMAND_TOO_LONG_ERROR) {
+                         this.terminal.write(`\x1b[31m${action.payload.log}\x1b[0m\r\n`);
+                         // dispatch Enter to show the termina prompt
+                         this.dispatchEnter();
+                     }
+                     else {
+                         this.terminal.write(action.payload.log);
+                     }
                 }
             });
     }
@@ -124,6 +137,10 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
 
     onResized() {
         this.fitAddon?.fit()
+    }
+
+    private dispatchEnter(): void {
+        this.dispatchTerminalInput('\r\n');
     }
 
     private dispatchTerminalInput(data: string): void {
@@ -163,10 +180,8 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
             // initialize the terminal if no history found,
             // it will write the correct prompt
             if (!foundHistory) {
-                this.dispatchTerminalInput('\n')
+                this.dispatchEnter();
             }
         }
     }
-
-    protected readonly faCopy = faCopy;
 }

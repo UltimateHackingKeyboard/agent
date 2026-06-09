@@ -40,6 +40,7 @@ import {
     RightSlotModules,
     SaveUserConfigurationData,
     shouldUpgradeFirmware,
+    SHELL_COMMAND_TOO_LONG_ERROR,
     simulateInvalidUserConfigError,
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
@@ -998,6 +999,18 @@ export class DeviceService {
         }
         catch(error) {
             this.logService.error('[DeviceService] execute shell command failed', error);
+
+            if (error.message === SHELL_COMMAND_TOO_LONG_ERROR) {
+                const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
+
+                const logEntry: ZephyrLogEntry = {
+                    log: error.message,
+                    level: 'error',
+                    device: uhkDeviceProduct?.logName || UHK_80_DEVICE.logName,
+                }
+                this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+            }
+
         }
         finally {
             this.startPollUhkDevice();
@@ -1450,8 +1463,10 @@ export class DeviceService {
     }
 
     private async readZephyrLog(): Promise<void> {
+        let uhkDeviceProduct: UhkDeviceProduct;
+
         try {
-            const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
+            uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             const log = await this.operations.getVariable(UsbVariables.ShellBuffer)
             this.logService.misc(`[DeviceService] Right half zephyr log (escaped): ⟦${escapeZephyrControlChars(log as string)}⟧`);
             const logEntry: ZephyrLogEntry = {
@@ -1466,7 +1481,7 @@ export class DeviceService {
             const logEntry: ZephyrLogEntry = {
                 log: error.message as string,
                 level: 'error',
-                device: UHK_80_DEVICE.logName,
+                device: uhkDeviceProduct?.logName || UHK_80_DEVICE.logName,
             }
             this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
         }

@@ -27,6 +27,7 @@ import {
     UHK_MODULE_IDS,
     UNKNOWN_DEVICE,
     UserConfiguration,
+    SHELL_COMMAND_TOO_LONG_ERROR,
     VERSIONS,
 } from 'uhk-common';
 import { promisify } from 'util';
@@ -948,7 +949,7 @@ export class UhkOperations {
         const buffer = Buffer.concat([b1, b2, b0]);
 
         if (buffer.length > MAX_USB_PAYLOAD_SIZE) {
-            throw new Error('Shel command is too long. At most 61 characters are supported.')
+            throw new Error(SHELL_COMMAND_TOO_LONG_ERROR)
         }
 
         await this.device.write(buffer);
