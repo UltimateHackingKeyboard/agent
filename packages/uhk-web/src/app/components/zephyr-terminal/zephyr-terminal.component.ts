@@ -9,6 +9,7 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { FitAddon } from '@xterm/addon-fit';
@@ -103,6 +104,24 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
         this.terminal?.dispose();
     }
 
+    getClipboardContent(): string {
+        if (!this.terminal) {
+            return '';
+        }
+
+        let text = this.terminal.getSelection();
+
+        if (!text) {
+            this.terminal.selectAll();
+            text = this.terminal.getSelection();
+            this.terminal.clearSelection();
+        }
+
+        // Trim the text to remove trailing new line characters when the text contains less rows than terminal rows
+        return text.trim();
+    }
+
+
     onResized() {
         this.fitAddon?.fit()
     }
@@ -148,4 +167,6 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
             }
         }
     }
+
+    protected readonly faCopy = faCopy;
 }

@@ -5,4 +5,17 @@
              (ngxResize)="onResized()"
         ></div>
     </div>
+    <div class="copy-container-wrapper">
+        <div class="copy-container">
+            <span ngbTooltip="Copy to clipboard"
+                  container="body"
+                  placement="top">
+                <fa-icon [icon]="faCopy"
+                         size="2x"
+                         ngxClipboard
+                         [cbContent]="getClipboardContent()"
+                />
+            </span>
+        </div>
+    </div>
 </div>
