@@ -100,7 +100,7 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
             else if (event.ctrlKey && event.shiftKey && event.code === 'KeyV' && event.type === 'keydown') {
                 navigator.clipboard.readText()
                     .then((text) => {
-                        this.terminal.write(text);
+                        this.dispatchTerminalInput(text);
                     })
                     .catch((error) => {
                         this.logService.error('Failed to paste text from clipboard', error);
