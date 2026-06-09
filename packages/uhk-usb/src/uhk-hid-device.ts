@@ -463,7 +463,12 @@ export class UhkHidDevice {
         if (!this._device) {
             return;
         }
-        await this._device.close();
+        try {
+            await this._device.close();
+        }
+        catch (error) {
+            this.logService.error('[UhkHidDevice] Error while closing device communication: ', error);
+        }
         this._device = null;
         this.setDeviceInfo(undefined);
         this.logService.misc('[UhkHidDevice] Device communication closed.');

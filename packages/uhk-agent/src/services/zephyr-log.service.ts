@@ -1,4 +1,5 @@
 import { ipcMain } from 'electron';
+import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import pLimit from 'p-limit';
 import {
     CommandLineArgs,
@@ -9,7 +10,7 @@ import {
     ZephyrLogEntry,
 } from 'uhk-common'
 import { UsbVariables } from 'uhk-usb';
-import { getCurrentUhkDongleHID, getCurrenUhk80LeftHID, snooze, UhkHidDevice, UhkOperations, } from 'uhk-usb'
+import { getCurrentUhkDongleHID, getCurrenUhk80LeftHID, UhkHidDevice, UhkOperations, } from 'uhk-usb'
 
 import { QueueManager } from './queue-manager';
 
@@ -37,6 +38,8 @@ export class ZephyrLogService {
     private uhkHidDevice: UhkHidDevice;
     private operations: UhkOperations;
     private operationLimiter = pLimit(1);
+    private pollerAbortController: AbortController;
+    private resumeLoggingTimer: NodeJS.Timeout;
 
     constructor(private options: ZephyrLogServiceOptions) {
         ipcMain.on(options.ipcEvents.execShellCommand, (...args) => {
@@ -99,6 +102,8 @@ export class ZephyrLogService {
     }
 
     private async execShellCommand(_: Electron.IpcMainEvent, [command]): Promise<void> {
+        this.options.logService.misc(`[ZephyrLogService | execute shell command (escaped): ${escapeZephyrControlChars(command)}`);
+
         try {
             await this.pauseLogging();
 
@@ -115,14 +120,15 @@ export class ZephyrLogService {
             await operations.execShellCommand(command);
             this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] execute shell command success`);
             // give some time for the command to complete
-            await snooze(5);
+            await setTimeoutPromise(5);
             await this.readZephyrLog(operations);
         }
         catch (error) {
             this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] execute shell command failed`, error);
+            await this.releaseOperations();
         }
         finally {
-            await this.resumeLogging();
+            await this.resumeLogging(250);
         }
     }
 
@@ -165,7 +171,12 @@ export class ZephyrLogService {
             }
 
             this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] releasing instances`);
-            await this.uhkHidDevice.close()
+            try {
+                await this.uhkHidDevice.close()
+            }
+            catch (error) {
+                this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] failed to close HID device. Ignoring error.`, error);
+            }
             this.uhkHidDevice = undefined;
             this.operations = undefined
             this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] instances are released`);
@@ -188,6 +199,7 @@ export class ZephyrLogService {
         }
         catch (error) {
             this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] check zephyr logging enabled failed`, error);
+            await this.releaseOperations();
         }
         finally {
             await this.resumeLogging();
@@ -199,12 +211,9 @@ export class ZephyrLogService {
      * @private
      */
     private async pauseLogging(): Promise<void> {
-        if (this.isPaused) {
-            return;
-        }
-
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] pausing logging`);
         this.isPaused = true;
+        this.pollerAbortController?.abort();
         await this.waitUntilPollerStopped()
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] paused logging`);
     }
@@ -228,14 +237,31 @@ export class ZephyrLogService {
                 device: this.options.uhkDeviceProduct.logName,
             }
             this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+            await this.releaseOperations();
         }
     }
 
-    private async resumeLogging(): Promise<void> {
+    private async resumeLogging(delay = 0): Promise<void> {
         if (!this.isPaused) {
             return;
         }
 
+        if (this.resumeLoggingTimer) {
+            clearTimeout(this.resumeLoggingTimer);
+            this.resumeLoggingTimer = undefined;
+        }
+
+        if (delay === 0) {
+            this.resumeLoggingFunction();
+            return;
+        }
+
+        this.resumeLoggingTimer = setTimeout(() => {
+            this.resumeLoggingFunction();
+        }, delay);
+    }
+
+    private resumeLoggingFunction() {
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] resuming logging`);
         this.isPaused = false;
         this.startLogPoller();
@@ -246,43 +272,55 @@ export class ZephyrLogService {
             return;
         }
 
-        while (this.isEnabled && this.isShellEnabled && !this.isPaused) {
-            try {
-                this.isPolling = true;
-                const operations = await this.getOperations(false);
-                if (!operations) {
-                    await snooze(250)
-                    continue;
+        try {
+            this.isPolling = true;
+
+            while (this.isEnabled && this.isShellEnabled && !this.isPaused) {
+                try {
+                    const operations = await this.getOperations(false);
+                    if (!operations) {
+                        await setTimeoutPromise(250)
+                        continue;
+                    }
+
+                    const deviceState = await this.uhkHidDevice.getDeviceState();
+
+                    if (deviceState.isZephyrLogAvailable) {
+                        await this.readZephyrLog(operations);
+                    }
+                } catch (error) {
+                    this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Can't poll log`, error);
+                    const logEntry: ZephyrLogEntry = {
+                        log: error.message,
+                        level: 'error',
+                        device: this.options.uhkDeviceProduct.logName,
+                    }
+                    this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+                    await this.releaseOperations()
                 }
 
-                const deviceState = await this.uhkHidDevice.getDeviceState();
+                if (!this.pollerAbortController) {
+                    this.pollerAbortController = new AbortController();
+                }
 
-                if (deviceState.isZephyrLogAvailable) {
-                    await this.readZephyrLog(operations);
+                try {
+                    await setTimeoutPromise(250, () => {}, { signal: this.pollerAbortController.signal })
+                }
+                catch {
+                    // dont care about abort
                 }
             }
-            catch (error) {
-                this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Can't poll log`, error);
-                const logEntry: ZephyrLogEntry = {
-                    log: error.message,
-                    level: 'error',
-                    device: this.options.uhkDeviceProduct.logName,
-                }
-                this.options.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
-                await this.releaseOperations()
-            }
-            finally {
-                this.isPolling = false;
-            }
-
-            await snooze(250)
+        }
+        finally {
+            this.isPolling = false;
+            this.pollerAbortController = undefined;
         }
     }
 
     private async waitUntilPollerStopped(): Promise<void> {
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] wait until polling`);
         while (this.isPolling) {
-            await snooze(100)
+            await setTimeoutPromise(100)
         }
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] stopped`);
     }
@@ -308,6 +346,7 @@ export class ZephyrLogService {
         }
         catch (error) {
             this.options.logService.error(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] toggle zephyr logging failed`, error);
+            await this.releaseOperations();
         }
         finally {
             await this.resumeLogging();

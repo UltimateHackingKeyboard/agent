@@ -986,7 +986,7 @@ export class DeviceService {
     }
 
     public async execShellCommand(_: Electron.IpcMainEvent, [command]): Promise<void> {
-        this.logService.misc(`[DeviceService] execute shell command: ${command}`);
+        this.logService.misc(`[DeviceService] execute shell command (escaped): ${escapeZephyrControlChars(command)}`);
 
         try {
             await this.stopPollUhkDevice();
