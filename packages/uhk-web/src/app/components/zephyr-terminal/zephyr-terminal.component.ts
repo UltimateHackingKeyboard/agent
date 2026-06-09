@@ -108,6 +108,10 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
 
                 return false;
             }
+            // Prevent double paste on Windows
+            else if (event.ctrlKey && event.code === 'KeyV' && event.type === 'keydown') {
+                return false;
+            }
 
             return true;
         });
