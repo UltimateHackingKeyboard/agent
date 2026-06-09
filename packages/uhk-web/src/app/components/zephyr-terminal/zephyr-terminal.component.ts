@@ -13,10 +13,10 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { FitAddon } from '@xterm/addon-fit';
-import { ClipboardAddon } from '@xterm/addon-clipboard';
 import { Terminal } from '@xterm/xterm';
 import { Subscription } from 'rxjs';
 import {
+    LogService,
     SHELL_COMMAND_TOO_LONG_ERROR,
     UhkDeviceProduct,
     UHK_DEVICE_IDS,
@@ -62,6 +62,7 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
     protected readonly faCopy = faCopy;
 
     constructor(
+        private logService: LogService,
         private store: Store<AppState>,
         private actions$: Actions,
     ) {}
@@ -75,12 +76,41 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
         });
         this.fitAddon = new FitAddon();
         this.terminal.loadAddon(this.fitAddon);
-        const clipboardAddon = new ClipboardAddon();
-        this.terminal.loadAddon(clipboardAddon);
         this.terminal.open(this.terminalElement.nativeElement);
         setTimeout(() => {
             this.fitAddon.fit();
         }, 1);
+
+        this.terminal.attachCustomKeyEventHandler((event) => {
+            // Handle CTRL + SHIFT + C as copy to clipboard
+            // It copies only the selected text.
+            // Does not copy the whole terminal content when no text is selected like Copy To Clipboard icon
+            if (event.ctrlKey && event.shiftKey && event.code === 'KeyC' && event.type === 'keydown') {
+                const selection = this.terminal.getSelection();
+                if (selection) {
+                    navigator.clipboard.writeText(selection)
+                        .catch((error) => {
+                            this.logService.error('Failed to copy text to clipboard', error);
+                        });
+
+                    return false;
+                }
+            }
+            // Handle CTRL + SHIFT + V as paste from clipboard
+            else if (event.ctrlKey && event.shiftKey && event.code === 'KeyV' && event.type === 'keydown') {
+                navigator.clipboard.readText()
+                    .then((text) => {
+                        this.terminal.write(text);
+                    })
+                    .catch((error) => {
+                        this.logService.error('Failed to paste text from clipboard', error);
+                    });
+
+                return false;
+            }
+
+            return true;
+        });
 
         // Forward every keystroke (raw bytes, incl. ESC sequences).
         this.terminal.onData((data: string) => {
