@@ -306,7 +306,7 @@ export class UserConfigEffects {
                 const newUserConfiguration= updateUserConfigurationWithLastSaveInfo(userConfiguration, hardwareModules.rightModuleInfo);
                 const uhkBuffer = new UhkBuffer();
                 newUserConfiguration.toBinary(uhkBuffer);
-                const blob = new Blob([uhkBuffer.getBufferContent()]);
+                const blob = new Blob([new Uint8Array(uhkBuffer.getBufferContent())]);
                 saveAs(blob, 'UserConfiguration.bin');
             })
         ),

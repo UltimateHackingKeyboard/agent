@@ -1,1 +1,3 @@
-export { Buffer } from '../node_modules/buffer/index.js';
+import { Buffer as NodeBuffer } from 'buffer';
+
+export const Buffer = NodeBuffer;

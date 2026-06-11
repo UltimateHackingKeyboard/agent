@@ -28,7 +28,7 @@ export class UhkBuffer {
 
     private static maxCompactLength = 0xFFFF;
     private static longCompactLengthPrefix = 0xFF;
-    private static stringEncoding = 'utf8';
+    private static readonly stringEncoding = 'utf8' as const;
     private static isFirstElementToDump = false;
 
     offset: number;
