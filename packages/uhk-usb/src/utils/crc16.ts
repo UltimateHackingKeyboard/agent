@@ -34,7 +34,7 @@ const CRC16TABLE = new Uint16Array([
     0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
 ]);
 
-export default function crc16(data: ArrayLike<number>): number {
+export default function crc16(data: ArrayLike<any>): number {
     let crc = 0;
     const l = data.length;
     for (let i = 0; i < l; i++) {
