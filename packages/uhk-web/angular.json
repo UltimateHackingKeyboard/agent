@@ -32,6 +32,7 @@
             ],
             "styles": [
               "node_modules/nouislider/dist/nouislider.min.css",
+              "node_modules/@xterm/xterm/css/xterm.css",
               "node_modules/@perfectmemory/ngx-contextmenu/src/assets/stylesheets/base.scss",
               {
                 "input": "src/styles.scss",
@@ -136,6 +137,7 @@
             ],
             "styles": [
               "node_modules/nouislider/dist/nouislider.min.css",
+              "node_modules/@xterm/xterm/css/xterm.css",
               "node_modules/@perfectmemory/ngx-contextmenu/src/assets/stylesheets/base.scss",
               {
                 "input": "src/styles.scss",

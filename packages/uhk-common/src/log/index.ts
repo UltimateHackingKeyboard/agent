@@ -1,4 +1,5 @@
 export * from './default-log-options.js';
+export * from './escape-zephyr-control-chars.js';
 export * from './get-log-options.js';
 export * from './log-reg-exps.js';
 export * from './log-user-config-helper.js';

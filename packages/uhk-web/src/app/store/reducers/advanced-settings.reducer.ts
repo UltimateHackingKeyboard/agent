@@ -1,4 +1,4 @@
-import { getFormattedTimestamp, UhkDeviceProduct } from 'uhk-common';
+import { getFormattedTimestamp, UhkDeviceProduct, ZephyrLogEntry } from 'uhk-common';
 
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { appendXtermLogs } from '../../util/merge-xterm-logs';
@@ -31,6 +31,7 @@ export interface State {
     isRightHalfZephyrLoggingEnabled: boolean;
     lastConnectedDevice?: UhkDeviceProduct;
     menuVisible: boolean;
+    zephyrLogs: ZephyrLogEntry[];
 }
 
 export const initialState = (): State => ({
@@ -42,6 +43,7 @@ export const initialState = (): State => ({
     isRightHalfZephyrLoggingEnabled: false,
     isLeftHalfPairing: false,
     menuVisible: false,
+    zephyrLogs: [],
 });
 
 export function reducer(state = initialState(), action: Actions | App.Actions | Device.Actions) {
@@ -199,7 +201,6 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
         case ActionTypes.toggleZephyrLogging: {
             return {
                 ...state,
-                i2cLogs: [],
                 activeButton: state.activeButton === ActiveButton.ShowZephyrLogs
                     ? ActiveButton.None
                     : ActiveButton.ShowZephyrLogs,
@@ -219,13 +220,15 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             const payload = (action as ZephyrLogAction).payload;
             const newState = {...state};
 
-            newState.i2cLogs = [
-                ...state.i2cLogs,
-                {
-                    message: `${getFormattedTimestamp()} | ${payload.device.padEnd(15 )} | ${payload.log}`,
-                    cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard,
-                }
-            ];
+            // the clear command sent so have to clear the history too
+            if (payload.log.startsWith('\\r\\n\\033[H\\033[2J\u001b')) {
+                newState.zephyrLogs.filter(log => log.device !== payload.device);
+            }
+            else {
+                newState.zephyrLogs = [...state.zephyrLogs];
+            }
+
+            newState.zephyrLogs.push(payload);
 
             return newState;
         }

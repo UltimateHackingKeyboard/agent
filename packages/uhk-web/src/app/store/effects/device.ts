@@ -31,6 +31,9 @@ import {
     ConnectionStateChangedAction,
     EnableUsbStackTestAction,
     EraseBleSettingReplyAction,
+    ExecShellCommandOnDongleAction,
+    ExecShellCommandOnLeftHalfAction,
+    ExecShellCommandOnRightHalfAction,
     HideSaveToKeyboardButton,
     ReadConfigSizesAction,
     RecoveryDeviceAction,
@@ -270,6 +273,36 @@ export class DeviceEffects {
                 }));
             })
         ),
+    );
+
+    execShellCommandOnDongle$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<ExecShellCommandOnDongleAction>(ActionTypes.ExecShellCommandOnDongle),
+            tap((action) => {
+                this.deviceRendererService.execShellCommandOnDongle(action.payload);
+            })
+        ),
+        { dispatch: false }
+    );
+
+    execShellCommandOnLeftHalf$ = createEffect(() => this.actions$
+            .pipe(
+                ofType<ExecShellCommandOnLeftHalfAction>(ActionTypes.ExecShellCommandOnLeftHalf),
+                tap((action) => {
+                    this.deviceRendererService.execShellCommandOnLeftHalf(action.payload);
+                })
+            ),
+        { dispatch: false }
+    );
+
+    execShellCommandOnRightHalf$ = createEffect(() => this.actions$
+            .pipe(
+                ofType<ExecShellCommandOnRightHalfAction>(ActionTypes.ExecShellCommandOnRightHalf),
+                tap((action) => {
+                    this.deviceRendererService.execShellCommandOnRightHalf(action.payload);
+                })
+            ),
+        { dispatch: false }
     );
 
     setPrivilegeOnLinux$ = createEffect(() => this.actions$

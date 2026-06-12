@@ -104,6 +104,18 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.eraseBleSettings);
     }
 
+    execShellCommandOnDongle(command: string): void {
+        this.ipcRenderer.send(IpcEvents.device.execShellCommandOnDongle, command);
+    }
+
+    execShellCommandOnLeftHalf(command: string): void {
+        this.ipcRenderer.send(IpcEvents.device.execShellCommandOnLeftHalf, command);
+    }
+
+    execShellCommandOnRightHalf(command: string): void {
+        this.ipcRenderer.send(IpcEvents.device.execShellCommandOnRightHalf, command);
+    }
+
     isDongleZephyrLoggingEnabled(): void {
         this.ipcRenderer.send(IpcEvents.device.isDongleZephyrLoggingEnabled);
     }

@@ -2,7 +2,6 @@ import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
 import { rm } from 'node:fs/promises';
 import os from 'node:os';
-import { UhkDeviceProduct } from 'uhk-common';
 import {
     ALL_UHK_DEVICES,
     AreBleAddressesPairedIpcResponse,
@@ -14,6 +13,7 @@ import {
     convertBleStringToNumberArray,
     CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
+    escapeZephyrControlChars,
     findUhkModuleById,
     FIRMWARE_UPGRADE_METHODS,
     FirmwareUpgradeIpcResponse,
@@ -40,6 +40,7 @@ import {
     RightSlotModules,
     SaveUserConfigurationData,
     shouldUpgradeFirmware,
+    SHELL_COMMAND_TOO_LONG_ERROR,
     simulateInvalidUserConfigError,
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
@@ -47,6 +48,7 @@ import {
     UHK_DONGLE,
     UHK_MODULE_IDS,
     UHK_MODULES,
+    UhkDeviceProduct,
     UpdateFirmwareData,
     UploadFileData,
     VERSIONS,
@@ -125,6 +127,7 @@ export class DeviceService {
             currentDeviceFn: getCurrentUhkDongleHID,
             logService: this.logService,
             ipcEvents: {
+                execShellCommand: IpcEvents.device.execShellCommandOnDongle,
                 isZephyrLoggingEnabled: IpcEvents.device.isDongleZephyrLoggingEnabled,
                 isZephyrLoggingEnabledReply: IpcEvents.device.isDongleZephyrLoggingEnabledReply,
                 toggleZephyrLogging: IpcEvents.device.toggleDongleZephyrLogging,
@@ -138,6 +141,7 @@ export class DeviceService {
             currentDeviceFn: getCurrenUhk80LeftHID,
             logService: this.logService,
             ipcEvents: {
+                execShellCommand: IpcEvents.device.execShellCommandOnLeftHalf,
                 isZephyrLoggingEnabled: IpcEvents.device.isLeftHalfZephyrLoggingEnabled,
                 isZephyrLoggingEnabledReply: IpcEvents.device.isLeftHalfZephyrLoggingEnabledReply,
                 toggleZephyrLogging: IpcEvents.device.toggleLeftHalfZephyrLogging,
@@ -189,6 +193,15 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.eraseBleSettings, (...args) => {
             this.queueManager.add({
                 method: this.eraseBleSettings,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.execShellCommandOnRightHalf, (...args) => {
+            this.queueManager.add({
+                method: this.execShellCommand,
                 bind: this,
                 params: args,
                 asynchronous: true
@@ -973,6 +986,37 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.eraseBleSettingsReply, response);
     }
 
+    public async execShellCommand(_: Electron.IpcMainEvent, [command]): Promise<void> {
+        this.logService.misc(`[DeviceService] execute shell command (escaped): ${escapeZephyrControlChars(command)}`);
+
+        try {
+            await this.stopPollUhkDevice();
+            await this.operations.execShellCommand(command);
+            this.logService.misc('[DeviceService] execute shell command success');
+            // give some time for the command to complete
+            await snooze(5);
+            await this.readZephyrLog();
+        }
+        catch(error) {
+            this.logService.error('[DeviceService] execute shell command failed', error);
+
+            if (error.message === SHELL_COMMAND_TOO_LONG_ERROR) {
+                const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
+
+                const logEntry: ZephyrLogEntry = {
+                    log: error.message,
+                    level: 'error',
+                    device: uhkDeviceProduct?.logName || UHK_80_DEVICE.logName,
+                }
+                this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+            }
+
+        }
+        finally {
+            this.startPollUhkDevice();
+        }
+    }
+
     public async startDonglePairing(event: Electron.IpcMainEvent): Promise<void> {
         this.logService.misc('[DeviceService] start Dongle pairing');
         try {
@@ -1419,10 +1463,12 @@ export class DeviceService {
     }
 
     private async readZephyrLog(): Promise<void> {
+        let uhkDeviceProduct: UhkDeviceProduct;
+
         try {
-            const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
+            uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             const log = await this.operations.getVariable(UsbVariables.ShellBuffer)
-            this.logService.misc(`[DeviceService] Right half zephyr log: ${log}`);
+            this.logService.misc(`[DeviceService] Right half zephyr log (escaped): ⟦${escapeZephyrControlChars(log as string)}⟧`);
             const logEntry: ZephyrLogEntry = {
                 log: log as string,
                 level: 'info',
@@ -1435,7 +1481,7 @@ export class DeviceService {
             const logEntry: ZephyrLogEntry = {
                 log: error.message as string,
                 level: 'error',
-                device: UHK_80_DEVICE.logName,
+                device: uhkDeviceProduct?.logName || UHK_80_DEVICE.logName,
             }
             this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
         }

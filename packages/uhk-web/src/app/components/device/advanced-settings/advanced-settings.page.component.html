@@ -79,7 +79,7 @@
         </div>
 
         <div *ngIf="state.activeButton === ActiveButton.ShowZephyrLogs" class="checkbox d-flex mb-0 mt-3 gap-3">
-            <label *ngIf="showLeftHalfZephyrLogCheckbox" class="d-inline-flex align-items-center gap-1">
+            <label *ngIf="isLeftHalfConnected" class="d-inline-flex align-items-center gap-1">
                 <input type="checkbox"
                        [checked]="state.isLeftHalfZephyrLoggingEnabled"
                        (click)="onToggleLeftHalfZephyrLogging()"
@@ -93,7 +93,7 @@
                 > Right half
             </label>
 
-            <label *ngIf="showDongleZephyrLogCheckbox" class="d-inline-flex align-items-center gap-1">
+            <label *ngIf="isDongleConnected" class="d-inline-flex align-items-center gap-1">
                 <input type="checkbox"
                        [checked]="state.isDongleZephyrLoggingEnabled"
                        (click)="onToggleDongleZephyrLogging()"
@@ -102,8 +102,39 @@
         </div>
 
         <div class="flex-grow mt-3">
-            <xterm [logs]="state.i2cLogs"></xterm>
+            @if (state.activeButton === ActiveButton.ShowZephyrLogs) {
+            <as-split direction="horizontal">
+                @if (state.isLeftHalfZephyrLoggingEnabled) {
+                <as-split-area>
+                    <zephyr-terminal [uhkDevice]="UHK_80_DEVICE_LEFT"
+                                     [zephyrLogs]="state.zephyrLogs"
+                    />
+                </as-split-area>
+                }
+
+                @if (state.isRightHalfZephyrLoggingEnabled) {
+                <as-split-area>
+                    <zephyr-terminal [uhkDevice]="connectedDevice"
+                                     [zephyrLogs]="state.zephyrLogs"
+                    />
+                </as-split-area>
+                }
+
+                @if (state.isDongleZephyrLoggingEnabled) {
+                <as-split-area>
+                    <zephyr-terminal [uhkDevice]="UHK_DONGLE"
+                                     [zephyrLogs]="state.zephyrLogs"
+                    />
+                </as-split-area>
+                }
+            </as-split>
+            }
+            @else
+            {
+            <xterm [logs]="state.i2cLogs" />
+            }
         </div>
+
         <audio #audioPlayer src="assets/beep.mp3" preload="auto"></audio>
         <div class="flex-footer">
         </div>

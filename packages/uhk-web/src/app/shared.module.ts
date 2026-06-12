@@ -147,6 +147,7 @@ import { UpdateAgentPageComponent } from './pages/update-agent.page';
 import { UpdateFirmwarePageComponent } from './pages/update-firmware.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
+import { ZephyrTerminalComponent } from './components/zephyr-terminal/zephyr-terminal.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { Autofocus } from './directives/autofocus/autofocus.directive';
@@ -271,6 +272,7 @@ import appInitFactory from './services/app-init-factory';
         UpdateAgentPageComponent,
         UpdateFirmwarePageComponent,
         XtermComponent,
+        ZephyrTerminalComponent,
         SliderWrapperComponent,
         EditableTextComponent,
         Autofocus,

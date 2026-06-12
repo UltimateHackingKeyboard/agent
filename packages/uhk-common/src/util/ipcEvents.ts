@@ -31,6 +31,9 @@ export class Device {
     public static readonly dongleVersionInfoLoaded = 'device-dongle-version-info-loaded';
     public static readonly eraseBleSettings = 'device-erase-ble-settings';
     public static readonly eraseBleSettingsReply = 'device-erase-ble-settings-reply';
+    public static readonly execShellCommandOnDongle = 'device-exec-shell-command-on-dongle';
+    public static readonly execShellCommandOnLeftHalf = 'device-exec-shell-command-on-left-half';
+    public static readonly execShellCommandOnRightHalf = 'device-exec-shell-command-on-right-half';
     public static readonly hardwareModulesLoaded = 'device-hardware-modules-loaded';
     public static readonly isDongleZephyrLoggingEnabled = 'device-is-dongle-zephyr-logging-enabled';
     public static readonly isDongleZephyrLoggingEnabledReply = 'device-is-dongle-zephyr-logging-enabled-reply';

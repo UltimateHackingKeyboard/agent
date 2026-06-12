@@ -27,6 +27,7 @@ import {
     UHK_MODULE_IDS,
     UNKNOWN_DEVICE,
     UserConfiguration,
+    SHELL_COMMAND_TOO_LONG_ERROR,
     VERSIONS,
 } from 'uhk-common';
 import { promisify } from 'util';
@@ -747,7 +748,10 @@ export class UhkOperations {
                 message += await this.getVariable(variableId, iteration + 1);
             }
 
-            if (iteration === 0) {
+            // The shell buffer carries a raw VT100 stream (colors, cursor control) that must be
+            // forwarded verbatim to the terminal emulator. Only the macro status buffer gets the
+            // dedup/reorder normalization.
+            if (iteration === 0 && variableId === UsbVariables.statusBuffer) {
                 message = normalizeStatusBuffer(message);
             }
 
@@ -932,6 +936,20 @@ export class UhkOperations {
 
         if (buffer.length > MAX_USB_PAYLOAD_SIZE) {
             throw new Error('Macro command is too long. At most 61 characters are supported. Feel free to execute native uhk macro using `exec <uhk macro name>`.')
+        }
+
+        await this.device.write(buffer);
+    }
+
+    public async execShellCommand(cmd: string): Promise<void> {
+        this.logService.usbOps('[DeviceOperation] USB[T]: Execute Shell Command');
+        const b1 = Buffer.from([UsbCommand.ExecShellCommand]);
+        const b2 = Buffer.from(cmd);
+        const b0 = Buffer.from([0x00]);
+        const buffer = Buffer.concat([b1, b2, b0]);
+
+        if (buffer.length > MAX_USB_PAYLOAD_SIZE) {
+            throw new Error(SHELL_COMMAND_TOO_LONG_ERROR)
         }
 
         await this.device.write(buffer);
