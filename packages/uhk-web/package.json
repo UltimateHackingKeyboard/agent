@@ -54,7 +54,7 @@
     "file-saver": "2.0.5",
     "gramli-angular-notifier": "18.0.0",
     "monaco-editor": "0.55.1",
-    "naive-autocompletion-parser": "1.1.9",
+    "naive-autocompletion-parser": "1.1.11",
     "ng2-dragula": "7.0.0",
     "ng2-nouislider": "2.0.0",
     "ngrx-store-freeze": "0.2.4",

@@ -165,7 +165,10 @@ export class SmartMacroDocService {
                 return this.fallbackToBundledFirmware(event);
             }
 
-            return this.downloadDocumentation(event, firmwareRepoInfo);
+            // `await` is required so that a rejection from downloadDocumentation is caught here
+            // instead of escaping. This happens e.g. with development firmware whose git tag does
+            // not exist on GitHub, in which case we fall back to the bundled firmware grammar.
+            return await this.downloadDocumentation(event, firmwareRepoInfo);
         } catch (error) {
             this.logService.error(serviceLogMessage('download running firmware documentation failed'), error);
             return this.fallbackToBundledFirmware(event);
