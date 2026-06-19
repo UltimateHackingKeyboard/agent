@@ -316,8 +316,10 @@ export class UserConfigEffects {
     loadUserConfigurationFromFile$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile),
-            map(action => action.payload),
-            map((payload: LoadUserConfigurationFromFilePayload) => {
+            withLatestFrom(this.store.select(getUserConfiguration)),
+            map(([action, currentUserConfiguration]): [LoadUserConfigurationFromFilePayload, string] =>
+                [action.payload, currentUserConfiguration.deviceName]),
+            map(([payload, deviceName]: [LoadUserConfigurationFromFilePayload, string]) => {
                 try {
                     let userConfig = new UserConfiguration();
 
@@ -331,6 +333,10 @@ export class UserConfigEffects {
 
                     if (userConfig.userConfigMajorVersion) {
                         userConfig = this.uhk80MigratorService.migrate(userConfig);
+
+                        // Keep the connected keyboard's name when importing a config, so a single config
+                        // can be shared across multiple keyboards while each retains its own name.
+                        userConfig.deviceName = deviceName;
 
                         if (payload.autoSave) {
                             return new ApplyUserConfigurationFromFileAction({
