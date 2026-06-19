@@ -116,6 +116,8 @@ export const metaReducers: MetaReducer<AppState>[] = environment.production
 
 export const advanceSettingsState = (state: AppState) => state.advanceSettings;
 export const getIsAdvancedSettingsMenuVisible = createSelector(advanceSettingsState, fromAdvancedSettings.isAdvancedSettingsMenuVisible);
+export const getAlwaysEnableAdvancedMode = createSelector(advanceSettingsState, fromAdvancedSettings.isAlwaysEnableAdvancedMode);
+export const getAlwaysEnableAdvancedModeSettingVisible = createSelector(advanceSettingsState, fromAdvancedSettings.isAlwaysEnableAdvancedModeSettingVisible);
 export const isLeftHalfPairing = createSelector(advanceSettingsState, fromAdvancedSettings.isLeftHalfPairing);
 export const getIsI2cDebuggingEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingEnabled);
 export const isI2cDebuggingRingBellEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingRingBellEnabled);
@@ -829,11 +831,13 @@ export const getApplicationSettings = createSelector(
     getSmartMacroPanelWidth,
     backlightingColorPalette,
     keyboardHalvesAlwaysJoined,
+    getAlwaysEnableAdvancedMode,
     (updateSettingsState,
         app,
         smartMacroPanelWidth,
         backlightingColorPalette,
         keyboardHalvesAlwaysJoined,
+        alwaysEnableAdvancedMode,
     ): ApplicationSettings => {
         return {
             errorPanelHeight: app.errorPanelHeight,
@@ -843,6 +847,7 @@ export const getApplicationSettings = createSelector(
             appTheme: app.appTheme,
             backlightingColorPalette,
             keyboardHalvesAlwaysJoined,
+            alwaysEnableAdvancedMode,
             smartMacroPanelWidth
         };
     });

@@ -33,6 +33,17 @@
     </div>
 </div>
 
+<div class="col-12 mt-1" *ngIf="alwaysEnableAdvancedModeSettingVisible$ | async">
+    <div class="checkbox d-inline-block mb-0 mt-0">
+        <label>
+            <input type="checkbox"
+                   [checked]="alwaysEnableAdvancedMode$ | async"
+                   (change)="toggleAlwaysEnableAdvancedMode($event.target.checked)"
+            > Always enable advanced settings
+        </label>
+    </div>
+</div>
+
 
 <div class="col-12 col-md-6 mb-0 mt-0">
     <div class="d-flex align-items-center mt-2">

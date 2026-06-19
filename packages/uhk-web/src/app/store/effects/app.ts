@@ -29,6 +29,7 @@ import {
     UndoLastAction
 } from '../actions/app';
 import { ActionTypes as UpdateActionTypes } from '../actions/auto-update-settings';
+import { ActionTypes as AdvanceSettingsActionTypes } from '../actions/advance-settings.action';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 import { ActionTypes as DeviceActionTypes, StartConnectionPollerAction } from '../actions/device';
@@ -145,6 +146,7 @@ export class ApplicationEffects {
                 ActionTypes.SetAppTheme,
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,
+                AdvanceSettingsActionTypes.toggleAlwaysEnableAdvancedMode,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration,
                 SmartMacroDocActionTypes.PanelSizeChanged,

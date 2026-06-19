@@ -8,6 +8,8 @@ import { AppTheme, AppThemeSelect } from 'uhk-common';
 import {
     AppState,
     appUpdateSettingsState,
+    getAlwaysEnableAdvancedMode,
+    getAlwaysEnableAdvancedModeSettingVisible,
     getAnimationEnabled,
     getAppTheme,
     getOperatingSystem,
@@ -20,6 +22,7 @@ import {
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
 import { OpenConfigFolderAction, SetAppThemeAction, ToggleAnimationEnabledAction, ToggleKeyboardHalvesAlwaysJoinedAction } from '../../../store/actions/app';
+import { ToggleAlwaysEnableAdvancedModeAction } from '../../../store/actions/advance-settings.action';
 import { OperatingSystem } from '../../../models/operating-system';
 
 @Component({
@@ -39,6 +42,8 @@ export class SettingsComponent {
     isLinux$: Observable<boolean>;
     faCog = faCog;
     keyboardHalvesAlwaysJoined$: Observable<boolean>;
+    alwaysEnableAdvancedMode$: Observable<boolean>;
+    alwaysEnableAdvancedModeSettingVisible$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
@@ -47,6 +52,8 @@ export class SettingsComponent {
         this.themes$ = store.select(getSupportedThemes);
         this.isLinux$ = store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
         this.keyboardHalvesAlwaysJoined$ = store.select(keyboardHalvesAlwaysJoined);
+        this.alwaysEnableAdvancedMode$ = store.select(getAlwaysEnableAdvancedMode);
+        this.alwaysEnableAdvancedModeSettingVisible$ = store.select(getAlwaysEnableAdvancedModeSettingVisible);
     }
 
     openConfigFolder(): void {
@@ -71,6 +78,10 @@ export class SettingsComponent {
 
     toggleKeyboardHalvesAlwaysJoined(enabled: boolean): void {
         this.store.dispatch(new ToggleKeyboardHalvesAlwaysJoinedAction(enabled));
+    }
+
+    toggleAlwaysEnableAdvancedMode(enabled: boolean): void {
+        this.store.dispatch(new ToggleAlwaysEnableAdvancedModeAction(enabled));
     }
 
 }
