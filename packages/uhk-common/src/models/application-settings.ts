@@ -30,4 +30,8 @@ export interface ApplicationSettings {
      * Smart Macro panel width in percent;
      */
     smartMacroPanelWidth?: number;
+    /**
+     * If true, the Advanced settings menu is shown on Agent startup.
+     */
+    alwaysEnableAdvancedMode?: boolean;
 }

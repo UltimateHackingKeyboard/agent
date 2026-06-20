@@ -9,6 +9,7 @@ import {
     IsDongleZephyrLoggingEnabledReplyAction,
     IsLeftHalfZephyrLoggingEnabledReplyAction,
     IsRightHalfZephyrLoggingEnabledReplyAction,
+    ToggleAlwaysEnableAdvancedModeAction,
     ZephyrLogAction,
 } from '../actions/advance-settings.action';
 import * as App from '../actions/app';
@@ -23,6 +24,7 @@ export enum ActiveButton {
 
 export interface State {
     activeButton: ActiveButton;
+    alwaysEnableAdvancedMode: boolean;
     i2cDebuggingRingBellEnabled: boolean,
     i2cLogs: Array<XtermLog>;
     isLeftHalfPairing: boolean;
@@ -36,6 +38,7 @@ export interface State {
 
 export const initialState = (): State => ({
     activeButton: ActiveButton.None,
+    alwaysEnableAdvancedMode: false,
     i2cDebuggingRingBellEnabled: false,
     i2cLogs: [],
     isDongleZephyrLoggingEnabled: false,
@@ -48,6 +51,17 @@ export const initialState = (): State => ({
 
 export function reducer(state = initialState(), action: Actions | App.Actions | Device.Actions) {
     switch (action.type) {
+
+        case App.ActionTypes.LoadApplicationSettingsSuccess: {
+            const settings = (action as App.LoadApplicationSettingsSuccessAction).payload;
+            const alwaysEnableAdvancedMode = !!settings.alwaysEnableAdvancedMode;
+
+            return {
+                ...state,
+                alwaysEnableAdvancedMode,
+                menuVisible: alwaysEnableAdvancedMode || state.menuVisible,
+            };
+        }
 
         case App.ActionTypes.ElectronMainLogReceived: {
             if (!state.isLeftHalfPairing) {
@@ -212,7 +226,17 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
         case ActionTypes.showAdvancedSettingsMenu: {
             return {
                 ...state,
-                menuVisible: true
+                menuVisible: true,
+            };
+        }
+
+        case ActionTypes.toggleAlwaysEnableAdvancedMode: {
+            const alwaysEnableAdvancedMode = (action as ToggleAlwaysEnableAdvancedModeAction).payload;
+
+            return {
+                ...state,
+                alwaysEnableAdvancedMode,
+                menuVisible: alwaysEnableAdvancedMode || state.menuVisible,
             };
         }
 
@@ -240,6 +264,7 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
 }
 
 export const isAdvancedSettingsMenuVisible = (state: State): boolean => state.menuVisible;
+export const isAlwaysEnableAdvancedMode = (state: State): boolean => state.alwaysEnableAdvancedMode;
 export const isLeftHalfPairing = (state: State): boolean => state.isLeftHalfPairing;
 export const isI2cDebuggingEnabled = (state: State): boolean => state.activeButton === ActiveButton.I2CRecoveryDebugging;
 export const isI2cDebuggingRingBellEnabled = (state: State): boolean => state.i2cDebuggingRingBellEnabled;
