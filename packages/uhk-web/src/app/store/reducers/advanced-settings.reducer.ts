@@ -25,7 +25,6 @@ export enum ActiveButton {
 export interface State {
     activeButton: ActiveButton;
     alwaysEnableAdvancedMode: boolean;
-    alwaysEnableAdvancedModeSettingVisible: boolean;
     i2cDebuggingRingBellEnabled: boolean,
     i2cLogs: Array<XtermLog>;
     isLeftHalfPairing: boolean;
@@ -40,7 +39,6 @@ export interface State {
 export const initialState = (): State => ({
     activeButton: ActiveButton.None,
     alwaysEnableAdvancedMode: false,
-    alwaysEnableAdvancedModeSettingVisible: false,
     i2cDebuggingRingBellEnabled: false,
     i2cLogs: [],
     isDongleZephyrLoggingEnabled: false,
@@ -61,8 +59,6 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             return {
                 ...state,
                 alwaysEnableAdvancedMode,
-                alwaysEnableAdvancedModeSettingVisible: alwaysEnableAdvancedMode
-                    || state.alwaysEnableAdvancedModeSettingVisible,
                 menuVisible: alwaysEnableAdvancedMode || state.menuVisible,
             };
         }
@@ -231,7 +227,6 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             return {
                 ...state,
                 menuVisible: true,
-                alwaysEnableAdvancedModeSettingVisible: true,
             };
         }
 
@@ -241,7 +236,6 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             return {
                 ...state,
                 alwaysEnableAdvancedMode,
-                alwaysEnableAdvancedModeSettingVisible: true,
                 menuVisible: alwaysEnableAdvancedMode || state.menuVisible,
             };
         }
@@ -271,8 +265,6 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
 
 export const isAdvancedSettingsMenuVisible = (state: State): boolean => state.menuVisible;
 export const isAlwaysEnableAdvancedMode = (state: State): boolean => state.alwaysEnableAdvancedMode;
-export const isAlwaysEnableAdvancedModeSettingVisible = (state: State): boolean =>
-    state.menuVisible || state.alwaysEnableAdvancedModeSettingVisible;
 export const isLeftHalfPairing = (state: State): boolean => state.isLeftHalfPairing;
 export const isI2cDebuggingEnabled = (state: State): boolean => state.activeButton === ActiveButton.I2CRecoveryDebugging;
 export const isI2cDebuggingRingBellEnabled = (state: State): boolean => state.i2cDebuggingRingBellEnabled;

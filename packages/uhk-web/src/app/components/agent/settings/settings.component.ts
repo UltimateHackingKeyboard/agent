@@ -9,9 +9,9 @@ import {
     AppState,
     appUpdateSettingsState,
     getAlwaysEnableAdvancedMode,
-    getAlwaysEnableAdvancedModeSettingVisible,
     getAnimationEnabled,
     getAppTheme,
+    getIsAdvancedSettingsMenuVisible,
     getOperatingSystem,
     getSupportedThemes,
     keyboardHalvesAlwaysJoined
@@ -53,7 +53,7 @@ export class SettingsComponent {
         this.isLinux$ = store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
         this.keyboardHalvesAlwaysJoined$ = store.select(keyboardHalvesAlwaysJoined);
         this.alwaysEnableAdvancedMode$ = store.select(getAlwaysEnableAdvancedMode);
-        this.alwaysEnableAdvancedModeSettingVisible$ = store.select(getAlwaysEnableAdvancedModeSettingVisible);
+        this.alwaysEnableAdvancedModeSettingVisible$ = store.select(getIsAdvancedSettingsMenuVisible);
     }
 
     openConfigFolder(): void {
