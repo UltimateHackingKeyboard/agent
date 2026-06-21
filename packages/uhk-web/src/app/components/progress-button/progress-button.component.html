@@ -1,8 +1,15 @@
-<button class="btn btn-primary"
+<button class="btn btn-primary progress-button"
         (click)="onClicked()"
+        [class.progress-button--active]="state.showProgress"
         [disabled]="state.showProgress">
-    <fa-icon *ngIf="state.showProgress"
-             [icon]="faSpinner"
-             animation="spin"></fa-icon>
-    {{state.text}}
+    <span class="progress-button__fill"
+          role="progressbar"
+          [attr.aria-valuenow]="state.progressPercent ?? 0"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [style.width.%]="state.showProgress ? (state.progressPercent ?? 0) : 0">
+    </span>
+    <span class="progress-button__content">
+        {{state.text}}
+    </span>
 </button>

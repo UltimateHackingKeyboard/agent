@@ -5,10 +5,43 @@
     justify-content: center;
 }
 
+.uhk-message-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.uhk-message-main {
+    display: flex;
+    align-items: center;
+}
+
 .agent-logo {
     margin: 1.25em;
     height: 8em;
     width: 8em;
+}
+
+.with-progress-bar .agent-logo {
+    margin-bottom: 1.5em;
+}
+
+.loading-progress-bar {
+    width: 100%;
+    padding: 0 1.25em;
+}
+
+.loading-progress-bar__track {
+    background-color: var(--color-loading-progress-bar-bg);
+    border-radius: 0.375rem;
+    height: 1rem;
+    overflow: hidden;
+}
+
+.loading-progress-bar__fill {
+    background-color: var(--color-loading-progress-bar-fill);
+    height: 100%;
+    transition: width 200ms ease-out;
 }
 
 .message {

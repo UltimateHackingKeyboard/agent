@@ -29,6 +29,7 @@ export interface State {
     prevUserConfig?: UserConfiguration;
     runningInElectron: boolean;
     configLoading: boolean;
+    configurationLoadingProgress: number;
     hardwareConfig?: HardwareConfiguration;
     privilegeWhatWillThisDoClicked: boolean;
     permissionError?: unknown;
@@ -49,6 +50,7 @@ export const initialState: State = {
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
     configLoading: true,
+    configurationLoadingProgress: 0,
     privilegeWhatWillThisDoClicked: false,
     keypressCapturing: false,
     everAttemptedSavingToKeyboard: false,
@@ -133,7 +135,21 @@ export function reducer(
         case UserConfigActionTypes.LoadUserConfig: {
             return {
                 ...state,
-                configLoading: true
+                configLoading: true,
+                configurationLoadingProgress: 0
+            };
+        }
+
+        case App.ActionTypes.ConfigurationLoadingProgressChanged: {
+            const progress = (action as App.ConfigurationLoadingProgressChangedAction).payload;
+
+            if (!state.configLoading) {
+                return state;
+            }
+
+            return {
+                ...state,
+                configurationLoadingProgress: Math.max(state.configurationLoadingProgress, progress)
             };
         }
 
@@ -152,7 +168,8 @@ export function reducer(
 
             return {
                 ...state,
-                hardwareConfig: null
+                hardwareConfig: null,
+                configurationLoadingProgress: 0
             };
         }
 
@@ -235,6 +252,7 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
     return KeyboardLayout.ANSI;
 };
 export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
+export const getConfigurationLoadingProgress = (state: State): number => state.configurationLoadingProgress;
 
 export const runningOnNotSupportedWindows = (state: State): boolean => {
     if (!state.osVersion || state.platform !== 'win32') {

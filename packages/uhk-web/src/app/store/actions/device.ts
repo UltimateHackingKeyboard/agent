@@ -37,6 +37,7 @@ export enum ActionTypes {
     SetPrivilegeOnLinuxReply = '[device] set privilege on linux reply',
     ConnectionStateChanged = '[device] connection state changed',
     SaveConfiguration = '[device] save configuration',
+    SaveConfigurationProgressChanged = '[device] save configuration progress changed',
     SaveConfigurationReply = '[device] save configuration reply',
     SavingConfiguration = '[device] saving configuration', // TODO: Delete looks like not used
     ShowSaveToKeyboardButton = '[device] show save to keyboard button',
@@ -158,6 +159,13 @@ export class SaveConfigurationAction implements Action {
      * @param payload - if true then save user configuration in the history
      */
     constructor(public payload: boolean) {
+    }
+}
+
+export class SaveConfigurationProgressChangedAction implements Action {
+    type = ActionTypes.SaveConfigurationProgressChanged;
+
+    constructor(public payload: number) {
     }
 }
 
@@ -357,6 +365,7 @@ export type Actions
     | ConnectionStateChangedAction
     | ShowSaveToKeyboardButtonAction
     | SaveConfigurationAction
+    | SaveConfigurationProgressChangedAction
     | SaveConfigurationReplyAction
     | SaveToKeyboardSuccessAction
     | SaveToKeyboardSuccessFailed

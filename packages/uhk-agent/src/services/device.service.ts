@@ -111,6 +111,7 @@ export class DeviceService {
     private leftHalfZephyrLogService: ZephyrLogService;
     private queueManager = new QueueManager();
     private wasCalledSaveUserConfiguration = false;
+    private loadConfigurationsInProgress = false;
     private isI2cDebuggingEnabled = false;
     private i2cWatchdogRecoveryCounter = -1;
     private savedState: DeviceConnectionState;
@@ -355,16 +356,34 @@ export class DeviceService {
      * @returns {Promise<Buffer>}
      */
     public async loadConfigurations(event: Electron.IpcMainEvent, args): Promise<void> {
+        if (this.loadConfigurationsInProgress) {
+            this.logService.misc('[DeviceService] load user configuration already in progress, skipping');
+            return;
+        }
+
+        this.loadConfigurationsInProgress = true;
         this.logService.misc('[DeviceService] load user configuration');
 
         let response: ConfigurationReply;
+        let progress = 0;
 
         try {
             await this.stopPollUhkDevice();
 
+            const sendProgress = (percent: number) => {
+                progress = Math.max(progress, Math.min(100, percent));
+                event.sender.send(IpcEvents.device.loadConfigurationProgress, progress);
+            };
+
+            sendProgress(0);
             await this.operations.waitUntilKeyboardBusy();
-            const result = await this.operations.loadConfigurations();
+            sendProgress(3);
+            const result = await this.operations.loadConfigurations((percent) => {
+                sendProgress(3 + Math.round(percent * 0.82));
+            });
+            sendProgress(88);
             const modules: HardwareModules = await this.getHardwareModules(false);
+            sendProgress(95);
 
             const hardwareConfig = getHardwareConfigFromDeviceResponse(result.hardwareConfiguration);
             const uniqueId = hardwareConfig.uniqueId;
@@ -385,6 +404,7 @@ export class DeviceService {
                         info: BackupUserConfigurationInfo.Unknown
                     }
             };
+            sendProgress(100);
         } catch (error) {
             response = {
                 success: false,
@@ -393,6 +413,7 @@ export class DeviceService {
         } finally {
             await this.device.close();
             this.startPollUhkDevice();
+            this.loadConfigurationsInProgress = false;
         }
 
         event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
@@ -1298,18 +1319,32 @@ export class DeviceService {
 
         try {
             await this.stopPollUhkDevice();
+
+            let progress = 0;
+            const sendProgress = (percent: number) => {
+                progress = Math.max(progress, Math.min(100, percent));
+                event.sender.send(IpcEvents.device.saveUserConfigurationProgress, progress);
+            };
+
+            sendProgress(0);
             await backupUserConfiguration(data);
+            sendProgress(1);
 
             this.logService.config('[DeviceService] User configuration will be saved', data.configuration);
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
-            await this.operations.saveUserConfiguration(buffer);
+            await this.operations.saveUserConfiguration(buffer, (percent) => {
+                sendProgress(1 + Math.round(percent * 0.94));
+            });
+
             this._checkStatusBuffer = true;
 
             if (data.saveInHistory) {
+                sendProgress(97);
                 await saveUserConfigHistoryAsync(buffer, data.deviceId, data.uniqueId);
                 await this.loadUserConfigFromHistory(event);
             }
 
+            sendProgress(100);
             response.success = true;
         } catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
