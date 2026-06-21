@@ -111,7 +111,6 @@ export class DeviceService {
     private leftHalfZephyrLogService: ZephyrLogService;
     private queueManager = new QueueManager();
     private wasCalledSaveUserConfiguration = false;
-    private loadConfigurationsInProgress = false;
     private isI2cDebuggingEnabled = false;
     private i2cWatchdogRecoveryCounter = -1;
     private savedState: DeviceConnectionState;
@@ -356,12 +355,6 @@ export class DeviceService {
      * @returns {Promise<Buffer>}
      */
     public async loadConfigurations(event: Electron.IpcMainEvent, args): Promise<void> {
-        if (this.loadConfigurationsInProgress) {
-            this.logService.misc('[DeviceService] load user configuration already in progress, skipping');
-            return;
-        }
-
-        this.loadConfigurationsInProgress = true;
         this.logService.misc('[DeviceService] load user configuration');
 
         let response: ConfigurationReply;
@@ -413,7 +406,6 @@ export class DeviceService {
         } finally {
             await this.device.close();
             this.startPollUhkDevice();
-            this.loadConfigurationsInProgress = false;
         }
 
         event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));

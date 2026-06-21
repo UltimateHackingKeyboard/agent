@@ -12,16 +12,11 @@
                 <p *ngIf="description"> {{ description }} </p>
             </div>
         </div>
-        <div *ngIf="showProgressBar" class="loading-progress-bar">
-            <div class="loading-progress-bar__track">
-                <div class="loading-progress-bar__fill"
-                     role="progressbar"
-                     [attr.aria-valuenow]="progressPercent"
-                     aria-valuemin="0"
-                     aria-valuemax="100"
-                     [style.width.%]="progressPercent">
-                </div>
-            </div>
+        <div *ngIf="showProgressBar" class="loading-progress-bar-wrapper">
+            <progress class="loading-progress-bar"
+                      [value]="progressPercent"
+                      max="100">
+            </progress>
         </div>
     </div>
 </div>
