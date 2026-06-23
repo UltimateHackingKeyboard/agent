@@ -8,7 +8,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 ## [10.1.0] - 2026-06-23
 
-Firmware: 17.1.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v17.1.0)] | Device Protocol: 4.17.0 | User Config: 14.0.0 | Hardware Config: 1.0.0
+Firmware: 17.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v17.2.0)] | Device Protocol: 4.17.0 | User Config: 14.0.0 | Hardware Config: 1.0.0
 
 - Implement new logging/shell access with vt100 support.
 - Make keyboard names persistent when sharing a single config between multiple uhks.
