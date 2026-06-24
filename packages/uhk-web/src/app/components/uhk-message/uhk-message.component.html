@@ -1,12 +1,22 @@
 <div class="uhk-message-wrapper">
-    <uhk-agent-icon *ngIf="showLogo"
-         class="agent-logo"
-         [ngClass]="{'spin-logo': rotateLogo}">
-    </uhk-agent-icon>
-    <div class="messages">
-        <h1> {{ header }} </h1>
-        <h2 *ngIf="!smallText"> {{ subtitle }} </h2>
-        <div *ngIf="smallText"> {{ subtitle }} </div>
-        <p *ngIf="description"> {{ description }} </p>
+    <div class="uhk-message-content" [class.with-progress-bar]="showProgressBar">
+        <div class="uhk-message-main">
+            <uhk-agent-icon *ngIf="showLogo"
+                 class="agent-logo"
+                 [ngClass]="{'spin-logo': rotateLogo}">
+            </uhk-agent-icon>
+            <div class="messages">
+                <h1> {{ header }} </h1>
+                <h2 *ngIf="!smallText"> {{ subtitle }} </h2>
+                <div *ngIf="smallText"> {{ subtitle }} </div>
+                <p *ngIf="description"> {{ description }} </p>
+            </div>
+        </div>
+        <div *ngIf="showProgressBar" class="loading-progress-bar-wrapper">
+            <progress class="loading-progress-bar"
+                      [value]="progressPercent"
+                      max="100">
+            </progress>
+        </div>
     </div>
 </div>

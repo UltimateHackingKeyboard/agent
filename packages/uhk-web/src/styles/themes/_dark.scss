@@ -118,6 +118,9 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --color-progress-bar-progress-rgb-colors: #{tint-color($success, 10%)};
     --color-progress-bar-text: #{$color-text};
 
+    --color-loading-progress-bar-bg: #555;
+    --color-loading-progress-bar-fill: #fff;
+
     --color-macro-bg: #333;
     --color-macro-border: #444;
 

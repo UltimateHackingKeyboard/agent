@@ -54,6 +54,7 @@ import {
     RecoveryDeviceReplyAction,
     RecoveryModuleReplyAction,
     SaveConfigurationReplyAction,
+    SaveConfigurationProgressChangedAction,
     SetPrivilegeOnLinuxReplyAction,
     StatusBufferChangedAction,
     UpdateFirmwareJsonAction,
@@ -65,6 +66,7 @@ import {
     I2cWatchdogCounterChangedAction,
 } from '../store/actions/advance-settings.action';
 import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
+import { ConfigurationLoadingProgressChangedAction } from '../store/actions/app';
 import {
     DeleteUserConfigHistoryReplyAction,
     LoadUserConfigurationHistorySuccessAction,
@@ -264,12 +266,20 @@ export class DeviceRendererService {
             this.dispachStoreAction(new SetPrivilegeOnLinuxReplyAction(response));
         });
 
+        this.ipcRenderer.on(IpcEvents.device.saveUserConfigurationProgress, (event: string, progress: number) => {
+            this.dispachStoreAction(new SaveConfigurationProgressChangedAction(progress));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.saveUserConfigurationReply, (event: string, response: IpcResponse) => {
             this.dispachStoreAction(new SaveConfigurationReplyAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.statusBufferChanged, (event: string, response: string) => {
             this.dispachStoreAction(new StatusBufferChangedAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.loadConfigurationProgress, (event: string, progress: number) => {
+            this.dispachStoreAction(new ConfigurationLoadingProgressChangedAction(progress));
         });
 
         this.ipcRenderer.on(IpcEvents.device.loadConfigurationReply, (event: string, response: string) => {

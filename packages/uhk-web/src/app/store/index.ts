@@ -191,6 +191,7 @@ export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrev
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
+export const getConfigurationLoadingProgress = createSelector(appState, fromApp.getConfigurationLoadingProgress);
 export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
 export const keypressCapturing = createSelector(appState, fromApp.keypressCapturing);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);

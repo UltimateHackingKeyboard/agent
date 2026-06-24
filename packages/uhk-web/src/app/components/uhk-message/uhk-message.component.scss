@@ -5,10 +5,61 @@
     justify-content: center;
 }
 
+.uhk-message-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.uhk-message-main {
+    display: flex;
+    align-items: center;
+}
+
 .agent-logo {
     margin: 1.25em;
     height: 8em;
     width: 8em;
+}
+
+.with-progress-bar .agent-logo {
+    margin-bottom: 1.5em;
+}
+
+.loading-progress-bar-wrapper {
+    width: 100%;
+    padding: 0 1.25em;
+}
+
+.loading-progress-bar {
+    display: block;
+    width: 100%;
+    height: 1rem;
+    appearance: none;
+    border: none;
+    border-radius: 0.375rem;
+    overflow: hidden;
+    background-color: var(--color-loading-progress-bar-bg);
+
+    &::-webkit-progress-inner-element {
+        border: none;
+    }
+
+    &::-webkit-progress-bar {
+        background-color: var(--color-loading-progress-bar-bg);
+    }
+
+    &::-webkit-progress-value {
+        background-color: var(--color-loading-progress-bar-fill);
+        border-radius: 0;
+        transition: inline-size 200ms ease-out;
+    }
+
+    &::-moz-progress-bar {
+        background-color: var(--color-loading-progress-bar-fill);
+        border-radius: 0;
+        transition: inline-size 200ms ease-out;
+    }
 }
 
 .message {

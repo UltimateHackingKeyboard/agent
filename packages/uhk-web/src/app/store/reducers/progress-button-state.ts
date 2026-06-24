@@ -5,13 +5,15 @@ export interface ProgressButtonState {
     showButton: boolean;
     text: string;
     showProgress?: boolean;
+    progressPercent?: number;
     action?: Action;
 }
 
 export const initProgressButtonState = {
     showButton: false,
     text: null,
-    showProgress: false
+    showProgress: false,
+    progressPercent: 0
 };
 
 export function getSaveToKeyboardButtonState(): ProgressButtonState {

@@ -308,11 +308,36 @@ export class UhkOperations {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(): Promise<LoadConfigurationsResult> {
+    public async loadConfigurations(onProgress?: (percent: number) => void): Promise<LoadConfigurationsResult> {
         try {
             await this.waitUntilKeyboardBusy();
-            const userConfiguration = await this.loadConfiguration(ConfigBufferId.validatedUserConfig);
-            const hardwareConfiguration = await this.loadConfiguration(ConfigBufferId.hardwareConfig);
+            onProgress?.(0);
+
+            const configSizes = await this.getConfigSizesFromKeyboard();
+            let userConfigSize = configSizes.userConfig;
+            const hardwareConfigSize = configSizes.hardwareConfig;
+
+            const reportTransferProgress = (userOffset: number, hardwareOffset: number) => {
+                const totalBytes = Math.max(userConfigSize + hardwareConfigSize, 1);
+                const transferredBytes = userOffset + hardwareOffset;
+
+                onProgress?.(Math.round(Math.min(transferredBytes / totalBytes, 1) * 100));
+            };
+
+            const userConfiguration = await this.loadConfiguration(
+                ConfigBufferId.validatedUserConfig,
+                (offset, configSize) => {
+                    userConfigSize = configSize;
+                    reportTransferProgress(offset, 0);
+                }
+            );
+            const hardwareConfiguration = await this.loadConfiguration(
+                ConfigBufferId.hardwareConfig,
+                (offset) => {
+                    reportTransferProgress(userConfigSize, offset);
+                }
+            );
+            reportTransferProgress(userConfigSize, hardwareConfigSize);
 
             return {
                 userConfiguration: JSON.stringify(convertBufferToIntArray(userConfiguration)),
@@ -327,7 +352,10 @@ export class UhkOperations {
      * Return with the actual user / hardware fonfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfiguration(configBufferId: ConfigBufferId): Promise<Buffer> {
+    public async loadConfiguration(
+        configBufferId: ConfigBufferId,
+        onProgress?: (offset: number, configSize: number) => void
+    ): Promise<Buffer> {
         const configBufferIdToName = ['HardwareConfig', 'StagingUserConfig', 'ValidatedUserConfig'];
         const configName = configBufferIdToName[configBufferId];
 
@@ -360,6 +388,8 @@ export class UhkOperations {
                         configSize = originalConfigSize;
                     }
                 }
+
+                onProgress?.(offset, configSize);
             }
 
             return configBuffer;
@@ -393,8 +423,15 @@ export class UhkOperations {
         };
     }
 
-    public async saveUserConfiguration(buffer: Buffer): Promise<void> {
+    public async saveUserConfiguration(buffer: Buffer, onProgress?: (percent: number) => void): Promise<void> {
+        let lastProgress = 0;
+        const reportProgress = (percent: number) => {
+            lastProgress = Math.max(lastProgress, Math.min(100, Math.round(percent)));
+            onProgress?.(lastProgress);
+        };
+
         try {
+            reportProgress(0);
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to keyboard');
             let shouldRecalculateLength = false;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -423,11 +460,20 @@ export class UhkOperations {
 
             const resultBuffer = new UhkBuffer(UHK_EEPROM_SIZE)
             userConfiguration.toBinary(resultBuffer)
-            await this.sendConfigToKeyboard(resultBuffer.getBufferContent(), true);
+            const configBuffer = resultBuffer.getBufferContent();
+
+            reportProgress(2);
+            await this.sendConfigToKeyboard(configBuffer, true, (bytesSent, totalBytes) => {
+                reportProgress(2 + bytesSent / totalBytes * 83);
+            });
+            reportProgress(86);
             await this.applyConfiguration();
+            reportProgress(90);
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
+            reportProgress(94);
             await this.waitUntilKeyboardBusy();
+            reportProgress(96);
         } catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
@@ -916,14 +962,23 @@ export class UhkOperations {
      * @returns {Promise<void>}
      * @private
      */
-    private async sendConfigToKeyboard(buffer: Buffer, isUserConfiguration): Promise<void> {
+    private async sendConfigToKeyboard(
+        buffer: Buffer,
+        isUserConfiguration,
+        onProgress?: (bytesSent: number, totalBytes: number) => void
+    ): Promise<void> {
         const command = isUserConfiguration
             ? UsbCommand.WriteStagingUserConfig
             : UsbCommand.WriteHardwareConfig;
 
         const fragments = getTransferBuffers(command, buffer);
-        for (const fragment of fragments) {
-            await this.device.write(fragment);
+        for (let i = 0; i < fragments.length; i++) {
+            await this.device.write(fragments[i]);
+            const bytesSent = Math.min(
+                buffer.length,
+                Math.round((i + 1) / fragments.length * buffer.length)
+            );
+            onProgress?.(bytesSent, buffer.length);
         }
     }
 
