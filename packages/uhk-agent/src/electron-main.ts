@@ -104,9 +104,9 @@ async function createWindow() {
         webPreferences: {
             contextIsolation: false,
             spellcheck: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(import.meta.dirname, 'preload.js')
         },
-        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png'),
+        icon: path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png'),
         backgroundColor: await getWindowBackgroundColor(),
         show: false
     });
@@ -125,7 +125,7 @@ async function createWindow() {
     // and load the index.html of the app.
 
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'renderer/index.html'),
+        pathname: path.join(import.meta.dirname, 'renderer/index.html'),
         protocol: 'file:',
         slashes: true
     }));
