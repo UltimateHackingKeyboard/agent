@@ -27,6 +27,35 @@
                 </div>
             </div>
         </div>
+        <circle-tooltip [tooltip]="layerTooltip" width="450" placement="bottom"/>
+    </div>
+
+    <div *ngIf="allowLayerCopy" role="group" class="btn-group btn-group-lg layer-actions">
+        <button #copyTooltip="ngbTooltip"
+                type="button"
+                class="btn btn-default"
+                ngbTooltip="Copy the current layer to Agent's virtual clipboard. You can then paste it onto any layer, overwriting that layer's key actions."
+                tooltipClass="tooltip-layer-action"
+                triggers="hover"
+                container="body"
+                placement="bottom"
+                (click)="copyTooltip.close(); onCopyLayer()"
+        >
+            <fa-icon [icon]="faCopy"></fa-icon>
+        </button>
+        <button *ngIf="canPasteLayer"
+                #pasteTooltip="ngbTooltip"
+                type="button"
+                class="btn btn-default"
+                ngbTooltip="Overwrite the current layer with the layer stored in Agent's virtual clipboard."
+                tooltipClass="tooltip-layer-action"
+                triggers="hover"
+                container="body"
+                placement="bottom"
+                (click)="pasteTooltip.close(); onPasteLayer()"
+        >
+            <fa-icon [icon]="faPaste"></fa-icon>
+        </button>
     </div>
 
     <div *ngIf="showPaletteColors" class="group-container">
@@ -80,7 +109,6 @@
         </div>
     </div>
 
-    <circle-tooltip [tooltip]="layerTooltip" width="450" placement="bottom bottom-end"/>
     <ng-template #layerTooltip>
         <ul class="text-start">
             <li>The <strong>Base</strong> layer is active by default (when no other layers are active). This layer can never be deleted.</li>

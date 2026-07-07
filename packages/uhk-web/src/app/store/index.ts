@@ -139,6 +139,7 @@ export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMac
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
 export const getOpenPopover = createSelector(userConfigState, fromUserConfig.getOpenPopover);
 export const getSelectedLayerOption = createSelector(userConfigState, fromUserConfig.getSelectedLayerOption);
+export const getHasCopiedLayer = createSelector(userConfigState, fromUserConfig.getHasCopiedLayer);
 export const getLayerOptions = createSelector(userConfigState, fromUserConfig.getLayerOptions);
 export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, getLayerOptions,
     (selectedLayer, layerOptions): SelectOptionData[] => {
