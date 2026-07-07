@@ -143,13 +143,9 @@ export function reducer(
         case App.ActionTypes.ConfigurationLoadingProgressChanged: {
             const progress = (action as App.ConfigurationLoadingProgressChangedAction).payload;
 
-            if (!state.configLoading) {
-                return state;
-            }
-
             return {
                 ...state,
-                configurationLoadingProgress: Math.max(state.configurationLoadingProgress, progress)
+                configurationLoadingProgress: progress
             };
         }
 

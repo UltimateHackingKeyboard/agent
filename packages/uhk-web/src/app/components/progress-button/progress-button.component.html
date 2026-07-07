@@ -4,10 +4,10 @@
         [disabled]="state.showProgress">
     <span class="progress-button__fill"
           role="progressbar"
-          [attr.aria-valuenow]="state.progressPercent ?? 0"
+          [attr.aria-valuenow]="state.progressPercent"
           aria-valuemin="0"
           aria-valuemax="100"
-          [style.width.%]="state.showProgress ? (state.progressPercent ?? 0) : 0">
+          [style.width.%]="state.showProgress ? state.progressPercent : 0">
     </span>
     <span class="progress-button__content">
         {{state.text}}

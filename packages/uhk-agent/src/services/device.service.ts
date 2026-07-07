@@ -358,15 +358,17 @@ export class DeviceService {
         this.logService.misc('[DeviceService] load user configuration');
 
         let response: ConfigurationReply;
-        let progress = 0;
 
         try {
             await this.stopPollUhkDevice();
 
-            const sendProgress = (percent: number) => {
-                progress = Math.max(progress, Math.min(100, percent));
-                event.sender.send(IpcEvents.device.loadConfigurationProgress, progress);
-            };
+            const sendProgress = (() => {
+                let progress = 0;
+                return (percent: number) => {
+                    progress = Math.max(progress, Math.min(100, percent));
+                    event.sender.send(IpcEvents.device.loadConfigurationProgress, progress);
+                };
+            })();
 
             sendProgress(0);
             await this.operations.waitUntilKeyboardBusy();
@@ -1312,11 +1314,13 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
-            let progress = 0;
-            const sendProgress = (percent: number) => {
-                progress = Math.max(progress, Math.min(100, percent));
-                event.sender.send(IpcEvents.device.saveUserConfigurationProgress, progress);
-            };
+            const sendProgress = (() => {
+                let progress = 0;
+                return (percent: number) => {
+                    progress = Math.max(progress, Math.min(100, percent));
+                    event.sender.send(IpcEvents.device.saveUserConfigurationProgress, progress);
+                };
+            })();
 
             sendProgress(0);
             await backupUserConfiguration(data);

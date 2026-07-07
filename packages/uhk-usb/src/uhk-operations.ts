@@ -337,7 +337,6 @@ export class UhkOperations {
                     reportTransferProgress(userConfigSize, offset);
                 }
             );
-            reportTransferProgress(userConfigSize, hardwareConfigSize);
 
             return {
                 userConfiguration: JSON.stringify(convertBufferToIntArray(userConfiguration)),
@@ -424,11 +423,13 @@ export class UhkOperations {
     }
 
     public async saveUserConfiguration(buffer: Buffer, onProgress?: (percent: number) => void): Promise<void> {
-        let lastProgress = 0;
-        const reportProgress = (percent: number) => {
-            lastProgress = Math.max(lastProgress, Math.min(100, Math.round(percent)));
-            onProgress?.(lastProgress);
-        };
+        const reportProgress = (() => {
+            let lastProgress = 0;
+            return (percent: number) => {
+                lastProgress = Math.max(lastProgress, Math.min(100, Math.round(percent)));
+                onProgress?.(lastProgress);
+            };
+        })();
 
         try {
             reportProgress(0);
@@ -462,9 +463,12 @@ export class UhkOperations {
             userConfiguration.toBinary(resultBuffer)
             const configBuffer = resultBuffer.getBufferContent();
 
-            reportProgress(2);
-            await this.sendConfigToKeyboard(configBuffer, true, (bytesSent, totalBytes) => {
-                reportProgress(2 + bytesSent / totalBytes * 83);
+            const preTransferPercent = 2;
+            const transferPercentRange = 83;
+
+            reportProgress(preTransferPercent);
+            await this.sendConfigToKeyboard(configBuffer, true, (percent) => {
+                reportProgress(preTransferPercent + percent / 100 * transferPercentRange);
             });
             reportProgress(86);
             await this.applyConfiguration();
@@ -965,7 +969,7 @@ export class UhkOperations {
     private async sendConfigToKeyboard(
         buffer: Buffer,
         isUserConfiguration,
-        onProgress?: (bytesSent: number, totalBytes: number) => void
+        onProgress?: (percent: number) => void
     ): Promise<void> {
         const command = isUserConfiguration
             ? UsbCommand.WriteStagingUserConfig
@@ -974,11 +978,7 @@ export class UhkOperations {
         const fragments = getTransferBuffers(command, buffer);
         for (let i = 0; i < fragments.length; i++) {
             await this.device.write(fragments[i]);
-            const bytesSent = Math.min(
-                buffer.length,
-                Math.round((i + 1) / fragments.length * buffer.length)
-            );
-            onProgress?.(bytesSent, buffer.length);
+            onProgress?.(Math.round((i + 1) / fragments.length * 100));
         }
     }
 

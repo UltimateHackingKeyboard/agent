@@ -5,7 +5,7 @@ export interface ProgressButtonState {
     showButton: boolean;
     text: string;
     showProgress?: boolean;
-    progressPercent?: number;
+    progressPercent: number;
     action?: Action;
 }
 
@@ -20,6 +20,8 @@ export function getSaveToKeyboardButtonState(): ProgressButtonState {
     return {
         showButton: true,
         text: 'Save to keyboard',
+        showProgress: false,
+        progressPercent: 0,
         action: new Device.SaveConfigurationAction(true)
     };
 }

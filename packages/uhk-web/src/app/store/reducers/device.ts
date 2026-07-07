@@ -233,7 +233,7 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case Device.ActionTypes.SaveConfigurationProgressChanged: {
-            if (state.saveToKeyboard.text !== 'Saving') {
+            if (!state.saveToKeyboard.showProgress) {
                 return state;
             }
 
@@ -243,7 +243,7 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 saveToKeyboard: {
                     ...state.saveToKeyboard,
-                    progressPercent: Math.max(state.saveToKeyboard.progressPercent ?? 0, progress)
+                    progressPercent: progress
                 }
             };
         }

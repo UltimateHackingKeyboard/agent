@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
 import { AppState, getConfigurationLoadingProgress } from '../../store';
 
@@ -13,13 +14,13 @@ import { AppState, getConfigurationLoadingProgress } from '../../store';
                      [showLogo]="true"
                      [rotateLogo]="true"
                      [showProgressBar]="true"
-                     [progressPercent]="(progressPercent$ | async) ?? 0"></uhk-message>
+                     [progressPercent]="progressPercent$ | async"></uhk-message>
     `,
 })
 export class LoadingDevicePageComponent {
     progressPercent$: Observable<number>;
 
     constructor(store: Store<AppState>) {
-        this.progressPercent$ = store.select(getConfigurationLoadingProgress);
+        this.progressPercent$ = store.select(getConfigurationLoadingProgress).pipe(startWith(0));
     }
 }
