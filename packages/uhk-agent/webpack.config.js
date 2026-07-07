@@ -13,10 +13,14 @@ module.exports = {
         path: rootDir + "/dist",
         filename: "electron-main.js"
     },
-    target: 'electron-main',
+    target: 'electron42.4-main',
+    experiments: {
+        outputModule: true,
+    },
+    externalsType: 'module',
     externals: {
-        "node-hid": "require('node-hid')",
-        "serialport": "require('serialport')",
+        "node-hid": "node-hid",
+        "serialport": "serialport",
     },
     devtool: 'source-map',
     resolve: {
@@ -52,9 +56,4 @@ module.exports = {
             webpackHelper.root(__dirname, './src') // location of your src
         )
     ],
-    node: {
-        __dirname: false,
-        __filename: false
-    }
-
 }
