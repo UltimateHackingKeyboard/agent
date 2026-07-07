@@ -93,6 +93,8 @@ export interface State {
     theme: string;
     customAdvancedSecondaryRoleConfiguration?: AdvancedSecondaryRoleConfiguration;
     isCustomPresetTheLastLoadedPreset: boolean;
+    copiedLayer?: Layer;
+    copiedLayerMacroNames?: Map<number, string>;
 }
 
 export const initialState: State = {
@@ -380,6 +382,99 @@ export function reducer(
             newState.layerOptions = calculateLayerOptions(newState);
 
             return newState;
+        }
+
+        case KeymapActions.ActionTypes.CopyLayer: {
+            const layerId = (action as KeymapActions.CopyLayerAction).payload;
+            const currentKeymap = state.userConfiguration.keymaps
+                .find(keymap => keymap.abbreviation === state.selectedKeymapAbbr);
+            const layerToCopy = currentKeymap?.layers.find(layer => layer.id === layerId);
+
+            if (!layerToCopy) {
+                return state;
+            }
+
+            // Snapshot the names of the macros referenced by the copied layer. Macro ids are
+            // config specific, so a later paste (possibly into another keymap or device) has to
+            // re-link them by name.
+            const copiedLayerMacroNames = new Map<number, string>();
+            for (const module of layerToCopy.modules) {
+                for (const keyAction of module.keyActions) {
+                    if (keyAction instanceof PlayMacroAction && !copiedLayerMacroNames.has(keyAction.macroId)) {
+                        const macro = state.userConfiguration.macros.find(m => m.id === keyAction.macroId);
+                        if (macro) {
+                            copiedLayerMacroNames.set(keyAction.macroId, macro.name);
+                        }
+                    }
+                }
+            }
+
+            return {
+                ...state,
+                copiedLayer: new Layer(layerToCopy),
+                copiedLayerMacroNames,
+            };
+        }
+
+        case KeymapActions.ActionTypes.PasteLayer: {
+            if (!state.copiedLayer) {
+                return state;
+            }
+
+            const targetLayerId = (action as KeymapActions.PasteLayerAction).payload;
+            const copiedLayer = state.copiedLayer;
+            const macroIdByName = new Map<string, number>(
+                state.userConfiguration.macros.map(macro => [macro.name, macro.id])
+            );
+            const keymapAbbreviations = new Set(state.userConfiguration.keymaps.map(keymap => keymap.abbreviation));
+
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
+                if (keymap.abbreviation !== state.selectedKeymapAbbr) {
+                    return keymap;
+                }
+
+                keymap = new Keymap(keymap);
+                keymap.layers = keymap.layers.map(layer => {
+                    if (layer.id !== targetLayerId) {
+                        return layer;
+                    }
+
+                    const pastedLayer = new Layer();
+                    pastedLayer.id = layer.id;
+                    // Merge by module id + key count so pasting a layer that comes from a different
+                    // keyboard or layout can never desync the target's module structure. Modules that
+                    // have no compatible counterpart in the copied layer keep their current content.
+                    pastedLayer.modules = layer.modules.map(targetModule => {
+                        const sourceModule = copiedLayer.modules.find(module =>
+                            module.id === targetModule.id
+                            && module.keyActions.length === targetModule.keyActions.length
+                        );
+
+                        if (!sourceModule) {
+                            return new Module(targetModule);
+                        }
+
+                        const pastedModule = new Module(targetModule);
+                        pastedModule.keyActions = sourceModule.keyActions.map(keyAction =>
+                            remapCopiedKeyAction(keyAction, state.copiedLayerMacroNames, macroIdByName, keymapAbbreviations)
+                        );
+
+                        return pastedModule;
+                    });
+
+                    setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, pastedLayer, state.theme);
+
+                    return pastedLayer;
+                });
+
+                return keymap;
+            });
+
+            return {
+                ...state,
+                userConfiguration,
+            };
         }
 
         case KeymapActions.ActionTypes.EditName: {
@@ -1304,6 +1399,7 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
     .from(state.layerOptions.values())
     .sort((a, b) => a.order - b.order);
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
+export const getHasCopiedLayer = (state: State): boolean => !!state.copiedLayer;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 export const getSelectedModuleConfiguration = (state: State): ModuleConfiguration => {
     if(!state.selectedModuleConfigurationId) {
@@ -1548,6 +1644,53 @@ function assignUserConfiguration(state: State, userConfig: UserConfiguration, th
         userConfiguration
     };
 
+}
+
+/**
+ * Clones a key action coming from a copied layer and re-links or neutralizes its config specific
+ * references so that a paste can never introduce a dangling reference:
+ * - PlayMacroAction is re-linked to the target macro sharing the copied macro's name; if no such
+ *   macro exists the key becomes a NoneAction (keeping its color).
+ * - SwitchKeymapAction is kept only if the referenced keymap abbreviation still exists, otherwise it
+ *   becomes a NoneAction (keeping its color).
+ * SwitchLayerAction and keystroke secondary roles reference layers by fixed enum value, so they are
+ * safe to leave untouched even when the target keymap lacks that layer.
+ */
+function remapCopiedKeyAction(
+    keyAction: KeyAction,
+    macroNamesById: Map<number, string> | undefined,
+    macroIdByName: Map<string, number>,
+    keymapAbbreviations: Set<string>,
+): KeyAction {
+    const clonedKeyAction = KeyActionHelper.fromKeyAction(keyAction);
+
+    if (clonedKeyAction instanceof PlayMacroAction) {
+        const macroName = macroNamesById?.get(clonedKeyAction.macroId);
+        const targetMacroId = macroName === undefined ? undefined : macroIdByName.get(macroName);
+
+        if (targetMacroId === undefined) {
+            return toNoneActionWithColor(clonedKeyAction);
+        }
+
+        clonedKeyAction.macroId = targetMacroId;
+
+        return clonedKeyAction;
+    }
+
+    if (clonedKeyAction instanceof SwitchKeymapAction && !keymapAbbreviations.has(clonedKeyAction.keymapAbbreviation)) {
+        return toNoneActionWithColor(clonedKeyAction);
+    }
+
+    return clonedKeyAction;
+}
+
+function toNoneActionWithColor(keyAction: KeyAction): NoneAction {
+    const noneAction = new NoneAction();
+    noneAction.r = keyAction.r;
+    noneAction.g = keyAction.g;
+    noneAction.b = keyAction.b;
+
+    return noneAction;
 }
 
 function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.SaveKeyAction): UserConfiguration {

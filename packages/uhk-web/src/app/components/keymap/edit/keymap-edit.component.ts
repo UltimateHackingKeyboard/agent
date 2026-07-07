@@ -16,6 +16,7 @@ import {
     backlightingColorPalette,
     backlightingMode,
     getHalvesInfo,
+    getHasCopiedLayer,
     getKeyboardLayout,
     getLayerOptions,
     getSecondaryRoleOptions,
@@ -57,6 +58,7 @@ export class KeymapEditComponent implements OnDestroy {
     backlightingMode$: Observable<BacklightingMode>;
     currentLayer$: Observable<LayerOption>;
     deletable$: Observable<boolean>;
+    hasCopiedLayer$: Observable<boolean>;
     isBacklightingColoring$: Observable<boolean>;
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
@@ -117,6 +119,7 @@ export class KeymapEditComponent implements OnDestroy {
             });
 
         this.deletable$ = store.select(isKeymapDeletable);
+        this.hasCopiedLayer$ = store.select(getHasCopiedLayer);
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);

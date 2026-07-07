@@ -32,11 +32,23 @@
                 font-size: 18px;
             }
 
+            circle-tooltip {
+                align-self: center;
+            }
+
             .btn-group {
                 flex-wrap: wrap;
                 .btn {
                     flex-grow: 0;
                 }
+            }
+        }
+
+        .layer-actions {
+            flex-wrap: wrap;
+
+            .btn {
+                flex-grow: 0;
             }
         }
     }
