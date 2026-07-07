@@ -10,3 +10,55 @@
     display: inline-block;
     width: 1rem;
 }
+
+.firmware-module-list {
+    margin-bottom: 0;
+}
+
+.firmware-module {
+    width: fit-content;
+    max-width: 100%;
+}
+
+.firmware-module__percent {
+    margin-left: 0.25rem;
+}
+
+.firmware-module:last-child {
+    margin-bottom: 1rem;
+}
+
+.firmware-module__progress {
+    height: 5px;
+    margin-top: 2px;
+    border-radius: 2px;
+    overflow: hidden;
+    background-color: var(--color-progress-bar-bg);
+}
+
+.firmware-module__progress-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--color-progress-bar-progress);
+    transition: width 200ms ease-out;
+}
+
+.firmware-connect-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.firmware-connect-prompt__icon {
+    font-size: 1.5rem;
+}
+
+.firmware-log-toggle {
+    margin-bottom: 0;
+
+    a {
+        cursor: pointer;
+    }
+}

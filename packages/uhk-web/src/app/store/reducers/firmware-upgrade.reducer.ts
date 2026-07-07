@@ -6,6 +6,7 @@ import {
     FirmwareUpgradeFailReason,
     HardwareModules,
     isOfficialUhkFirmware,
+    ModuleFirmwareUpgradeProgress,
     ModuleFirmwareUpgradeSkipReason,
     ModuleInfo,
     ModuleSlotToId,
@@ -50,6 +51,7 @@ const FIRMWARE_NOT_FORCE_UPGRADING = [
 
 export interface State {
     connectedDevice?: UhkDeviceProduct;
+    connectPrompt?: string;
     dongle?: Dongle;
     firmwareJson?: FirmwareJson;
     hardwareModules: HardwareModules;
@@ -123,6 +125,24 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
+        case Device.ActionTypes.ModuleFirmwareUpgradeProgress: {
+            const payload = (action as Device.ModuleFirmwareUpgradeProgressAction).payload;
+
+            return {
+                ...state,
+                modules: setModuleUpgradeProgress(state.modules, payload),
+            };
+        }
+
+        case Device.ActionTypes.FirmwareUpgradeConnectPrompt: {
+            const payload = (action as Device.FirmwareUpgradeConnectPromptAction).payload;
+
+            return {
+                ...state,
+                connectPrompt: payload?.message,
+            };
+        }
+
         case Device.ActionTypes.CurrentlyUpdateSkipModule: {
             const payload = (action as Device.CurrentlyUpdateSkipModuleAction).payload;
 
@@ -179,6 +199,7 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.UpdateFirmware:
             return {
                 ...state,
+                connectPrompt: undefined,
                 log: [{ message: 'Start flashing firmware', cssClass: XtermCssClass.standard }],
                 upgradeState: (action as UpdateFirmwareAction).payload
                     ? FirmwareUpgradeStates.ForceUpdateStarted
@@ -192,6 +213,7 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.UpdateFirmwareWith:
             return {
                 ...state,
+                connectPrompt: undefined,
                 log: [{ message: 'Start flashing firmware', cssClass: XtermCssClass.standard }],
                 upgradeState: (action as UpdateFirmwareWithAction).payload.forceUpgrade
                     ? FirmwareUpgradeStates.ForceUpdateStartedWith
@@ -205,6 +227,7 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.UpdateFirmwareSuccess:
             return {
                 ...state,
+                connectPrompt: undefined,
                 firmwareJson: undefined,
                 upgradeState: state.upgradedModule
                     ? FirmwareUpgradeStates.Success
@@ -247,6 +270,7 @@ export function reducer(state = initialState, action: Action): State {
 
             return {
                 ...state,
+                connectPrompt: undefined,
                 log: [...state.log, logEntry],
                 upgradeState: FirmwareUpgradeStates.Failed,
                 modules: state.modules.map(module => {
@@ -317,6 +341,7 @@ export const updatingFirmware = (state: State) => FIRMWARE_UPGRADING_STATES.incl
 export const firmwareUpgradeFailed = (state: State) => state.upgradeState === FirmwareUpgradeStates.Failed;
 export const firmwareUpgradeSuccess = (state: State) => state.upgradeState === FirmwareUpgradeStates.Success;
 export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
+    connectPrompt: state.connectPrompt,
     failReason: state.failReason,
     showForceFirmwareUpgrade: state.showForceFirmwareUpgrade,
     showForceFirmwareUpgradeWith: state.showForceFirmwareUpgradeWith,
@@ -478,6 +503,7 @@ function setUpdatingModuleState(state: State, payload: CurrentlyUpdatingModuleIn
                 beforeFirmwareUpgradeChecksum: module.currentFirmwareChecksum,
                 forceUpgraded: payload.forceUpgraded,
                 newFirmwareChecksum: payload.newFirmwareChecksum,
+                progressPercent: 0,
                 state: ModuleFirmwareUpgradeStates.Upgrading,
             };
             newState.checksumTooltip = calculateChecksumTooltip(newState);
@@ -487,6 +513,19 @@ function setUpdatingModuleState(state: State, payload: CurrentlyUpdatingModuleIn
 
         if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
             return updateUpgradingModuleState(state, module, payload);
+        }
+
+        return module;
+    });
+}
+
+function setModuleUpgradeProgress(modules: Array<ModuleFirmwareUpgradeState>, payload: ModuleFirmwareUpgradeProgress): Array<ModuleFirmwareUpgradeState> {
+    return modules.map(module => {
+        if (module.moduleName === payload.moduleName && module.state === ModuleFirmwareUpgradeStates.Upgrading) {
+            return {
+                ...module,
+                progressPercent: payload.progress,
+            };
         }
 
         return module;

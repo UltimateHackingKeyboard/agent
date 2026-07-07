@@ -7,7 +7,7 @@ export interface Peripheral {
 
     sendCommand(options: CommandOption): Promise<CommandResponse>;
 
-    writeMemory(data: DataOption): Promise<void>;
+    writeMemory(data: DataOption, onProgress?: (percent: number) => void): Promise<void>;
 
     readMemory(startAddress: number, count: number): Promise<Buffer>;
 }

@@ -8,6 +8,7 @@ import {
     DeviceConnectionState,
     DeviceVersionInformation,
     FirmwareJson,
+    FirmwareUpgradeConnectPrompt,
     FirmwareUpgradeIpcResponse,
     HardwareConfiguration,
     HardwareModules,
@@ -15,6 +16,7 @@ import {
     IpcResponse,
     KeyboardLayout,
     LogService,
+    ModuleFirmwareUpgradeProgress,
     ModuleFirmwareUpgradeSkipInfo,
     SaveUserConfigurationData,
     UHK_DEVICE_IDS_TYPE,
@@ -49,7 +51,9 @@ import {
     EraseBleSettingReplyAction,
     CurrentlyUpdateSkipModuleAction,
     CurrentlyUpdatingModuleAction,
+    FirmwareUpgradeConnectPromptAction,
     HardwareModulesLoadedAction,
+    ModuleFirmwareUpgradeProgressAction,
     ReadConfigSizesReplyAction,
     RecoveryDeviceReplyAction,
     RecoveryModuleReplyAction,
@@ -296,6 +300,14 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgrading, (event: string, response: CurrentlyUpdatingModuleInfo) => {
             this.dispachStoreAction(new CurrentlyUpdatingModuleAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeProgress, (event: string, response: ModuleFirmwareUpgradeProgress) => {
+            this.dispachStoreAction(new ModuleFirmwareUpgradeProgressAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.firmwareUpgradeConnectPrompt, (event: string, response: FirmwareUpgradeConnectPrompt | null) => {
+            this.dispachStoreAction(new FirmwareUpgradeConnectPromptAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.updateFirmwareReply, (event: string, response: FirmwareUpgradeIpcResponse) => {

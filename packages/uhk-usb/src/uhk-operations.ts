@@ -123,22 +123,22 @@ export class UhkOperations {
         await this.device.write(transfer);
     }
 
-    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct, onProgress?: (percent: number) => void): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing device firmware with ${device.firmwareUpgradeMethod}`);
 
         switch (device.firmwareUpgradeMethod) {
             case FIRMWARE_UPGRADE_METHODS.KBOOT:
-                return this.updateRightFirmwareWithKboot(firmwarePath, device);
+                return this.updateRightFirmwareWithKboot(firmwarePath, device, onProgress);
 
             case FIRMWARE_UPGRADE_METHODS.MCUBOOT:
-                return this.updateFirmwareWithMcuManager(firmwarePath, device);
+                return this.updateFirmwareWithMcuManager(firmwarePath, device, onProgress);
 
             default:
                 throw new Error(`Firmware upgrade method not implemented: ${device.firmwareUpgradeMethod}`);
         }
     }
 
-    public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+    public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct, onProgress?: (percent: number) => void): Promise<void> {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
@@ -162,13 +162,20 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Read RIGHT firmware from file');
         const bootloaderMemoryMap = await readBootloaderFirmwareFromHexFileAsync(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory');
+        const totalBytes = [...bootloaderMemoryMap.values()].reduce((sum, data) => sum + data.length, 0);
+        let writtenBytes = 0;
+        onProgress?.(0);
         for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
             const dataOption: DataOption = {
                 startAddress,
                 data
             };
 
-            await kboot.writeMemory(dataOption);
+            const bytesBeforeEntry = writtenBytes;
+            await kboot.writeMemory(dataOption, entryPercent => {
+                onProgress?.(Math.min(100, Math.round((bytesBeforeEntry + data.length * entryPercent / 100) / totalBytes * 100)));
+            });
+            writtenBytes += data.length;
         }
 
         this.logService.misc('[UhkOperations] Reset bootloader');
@@ -178,7 +185,7 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct) {
+    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct, onProgress?: (percent: number) => void) {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
@@ -199,7 +206,7 @@ export class UhkOperations {
         this.logService.misc(`[UhkOperations] Read ${device.logName} firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory with mcumgr');
-        await mcuManager.imageUpload(configData);
+        await mcuManager.imageUpload(configData, onProgress);
         this.logService.misc('[UhkOperations] Reset mcu bootloader');
         await mcuManager.reset();
         this.logService.misc('[UhkOperations] Close mcu communication channels');
@@ -207,14 +214,15 @@ export class UhkOperations {
         this.logService.misc(`[UhkOperations] ${device.logName} firmware successfully flashed`);
     }
 
-    public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
-        return this.updateModuleWithKboot(firmwarePath, device, LEFT_HALF_MODULE);
+    public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct, onProgress?: (percent: number) => void): Promise<void> {
+        return this.updateModuleWithKboot(firmwarePath, device, LEFT_HALF_MODULE, onProgress);
     }
 
     public async updateModuleWithKboot(
         firmwarePath: string,
         device: UhkDeviceProduct,
-        module: UhkModule
+        module: UhkModule,
+        onProgress?: (percent: number) => void
     ): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
@@ -279,7 +287,7 @@ export class UhkOperations {
 
         this.logService.misc('[UhkOperations] Write memory');
         await kboot.configureI2c(module.i2cAddress);
-        await kboot.writeMemory({ startAddress: 0, data: configData });
+        await kboot.writeMemory({ startAddress: 0, data: configData }, onProgress);
 
         this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
         await kboot.reset();
