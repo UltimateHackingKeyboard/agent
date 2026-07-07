@@ -75,9 +75,10 @@ export class UsbPeripheral implements Peripheral {
         });
     }
 
-    writeMemory(option: DataOption): Promise<void> {
+    writeMemory(option: DataOption, onProgress?: (percent: number) => void): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
+                onProgress?.(0);
                 const command: CommandOption = {
                     command: Commands.WriteMemory,
                     hasDataPhase: true,
@@ -113,6 +114,7 @@ export class UsbPeripheral implements Peripheral {
                     await this._device.write(writeData);
                     // workaround to prevent main thread blocking
                     await snooze(1);
+                    onProgress?.(Math.min(100, Math.round((i + slice.length) / option.data.length * 100)));
                 }
 
                 const receivedData = await this._device.read(option.timeout || 2000);

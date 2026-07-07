@@ -17,7 +17,8 @@ export class TestPeripheral implements Peripheral {
         return Promise.resolve(response);
     }
 
-    writeMemory(data: DataOption): Promise<void> {
+    writeMemory(data: DataOption, onProgress?: (percent: number) => void): Promise<void> {
+        onProgress?.(100);
         return Promise.resolve();
     }
 

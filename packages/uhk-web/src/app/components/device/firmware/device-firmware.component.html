@@ -7,35 +7,56 @@
                 <span>Firmware</span>
             </h1>
 
-            <ul class="list-unstyled">
-                <li *ngFor="let state of firmwareUpgradeStates.modules; trackBy:firmwareUpgradeStateTrackByFn;">
+            <ul class="list-unstyled firmware-module-list">
+                <li *ngFor="let state of firmwareUpgradeStates.modules; trackBy:firmwareUpgradeStateTrackByFn;"
+                    class="firmware-module">
                     <ng-template #htmlTooltipTemplate>
                         <div [innerHTML]="state.checksumTooltip | escapeHtml | safeHtml"></div>
                     </ng-template>
-                    <span class="upgrading"
-                          [ngbTooltip]="htmlTooltipTemplate"
-                          [disableTooltip]="!state.checksumTooltip"
-                          tooltipClass="tooltip-firmware-checksum"
-                    >
-                        <fa-icon *ngIf="state.state === 'Upgrading'" [icon]="faSpinner" animation="spin" [fixedWidth]="true"></fa-icon>
-                        <fa-icon *ngIf="state.state === 'Failed'" [icon]="faExclamation" class="text-danger" [fixedWidth]="true"></fa-icon>
-                        <fa-icon *ngIf="state.state === 'Success' || state.state === 'Skipped'" [icon]="faCheck" [fixedWidth]="true"></fa-icon>
-                    </span>
-                    {{ state.moduleName }}
-                    <span *ngIf="state.firmwareUpgradeSupported">firmware:
-                        <span *ngIf="state.gitRepo" [class.text-body-secondary]="state.isOfficialFirmware">{{ state.gitRepo }}:</span>
-                        <span [class.text-dotted]="state.tooltip"
-                              [ngbTooltip]="state.tooltip"
-                              tooltipClass="tooltip-firmware-version"
-                        >{{ state.currentFirmwareVersion }}</span>
-                        <span *ngIf="state.gitTag" [class.text-body-secondary]="state.isOfficialFirmware">{{ gitTagText(state.currentFirmwareVersion, state.gitTag) }}</span>
-                        <span *ngIf="state.newFirmwareVersion && (state.currentFirmwareVersion !== state.newFirmwareVersion || state.gitTag !== state.newGitTag)">
-                            <fa-icon [icon]="faLongArrowAltRight"></fa-icon> {{ state.newFirmwareVersion }} <span *ngIf="state.newGitTag">{{ gitTagText(state.newFirmwareVersion, state.newGitTag) }}</span>
+                    <div class="firmware-module__header">
+                        <span class="upgrading"
+                              [ngbTooltip]="htmlTooltipTemplate"
+                              [disableTooltip]="!state.checksumTooltip"
+                              tooltipClass="tooltip-firmware-checksum"
+                        >
+                            <fa-icon *ngIf="state.state === moduleFirmwareUpgradeStates.Upgrading" [icon]="faSpinner" animation="spin" [fixedWidth]="true"></fa-icon>
+                            <fa-icon *ngIf="state.state === moduleFirmwareUpgradeStates.Failed" [icon]="faExclamation" class="text-danger" [fixedWidth]="true"></fa-icon>
+                            <fa-icon *ngIf="state.state === moduleFirmwareUpgradeStates.Success || state.state === moduleFirmwareUpgradeStates.Skipped" [icon]="faCheck" [fixedWidth]="true"></fa-icon>
                         </span>
-                    </span>
-                    <span *ngIf="!state.firmwareUpgradeSupported"> is detected, and its firmware is implemented by the right keyboard half.</span>
+                        {{ state.moduleName }}
+                        <span *ngIf="state.firmwareUpgradeSupported">firmware:
+                            <span *ngIf="state.gitRepo" [class.text-body-secondary]="state.isOfficialFirmware">{{ state.gitRepo }}:</span>
+                            <span [class.text-dotted]="state.tooltip"
+                                  [ngbTooltip]="state.tooltip"
+                                  tooltipClass="tooltip-firmware-version"
+                            >{{ state.currentFirmwareVersion }}</span>
+                            <span *ngIf="state.gitTag" [class.text-body-secondary]="state.isOfficialFirmware">{{ gitTagText(state.currentFirmwareVersion, state.gitTag) }}</span>
+                            <span *ngIf="state.newFirmwareVersion && (state.currentFirmwareVersion !== state.newFirmwareVersion || state.gitTag !== state.newGitTag)">
+                                <fa-icon [icon]="faLongArrowAltRight"></fa-icon> {{ state.newFirmwareVersion }} <span *ngIf="state.newGitTag">{{ gitTagText(state.newFirmwareVersion, state.newGitTag) }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="!state.firmwareUpgradeSupported"> is detected, and its firmware is implemented by the right keyboard half.</span>
+                        <span *ngIf="state.state === moduleFirmwareUpgradeStates.Upgrading"
+                              class="firmware-module__percent">{{ state.progressPercent || 0 }}%</span>
+                    </div>
+                    <div *ngIf="state.state === moduleFirmwareUpgradeStates.Upgrading"
+                         class="firmware-module__progress"
+                         role="progressbar"
+                         [attr.aria-valuenow]="state.progressPercent || 0"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="firmware-module__progress-bar"
+                             [style.width.%]="state.progressPercent || 0"></div>
+                    </div>
                 </li>
             </ul>
+
+            <div *ngIf="firmwareUpgradeStates.connectPrompt"
+                 class="alert alert-warning firmware-connect-prompt"
+                 role="alert">
+                <fa-icon [icon]="faExclamationTriangle" class="firmware-connect-prompt__icon"></fa-icon>
+                <span>{{ firmwareUpgradeStates.connectPrompt }}</span>
+            </div>
 
             <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista,
                 and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
@@ -118,9 +139,13 @@
                  role="alert">
                 {{ upgradeType }} update succeeded.
             </div>
+
+            <p *ngIf="hasLogText$ | async" class="firmware-log-toggle">
+                <a (click)="toggleLog()">{{ showLog ? 'Hide' : 'Show' }} update log</a>
+            </p>
         </div>
 
-        <div class="flex-grow" *ngIf="firmwareUpgradeAllowed$ | async">
+        <div class="flex-grow" *ngIf="showLog && (firmwareUpgradeAllowed$ | async)">
             <xterm [logs]="xtermLog$ | async"></xterm>
         </div>
         <div class="flex-footer">

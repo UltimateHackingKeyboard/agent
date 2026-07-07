@@ -1,9 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
     faCheck,
     faExclamation,
+    faExclamationTriangle,
     faLongArrowAltRight,
     faSlidersH,
     faSpinner,
@@ -24,7 +26,7 @@ import {
 import { RecoveryModuleAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 import { XtermComponent } from '../../xterm/xterm.component';
-import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
+import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, ModuleFirmwareUpgradeStates, UpdateFirmwareWithPayload } from '../../../models';
 
 @Component({
     selector: 'device-firmware',
@@ -38,6 +40,8 @@ import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPay
 export class DeviceFirmwareComponent implements OnDestroy {
     flashFirmwareButtonDisabled$: Observable<boolean>;
     xtermLog$: Observable<Array<XtermLog>>;
+    hasLogText$: Observable<boolean>;
+    showLog = false;
     firmwareUpgradeStates: FirmwareUpgradeState;
     runningOnNotSupportedWindows$: Observable<boolean>;
     firmwareUpgradeAllowed$: Observable<boolean>;
@@ -56,6 +60,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
     faSpinner = faSpinner;
     faCheck = faCheck;
     faExclamation = faExclamation;
+    faExclamationTriangle = faExclamationTriangle;
+    moduleFirmwareUpgradeStates = ModuleFirmwareUpgradeStates;
 
     private subscription = new Subscription();
 
@@ -63,6 +69,9 @@ export class DeviceFirmwareComponent implements OnDestroy {
                 private cdRef: ChangeDetectorRef) {
         this.flashFirmwareButtonDisabled$ = store.select(flashFirmwareButtonDisabled);
         this.xtermLog$ = store.select(xtermLog);
+        this.hasLogText$ = this.xtermLog$.pipe(
+            map(logs => (logs || []).some(log => log.message?.trim().length > 0))
+        );
         this.subscription.add(store.select(getFirmwareUpgradeState).subscribe(data => {
             this.firmwareUpgradeStates = data;
             this.cdRef.markForCheck();
@@ -85,6 +94,10 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+    }
+
+    toggleLog(): void {
+        this.showLog = !this.showLog;
     }
 
     onUpdateFirmware(): void {

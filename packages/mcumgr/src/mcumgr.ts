@@ -74,9 +74,10 @@ export class McuManager {
     /**
      * Upload a firmware/bootloader image to the device
      */
-    async imageUpload(buffer: Buffer): Promise<void> {
+    async imageUpload(buffer: Buffer, onProgress?: (percent: number) => void): Promise<void> {
         logger('Start send image upload command: %o', { bufferLength: buffer.byteLength });
         let written = 0;
+        onProgress?.(0);
 
         while (written < buffer.length) {
             const message: ImageUploadRequest = {
@@ -104,6 +105,7 @@ export class McuManager {
             }
 
             logger('Image uploaded: %d', written / buffer.length * 100);
+            onProgress?.(Math.min(100, Math.round(written / buffer.length * 100)));
         }
     }
 
