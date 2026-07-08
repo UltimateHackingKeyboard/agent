@@ -321,7 +321,7 @@ export class UhkOperations {
                 const totalBytes = Math.max(userConfigSize + hardwareConfigSize, 1);
                 const transferredBytes = userOffset + hardwareOffset;
 
-                onProgress?.(Math.round(Math.min(transferredBytes / totalBytes, 1) * 100));
+                onProgress?.(Math.round(transferredBytes / totalBytes * 100));
             };
 
             const userConfiguration = await this.loadConfiguration(
@@ -423,13 +423,9 @@ export class UhkOperations {
     }
 
     public async saveUserConfiguration(buffer: Buffer, onProgress?: (percent: number) => void): Promise<void> {
-        const reportProgress = (() => {
-            let lastProgress = 0;
-            return (percent: number) => {
-                lastProgress = Math.max(lastProgress, Math.min(100, Math.round(percent)));
-                onProgress?.(lastProgress);
-            };
-        })();
+        const reportProgress = (percent: number) => {
+            onProgress?.(percent);
+        };
 
         try {
             reportProgress(0);
@@ -464,11 +460,11 @@ export class UhkOperations {
             const configBuffer = resultBuffer.getBufferContent();
 
             const preTransferPercent = 2;
-            const transferPercentRange = 83;
+            const transferPercentRange = 0.83;
 
             reportProgress(preTransferPercent);
             await this.sendConfigToKeyboard(configBuffer, true, (percent) => {
-                reportProgress(preTransferPercent + percent / 100 * transferPercentRange);
+                reportProgress(preTransferPercent + Math.round(percent * transferPercentRange));
             });
             reportProgress(86);
             await this.applyConfiguration();

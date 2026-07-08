@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { startWith } from 'rxjs/operators';
 
 import { AppState, getConfigurationLoadingProgress } from '../../store';
 
@@ -21,6 +20,6 @@ export class LoadingDevicePageComponent {
     progressPercent$: Observable<number>;
 
     constructor(store: Store<AppState>) {
-        this.progressPercent$ = store.select(getConfigurationLoadingProgress).pipe(startWith(0));
+        this.progressPercent$ = store.select(getConfigurationLoadingProgress);
     }
 }

@@ -4,7 +4,7 @@ import * as Device from "../actions/device";
 export interface ProgressButtonState {
     showButton: boolean;
     text: string;
-    showProgress?: boolean;
+    showProgress: boolean;
     progressPercent: number;
     action?: Action;
 }
