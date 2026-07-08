@@ -17,8 +17,7 @@ import { isAllowedScancode } from '../scancode-checker.js';
 
 export class Helper {
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    static createKeyAction(source: KeyAction | UhkBuffer | any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
+    static createKeyAction(source: KeyAction | UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
         } else if (source instanceof UhkBuffer) {

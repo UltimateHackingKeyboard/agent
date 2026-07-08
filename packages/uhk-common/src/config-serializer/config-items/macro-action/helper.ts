@@ -11,8 +11,7 @@ import { CommandMacroAction } from './command-macro-action.js';
 
 export class Helper {
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    static createMacroAction(source: MacroAction | UhkBuffer | any, serialisationInfo: SerialisationInfo): MacroAction {
+    static createMacroAction(source: MacroAction | UhkBuffer, serialisationInfo: SerialisationInfo): MacroAction {
         if (source instanceof MacroAction) {
             return Helper.fromMacroAction(source);
         } else if (source instanceof UhkBuffer) {
