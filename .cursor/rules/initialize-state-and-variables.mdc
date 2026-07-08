@@ -1,0 +1,43 @@
+---
+description: Initialize variables and NgRx state with concrete defaults
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Initialize variables and NgRx state
+
+Initialize primitives and objects at declaration whenever a sensible default exists. The goal is typed, predictable values—not defensive `?.` and `??` scattered through selectors, templates, and components.
+
+## General TypeScript
+
+- Give local variables an initial value when one is known at declaration time.
+- Prefer empty-but-valid defaults (`''`, `0`, `[]`, `{}`) over `undefined`.
+- Mark fields optional (`?`) only when they are genuinely absent until a specific event (e.g. async load, user action).
+
+## NgRx state
+
+- Define a complete `initialState` that sets every non-optional field on the `State` interface.
+- Reuse existing factory helpers or constants for defaults when the codebase already provides them.
+- Reserve optional properties for values that truly start unknown; do not make a field optional just to skip initializing it.
+
+```typescript
+// ✅ GOOD — complete initialState; optional only where value is truly unknown
+export interface State {
+    loading: boolean;
+    items: Item[];
+    selectedId?: string;
+}
+
+export const initialState: State = {
+    loading: false,
+    items: [],
+};
+
+// ❌ BAD — optional everywhere forces nullish handling downstream
+export interface State {
+    loading?: boolean;
+    items?: Item[];
+}
+
+export const initialState: State = {};
+```

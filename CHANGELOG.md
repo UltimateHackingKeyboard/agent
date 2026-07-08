@@ -6,6 +6,16 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [10.1.0] - 2026-06-23
+
+Firmware: 17.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v17.2.0)] | Device Protocol: 4.17.0 | User Config: 14.0.0 | Hardware Config: 1.0.0
+
+- Implement new logging/shell access with vt100 support.
+- Make keyboard names persistent when sharing a single config between multiple uhks.
+- Improve Typing Behavior page wording.
+- Fix: autocompletion grammar fallback.
+- Fix: autocompletion freeze on `tapKeySeq f1 f1 f1 f1...` and other ambiguous expressions.
+
 ## [10.0.0] - 2026-04-28
 
 Firmware: 17.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v17.0.0)] | Device Protocol: 4.17.0 | User Config: 14.0.0 | Hardware Config: 1.0.0

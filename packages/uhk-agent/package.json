@@ -31,7 +31,7 @@
     "uhk-usb": "file:../uhk-usb"
   },
   "scripts": {
-    "start": "cross-env DEBUG=kboot*,mcumgr* electron ./dist/electron-main.js",
+    "start": "cross-env DEBUG=kboot*,mcumgr* NODE_OPTIONS=\"--enable-source-maps\" electron ./dist/electron-main.js",
     "electron:spe": "electron ./dist/electron-main.js --spe",
     "build": "webpack && npm run install:build-deps && npm run download-firmware && npm run copy-to-tmp-folder",
     "clean": "rimraf ./node_modules ./dist",

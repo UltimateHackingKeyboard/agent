@@ -1,0 +1,14 @@
+---
+description: Refactor iteration leftovers before committing or opening a PR
+alwaysApply: true
+---
+
+# Refactor before commit or PR
+
+Before committing or opening a pull request, review the diff for refactoring opportunities in the code you touched.
+
+Iterative changes—especially from agent-assisted edits—often leave redundant helpers, duplicated logic, dead code, or overly narrow abstractions. Clean these up when the refactor is clearly worthwhile and stays within the scope of the change.
+
+- Prefer consolidating duplication and removing unused code over adding new layers.
+- Do not expand scope into unrelated files or drive-by refactors.
+- If a refactor would be large or risky, note it in the PR instead of blocking the commit.

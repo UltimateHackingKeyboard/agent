@@ -2,7 +2,7 @@
   "name": "uhk-web",
   "version": "1.0.0",
   "scripts": {
-    "clean": "rimraf ./node_modules ./.angular",
+    "clean": "rimraf ./node_modules ./.angular ./dist",
     "ng": "ng",
     "start": "ng serve",
     "build": "run-s -sn build:renderer",

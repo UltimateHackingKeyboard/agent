@@ -45,10 +45,15 @@ export class AppUpdateService extends MainServiceBase {
             this.sendIpcToWindow(IpcEvents.autoUpdater.checkingForUpdate);
         });
 
-        autoUpdater.on('update-available', async (info: UpdateInfo) => {
+        autoUpdater.on('update-available', (info: UpdateInfo) => {
             this.logService.misc('[AppUpdateService] update available. Downloading started');
-            await autoUpdater.downloadUpdate();
-            this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
+            autoUpdater.downloadUpdate()
+                .then(() => {
+                    this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
+                })
+                .catch((error) => {
+                    this.logService.error('[AppUpdateService] Error when reporting update available: ', error);
+                });
         });
 
         autoUpdater.on('update-not-available', (info: UpdateInfo) => {
@@ -88,12 +93,16 @@ export class AppUpdateService extends MainServiceBase {
             return autoUpdater.quitAndInstall(true, true);
         });
 
-        ipcMain.on(IpcEvents.app.appStarted, async () => {
-            if (await this.checkForUpdateAtStartup()) {
-                this.sendAutoUpdateNotification = false;
-                this.logService.misc('[AppUpdateService] app started. Automatically check for update.');
-                this.checkForUpdate();
-            }
+        ipcMain.on(IpcEvents.app.appStarted, () => {
+            this.logService.misc('[AppUpdateService] app started');
+            this.checkForUpdateAtStartup()
+                .then((checkForUpdate) => {
+                    if (checkForUpdate) {
+                        this.sendAutoUpdateNotification = false;
+                        this.logService.misc('[AppUpdateService] app started. Automatically check for update.');
+                        this.checkForUpdate();
+                    }
+                })
         });
 
         ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, (event: Electron.Event, args) => {

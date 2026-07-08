@@ -104,9 +104,9 @@ async function createWindow() {
         webPreferences: {
             contextIsolation: false,
             spellcheck: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(import.meta.dirname, 'preload.js')
         },
-        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png'),
+        icon: path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png'),
         backgroundColor: await getWindowBackgroundColor(),
         show: false
     });
@@ -125,7 +125,7 @@ async function createWindow() {
     // and load the index.html of the app.
 
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'renderer/index.html'),
+        pathname: path.join(import.meta.dirname, 'renderer/index.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -135,26 +135,11 @@ async function createWindow() {
     });
 
     // Emitted when the window is closed.
-    win.on('closed', async () => {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        logger.misc('[Electron Main] win closed');
-        win = null;
-        try {
-            await deviceService.close();
-        } catch (error) {
-            // TODO: Investigate it deeper. It happens on MacOs 15+ sometimes
-            logger.error('[Electron Main] Error while closing DeviceService when electron has been closed', error);
-        }
-        deviceService = null;
-        appUpdateService = null;
-        appService = null;
-        await uhkHidDeviceService.close();
-        uhkHidDeviceService = null;
-        sudoService = null;
-        await smartMacroDocService.stop();
-        smartMacroDocService = null;
+    win.on('closed', () => {
+        windowClosed()
+            .catch((error) => {
+                logger.error('[Electron Main] Error while closing window', error);
+            })
     });
 
     win.once('ready-to-show', () => {
@@ -198,6 +183,28 @@ async function createWindow() {
     });
 
     win.on('close', () => saveWindowState(win, logger));
+}
+
+async function windowClosed() {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    logger.misc('[Electron Main] win closed');
+    win = null;
+    try {
+        await deviceService.close();
+    } catch (error) {
+        // TODO: Investigate it deeper. It happens on MacOs 15+ sometimes
+        logger.error('[Electron Main] Error while closing DeviceService when electron has been closed', error);
+    }
+    deviceService = null;
+    appUpdateService = null;
+    appService = null;
+    await uhkHidDeviceService.close();
+    uhkHidDeviceService = null;
+    sudoService = null;
+    await smartMacroDocService.stop();
+    smartMacroDocService = null;
 }
 
 if (isSecondInstance) {
@@ -254,7 +261,12 @@ if (isSecondInstance) {
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    app.on('ready', createWindow);
+    app.on('ready', () => {
+        createWindow()
+            .catch((error) => {
+                logger.error('[Electron Main] when creating the window: ', error);
+            });
+    });
 
     // Quit when all windows are closed.
     app.on('window-all-closed', () => {
@@ -264,11 +276,14 @@ if (isSecondInstance) {
     app.on('will-quit', () => {
     });
 
-    app.on('activate', async () => {
+    app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (win === null) {
-            await createWindow();
+            createWindow()
+                .catch((error) => {
+                    logger.error('[Electron Main] when activating the app: ', error);
+                });
         }
     });
 
