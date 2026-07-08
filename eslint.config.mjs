@@ -27,7 +27,6 @@ export const typescriptRules = {
     '@typescript-eslint/prefer-promise-reject-errors': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/unbound-method': 'off',
-    'no-case-declarations': 'off',
     'no-prototype-builtins': 'off',
     'preserve-caught-error': 'off',
 }

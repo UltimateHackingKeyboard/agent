@@ -96,7 +96,7 @@ export function encode(value: unknown) {
             return writeUint8(0xf7);
 
         switch (typeof value) {
-            case "number":
+            case "number": {
                 if (Math.floor(value) === value) {
                     if (0 <= value && value <= POW_2_53)
                         return writeTypeAndLength(0, value);
@@ -105,8 +105,9 @@ export function encode(value: unknown) {
                 }
                 writeUint8(0xfb);
                 return writeFloat64(value);
+            }
 
-            case "string":
+            case "string": {
                 const utf8data = [];
                 for (i = 0; i < value.length; ++i) {
                     let charCode = value.charCodeAt(i);
@@ -133,8 +134,9 @@ export function encode(value: unknown) {
 
                 writeTypeAndLength(3, utf8data.length);
                 return writeUint8Array(utf8data);
+            }
 
-            default:
+            default: {
                 let length;
                 if (Array.isArray(value)) {
                     length = value.length;
@@ -154,6 +156,7 @@ export function encode(value: unknown) {
                         encodeItem(value[key]);
                     }
                 }
+            }
         }
     }
 
@@ -308,11 +311,15 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
             throw "Invalid length";
 
         switch (majorType) {
-            case 0:
+            case 0: {
                 return length;
-            case 1:
+            }
+
+            case 1: {
                 return -1 - length;
-            case 2:
+            }
+
+            case 2: {
                 if (length < 0) {
                     const elements = [];
                     let fullArrayLength = 0;
@@ -329,7 +336,9 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
                     return fullArray;
                 }
                 return readArrayBuffer(length);
-            case 3:
+            }
+
+            case 3: {
                 const utf16data = [];
                 if (length < 0) {
                     while ((length = readIndefiniteStringLength(majorType)) >= 0)
@@ -337,7 +346,9 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
                 } else
                     appendUtf16Data(utf16data, length);
                 return String.fromCharCode.apply(null, utf16data);
-            case 4:
+            }
+
+            case 4: {
                 let retArray;
                 if (length < 0) {
                     retArray = [];
@@ -349,16 +360,22 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
                         retArray[i] = decodeItem();
                 }
                 return retArray;
-            case 5:
+            }
+
+            case 5: {
                 const retObject = {};
                 for (i = 0; i < length || length < 0 && !readBreak(); ++i) {
                     const key = decodeItem();
                     retObject[key] = decodeItem();
                 }
                 return retObject;
-            case 6:
+            }
+
+            case 6: {
                 return tagger(decodeItem(), length);
-            case 7:
+            }
+
+            case 7: {
                 switch (length) {
                     case 20:
                         return false;
@@ -371,6 +388,7 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
                     default:
                         return simpleValue(length);
                 }
+            }
         }
     }
 
