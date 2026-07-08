@@ -1,5 +1,7 @@
 import { McuManager, SerialPeripheral } from '@uhk/mcumgr';
+import crc16 from 'crc16-xmodem';
 import * as fs from 'fs';
+import { readFile } from 'node:fs/promises';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 import {
     ALL_UHK_DEVICES,
@@ -45,6 +47,11 @@ import {
     UsbCommand,
     UsbVariables
 } from './constants.js';
+import {
+    MODULE_FLASH_STATE,
+    MODULE_FLASH_STATE_TYPE,
+    ModuleFlashResponse,
+} from './models/module-flash-state.js';
 import {
     DebugInfo,
     Duration,
@@ -197,7 +204,7 @@ export class UhkOperations {
         const peripheral = new SerialPeripheral(reenumerateResult.serialPath);
         const mcuManager = new McuManager(peripheral);
         this.logService.misc(`[UhkOperations] Read ${device.logName} firmware from file`);
-        const configData = fs.readFileSync(firmwarePath);
+        const configData = await readFile(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory with mcumgr');
         await mcuManager.imageUpload(configData);
         this.logService.misc('[UhkOperations] Reset mcu bootloader');
@@ -275,7 +282,7 @@ export class UhkOperations {
         await kboot.flashEraseAllUnsecure();
 
         this.logService.misc(`[UhkOperations] Read "${module.name}" firmware from file`);
-        const configData = fs.readFileSync(firmwarePath);
+        const configData = await readFile(firmwarePath);
 
         this.logService.misc('[UhkOperations] Write memory');
         await kboot.configureI2c(module.i2cAddress);
@@ -302,6 +309,52 @@ export class UhkOperations {
         await this.device.close();
 
         this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
+    }
+
+    public async updateModuleWithKbootNative(
+        firmwarePath: string,
+        device: UhkDeviceProduct,
+        module: UhkModule
+    ): Promise<void> {
+        this.logService.misc(`[UhkOperations][kboot-native] Start flashing "${module.name}" module firmware`);
+        await this.device.reenumerate({
+            device,
+            enumerationMode: EnumerationModes.NormalKeyboard,
+        });
+        await this.device.close();
+        await snooze(1000);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const configData = await readFile(firmwarePath) as any;
+        this.logService.misc('[UhkOperations][kboot-native] sending firmware to the keyboard');
+        await this.sendConfigToKeyboard(configData, UsbCommand.WriteModuleFirmware);
+
+        this.logService.misc('[UhkOperations][kboot-native] validating module firmware');
+        const crc = crc16(configData);
+        this.logService.misc(`[UhkOperations][kboot-native] module firmware crc: ${crc}`);
+        const isValid = await this.isBufferValid(ConfigBufferId.moduleFirmware, configData.length, crc);
+
+        if (!isValid) {
+            this.logService.error('[UhkOperations][kboot-native] module firmware crc validation failed');
+            throw new Error('Module firmware crc validation failed');
+        }
+
+        this.logService.misc('[UhkOperations][kboot-native] flashing module');
+        await this.flashModule(module);
+
+        this.logService.misc('[UhkOperations][kboot-native] wait until flashing finished');
+        const response = await this.waitUntilModuleFlashFinished();
+
+        if (response.state === MODULE_FLASH_STATE.Error) {
+            this.logService.error(`[UhkOperations][kboot-native] error occurred in the module flashing process. Error code: ${response.errorCode}`);
+
+            throw new Error(`Error occurred in the module flashing process. Error code: ${response.errorCode}`);
+        }
+
+        this.logService.misc('[UhkOperations][kboot-native] wait until flashing finished');
+        await this.waitUntilModuleFlashFinished();
+
+        this.logService.misc(`[UhkOperations][kboot-native] "${module.name}" firmware successfully flashed`);
     }
 
     /**
@@ -463,9 +516,15 @@ export class UhkOperations {
             const transferPercentRange = 0.83;
 
             reportProgress(preTransferPercent);
-            await this.sendConfigToKeyboard(configBuffer, true, (percent) => {
-                reportProgress(preTransferPercent + Math.round(percent * transferPercentRange));
-            });
+
+            await this.sendConfigToKeyboard(
+                resultBuffer.getBufferContent(),
+                UsbCommand.WriteStagingUserConfig,
+                (percent) => {
+                    reportProgress(preTransferPercent + Math.round(percent * transferPercentRange));
+                },
+            );
+
             reportProgress(86);
             await this.applyConfiguration();
             reportProgress(90);
@@ -501,7 +560,7 @@ export class UhkOperations {
         hardwareConfig.toBinary(hardwareBuffer);
         const buffer = hardwareBuffer.getBufferContent();
 
-        await this.sendConfigToKeyboard(buffer, false);
+        await this.sendConfigToKeyboard(buffer, UsbCommand.WriteHardwareConfig);
         await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
         await this.waitUntilKeyboardBusy();
     }
@@ -529,6 +588,25 @@ export class UhkOperations {
         }
     }
 
+    public async waitUntilModuleFlashFinished(): Promise<ModuleFlashResponse> {
+        while (true) {
+            const response = await this.getModuleFlashState();
+            if (response.state === MODULE_FLASH_STATE.Erasing) {
+                this.logService.misc('[DeviceOperation] Module flash erasing, wait...');
+                await snooze(200);
+                continue;
+            }
+
+            if (response.state === MODULE_FLASH_STATE.Writing) {
+                this.logService.misc('[DeviceOperation] Module flash writing, wait...');
+                await snooze(200);
+                continue;
+            }
+
+            return response;
+        }
+    }
+
     public async waitForKbootIdle(moduleName: string): Promise<boolean> {
         while (true) {
             const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
@@ -541,6 +619,15 @@ export class UhkOperations {
             this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
 
             await snooze(1000);
+        }
+    }
+
+    public async getModuleFlashState(): Promise<ModuleFlashResponse> {
+        const buffer = await this.device.write(Buffer.from([UsbCommand.GetModuleFlashState]));
+
+        return {
+            state: buffer[0] as MODULE_FLASH_STATE_TYPE,
+            errorCode: buffer[1]
         }
     }
 
@@ -697,15 +784,22 @@ export class UhkOperations {
     public async eraseHardwareConfig(): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Erase hardware configuration');
         const buffer = Buffer.from(Array(64).fill(0xff));
-        await this.sendConfigToKeyboard(buffer, false);
+        await this.sendConfigToKeyboard(buffer, UsbCommand.WriteHardwareConfig);
         await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
     }
 
     public async eraseUserConfig(): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Erase user configuration');
         const buffer = Buffer.from(Array(2 ** 15 - 64).fill(0xff));
-        await this.sendConfigToKeyboard(buffer, true);
+        await this.sendConfigToKeyboard(buffer, UsbCommand.WriteStagingUserConfig);
         await this.writeConfigToEeprom(ConfigBufferId.stagingUserConfig);
+    }
+
+    public async flashModule(module: UhkModule): Promise<void> {
+        this.logService.usbOps('[DeviceOperation] USB[T]: Flash module');
+        const buffer = Buffer.from([UsbCommand.FlashModule, module.slotId]);
+
+        await this.device.write(buffer);
     }
 
     public async switchKeymap(keymapAbbreviation: string): Promise<void> {
@@ -958,19 +1052,15 @@ export class UhkOperations {
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
      * @param {Buffer} buffer - UserConfiguration buffer
-     * @param {Boolean} isUserConfiguration - User or Hardware configuration
+     * @param {UsbCommand} command - Represent which configuration area write to the device
      * @returns {Promise<void>}
      * @private
      */
     private async sendConfigToKeyboard(
         buffer: Buffer,
-        isUserConfiguration,
+        command: UsbCommand,
         onProgress?: (percent: number) => void
     ): Promise<void> {
-        const command = isUserConfiguration
-            ? UsbCommand.WriteStagingUserConfig
-            : UsbCommand.WriteHardwareConfig;
-
         const fragments = getTransferBuffers(command, buffer);
         for (let i = 0; i < fragments.length; i++) {
             await this.device.write(fragments[i]);
@@ -1004,5 +1094,18 @@ export class UhkOperations {
         }
 
         await this.device.write(buffer);
+    }
+
+    public async isBufferValid(bufferId: ConfigBufferId, expectedSize: number, expectedCrc: number): Promise<boolean> {
+        this.logService.usbOps('[DeviceOperation] USB[T]: Validate Buffer CRC');
+        const buffer = Buffer.alloc(6);
+        buffer.writeUInt8(UsbCommand.ValidateBufferCrc, 0);
+        buffer.writeUInt8(bufferId, 1);
+        buffer.writeUInt16LE(expectedSize, 2);
+        buffer.writeUInt16LE(expectedCrc, 4);
+
+        const response = await this.device.write(buffer);
+
+        return response[1] === 0;
     }
 }
