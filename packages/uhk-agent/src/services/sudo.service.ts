@@ -33,17 +33,20 @@ export class SudoService {
         }
 
         switch (process.platform) {
-            case 'linux':
+            case 'linux': {
                 await this.setPrivilegeOnLinux(event);
                 break;
-            default:
+            }
+
+            default: {
                 const response: IpcResponse = {
                     success: false,
-                    error: {message: 'Permissions couldn\'t be set. Invalid platform: ' + process.platform}
+                    error: { message: 'Permissions couldn\'t be set. Invalid platform: ' + process.platform }
                 };
 
                 event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
                 break;
+            }
         }
     }
 
