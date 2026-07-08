@@ -1,4 +1,5 @@
 import { McuManager, SerialPeripheral } from '@uhk/mcumgr';
+import crc16 from 'crc16-xmodem';
 import * as fs from 'fs';
 import { readFile } from 'node:fs/promises';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
@@ -66,7 +67,6 @@ import {
     readBootloaderFirmwareFromHexFileAsync,
     waitForDevice
 } from './util.js';
-import crc16 from './utils/crc16.js';
 import { generateDeviceSerialNumber } from './utils/generate-device-serial-number.js';
 import { convertMsToDuration, convertSlaveI2cErrorBuffer, snooze, waitUntil} from './utils/index.js';
 import { normalizeStatusBuffer } from './utils/normalize-status-buffer.js';
@@ -324,6 +324,7 @@ export class UhkOperations {
         await this.device.close();
         await snooze(1000);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const configData = await readFile(firmwarePath) as any;
         this.logService.misc('[UhkOperations][kboot-native] sending firmware to the keyboard');
         await this.sendConfigToKeyboard(configData, UsbCommand.WriteModuleFirmware);

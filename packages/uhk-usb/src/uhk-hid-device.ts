@@ -479,7 +479,7 @@ export class UhkHidDevice {
     ): Promise<ReenumerateResult> {
         await this.close();
         const reenumMode = EnumerationModes[enumerationMode].toString();
-        this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}, timeout: ${timeout}ms`);
+        this.logService.misc(`[UhkHidDevice] Start reenumeration, device: ${device.logName}, mode: ${reenumMode}, timeout: ${timeout}ms`);
         const vidPidPairs = getDeviceEnumerateVidPidPairs(device, enumerationMode);
 
         const startTime = new Date();
