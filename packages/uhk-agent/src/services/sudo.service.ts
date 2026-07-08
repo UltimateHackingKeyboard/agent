@@ -61,7 +61,7 @@ export class SudoService {
         };
         const command = `sh ${scriptPath}`;
         this.logService.misc('[SudoService] Set privilege command: ', command);
-        sudo.exec(command, options, async (error: Error) => {
+        sudo.exec(command, options, (error: Error) => {
             const response = new IpcResponse();
 
             if (error) {
@@ -72,9 +72,14 @@ export class SudoService {
                 response.success = true;
             }
 
-            await rm(tmpDirectory, { recursive: true, force: true });
-            this.deviceService.startPollUhkDevice();
-            event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
+            rm(tmpDirectory, { recursive: true, force: true })
+                .then(() => {
+                    this.deviceService.startPollUhkDevice();
+                    event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
+                })
+                .catch((error) => {
+                    this.logService.error('[SudoService] Error when removing tmp directory: ', error);
+                });
         });
     }
 }

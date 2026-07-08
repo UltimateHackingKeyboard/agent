@@ -167,7 +167,7 @@ export class UserConfigEffects {
             map(action => action.payload),
             switchMap((payload: UndoUserConfigData) => this.dataStorageRepository.saveConfig(payload.config, payload.uhkDeviceProduct)
                 .pipe(
-                    tap(() => this.router.navigate([payload.path])),
+                    tap(() => { this.router.navigate([payload.path]); }),
                     map(() => new LoadUserConfigSuccessAction(payload.config))
                 )
             )
@@ -413,15 +413,17 @@ export class UserConfigEffects {
     resetKeymapQueryParams$ = createEffect(() => this.actions$
         .pipe(
             ofType(Keymaps.ActionTypes.SaveKey, Keymaps.ActionTypes.ClosePopover),
-            tap(() => this.router.navigate([], {
-                queryParams: {
-                    module: null,
-                    key: null,
-                    remapOnAllKeymap: null,
-                    remapOnAllLayer: null,
-                },
-                queryParamsHandling: 'merge'
-            }))
+            tap(() => {
+                this.router.navigate([], {
+                    queryParams: {
+                        module: null,
+                        key: null,
+                        remapOnAllKeymap: null,
+                        remapOnAllLayer: null,
+                    },
+                    queryParamsHandling: 'merge'
+                })
+            })
         ),
     { dispatch: false }
     );

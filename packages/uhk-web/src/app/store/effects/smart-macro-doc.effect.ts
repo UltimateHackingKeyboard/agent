@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { distinctUntilChanged, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
-import { FirmwareRepoInfo } from 'uhk-common';
+import { FirmwareRepoInfo, LogService } from 'uhk-common';
 
 import { MonacoEditorCompletionItemProvider } from '../../services/monaco-editor-completion-item-provider';
 import { SmartMacroDocRendererService } from '../../services/smart-macro-doc-renderer.service';
@@ -19,13 +19,21 @@ export class SmartMacroDocEffect {
             ofType(AppActions.ActionTypes.AppBootstrapped),
             startWith(new AppActions.AppStartedAction()),
             withLatestFrom(this.store.select(runningInElectron)),
-            tap(async ([, electron]) => {
+            tap(([, electron]) => {
                 if (!electron) {
-                    const response = await fetch('https://raw.githubusercontent.com/UltimateHackingKeyboard/firmware/master/doc-dev/reference-manual.md');
-                    if (response.ok) {
-                        const text = await response.text();
-                        this.completionItemProvider.setReferenceManual(text);
-                    }
+                    fetch('https://raw.githubusercontent.com/UltimateHackingKeyboard/firmware/master/doc-dev/reference-manual.md')
+                        .then(async (response) => {
+                            if (response.ok) {
+                                const text = await response.text();
+                                this.completionItemProvider.setReferenceManual(text);
+                            }
+                            else {
+                                this.logService.error('[SmartMacroDocEffect] failed to fetch reference manual', response.statusText);
+                            }
+                        })
+                        .catch((error) => {
+                            this.logService.error('[SmartMacroDocEffect] failed to fetch reference manual', error);
+                        });
                 }
             })
         ),
@@ -59,6 +67,7 @@ export class SmartMacroDocEffect {
 
     constructor(private actions$: Actions,
                 private completionItemProvider: MonacoEditorCompletionItemProvider,
+                private logService: LogService,
                 private smartMacroDocRendererService: SmartMacroDocRendererService,
                 private smartMacroDocService: SmartMacroDocService,
                 private store: Store<AppState>) {

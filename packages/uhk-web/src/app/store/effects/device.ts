@@ -189,19 +189,23 @@ export class DeviceEffects {
                 }
 
                 if (state.multiDevice) {
-                    return this.router.navigate(['/multi-device']);
+                    this.router.navigate(['/multi-device']);
+                    return;
                 }
 
                 if (!state.hasPermission || state.udevRulesInfo === UdevRulesInfo.Different) {
-                    return this.router.navigate(['/privilege']);
+                    this.router.navigate(['/privilege']);
+                    return;
                 }
 
                 if (state.bootloaderActive || state.leftHalfBootloaderActive || state.dongle.bootloaderActive) {
-                    return this.router.navigate(['/recovery-device']);
+                    this.router.navigate(['/recovery-device']);
+                    return;
                 }
 
                 if (shouldUpgradeFirmware(state.hardwareModules?.rightModuleInfo?.userConfigVersion)) {
-                    return this.router.navigate(['/update-firmware']);
+                    this.router.navigate(['/update-firmware']);
+                    return;
                 }
 
                 if (state.connectedDevice && state.communicationInterfaceAvailable) {
@@ -212,13 +216,14 @@ export class DeviceEffects {
                     ].some(start => route.state.url.startsWith(start));
 
                     if (allowDefaultNavigation) {
-                        return this.router.navigate(['/']);
+                        this.router.navigate(['/']);
+                        return;
                     }
 
                     return;
                 }
 
-                return this.router.navigate(['/detection']);
+                this.router.navigate(['/detection']);
             }),
             distinctUntilChanged((
                 [prevAction, prevRoute, prevConnected],
@@ -335,11 +340,14 @@ export class DeviceEffects {
             ofType<SaveConfigurationAction>(ActionTypes.SaveConfiguration),
             withLatestFrom(this.store, this.store.select(getShowFirmwareUpgradePanel)),
             tap(([action, state, shouldUpgradeFirmware]) => {
-                if (shouldUpgradeFirmware)
-                    return this.router.navigate(['/update-firmware']);
+                if (shouldUpgradeFirmware) {
+                    this.router.navigate(['/update-firmware']);
+                    return;
+                }
 
                 if (state.userConfiguration.userConfiguration.hostConnections.length > HOST_CONNECTION_COUNT_MAX) {
-                    return this.router.navigate(['/host-connections']);
+                    this.router.navigate(['/host-connections']);
+                    return;
                 }
 
                 setTimeout(() => this.sendUserConfigToKeyboard(
