@@ -15,12 +15,14 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import {
     faChevronDown,
     faChevronUp,
+    faCog,
     faExclamationTriangle,
     faInfoCircle,
     faKeyboard,
     faPlay,
     faPlus,
     faPuzzlePiece,
+    faQuestionCircle,
     faSlidersH,
     faStar
 } from '@fortawesome/free-solid-svg-icons';
@@ -48,7 +50,6 @@ interface SideMenuState {
     keymap: SideMenuItemState;
     macro: SideMenuItemState;
     addon: SideMenuItemState;
-    agent: SideMenuItemState;
 }
 
 @Component({
@@ -95,18 +96,16 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
         addon: {
             icon: faChevronUp,
             animation: 'active'
-        },
-        agent: {
-            icon: faChevronUp,
-            animation: 'active'
         }
     };
+    faCog = faCog;
     faExclamationTriangle = faExclamationTriangle;
     faInfoCircle = faInfoCircle;
     faKeyboard = faKeyboard;
     faPlus = faPlus;
     faPlay = faPlay;
     faPuzzlePiece = faPuzzlePiece;
+    faQuestionCircle = faQuestionCircle;
     faSlidersH = faSlidersH;
     faStar = faStar;
     maxAllowedMacrosTooltip = MAX_ALLOWED_MACROS_TOOLTIP;
