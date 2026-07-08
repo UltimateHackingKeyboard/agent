@@ -17,6 +17,7 @@ export enum ActionTypes {
     UndoLastSuccess = '[app] undo last action success',
     DismissUndoNotification = '[app] dismiss notification action',
     LoadHardwareConfigurationSuccess = '[app] load hardware configuration success',
+    ConfigurationLoadingProgressChanged = '[app] configuration loading progress changed',
     LoadApplicationSettings = '[app] Load application settings',
     LoadApplicationSettingsSuccess = '[app] Load application settings success',
     SaveApplicationSettingsSuccess = '[app] Save application settings success',
@@ -100,6 +101,13 @@ export class LoadHardwareConfigurationSuccessAction implements Action {
     type = ActionTypes.LoadHardwareConfigurationSuccess;
 
     constructor(public payload: HardwareConfiguration) {
+    }
+}
+
+export class ConfigurationLoadingProgressChangedAction implements Action {
+    type = ActionTypes.ConfigurationLoadingProgressChanged;
+
+    constructor(public payload: number) {
     }
 }
 
@@ -215,6 +223,7 @@ export type Actions
     | UndoLastSuccessAction
     | DismissUndoNotificationAction
     | LoadHardwareConfigurationSuccessAction
+    | ConfigurationLoadingProgressChangedAction
     | LoadApplicationSettingsAction
     | LoadApplicationSettingsSuccessAction
     | SaveApplicationSettingsSuccessAction

@@ -91,6 +91,9 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-progress-bar-progress-rgb-colors: #{tint-color($success, 20%)};
     --color-progress-bar-text: #{$color-text};
 
+    --color-loading-progress-bar-bg: #e0e0e0;
+    --color-loading-progress-bar-fill: #000;
+
     --color-macro-bg: #{$color-bg-light};
     --color-macro-border: #ebebeb;
 

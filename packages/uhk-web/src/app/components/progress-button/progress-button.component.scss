@@ -1,3 +1,23 @@
 button {
     min-width: 150px;
 }
+
+.progress-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-button__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: var(--color-loading-progress-bar-fill);
+    opacity: 0.35;
+    transition: width 200ms ease-out;
+}
+
+.progress-button__content {
+    position: relative;
+    z-index: 1;
+}

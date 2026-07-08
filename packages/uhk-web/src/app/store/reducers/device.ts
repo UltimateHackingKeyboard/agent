@@ -226,7 +226,24 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Saving',
-                    showProgress: true
+                    showProgress: true,
+                    progressPercent: 0
+                }
+            };
+        }
+
+        case Device.ActionTypes.SaveConfigurationProgressChanged: {
+            if (!state.saveToKeyboard.showProgress) {
+                return state;
+            }
+
+            const progress = (action as Device.SaveConfigurationProgressChangedAction).payload;
+
+            return {
+                ...state,
+                saveToKeyboard: {
+                    ...state.saveToKeyboard,
+                    progressPercent: progress
                 }
             };
         }
@@ -237,7 +254,9 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Saved!',
-                    action: null
+                    action: null,
+                    showProgress: true,
+                    progressPercent: 100
                 },
                 restoringUserConfiguration: false
             };

@@ -362,9 +362,24 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
+            const sendProgress = (progress: number) => {
+                event.sender.send(IpcEvents.device.loadConfigurationProgress, progress);
+            };
+
+            sendProgress(0);
             await this.operations.waitUntilKeyboardBusy();
-            const result = await this.operations.loadConfigurations();
+
+            const preTransferPercent = 3;
+            const transferPercentRange = 0.82;
+            sendProgress(preTransferPercent);
+
+            const result = await this.operations.loadConfigurations((percent) => {
+                sendProgress(preTransferPercent + Math.round(percent * transferPercentRange));
+            });
+
+            sendProgress(88);
             const modules: HardwareModules = await this.getHardwareModules(false);
+            sendProgress(95);
 
             const hardwareConfig = getHardwareConfigFromDeviceResponse(result.hardwareConfiguration);
             const uniqueId = hardwareConfig.uniqueId;
@@ -385,6 +400,7 @@ export class DeviceService {
                         info: BackupUserConfigurationInfo.Unknown
                     }
             };
+            sendProgress(100);
         } catch (error) {
             response = {
                 success: false,
@@ -1298,18 +1314,32 @@ export class DeviceService {
 
         try {
             await this.stopPollUhkDevice();
+
+            const sendProgress = (progress: number) => {
+                event.sender.send(IpcEvents.device.saveUserConfigurationProgress, progress);
+            };
+
+            sendProgress(0);
             await backupUserConfiguration(data);
+            const preTransferPercent = 1;
+            const transferPercentRange = 0.94;
+            sendProgress(preTransferPercent);
 
             this.logService.config('[DeviceService] User configuration will be saved', data.configuration);
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
-            await this.operations.saveUserConfiguration(buffer);
+            await this.operations.saveUserConfiguration(buffer, (percent) => {
+                sendProgress(preTransferPercent + Math.round(percent * transferPercentRange));
+            });
+
             this._checkStatusBuffer = true;
 
             if (data.saveInHistory) {
+                sendProgress(97);
                 await saveUserConfigHistoryAsync(buffer, data.deviceId, data.uniqueId);
                 await this.loadUserConfigFromHistory(event);
             }
 
+            sendProgress(100);
             response.success = true;
         } catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);

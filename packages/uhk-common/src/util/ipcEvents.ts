@@ -45,8 +45,10 @@ export class Device {
     public static readonly setPrivilegeOnLinuxReply = 'set-privilege-on-linux-reply';
     public static readonly deviceConnectionStateChanged = 'device-connection-state-changed';
     public static readonly saveUserConfiguration = 'device-save-user-configuration';
+    public static readonly saveUserConfigurationProgress = 'device-save-user-configuration-progress';
     public static readonly saveUserConfigurationReply = 'device-save-user-configuration-reply';
     public static readonly loadConfigurations = 'device-load-configuration';
+    public static readonly loadConfigurationProgress = 'device-load-configuration-progress';
     public static readonly loadConfigurationReply = 'device-load-configuration-reply';
     public static readonly updateFirmware = 'device-update-firmware';
     public static readonly updateFirmwareJson = 'device-update-firmware-json';
