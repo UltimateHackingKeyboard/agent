@@ -19,6 +19,8 @@ import {
     LogService,
     ModuleSlotToId,
     ModuleVersionInfo,
+    ProgressCallback,
+    PromptCallback,
     UhkBuffer,
     UhkDeviceProduct,
     UHK_EEPROM_SIZE,
@@ -51,6 +53,8 @@ import {
     I2cBaudRate,
     I2cErrorBuffer,
     LoadConfigurationsResult,
+    UpdateLeftModuleWithKbootOptions,
+    UpdateModuleWithKbootOptions,
 } from './models/index.js';
 
 import { UhkHidDevice } from './uhk-hid-device.js';
@@ -123,22 +127,22 @@ export class UhkOperations {
         await this.device.write(transfer);
     }
 
-    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing device firmware with ${device.firmwareUpgradeMethod}`);
 
         switch (device.firmwareUpgradeMethod) {
             case FIRMWARE_UPGRADE_METHODS.KBOOT:
-                return this.updateRightFirmwareWithKboot(firmwarePath, device);
+                return this.updateRightFirmwareWithKboot(firmwarePath, device, onProgress);
 
             case FIRMWARE_UPGRADE_METHODS.MCUBOOT:
-                return this.updateFirmwareWithMcuManager(firmwarePath, device);
+                return this.updateFirmwareWithMcuManager(firmwarePath, device, onProgress);
 
             default:
                 throw new Error(`Firmware upgrade method not implemented: ${device.firmwareUpgradeMethod}`);
         }
     }
 
-    public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+    public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback): Promise<void> {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
@@ -162,14 +166,26 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Read RIGHT firmware from file');
         const bootloaderMemoryMap = await readBootloaderFirmwareFromHexFileAsync(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory');
+
+        const totalBytes = [...bootloaderMemoryMap.values()].reduce((sum, data) => sum + data.length, 0);
+        let writtenBytes = 0;
+
+        onProgress?.(0);
+
         for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
             const dataOption: DataOption = {
                 startAddress,
-                data
+                data,
+                onProgress: entryPercent => {
+                    onProgress?.(Math.min(100, Math.round((writtenBytes + data.length * entryPercent / 100) / totalBytes * 100)));
+                },
             };
 
             await kboot.writeMemory(dataOption);
+            writtenBytes += data.length;
         }
+
+        onProgress?.(100);
 
         this.logService.misc('[UhkOperations] Reset bootloader');
         await kboot.reset();
@@ -178,7 +194,7 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct) {
+    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback) {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
@@ -199,7 +215,7 @@ export class UhkOperations {
         this.logService.misc(`[UhkOperations] Read ${device.logName} firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory with mcumgr');
-        await mcuManager.imageUpload(configData);
+        await mcuManager.imageUpload(configData, onProgress);
         this.logService.misc('[UhkOperations] Reset mcu bootloader');
         await mcuManager.reset();
         this.logService.misc('[UhkOperations] Close mcu communication channels');
@@ -207,15 +223,20 @@ export class UhkOperations {
         this.logService.misc(`[UhkOperations] ${device.logName} firmware successfully flashed`);
     }
 
-    public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
-        return this.updateModuleWithKboot(firmwarePath, device, LEFT_HALF_MODULE);
+    public async updateLeftModuleWithKboot(options: UpdateLeftModuleWithKbootOptions): Promise<void> {
+        return this.updateModuleWithKboot({
+            ...options,
+            module: LEFT_HALF_MODULE
+        });
     }
 
-    public async updateModuleWithKboot(
-        firmwarePath: string,
-        device: UhkDeviceProduct,
-        module: UhkModule
-    ): Promise<void> {
+    public async updateModuleWithKboot({
+        firmwarePath,
+        device,
+        module,
+        onProgress,
+        prompt,
+    }: UpdateModuleWithKbootOptions): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
             device,
@@ -228,7 +249,7 @@ export class UhkOperations {
         await this.jumpToBootloaderModule(module.slotId);
         await this.device.close();
 
-        const moduleBricked = await this.waitForKbootIdle(module.name);
+        const moduleBricked = await this.waitForKbootIdle(module.name, prompt);
         if (!moduleBricked) {
             const msg = `[UhkOperations] Couldn't connect to the "${module.name}".`;
             this.logService.error(msg);
@@ -279,7 +300,7 @@ export class UhkOperations {
 
         this.logService.misc('[UhkOperations] Write memory');
         await kboot.configureI2c(module.i2cAddress);
-        await kboot.writeMemory({ startAddress: 0, data: configData });
+        await kboot.writeMemory({ startAddress: 0, data: configData, onProgress });
 
         this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
         await kboot.reset();
@@ -308,7 +329,7 @@ export class UhkOperations {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(onProgress?: (percent: number) => void): Promise<LoadConfigurationsResult> {
+    public async loadConfigurations(onProgress?: ProgressCallback): Promise<LoadConfigurationsResult> {
         try {
             await this.waitUntilKeyboardBusy();
             onProgress?.(0);
@@ -422,7 +443,7 @@ export class UhkOperations {
         };
     }
 
-    public async saveUserConfiguration(buffer: Buffer, onProgress?: (percent: number) => void): Promise<void> {
+    public async saveUserConfiguration(buffer: Buffer, onProgress?: ProgressCallback): Promise<void> {
         const reportProgress = (percent: number) => {
             onProgress?.(percent);
         };
@@ -529,16 +550,24 @@ export class UhkOperations {
         }
     }
 
-    public async waitForKbootIdle(moduleName: string): Promise<boolean> {
+    public async waitForKbootIdle(moduleName: string, prompt?: PromptCallback): Promise<boolean> {
+        let promptSent = false;
         while (true) {
             const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
             await this.device.close();
 
             if (buffer[1] === 0) {
+                prompt?.(undefined);
                 return true;
             }
 
-            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
+            const message = `[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`
+            if (!promptSent) {
+                prompt?.(message);
+                promptSent = true;
+            }
+
+            this.logService.misc(message);
 
             await snooze(1000);
         }
@@ -965,7 +994,7 @@ export class UhkOperations {
     private async sendConfigToKeyboard(
         buffer: Buffer,
         isUserConfiguration,
-        onProgress?: (percent: number) => void
+        onProgress?: ProgressCallback
     ): Promise<void> {
         const command = isUserConfiguration
             ? UsbCommand.WriteStagingUserConfig

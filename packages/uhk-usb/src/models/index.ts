@@ -8,3 +8,4 @@ export * from './pairing-info.js';
 export * from './reenumerate-option.js';
 export * from './reenumerate-result.js';
 export * from './tmp-firmware.js';
+export * from './update-module-with-kboot-options.js';

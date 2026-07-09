@@ -8,11 +8,13 @@ import {
     DeviceConnectionState,
     DeviceVersionInformation,
     FirmwareJson,
+    FirmwareUpgradeConnectPrompt,
     FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     HardwareModules,
     IpcResponse,
     KeyboardLayout,
+    ModuleFirmwareUpgradeProgress,
     ModuleFirmwareUpgradeSkipInfo,
     UHK_DEVICE_IDS_TYPE,
     UhkDeviceProduct,
@@ -49,6 +51,8 @@ export enum ActionTypes {
     ResetMacMouseSpeedSettings = '[device] reset Mac mouse speed settings',
     CurrentlyUpdateSkipModule = '[device] currently update skip module',
     CurrentlyUpdatingModule = '[device] currently updating module',
+    ModuleFirmwareUpgradeProgress = '[device] module firmware upgrade progress',
+    FirmwareUpgradeConnectPrompt = '[device] firmware upgrade connect prompt',
     UpdateFirmware = '[device] update firmware',
     UpdateFirmwareJson = '[device] update firmware JSON',
     UpdateFirmwareWith = '[device] update firmware with',
@@ -207,6 +211,20 @@ export class CurrentlyUpdateSkipModuleAction implements Action {
     type = ActionTypes.CurrentlyUpdateSkipModule;
 
     constructor(public payload: ModuleFirmwareUpgradeSkipInfo) {
+    }
+}
+
+export class ModuleFirmwareUpgradeProgressAction implements Action {
+    type = ActionTypes.ModuleFirmwareUpgradeProgress;
+
+    constructor(public payload: ModuleFirmwareUpgradeProgress) {
+    }
+}
+
+export class FirmwareUpgradeConnectPromptAction implements Action {
+    type = ActionTypes.FirmwareUpgradeConnectPrompt;
+
+    constructor(public payload: FirmwareUpgradeConnectPrompt | undefined) {
     }
 }
 
@@ -375,6 +393,8 @@ export type Actions
     | ResetUserConfigurationAction
     | CurrentlyUpdateSkipModuleAction
     | CurrentlyUpdatingModuleAction
+    | ModuleFirmwareUpgradeProgressAction
+    | FirmwareUpgradeConnectPromptAction
     | UpdateFirmwareAction
     | UpdateFirmwareJsonAction
     | UpdateFirmwareWithAction
