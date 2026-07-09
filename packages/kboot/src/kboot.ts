@@ -151,9 +151,9 @@ export class KBoot {
         return this.peripheral.readMemory(startAddress, count);
     }
 
-    async writeMemory(options: DataOption, onProgress?: (percent: number) => void): Promise<void> {
+    async writeMemory(options: DataOption): Promise<void> {
         logger('Start write memory %o', { options });
-        return this.peripheral.writeMemory(options, onProgress);
+        return this.peripheral.writeMemory(options);
     }
 
     /**

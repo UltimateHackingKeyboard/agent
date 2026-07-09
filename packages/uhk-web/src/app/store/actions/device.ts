@@ -224,7 +224,7 @@ export class ModuleFirmwareUpgradeProgressAction implements Action {
 export class FirmwareUpgradeConnectPromptAction implements Action {
     type = ActionTypes.FirmwareUpgradeConnectPrompt;
 
-    constructor(public payload: FirmwareUpgradeConnectPrompt | null) {
+    constructor(public payload: FirmwareUpgradeConnectPrompt | undefined) {
     }
 }
 

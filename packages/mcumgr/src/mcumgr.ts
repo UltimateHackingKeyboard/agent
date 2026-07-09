@@ -13,6 +13,7 @@ import {
 } from './constants.js';
 import { ImageUploadRequest } from './models/image-upload-request.js';
 import { ImageUploadResponseData } from './models/image-upload-response-data.js';
+import { ProgressCallback } from './models/progress-callback.js';
 import { NmpResponse } from './models/nmp.js';
 import { Peripheral } from './peripheral.js';
 import * as cbor from './util/cbor.js';
@@ -74,7 +75,7 @@ export class McuManager {
     /**
      * Upload a firmware/bootloader image to the device
      */
-    async imageUpload(buffer: Buffer, onProgress?: (percent: number) => void): Promise<void> {
+    async imageUpload(buffer: Buffer, onProgress?: ProgressCallback): Promise<void> {
         logger('Start send image upload command: %o', { bufferLength: buffer.byteLength });
         let written = 0;
         onProgress?.(0);

@@ -73,9 +73,9 @@ export class UsbPeripheral implements Peripheral {
         }
     }
 
-    async writeMemory(option: DataOption, onProgress?: (percent: number) => void): Promise<void> {
+    async writeMemory(option: DataOption): Promise<void> {
         try {
-            onProgress?.(0);
+            option.onProgress?.(0);
 
             const command: CommandOption = {
                 command: Commands.WriteMemory,
@@ -112,7 +112,7 @@ export class UsbPeripheral implements Peripheral {
                 await this._device.write(writeData);
                 // workaround to prevent main thread blocking
                 await snooze(1);
-                onProgress?.(Math.min(100, Math.round((i + slice.length) / option.data.length * 100)));
+                option.onProgress?.(Math.min(100, Math.round((i + slice.length) / option.data.length * 100)));
             }
 
             const receivedData = await this._device.read(option.timeout || 2000);
@@ -130,6 +130,8 @@ export class UsbPeripheral implements Peripheral {
                 const msg = `Non zero write memory final response! Response code: ${secondCommandResponse.code}`;
                 throw new Error(msg);
             }
+
+            option.onProgress?.(100);
         } catch (err) {
             logger('Can not write memory data %O', err);
             throw err;

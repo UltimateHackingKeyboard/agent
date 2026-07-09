@@ -517,24 +517,6 @@ export class DeviceService {
         let shouldEnableFirmwareVersionCheck = false;
         let uhkDeviceProduct: UhkDeviceProduct;
 
-        const createFirmwareProgressReporter = (moduleName: string): ((percent: number) => void) => {
-            let lastProgress = -1;
-
-            return (percent: number) => {
-                const progress = Math.max(0, Math.min(100, Math.round(percent)));
-
-                if (progress === lastProgress) {
-                    return;
-                }
-
-                lastProgress = progress;
-                event.sender.send(IpcEvents.device.moduleFirmwareUpgradeProgress, {
-                    moduleName,
-                    progress,
-                } as ModuleFirmwareUpgradeProgress);
-            };
-        };
-
         try {
             await this.stopPollUhkDevice();
             await this.dongleZephyrLogService.disable();
@@ -580,7 +562,7 @@ export class DeviceService {
                             moduleName: UHK_DONGLE.name,
                             newFirmwareChecksum: deviceConfig.md5,
                         } as CurrentlyUpdatingModuleInfo);
-                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE, createFirmwareProgressReporter(UHK_DONGLE.name));
+                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE, this.createFirmwareProgressReporter(event.sender, UHK_DONGLE.name));
                         this.logService.misc('[DeviceService] Waiting for keyboard');
                         await waitForDevices(UHK_DONGLE.keyboard);
                         await dongleUhkDevice.close();
@@ -629,7 +611,7 @@ export class DeviceService {
                     newFirmwareChecksum: deviceConfig.md5,
                     moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
                 } as CurrentlyUpdatingModuleInfo);
-                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, createFirmwareProgressReporter(RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME));
+                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, this.createFirmwareProgressReporter(event.sender, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME));
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevices(uhkDeviceProduct.keyboard);
 
@@ -701,7 +683,7 @@ export class DeviceService {
 
                     await snooze(1000);
                     const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
-                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, createFirmwareProgressReporter(leftModuleInfo.module.name));
+                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name));
 
                     await this.waitForUhkDeviceWithConnectPrompt(
                         event,
@@ -715,7 +697,7 @@ export class DeviceService {
                             getModuleFirmwarePath(leftModuleInfo.module, packageJson),
                             uhkDeviceProduct,
                             leftModuleInfo.module,
-                            createFirmwareProgressReporter(leftModuleInfo.module.name)
+                            this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name)
                         );
                 }
             } else {
@@ -778,7 +760,7 @@ export class DeviceService {
                                 getModuleFirmwarePath(moduleInfo.module, packageJson),
                                 uhkDeviceProduct,
                                 moduleInfo.module,
-                                createFirmwareProgressReporter(moduleInfo.module.name)
+                                this.createFirmwareProgressReporter(event.sender, moduleInfo.module.name)
                             );
                         this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
                     } else {
@@ -838,22 +820,8 @@ export class DeviceService {
         await this.dongleZephyrLogService.enable();
         await this.leftHalfZephyrLogService.enable();
 
-        event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, null);
+        event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, undefined);
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
-    }
-
-    private async waitForUhkDeviceWithConnectPrompt(
-        event: Electron.IpcMainEvent,
-        device: UhkDeviceProduct,
-        message: string
-    ): Promise<void> {
-        if (!(await isUhkDeviceConnected(device))) {
-            this.logService.misc(`[DeviceService] ${message}`);
-            event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, { message } as FirmwareUpgradeConnectPrompt);
-        }
-
-        await waitForUhkDeviceConnected(device);
-        event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, null);
     }
 
     public async recoveryDevice(event: Electron.IpcMainEvent, args): Promise<void> {
@@ -1220,6 +1188,24 @@ export class DeviceService {
         this.win.webContents.send(IpcEvents.device.statusBufferChanged, message);
     }
 
+    private createFirmwareProgressReporter(eventSender: Electron.WebContents, moduleName: string) {
+        let lastProgress = 0;
+
+        return (percent: number) => {
+            const progress = Math.max(0, Math.min(100, Math.round(percent)));
+
+            if (progress === lastProgress) {
+                return;
+            }
+
+            lastProgress = progress;
+            eventSender.send(IpcEvents.device.moduleFirmwareUpgradeProgress, {
+                moduleName,
+                progress,
+            } as ModuleFirmwareUpgradeProgress);
+        };
+    }
+
     /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
@@ -1554,4 +1540,20 @@ export class DeviceService {
             this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
         }
     }
+
+    private async waitForUhkDeviceWithConnectPrompt(
+        event: Electron.IpcMainEvent,
+        device: UhkDeviceProduct,
+        message: string
+    ): Promise<void> {
+        if (!(await isUhkDeviceConnected(device))) {
+            this.logService.misc(`[DeviceService] show firmware upgrade prompt: ${message}`);
+            event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, { message } as FirmwareUpgradeConnectPrompt);
+        }
+
+        await waitForUhkDeviceConnected(device);
+        this.logService.misc(`[DeviceService] hide firmware upgrade prompt`);
+        event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, undefined);
+    }
+
 }

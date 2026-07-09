@@ -1,7 +1,7 @@
 import { CommandOption, CommandResponse, DataOption, Peripheral, ResponseCodes, ResponseTags } from '../src/index.js';
 
 export class TestPeripheral implements Peripheral {
-    close(): void {
+    close(): Promise<void> {
     }
 
     async open(): Promise<void> {
@@ -17,8 +17,7 @@ export class TestPeripheral implements Peripheral {
         return Promise.resolve(response);
     }
 
-    writeMemory(data: DataOption, onProgress?: (percent: number) => void): Promise<void> {
-        onProgress?.(100);
+    writeMemory(data: DataOption): Promise<void> {
         return Promise.resolve();
     }
 
