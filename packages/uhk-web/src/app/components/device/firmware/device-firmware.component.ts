@@ -26,7 +26,12 @@ import {
 import { RecoveryModuleAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 import { XtermComponent } from '../../xterm/xterm.component';
-import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, ModuleFirmwareUpgradeStates, UpdateFirmwareWithPayload } from '../../../models';
+import {
+    FirmwareUpgradeState,
+    ModuleFirmwareUpgradeState,
+    ModuleFirmwareUpgradeStates,
+    UpdateFirmwareWithPayload,
+} from '../../../models';
 
 @Component({
     selector: 'device-firmware',

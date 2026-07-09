@@ -11,10 +11,6 @@
     width: 1rem;
 }
 
-.firmware-module-list {
-    margin-bottom: 0;
-}
-
 .firmware-module {
     width: fit-content;
     max-width: 100%;
@@ -53,12 +49,4 @@
 
 .firmware-connect-prompt__icon {
     font-size: 1.5rem;
-}
-
-.firmware-log-toggle {
-    margin-bottom: 0;
-
-    a {
-        cursor: pointer;
-    }
 }

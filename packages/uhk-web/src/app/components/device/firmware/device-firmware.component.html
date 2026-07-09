@@ -7,7 +7,7 @@
                 <span>Firmware</span>
             </h1>
 
-            <ul class="list-unstyled firmware-module-list">
+            <ul class="list-unstyled mb-0">
                 <li *ngFor="let state of firmwareUpgradeStates.modules; trackBy:firmwareUpgradeStateTrackByFn;"
                     class="firmware-module">
                     <ng-template #htmlTooltipTemplate>
@@ -140,8 +140,8 @@
                 {{ upgradeType }} update succeeded.
             </div>
 
-            <p *ngIf="hasLogText$ | async" class="firmware-log-toggle">
-                <a (click)="toggleLog()">{{ showLog ? 'Hide' : 'Show' }} update log</a>
+            <p *ngIf="hasLogText$ | async" class="mb-0">
+                <a (click)="toggleLog()" class="btn btn-link">{{ showLog ? 'Hide' : 'Show' }} update log</a>
             </p>
         </div>
 
