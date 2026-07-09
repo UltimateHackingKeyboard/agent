@@ -1549,7 +1549,7 @@ export class DeviceService {
         message: string
     ): Promise<void> {
         if (!(await isUhkDeviceConnected(device))) {
-            this.firmwareUpgradePrompt(eventSender, `[DeviceService] show firmware upgrade prompt: ${message}`)
+            this.firmwareUpgradePrompt(eventSender, message)
         }
 
         await waitForUhkDeviceConnected(device);
