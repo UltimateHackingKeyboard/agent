@@ -236,32 +236,34 @@
             </li>
         </ul>
     </li>
-    <li class="sidebar__level-0--item" [routerLinkActive]="['active']">
-        <div class="sidebar__level-0">
-            <i class="uhk-icon uhk-icon-pure-agent-icon"></i> Agent
-            <fa-icon [icon]="this.sideMenuState.agent.icon"
-                     class="chevron float-end"
-                     (click)="toggleMenuItem('agent')"></fa-icon>
-        </div>
-        <ul [@toggler]="this.sideMenuState.agent.animation">
-            <li class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/settings']"
-                       [class.disabled]="state.updatingFirmware">Settings</a>
-                </div>
-            </li>
-            <li class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/help']"
-                       [class.disabled]="state.updatingFirmware">Help</a>
-                </div>
-            </li>
-            <li class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/about']"
-                       [class.disabled]="state.updatingFirmware">About</a>
-                </div>
-            </li>
-        </ul>
+</ul>
+
+<ul class="menu--bottom">
+    <li class="menu--bottom__item">
+        <a [routerLink]="['/settings']"
+           [routerLinkActive]="['active']"
+           [class.disabled]="state.updatingFirmware"
+           class="menu--bottom__link">
+            <fa-icon [icon]="faCog"></fa-icon>
+            Settings
+        </a>
+    </li>
+    <li class="menu--bottom__item">
+        <a [routerLink]="['/help']"
+           [routerLinkActive]="['active']"
+           [class.disabled]="state.updatingFirmware"
+           class="menu--bottom__link">
+            <fa-icon [icon]="faQuestionCircle"></fa-icon>
+            Help
+        </a>
+    </li>
+    <li class="menu--bottom__item">
+        <a [routerLink]="['/about']"
+           [routerLinkActive]="['active']"
+           [class.disabled]="state.updatingFirmware"
+           class="menu--bottom__link">
+            <i class="uhk-icon uhk-icon-pure-agent-icon my-uhk-icon"></i>
+            About
+        </a>
     </li>
 </ul>
