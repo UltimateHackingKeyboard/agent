@@ -20,6 +20,7 @@ import {
     ModuleSlotToId,
     ModuleVersionInfo,
     ProgressCallback,
+    PromptCallback,
     UhkBuffer,
     UhkDeviceProduct,
     UHK_EEPROM_SIZE,
@@ -46,6 +47,8 @@ import {
     UsbCommand,
     UsbVariables
 } from './constants.js';
+import { UpdateLeftModuleWithKbootOptions } from './models/index.js';
+import { UpdateModuleWithKbootOptions } from './models/index.js';
 import {
     DebugInfo,
     Duration,
@@ -217,16 +220,20 @@ export class UhkOperations {
         this.logService.misc(`[UhkOperations] ${device.logName} firmware successfully flashed`);
     }
 
-    public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback): Promise<void> {
-        return this.updateModuleWithKboot(firmwarePath, device, LEFT_HALF_MODULE, onProgress);
+    public async updateLeftModuleWithKboot(options: UpdateLeftModuleWithKbootOptions): Promise<void> {
+        return this.updateModuleWithKboot({
+            ...options,
+            module: LEFT_HALF_MODULE
+        });
     }
 
-    public async updateModuleWithKboot(
-        firmwarePath: string,
-        device: UhkDeviceProduct,
-        module: UhkModule,
-        onProgress?: ProgressCallback
-    ): Promise<void> {
+    public async updateModuleWithKboot({
+        firmwarePath,
+        device,
+        module,
+        onProgress,
+        prompt,
+    }: UpdateModuleWithKbootOptions): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
             device,
@@ -239,7 +246,7 @@ export class UhkOperations {
         await this.jumpToBootloaderModule(module.slotId);
         await this.device.close();
 
-        const moduleBricked = await this.waitForKbootIdle(module.name);
+        const moduleBricked = await this.waitForKbootIdle(module.name, prompt);
         if (!moduleBricked) {
             const msg = `[UhkOperations] Couldn't connect to the "${module.name}".`;
             this.logService.error(msg);
@@ -540,16 +547,24 @@ export class UhkOperations {
         }
     }
 
-    public async waitForKbootIdle(moduleName: string): Promise<boolean> {
+    public async waitForKbootIdle(moduleName: string, prompt?: PromptCallback): Promise<boolean> {
+        let promptSent = false;
         while (true) {
             const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
             await this.device.close();
 
             if (buffer[1] === 0) {
+                prompt?.(undefined);
                 return true;
             }
 
-            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
+            const message = `[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`
+            if (!promptSent) {
+                prompt?.(message);
+                promptSent = true;
+            }
+
+            this.logService.misc(message);
 
             await snooze(1000);
         }
