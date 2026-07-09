@@ -108,6 +108,8 @@ export class McuManager {
             logger('Image uploaded: %d', written / buffer.length * 100);
             onProgress?.(Math.min(100, Math.round(written / buffer.length * 100)));
         }
+
+        onProgress?.(100);
     }
 
     /**

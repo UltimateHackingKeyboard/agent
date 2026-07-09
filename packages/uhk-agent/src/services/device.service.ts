@@ -1553,6 +1553,7 @@ export class DeviceService {
         }
 
         await waitForUhkDeviceConnected(device);
+
         this.firmwareUpgradePrompt(eventSender, undefined)
     }
 

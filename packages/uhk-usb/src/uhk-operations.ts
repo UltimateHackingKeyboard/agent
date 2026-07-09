@@ -47,14 +47,14 @@ import {
     UsbCommand,
     UsbVariables
 } from './constants.js';
-import { UpdateLeftModuleWithKbootOptions } from './models/index.js';
-import { UpdateModuleWithKbootOptions } from './models/index.js';
 import {
     DebugInfo,
     Duration,
     I2cBaudRate,
     I2cErrorBuffer,
     LoadConfigurationsResult,
+    UpdateLeftModuleWithKbootOptions,
+    UpdateModuleWithKbootOptions,
 } from './models/index.js';
 
 import { UhkHidDevice } from './uhk-hid-device.js';
@@ -166,23 +166,26 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Read RIGHT firmware from file');
         const bootloaderMemoryMap = await readBootloaderFirmwareFromHexFileAsync(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory');
+
         const totalBytes = [...bootloaderMemoryMap.values()].reduce((sum, data) => sum + data.length, 0);
         let writtenBytes = 0;
-        onProgress?.(0);
-        for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
-            const bytesBeforeEntry = writtenBytes;
 
+        onProgress?.(0);
+
+        for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
             const dataOption: DataOption = {
                 startAddress,
                 data,
                 onProgress: entryPercent => {
-                    onProgress?.(Math.min(100, Math.round((bytesBeforeEntry + data.length * entryPercent / 100) / totalBytes * 100)));
+                    onProgress?.(Math.min(100, Math.round((writtenBytes + data.length * entryPercent / 100) / totalBytes * 100)));
                 },
             };
 
             await kboot.writeMemory(dataOption);
             writtenBytes += data.length;
         }
+
+        onProgress?.(100);
 
         this.logService.misc('[UhkOperations] Reset bootloader');
         await kboot.reset();
