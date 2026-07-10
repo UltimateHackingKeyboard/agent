@@ -451,13 +451,19 @@ export function reducer(
                         const destinationModule = layer.modules.find(findModuleById(moduleId));
                         const copiedModule = copiedLayer.modules.find(findModuleById(moduleId));
 
-                        // the module neither on the destination or copied layer so we skip it
+                        // the module neither on the destination nor copied layer so we skip it
                         if (!destinationModule && !copiedModule) {
                             continue
                         }
 
-                        // the module exists either ont destination layer or copied layer
-                        pastedLayer.modules.push(destinationModule || copiedModule);
+                        // the module exists only on the destination layer
+                        if (destinationModule && !copiedModule) {
+                            pastedLayer.modules.push(destinationModule);
+                        }
+
+                        // use the copied module to ensure every key from it will copy
+                        // for example when uhk 80 key copies to uhk 60
+                        pastedLayer.modules.push(copiedModule);
                     }
 
                     setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, pastedLayer, state.theme);
