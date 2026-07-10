@@ -498,8 +498,14 @@ export function reducer(
 
                     let copiedKeyAction = copiedModule.keyActions?.[keyId];
 
-                    if (baseKey instanceof SwitchLayerAction && pasteToLayer.id === baseKey.layer) {
-                        copiedKeyAction = new SwitchLayerAction(baseKey);
+                    if (baseKey instanceof SwitchLayerAction) {
+                        const isLayerExists = pasteToKeymap.layers.some(layer => layer.id === baseKey.layer);
+                        if (isLayerExists) {
+                            copiedKeyAction = new SwitchLayerAction(baseKey);
+                        }
+                        else {
+                            copiedKeyAction = new NoneAction(baseKey);
+                        }
                     }
                     else if (copiedKeyAction instanceof PlayMacroAction) {
                         const macroName = state.copiedLayerMacroNames.get(copiedKeyAction.macroId);
