@@ -47,7 +47,7 @@ import {
 import { MapperService } from '../../../services/mapper.service';
 import { AppState, getKeymaps, getMacros, getAnimationEnabled, getOpenPopover } from '../../../store';
 import { ClosePopoverAction } from '../../../store/actions/keymap';
-import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
+import { AddLayerAction, CopyLayerAction, PasteLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
@@ -101,8 +101,10 @@ interface NameValuePair {
     ]
 })
 export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
+    @Input() allowLayerCopy = false;
     @Input() allowNewLayers: boolean;
     @Input() backlightingMode: BacklightingMode;
+    @Input() canPasteLayer = false;
     @Input() currentLayer: LayerOption;
     @Input() isBacklightingColoring = false;
     @Input() keymap: Keymap;
@@ -317,6 +319,14 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
 
     onRemoveLayer(id: number): void {
         this.store.dispatch(new RemoveLayerAction(id));
+    }
+
+    onCopyLayer(): void {
+        this.store.dispatch(new CopyLayerAction(this.currentLayer.id));
+    }
+
+    onPasteLayer(): void {
+        this.store.dispatch(new PasteLayerAction(this.currentLayer.id));
     }
 
     showPopover(keyAction: KeyAction): void {

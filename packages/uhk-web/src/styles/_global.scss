@@ -280,6 +280,11 @@ kbd {
     max-width: 350px;
 }
 
+.tooltip-layer-action .tooltip-inner {
+    width: 320px;
+    max-width: 320px;
+}
+
 mwl-confirmation-popover-window {
     .popover {
         &.bottom {

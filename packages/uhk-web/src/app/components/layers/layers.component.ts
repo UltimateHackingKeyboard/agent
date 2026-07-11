@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faPaste, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { colord, RgbColor } from 'colord';
 import { LayerName, RgbColorInterface } from 'uhk-common';
@@ -14,7 +14,9 @@ import { LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../..
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayersComponent {
+    @Input() allowLayerCopy = false;
     @Input() allowNewLayers: boolean;
+    @Input() canPasteLayer = false;
     @Input() current: LayerOption;
     @Input() layerOptions: LayerOption[];
     @Input() paletteColors: Array<RgbColor> = [];
@@ -27,10 +29,14 @@ export class LayersComponent {
     @Output() selectLayer = new EventEmitter<LayerOption>();
     @Output() toggleColorFromPalette = new EventEmitter<number>();
     @Output() addLayer = new EventEmitter<number>();
+    @Output() copyLayer = new EventEmitter<void>();
+    @Output() pasteLayer = new EventEmitter<void>();
     @Output() removeLayer = new EventEmitter<number>();
 
     @ViewChild('deleteTooltip') deleteTooltip: NgbTooltip;
 
+    faCopy = faCopy;
+    faPaste = faPaste;
     faPlus = faPlus;
     faTrash = faTrash;
     LayerName = LayerName;
@@ -54,6 +60,14 @@ export class LayersComponent {
 
     onAddLayer(layerOption: LayerOption): void {
         this.addLayer.emit(layerOption.id);
+    }
+
+    onCopyLayer(): void {
+        this.copyLayer.emit();
+    }
+
+    onPasteLayer(): void {
+        this.pasteLayer.emit();
     }
 
     onColorSelected(index): void {
