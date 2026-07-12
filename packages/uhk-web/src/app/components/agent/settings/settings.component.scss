@@ -1,3 +1,27 @@
+h1 {
+    margin-bottom: 1rem;
+}
+
 .theme-selector {
     min-width: 230px;
+}
+
+.macro-grouping-number-input {
+    width: 4rem;
+}
+
+.macro-grouping-checkbox {
+    align-items: center;
+    display: flex;
+    gap: 0.375rem;
+}
+
+.macro-grouping-inline-option {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.macro-grouping-dependent-options--disabled {
+    opacity: 0.55;
 }

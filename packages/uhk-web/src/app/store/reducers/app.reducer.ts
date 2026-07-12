@@ -2,9 +2,12 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
     AppTheme,
     CommandLineArgs,
+    DEFAULT_MACRO_GROUPING_SETTINGS,
     disableAgentUpgradeProtection,
+    normalizeMacroGroupingSettings,
     HardwareConfiguration,
     KeyboardLayout,
+    MacroGroupingSettings,
     Notification,
     NotificationType,
     runInElectron,
@@ -37,6 +40,7 @@ export interface State {
     osVersion?: string;
     keypressCapturing: boolean;
     everAttemptedSavingToKeyboard: boolean;
+    macroGrouping: MacroGroupingSettings;
     udevFileContent: string;
 }
 
@@ -54,6 +58,7 @@ export const initialState: State = {
     privilegeWhatWillThisDoClicked: false,
     keypressCapturing: false,
     everAttemptedSavingToKeyboard: false,
+    macroGrouping: DEFAULT_MACRO_GROUPING_SETTINGS,
     udevFileContent: ''
 };
 
@@ -207,7 +212,8 @@ export function reducer(
                 errorPanelHeight: settings.errorPanelHeight || DEFAULT_ERROR_PANEL_HEIGHT,
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
                 animationEnabled: settings.animationEnabled,
-                appTheme: settings.appTheme || AppTheme.System
+                appTheme: settings.appTheme || AppTheme.System,
+                macroGrouping: normalizeMacroGroupingSettings(settings.macroGrouping)
             };
         }
 
@@ -221,6 +227,15 @@ export function reducer(
             return {
                 ...state,
                 animationEnabled: (action as App.ToggleAnimationEnabledAction).payload
+            };
+
+        case App.ActionTypes.SetMacroGroupingSettings:
+            return {
+                ...state,
+                macroGrouping: normalizeMacroGroupingSettings({
+                    ...state.macroGrouping,
+                    ...(action as App.SetMacroGroupingSettingsAction).payload
+                })
             };
 
         case App.ActionTypes.SetAppTheme:
@@ -266,6 +281,7 @@ export const keypressCapturing = (state: State): boolean => state.keypressCaptur
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
 export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;
+export const getMacroGroupingSettings = (state: State): MacroGroupingSettings => state.macroGrouping;
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
 export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;
 export const getPlatform = (state: State): string => state.platform;

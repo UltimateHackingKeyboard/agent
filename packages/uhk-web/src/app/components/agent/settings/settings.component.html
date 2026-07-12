@@ -44,9 +44,8 @@
     </div>
 </div>
 
-
-<div class="col-12 col-md-6 mb-0 mt-0">
-    <div class="d-flex align-items-center mt-2">
+<div class="col-12 col-md-6 mb-0 mt-2">
+    <div class="d-flex align-items-center">
         <label class="mb-0 me-2">Theme</label>
         <ng-select
             class="theme-selector"
@@ -67,6 +66,64 @@
 
 <div class="col-12 mt-2">
    <button type="button" class="btn btn-link px-0" (click)="openConfigFolder()">Open configuration folder</button>
+</div>
+
+<div class="col-12 mt-3" *ngIf="macroGroupingSettings$ | async as macroGroupingSettings">
+    <h2 class="h5">Macro sidebar grouping</h2>
+    <div class="macro-grouping-checkbox mt-0">
+        <div class="checkbox mb-0">
+            <label>
+                <input type="checkbox"
+                       [checked]="macroGroupingSettings.enabled"
+                       (change)="updateMacroGroupingSettings({ enabled: $event.target.checked })"
+                > Group macros in the sidebar
+            </label>
+        </div>
+        <circle-tooltip
+            tooltip="Turns sidebar grouping on or off. When enabled, macros are sorted into collapsible folders by splitting names at non-alphanumeric characters, such as colons, underscores, hyphens, and spaces. For example, Doom: Chainsaw and Doom_Plasma gun appear under a Doom folder. When disabled, macros are shown as a flat alphabetical list. Only the sidebar layout changes; macro names in your configuration stay the same."
+            [width]="420"
+        />
+    </div>
+    <div class="macro-grouping-dependent-options"
+         [class.macro-grouping-dependent-options--disabled]="!macroGroupingSettings.enabled">
+        <div class="macro-grouping-checkbox mt-1">
+            <div class="checkbox mb-0">
+                <label>
+                    <input type="checkbox"
+                           [checked]="macroGroupingSettings.camelCaseSeparation"
+                           [disabled]="!macroGroupingSettings.enabled"
+                           (change)="updateMacroGroupingSettings({ camelCaseSeparation: $event.target.checked })"
+                    > Split camel case macro names
+                </label>
+            </div>
+            <circle-tooltip
+                tooltip="Requires Group macros in the sidebar. Adds a second splitting rule on top of non-alphanumeric separators: camelCase boundaries within each name segment. For example, bindMouseLeft and bindMouseRight are grouped under bind. Use this if you name macros in camelCase without non-alphanumeric separators. Leave off if camelCase names should stay whole, such as when the full name is a single identifier used by macro commands."
+                [width]="420"
+            />
+        </div>
+        <div class="macro-grouping-inline-option mt-1">
+            <label class="mb-0" for="macro-grouping-max-depth">Maximum nesting depth:</label>
+            <input id="macro-grouping-max-depth"
+                   type="number"
+                   class="form-control macro-grouping-number-input"
+                   min="1"
+                   [max]="macroGroupingMaxDepth"
+                   [disabled]="!macroGroupingSettings.enabled"
+                   [ngModel]="macroGroupingSettings.maxDepth"
+                   (ngModelChange)="updateMacroGroupingSettings({ maxDepth: +$event })">
+        </div>
+        <div class="macro-grouping-inline-option mt-1">
+            <label class="mb-0" for="macro-grouping-min-children">Minimum macros per group:</label>
+            <input id="macro-grouping-min-children"
+                   type="number"
+                   class="form-control macro-grouping-number-input"
+                   min="2"
+                   max="10"
+                   [disabled]="!macroGroupingSettings.enabled"
+                   [ngModel]="macroGroupingSettings.minChildren"
+                   (ngModelChange)="updateMacroGroupingSettings({ minChildren: +$event })">
+        </div>
+    </div>
 </div>
 
 <ng-template #systemThemeTooltip>

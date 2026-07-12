@@ -14,6 +14,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 import {
     faChevronDown,
+    faChevronRight,
     faChevronUp,
     faCog,
     faExclamationTriangle,
@@ -35,7 +36,7 @@ import { MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
 import { AppState, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
-import { DeviceUiStates, SideMenuPageState } from '../../models';
+import { DeviceUiStates, MacroMenuTreeNode, SideMenuPageState } from '../../models';
 
 interface SideMenuItemState {
     icon: IconDefinition;
@@ -109,6 +110,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     faSlidersH = faSlidersH;
     faStar = faStar;
     maxAllowedMacrosTooltip = MAX_ALLOWED_MACROS_TOOLTIP;
+    macroGroupState: Record<string, SideMenuItemState> = {};
 
     private stateSubscription: Subscription;
 
@@ -123,6 +125,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
             this.isBatterySettingsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.isConnectionsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.calculateDeviceAnimationState();
+            this.syncMacroGroupState();
             this.cdRef.markForCheck();
         });
     }
@@ -157,6 +160,45 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
         }
     }
 
+    toggleMacroGroup(path: string): void {
+        if (this.state.updatingFirmware) {
+            return;
+        }
+
+        const currentState = this.getMacroGroupState(path);
+
+        this.macroGroupState[path] = currentState.animation === 'active'
+            ? { icon: faChevronDown, animation: 'inactive' }
+            : { icon: faChevronUp, animation: 'active' };
+    }
+
+    getMacroGroupState(path: string): SideMenuItemState {
+        return this.macroGroupState[path] || {
+            icon: faChevronUp,
+            animation: 'active'
+        };
+    }
+
+    getMacroGroupArrowIcon(path: string): IconDefinition {
+        return this.getMacroGroupState(path).animation === 'active'
+            ? faChevronDown
+            : faChevronRight;
+    }
+
+    getMacroDisplayName(node: MacroMenuTreeNode): string {
+        return node.displayName || node.macro?.name || '';
+    }
+
+    getMacroTitle(node: MacroMenuTreeNode): string | null {
+        const fullName = node.macro?.name;
+
+        if (!fullName || !node.displayName || node.displayName === fullName) {
+            return null;
+        }
+
+        return fullName;
+    }
+
     addMacro() {
         this.store.dispatch(new AddMacroAction());
     }
@@ -171,5 +213,28 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
                 && this.state?.deviceUiState !== DeviceUiStates.UpdateNeeded
             ? 'active'
             : 'inactive';
+    }
+
+    private syncMacroGroupState(): void {
+        const nextState: Record<string, SideMenuItemState> = {};
+
+        for (const path of this.collectMacroGroupPaths(this.state?.macroTree || [])) {
+            nextState[path] = this.macroGroupState[path] || {
+                icon: faChevronUp,
+                animation: 'active'
+            };
+        }
+
+        this.macroGroupState = nextState;
+    }
+
+    private collectMacroGroupPaths(nodes: MacroMenuTreeNode[]): string[] {
+        return nodes.flatMap(node => {
+            if (node.type !== 'group' || !node.path) {
+                return [];
+            }
+
+            return [node.path, ...this.collectMacroGroupPaths(node.children || [])];
+        });
     }
 }

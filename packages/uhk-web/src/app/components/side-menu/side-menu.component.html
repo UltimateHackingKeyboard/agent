@@ -222,21 +222,40 @@
                              (click)="toggleMenuItem('macro')"></fa-icon>
                 </div>
                 <ul [@toggler]="this.sideMenuState.macro.animation">
-                    <li *ngFor="let macro of state.macros" class="sidebar__level-2--item">
-                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                            <a [routerLink]="['/macro', macro.id]"
-                               [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
-                            <span class="sidebar__macro_count badge rounded-pill"
-                                  ngbTooltip="This is the number of times the macro is used across all keymaps."
-                                  placement="bottom"
-                                  container="body">{{ macro.usageCount }}</span>
-                        </div>
-                    </li>
+                    <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: state.macroTree, depth: 0 }"></ng-container>
                 </ul>
             </li>
         </ul>
     </li>
 </ul>
+
+<ng-template #macroTree let-nodes let-depth="depth">
+    <ng-container *ngFor="let node of nodes">
+        <li *ngIf="node.type === 'macro'" class="sidebar__macro-tree-item">
+            <div class="sidebar__macro-tree-entry" [style.--macro-depth]="depth" [routerLinkActive]="['active']">
+                <a [routerLink]="['/macro', node.macro.id]"
+                   [class.disabled]="state.updatingFirmware"
+                   [attr.title]="getMacroTitle(node)">{{ getMacroDisplayName(node) }}</a>
+                <span class="sidebar__macro_count badge rounded-pill"
+                      ngbTooltip="This is the number of times the macro is used across all keymaps."
+                      placement="bottom"
+                      container="body">{{ node.macro.usageCount }}</span>
+            </div>
+        </li>
+        <li *ngIf="node.type === 'group'" class="sidebar__macro-tree-item">
+            <div class="sidebar__macro-tree-entry sidebar__macro-group"
+                 [style.--macro-depth]="depth"
+                 (click)="toggleMacroGroup(node.path)">
+                {{ node.label }}
+                <fa-icon [icon]="getMacroGroupArrowIcon(node.path)"
+                         class="sidebar__macro-group-arrow"></fa-icon>
+            </div>
+            <ul [@toggler]="getMacroGroupState(node.path).animation">
+                <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: node.children, depth: depth + 1 }"></ng-container>
+            </ul>
+        </li>
+    </ng-container>
+</ng-template>
 
 <ul class="menu--bottom">
     <li class="menu--bottom__item">

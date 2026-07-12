@@ -10,6 +10,7 @@ export * from './find-uhk-module-by-id.js';
 export * from './get-formatted-timestamp.js';
 export * from './get-md5-hash-from-file-name.js';
 export * from './get-slot-id-name.js';
+export * from './group-macros-by-name.js';
 export * from './helpers.js';
 export * from './is-bit-set.js';
 export * from './is-device-protocol-support-firmware-checksum.js';

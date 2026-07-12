@@ -21,6 +21,7 @@ import {
     LEFT_KEY_CLUSTER_MODULE,
     LeftSlotModules,
     MAX_ALLOWED_MACROS,
+    groupMacrosByName,
     PlayMacroAction,
     RIGHT_TRACKPOINT_MODULE,
     RightSlotModules,
@@ -45,6 +46,7 @@ import {
     FirmwareUpgradeState,
     HistoryFileInfo,
     MacroMenuItem,
+    MacroMenuTreeNode,
     ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
     OutOfSpaceWarningType,
@@ -202,6 +204,7 @@ export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindow
 export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp.getEverAttemptedSavingToKeyboard);
 export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
 export const getAnimationEnabled = createSelector(appState, fromApp.getAnimationEnabled);
+export const getMacroGroupingSettings = createSelector(appState, fromApp.getMacroGroupingSettings);
 export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
 export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeColors => {
     return  defaultUhkThemeColors(theme);
@@ -571,6 +574,7 @@ export const getSideMenuPageState = createSelector(
     isLeftHalfPairing,
     getRouterState,
     getSelectedKeymap,
+    getMacroGroupingSettings,
     (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
@@ -583,9 +587,11 @@ export const getSideMenuPageState = createSelector(
         donglePairingState,
         leftHalfPairing,
         routerState,
-        selectedKeymap
+        selectedKeymap,
+        macroGroupingSettings
     ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
+        const macroTree = groupMacrosByName(macros, macroGroupingSettings);
 
         return {
             advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
@@ -597,6 +603,7 @@ export const getSideMenuPageState = createSelector(
             keymapQueryParams: {
                 layer: selectedLayerOption.id
             },
+            macroTree,
             macros,
             maxMacroCountReached: macros.length >= MAX_ALLOWED_MACROS,
             restoreUserConfiguration,
@@ -834,12 +841,14 @@ export const getApplicationSettings = createSelector(
     backlightingColorPalette,
     keyboardHalvesAlwaysJoined,
     getAlwaysEnableAdvancedMode,
+    getMacroGroupingSettings,
     (updateSettingsState,
         app,
         smartMacroPanelWidth,
         backlightingColorPalette,
         keyboardHalvesAlwaysJoined,
         alwaysEnableAdvancedMode,
+        macroGrouping,
     ): ApplicationSettings => {
         return {
             errorPanelHeight: app.errorPanelHeight,
@@ -850,6 +859,7 @@ export const getApplicationSettings = createSelector(
             backlightingColorPalette,
             keyboardHalvesAlwaysJoined,
             alwaysEnableAdvancedMode,
+            macroGrouping,
             smartMacroPanelWidth
         };
     });
