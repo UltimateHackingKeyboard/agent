@@ -2,6 +2,7 @@ export * from './apply-user-configuration-from-file-payload';
 export * from './backlighting-option';
 export * from './ble-adding-state';
 export * from './config-size-state';
+export * from './copied-layer-origin';
 export * from './delete-host-connection-payload';
 export * from './device-ui-states';
 export * from './dongle-pairing-state';

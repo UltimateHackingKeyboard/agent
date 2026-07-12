@@ -47,7 +47,7 @@
                 #pasteTooltip="ngbTooltip"
                 type="button"
                 class="btn btn-default"
-                ngbTooltip="Overwrite the current layer with the layer stored in Agent's virtual clipboard."
+                [ngbTooltip]="pasteLayerTooltip"
                 tooltipClass="tooltip-layer-action"
                 triggers="hover"
                 container="body"

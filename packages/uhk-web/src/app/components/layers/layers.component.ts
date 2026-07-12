@@ -4,7 +4,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { colord, RgbColor } from 'colord';
 import { LayerName, RgbColorInterface } from 'uhk-common';
 
-import { LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../models';
+import { LayerOption, CopiedLayerOrigin, ModifyColorOfBacklightingColorPalettePayload } from '../../models';
 
 @Component({
     selector: 'layers',
@@ -17,6 +17,7 @@ export class LayersComponent {
     @Input() allowLayerCopy = false;
     @Input() allowNewLayers: boolean;
     @Input() canPasteLayer = false;
+    @Input() copiedLayerOrigin: CopiedLayerOrigin;
     @Input() current: LayerOption;
     @Input() layerOptions: LayerOption[];
     @Input() paletteColors: Array<RgbColor> = [];
@@ -41,6 +42,15 @@ export class LayersComponent {
     faTrash = faTrash;
     LayerName = LayerName;
     newColorPaletteColor = '#000000';
+
+    get pasteLayerTooltip(): string {
+        const origin = this.copiedLayerOrigin;
+        if (!origin) {
+            return `Overwrite the current layer with the layer stored in Agent's virtual clipboard.`;
+        }
+
+        return `Overwrite the current layer with the ${origin.deviceName}: ${origin.keymapName}: ${origin.layerName} layer stored in Agent's virtual clipboard.`;
+    }
 
     onSelectLayer(option: LayerOption) {
         if (this.current?.id === option.id) {

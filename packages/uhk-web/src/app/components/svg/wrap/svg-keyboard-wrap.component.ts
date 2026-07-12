@@ -58,7 +58,7 @@ import {
 } from '../../../models/svg-key-events';
 import { SelectOptionData } from '../../../models/select-option-data';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
-import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload, OpenPopoverModel, SelectedKeyModel } from '../../../models';
+import { CopiedLayerOrigin, LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload, OpenPopoverModel, SelectedKeyModel } from '../../../models';
 
 interface NameValuePair {
     name: string;
@@ -105,6 +105,7 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     @Input() allowNewLayers: boolean;
     @Input() backlightingMode: BacklightingMode;
     @Input() canPasteLayer = false;
+    @Input() copiedLayerOrigin: CopiedLayerOrigin;
     @Input() currentLayer: LayerOption;
     @Input() isBacklightingColoring = false;
     @Input() keymap: Keymap;
