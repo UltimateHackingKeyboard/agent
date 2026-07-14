@@ -28,5 +28,19 @@ $side-value-width: 80px;
 
     .value-indicator {
         white-space: nowrap;
+
+        &.editable {
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .value-input {
+        width: 100%;
+        padding: 0 0.2rem;
+        text-align: right;
     }
 }

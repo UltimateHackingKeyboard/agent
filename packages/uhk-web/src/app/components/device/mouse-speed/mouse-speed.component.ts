@@ -56,11 +56,11 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.userConfigSubscription = this.store.select(getUserConfiguration)
             .subscribe(config => {
-                this.mouseMoveInitialSpeed = config.mouseMoveInitialSpeed * MOUSE_MOVE_VALUE_MULTIPLIER || 0;
-                this.mouseMoveBaseSpeed = config.mouseMoveBaseSpeed * MOUSE_MOVE_VALUE_MULTIPLIER || 0;
-                this.mouseMoveAcceleration = config.mouseMoveAcceleration * MOUSE_MOVE_VALUE_MULTIPLIER || 0;
-                this.mouseMoveDeceleratedSpeed = config.mouseMoveDeceleratedSpeed * MOUSE_MOVE_VALUE_MULTIPLIER || 0;
-                this.mouseMoveAcceleratedSpeed = config.mouseMoveAcceleratedSpeed * MOUSE_MOVE_VALUE_MULTIPLIER || 0;
+                this.mouseMoveInitialSpeed = this.toDisplayMoveSpeed(config.mouseMoveInitialSpeed);
+                this.mouseMoveBaseSpeed = this.toDisplayMoveSpeed(config.mouseMoveBaseSpeed);
+                this.mouseMoveAcceleration = this.toDisplayMoveSpeed(config.mouseMoveAcceleration);
+                this.mouseMoveDeceleratedSpeed = this.toDisplayMoveSpeed(config.mouseMoveDeceleratedSpeed);
+                this.mouseMoveAcceleratedSpeed = this.toDisplayMoveSpeed(config.mouseMoveAcceleratedSpeed);
                 this.mouseMoveAxisSkew = config.mouseMoveAxisSkew || 0;
 
                 this.mouseScrollInitialSpeed = config.mouseScrollInitialSpeed || 0;
@@ -100,5 +100,9 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
 
     resetToMacDefault() {
         this.store.dispatch(new ResetMacMouseSpeedSettingsAction());
+    }
+
+    private toDisplayMoveSpeed(stored: number): number {
+        return Math.round(stored * MOUSE_MOVE_VALUE_MULTIPLIER) || 0;
     }
 }

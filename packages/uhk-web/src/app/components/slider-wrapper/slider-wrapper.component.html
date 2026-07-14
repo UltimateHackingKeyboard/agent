@@ -25,6 +25,20 @@
             (ngModelChange)="onSliderChange($event)"></nouislider>
     </div>
     <div class="slider-value">
-        <div class="value-indicator">{{ getFormatedValue(value) }}</div>
+        <div *ngIf="!editingValue"
+             class="value-indicator"
+             [class.editable]="canEditValue"
+             (click)="startEditing()">{{ getFormatedValue(value) }}</div>
+        <input *ngIf="editingValue"
+               #valueInput
+               class="value-input"
+               type="number"
+               [min]="min"
+               [max]="max"
+               step="any"
+               [(ngModel)]="inputValue"
+               (blur)="commitInputValue()"
+               (keydown.enter)="$event.preventDefault(); commitInputValue()"
+               (keydown.escape)="cancelEditing($event)"/>
     </div>
 </div>
