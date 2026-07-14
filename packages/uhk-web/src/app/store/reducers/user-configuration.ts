@@ -47,6 +47,7 @@ import {
     BleAddingStates,
     BleAddingState,
     BacklightingOption,
+    CopiedLayerOrigin,
     defaultLastEditKey,
     ExchangeKey,
     LastEditedKey,
@@ -97,6 +98,7 @@ export interface State {
     isCustomPresetTheLastLoadedPreset: boolean;
     copiedLayer?: Layer;
     copiedLayerMacroNames?: Map<number, string>;
+    copiedLayerOrigin?: CopiedLayerOrigin;
 }
 
 export const initialState: State = {
@@ -413,6 +415,11 @@ export function reducer(
                 ...state,
                 copiedLayer: new Layer(layerToCopy),
                 copiedLayerMacroNames,
+                copiedLayerOrigin: {
+                    deviceName: state.userConfiguration.deviceName,
+                    keymapName: currentKeymap.name,
+                    layerName: state.layerOptions.get(layerId).name,
+                },
             };
         }
 
@@ -1474,6 +1481,7 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
     .sort((a, b) => a.order - b.order);
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getHasCopiedLayer = (state: State): boolean => !!state.copiedLayer;
+export const getCopiedLayerOrigin = (state: State): CopiedLayerOrigin | undefined => state.copiedLayerOrigin;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 export const getSelectedModuleConfiguration = (state: State): ModuleConfiguration => {
     if(!state.selectedModuleConfigurationId) {

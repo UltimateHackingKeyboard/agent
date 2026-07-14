@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BacklightingMode, HalvesInfo, KeyboardLayout, Keymap, LayerName } from 'uhk-common';
 
-import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
+import { CopiedLayerOrigin, LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { SelectOptionData } from '../../../models/select-option-data';
 
@@ -16,6 +16,7 @@ import {
     backlightingColorPalette,
     backlightingMode,
     getHalvesInfo,
+    getCopiedLayerOrigin,
     getHasCopiedLayer,
     getKeyboardLayout,
     getLayerOptions,
@@ -56,6 +57,7 @@ import {
 export class KeymapEditComponent implements OnDestroy {
 
     backlightingMode$: Observable<BacklightingMode>;
+    copiedLayerOrigin$: Observable<CopiedLayerOrigin>;
     currentLayer$: Observable<LayerOption>;
     deletable$: Observable<boolean>;
     hasCopiedLayer$: Observable<boolean>;
@@ -111,6 +113,7 @@ export class KeymapEditComponent implements OnDestroy {
 
         this.backlightingMode$ = store.select(backlightingMode);
         this.currentLayer$ = store.select(getSelectedLayerOption);
+        this.copiedLayerOrigin$ = store.select(getCopiedLayerOrigin);
         this.keymap$ = store.select(getSelectedKeymap);
         this.keymapSubscription = this.keymap$
             .subscribe(keymap => {
