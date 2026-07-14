@@ -30,10 +30,11 @@ import {
 
 import { Store } from '@ngrx/store';
 
-import { Subscription } from 'rxjs';
-import { MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
+import { combineLatest, Subscription } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
+import { findMacroGroupAncestorPaths, MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
 
-import { AppState, getSideMenuPageState } from '../../store';
+import { AppState, getSelectedMacro, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
 import { DeviceUiStates, MacroMenuTreeNode, SideMenuPageState } from '../../models';
@@ -120,11 +121,20 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
+        this.stateSubscription = combineLatest([
+            this.store.select(getSideMenuPageState),
+            this.store.select(getSelectedMacro).pipe(
+                map(macro => macro?.id),
+                distinctUntilChanged()
+            )
+        ]).subscribe(([data, selectedMacroId]) => {
             this.state = data;
             this.isBatterySettingsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.isConnectionsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.calculateDeviceAnimationState();
+            if (selectedMacroId !== undefined) {
+                this.expandMacroGroupsForMacro(selectedMacroId, data.macroTree);
+            }
             this.syncMacroGroupState();
             this.cdRef.markForCheck();
         });
@@ -203,6 +213,16 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
                 && this.state?.deviceUiState !== DeviceUiStates.UpdateNeeded
             ? 'active'
             : 'inactive';
+    }
+
+    private expandMacroGroupsForMacro(macroId: number, macroTree: MacroMenuTreeNode[]): void {
+        for (const path of findMacroGroupAncestorPaths(macroTree, macroId) ?? []) {
+            this.macroGroupState[path] = { icon: faChevronUp, animation: 'active' };
+        }
+
+        if (this.sideMenuState.macro.animation !== 'active') {
+            this.sideMenuState.macro = { icon: faChevronUp, animation: 'active' };
+        }
     }
 
     private syncMacroGroupState(): void {

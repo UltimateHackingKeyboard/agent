@@ -5,7 +5,12 @@ import {
     MACRO_GROUPING_MAX_DEPTH,
     normalizeMacroGroupingSettings,
 } from '../models/macro-grouping-settings.js';
-import { groupMacrosByName, GroupableMacroItem, splitMacroName } from './group-macros-by-name.js';
+import {
+    findMacroGroupAncestorPaths,
+    groupMacrosByName,
+    GroupableMacroItem,
+    splitMacroName
+} from './group-macros-by-name.js';
 
 function createMacro(id: number, name: string): GroupableMacroItem {
     return {
@@ -213,6 +218,38 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 2);
         assert.deepEqual(result.map(node => node.macro?.name), ['Doom', 'Doom: Chainsaw']);
+    });
+});
+
+describe('findMacroGroupAncestorPaths', () => {
+    it('returns ancestor group paths for a nested macro', ({ assert }) => {
+        const macros = [
+            createMacro(1, 'Open: daily sites'),
+            createMacro(2, 'Open: weekly sites'),
+        ];
+        const tree = groupMacrosByName(macros, {
+            ...ENABLED_MACRO_GROUPING_SETTINGS,
+            maxDepth: 2,
+        });
+
+        assert.deepEqual(findMacroGroupAncestorPaths(tree, 1), ['Open']);
+        assert.deepEqual(findMacroGroupAncestorPaths(tree, 2), ['Open']);
+    });
+
+    it('returns an empty array for macros that are not grouped', ({ assert }) => {
+        const macros = [
+            createMacro(1, 'Doom'),
+            createMacro(2, 'Chainsaw'),
+        ];
+        const tree = groupMacrosByName(macros, ENABLED_MACRO_GROUPING_SETTINGS);
+
+        assert.deepEqual(findMacroGroupAncestorPaths(tree, 1), []);
+    });
+
+    it('returns null when the macro is not in the tree', ({ assert }) => {
+        const tree = groupMacrosByName([createMacro(1, 'Doom: Chainsaw')], ENABLED_MACRO_GROUPING_SETTINGS);
+
+        assert.equal(findMacroGroupAncestorPaths(tree, 99), null);
     });
 });
 

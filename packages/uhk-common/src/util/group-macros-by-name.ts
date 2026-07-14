@@ -135,6 +135,32 @@ function getMacroMenuTreeNodeLabel<TMacro extends GroupableMacroItem>(node: Macr
     return node.macro?.name || '';
 }
 
+export function findMacroGroupAncestorPaths<TMacro extends GroupableMacroItem>(
+    nodes: MacroMenuTreeNode<TMacro>[],
+    macroId: number,
+    ancestorPaths: string[] = []
+): string[] | null {
+    for (const node of nodes) {
+        if (node.type === 'macro' && node.macro?.id === macroId) {
+            return ancestorPaths;
+        }
+
+        if (node.type === 'group' && node.path && node.children) {
+            const found = findMacroGroupAncestorPaths(
+                node.children,
+                macroId,
+                [...ancestorPaths, node.path]
+            );
+
+            if (found !== null) {
+                return found;
+            }
+        }
+    }
+
+    return null;
+}
+
 export function splitMacroName(name: string, camelCaseSeparation: boolean): string[] {
     let parts = name.split(MACRO_NAME_SEPARATOR).filter(part => part.length > 0);
 
