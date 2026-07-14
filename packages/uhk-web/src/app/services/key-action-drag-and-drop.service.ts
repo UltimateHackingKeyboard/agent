@@ -58,7 +58,9 @@ export class KeyActionDragAndDropService implements OnDestroy {
         @Inject(DOCUMENT) private _document: Document,
         private _store: Store<AppState>
     ) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this._document.addEventListener('mouseup', this.leftButtonUp.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this._document.addEventListener('mousemove', this.mouseMove.bind(this));
         this.subscriptions.add(this._store.select(getSelectedKeymap).subscribe(keymap => this.keymap = keymap));
         this.subscriptions.add(this._store.select(getHalvesInfo).subscribe(info => this.halvesInfo = info));

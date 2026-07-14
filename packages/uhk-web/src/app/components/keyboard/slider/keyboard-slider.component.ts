@@ -74,11 +74,11 @@ export class KeyboardSliderComponent implements OnChanges {
             } else if (this.visibleLayerName === LayerNames.A) {
                 this.bLayer = this.layers.find(layer => layer.id === this.currentLayer.id);
                 this.visibleLayerName = LayerNames.B;
-                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
+                this.onLayerChange(layerChange.previousValue as LayerOption, layerChange.currentValue as LayerOption);
             } else {
                 this.aLayer = this.layers.find(layer => layer.id === this.currentLayer.id);
                 this.visibleLayerName = LayerNames.A;
-                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
+                this.onLayerChange(layerChange.previousValue as LayerOption, layerChange.currentValue as LayerOption);
             }
         }
     }

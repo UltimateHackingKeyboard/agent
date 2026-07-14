@@ -217,7 +217,7 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
             window.scrollTo(document.body.scrollLeft, document.body.scrollHeight);
         }, ANIMATION_INTERVAL);
 
-        this.scrollToBottomSetTimeoutTimer = window.setTimeout(this.clearScrollToBottomInterval.bind(this), ANIMATION_TIMEOUT);
+        this.scrollToBottomSetTimeoutTimer = window.setTimeout(() => this.clearScrollToBottomInterval(), ANIMATION_TIMEOUT);
     }
 
     private clearScrollToBottomInterval(): void {

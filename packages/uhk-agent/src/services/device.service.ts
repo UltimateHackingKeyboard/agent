@@ -47,6 +47,7 @@ import {
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
     UHK_DEVICE_IDS,
+    UHK_DEVICE_IDS_TYPE,
     UHK_DONGLE,
     UHK_MODULE_IDS,
     UHK_MODULES,
@@ -210,6 +211,7 @@ export class DeviceService {
             });
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.toggleI2cDebugging, this.toggleI2cDebugging.bind(this));
 
         ipcMain.on(IpcEvents.device.isRightHalfZephyrLoggingEnabled, (...args) => {
@@ -257,6 +259,7 @@ export class DeviceService {
             });
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.startConnectionPoller, this.startPollUhkDevice.bind(this));
 
         ipcMain.on(IpcEvents.device.startDonglePairing, (...args) => {
@@ -314,8 +317,11 @@ export class DeviceService {
             });
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.getUserConfigFromHistory, this.getUserConfigFromHistory.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.deleteUserConfigHistory, this.deleteUserConfigHistory.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.loadUserConfigHistory, this.loadUserConfigFromHistory.bind(this));
 
         logService.misc('[DeviceService] init success');
@@ -834,8 +840,8 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
             const arg = args[0];
-            const userConfig = arg.userConfig;
-            const deviceId = arg.deviceId;
+            const userConfig: Object = arg.userConfig;
+            const deviceId: UHK_DEVICE_IDS_TYPE = arg.deviceId;
             const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
 
@@ -944,7 +950,10 @@ export class DeviceService {
         }
     }
 
-    public async deleteHostConnection(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async deleteHostConnection(
+        event: Electron.IpcMainEvent,
+        args: [{ isConnectedDongleAddress: boolean, index: number, address: string }]
+    ): Promise<void> {
         const {isConnectedDongleAddress, index, address} = args[0];
         this.logService.misc('[DeviceService] delete host connection', { isConnectedDongleAddress, index, address });
 
@@ -1010,7 +1019,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.eraseBleSettingsReply, response);
     }
 
-    public async execShellCommand(_: Electron.IpcMainEvent, [command]): Promise<void> {
+    public async execShellCommand(_: Electron.IpcMainEvent, [command]: [string]): Promise<void> {
         this.logService.misc(`[DeviceService] execute shell command (escaped): ${escapeZephyrControlChars(command)}`);
 
         try {
@@ -1381,7 +1390,7 @@ export class DeviceService {
         return Promise.resolve();
     }
 
-    private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]): Promise<void> {
+    private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]: [string]): Promise<void> {
         const response: UploadFileData = {
             filename,
             data: await getUserConfigFromHistoryAsync(filename),
@@ -1391,7 +1400,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.getUserConfigFromHistoryReply, response);
     }
 
-    private async deleteUserConfigHistory(event: Electron.IpcMainEvent, [deviceUniqueId]): Promise<void> {
+    private async deleteUserConfigHistory(event: Electron.IpcMainEvent, [deviceUniqueId]: [number]): Promise<void> {
         const response = await deleteUserConfigHistory(deviceUniqueId);
 
         event.sender.send(IpcEvents.device.deleteUserConfigHistoryReply, response);

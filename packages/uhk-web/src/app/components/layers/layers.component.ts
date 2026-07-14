@@ -80,7 +80,7 @@ export class LayersComponent {
         this.pasteLayer.emit();
     }
 
-    onColorSelected(index): void {
+    onColorSelected(index: number): void {
         this.toggleColorFromPalette.emit(index);
     }
 

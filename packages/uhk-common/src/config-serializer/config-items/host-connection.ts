@@ -145,7 +145,7 @@ export class HostConnection {
         this.type = buffer.readUInt8();
 
         if (this.hasAddress()) {
-            const address = [];
+            const address: number[] = [];
 
             for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                 address.push(buffer.readUInt8());
@@ -170,7 +170,7 @@ export class HostConnection {
         this.type = buffer.readUInt8();
 
         if (this.hasAddress()) {
-            const address = [];
+            const address: number[] = [];
 
             for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                 address.push(buffer.readUInt8());

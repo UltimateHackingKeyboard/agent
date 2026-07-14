@@ -31,7 +31,9 @@ export class SmartMacroDocService implements OnDestroy {
     constructor(private store: Store<AppState>,
                 private logService: LogService,
                 private zone: NgZone) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.addEventListener('message', this.onMessage.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.addEventListener('messageerror', this.onMessageError.bind(this));
 
         this.subscriptions.add(
@@ -52,7 +54,9 @@ export class SmartMacroDocService implements OnDestroy {
     }
 
     ngOnDestroy(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.removeEventListener('message', this.onMessage.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.removeEventListener('messageerror', this.onMessageError.bind(this));
         this.subscriptions.unsubscribe();
     }
@@ -103,7 +107,7 @@ export class SmartMacroDocService implements OnDestroy {
                 return this.dispatchSmartMacroDocCommand(SmartMacroDocCommandAction.set, event.data.command);
 
             case 'doc-message-open-link': {
-                return this.dispatchStoreAction(new OpenUrlInNewWindowAction(event.data.url));
+                return this.dispatchStoreAction(new OpenUrlInNewWindowAction(event.data.url as string));
             }
 
             default: {

@@ -9,6 +9,7 @@ import { SmartMacroDocService } from '../../../services/smart-macro-doc-service'
 export class SmartMacroDocDirective implements OnDestroy {
     constructor(private elementRef: ElementRef,
                 private smartMacroDocService: SmartMacroDocService) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.smartMacroDocService.setIframe(this.elementRef.nativeElement);
     }
 

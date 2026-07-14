@@ -21,6 +21,7 @@ export class KeyActionColoringService implements OnDestroy {
         @Inject(DOCUMENT) private _document: Document,
         private _store: Store<AppState>
     ) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this._document.addEventListener('mouseup', this.leftButtonUp.bind(this));
         this.subscriptions.add(this._store.select(isBacklightingColoring).subscribe(coloring => this.coloring = coloring));
         this.subscriptions.add(this._store.select(selectedBacklightingColor).subscribe(color => this._selectedBacklightingColor = color));

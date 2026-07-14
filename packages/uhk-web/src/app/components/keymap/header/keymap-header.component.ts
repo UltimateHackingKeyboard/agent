@@ -67,7 +67,7 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
         if (changes['keymap']) {
             this.setKeymapTitle();
             this.setAbbreviation();
-            this.keymapName.writeValue(changes.keymap.currentValue.name);
+            this.keymapName.writeValue(changes.keymap.currentValue.name as string);
         }
         if (changes['deletable']) {
             this.setTrashTitle();

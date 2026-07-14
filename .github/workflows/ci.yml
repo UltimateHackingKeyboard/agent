@@ -35,11 +35,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run linters
-        run: npm run lint
-
       - name: Run Build
         run: npm run build
+
+      # For linting need some build time generated file
+      - name: Run linters
+        run: npm run lint
 
       - name: Run Build Web
         run: npm run build:web

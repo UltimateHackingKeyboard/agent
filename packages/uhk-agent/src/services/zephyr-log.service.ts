@@ -102,7 +102,7 @@ export class ZephyrLogService {
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Disabled`);
     }
 
-    private async execShellCommand(_: Electron.IpcMainEvent, [command]): Promise<void> {
+    private async execShellCommand(_: Electron.IpcMainEvent, [command]: [string]): Promise<void> {
         this.options.logService.misc(`[ZephyrLogService | execute shell command (escaped): ${escapeZephyrControlChars(command)}`);
 
         try {
@@ -337,7 +337,7 @@ export class ZephyrLogService {
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] stopped`);
     }
 
-    private async toggleZephyrLogging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
+    private async toggleZephyrLogging(_: Electron.IpcMainEvent, [enabled]: [boolean]): Promise<void> {
         this.options.logService.misc(`[ZephyrLogService | ${this.options.uhkDeviceProduct.logName}] Toggle zephyr logging => ${enabled}`);
 
         try {

@@ -88,7 +88,7 @@ export class KeymapEditComponent implements OnDestroy {
             .pipe(
                 map(params => params.abbr)
             )
-            .subscribe(abbr => {
+            .subscribe((abbr: string | undefined) => {
                 if (abbr) {
                     abbr = decodeURIComponent(abbr)
                 }
