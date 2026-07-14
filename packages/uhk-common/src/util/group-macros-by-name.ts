@@ -43,70 +43,44 @@ function groupMacrosAtLevel<TMacro extends GroupableMacroItem>(
     depth: number,
     parentPath: string
 ): MacroMenuTreeNode<TMacro>[] {
-    const sortedItems = [...items].sort((first, second) => first.groupingName.localeCompare(second.groupingName));
+    const sortedItems = items.toSorted((a, b) => a.groupingName.localeCompare(b.groupingName));
 
     if (depth >= settings.maxDepth) {
         return sortedItems.map(item => createMacroNode(item, depth));
     }
 
     const ungrouped: MacroMenuTreeNode<TMacro>[] = [];
-    const groupMap = new Map<string, MacroGroupingItem<TMacro>[]>();
-    const pendingGroups: Array<{
-        groupKey: string;
-        item: MacroGroupingItem<TMacro>;
-        remainder: string;
-    }> = [];
+    const groups = new Map<string, { item: MacroGroupingItem<TMacro>; rest: string }[]>();
 
     for (const item of sortedItems) {
-        const segments = splitMacroName(item.groupingName, settings.camelCaseSeparation);
-
-        if (segments.length <= 1) {
+        const split = splitFirstSegment(item.groupingName, settings.camelCaseSeparation);
+        if (!split) {
             ungrouped.push(createMacroNode(item, depth));
             continue;
         }
-
-        pendingGroups.push({
-            groupKey: segments[0],
-            item,
-            remainder: getRemainder(item.groupingName, segments[0]),
-        });
+        const bucket = groups.get(split.head) ?? [];
+        bucket.push({ item, rest: split.rest });
+        groups.set(split.head, bucket);
     }
 
-    const groupCounts = new Map<string, number>();
+    const groupedNodes: MacroMenuTreeNode<TMacro>[] = [];
 
-    for (const pendingGroup of pendingGroups) {
-        groupCounts.set(
-            pendingGroup.groupKey,
-            (groupCounts.get(pendingGroup.groupKey) || 0) + 1
-        );
-    }
-
-    for (const pendingGroup of pendingGroups) {
-        if ((groupCounts.get(pendingGroup.groupKey) || 0) < settings.minChildren) {
-            ungrouped.push(createMacroNode(pendingGroup.item, depth));
+    for (const [head, bucket] of groups) {
+        if (bucket.length < settings.minChildren) {
+            for (const { item } of bucket) ungrouped.push(createMacroNode(item, depth));
             continue;
         }
 
-        const groupedItems = groupMap.get(pendingGroup.groupKey) || [];
-        groupedItems.push({
-            groupingName: pendingGroup.remainder,
-            macro: pendingGroup.item.macro
+        const groupPath = parentPath ? `${parentPath}/${head}` : head;
+        const childItems = bucket.map(({ item, rest }) => ({ groupingName: rest, macro: item.macro }));
+
+        groupedNodes.push({
+            type: 'group',
+            children: groupMacrosAtLevel(childItems, settings, depth + 1, groupPath),
+            label: head,
+            path: groupPath,
         });
-        groupMap.set(pendingGroup.groupKey, groupedItems);
     }
-
-    const groupedNodes = [...groupMap.entries()]
-        .sort(([firstKey], [secondKey]) => firstKey.localeCompare(secondKey))
-        .map(([groupKey, groupedItems]) => {
-            const groupPath = parentPath ? `${parentPath}/${groupKey}` : groupKey;
-
-            return {
-                type: 'group' as const,
-                children: groupMacrosAtLevel(groupedItems, settings, depth + 1, groupPath),
-                label: groupKey,
-                path: groupPath
-            };
-        });
 
     return sortMacroMenuTreeNodes([...ungrouped, ...groupedNodes]);
 }
@@ -171,22 +145,18 @@ function splitCamelCaseSegment(segment: string): string[] {
     return parts.length > 0 ? parts : [segment];
 }
 
-function getRemainder(name: string, firstSegment: string): string {
-    const separatorMatch = name.match(new RegExp(`^${escapeRegExp(firstSegment)}[^a-zA-Z0-9$]+(.+)$`));
-
-    if (separatorMatch) {
-        return separatorMatch[1];
+function splitFirstSegment(
+    name: string,
+    camelCaseSeparation: boolean
+): { head: string; rest: string } | null {
+    const segments = splitMacroName(name, camelCaseSeparation);
+    if (segments.length <= 1) {
+        return null;
     }
 
-    if (name.startsWith(firstSegment) && name.length > firstSegment.length) {
-        return name.slice(firstSegment.length);
-    }
+    const head = segments[0];
+    const afterHead = name.slice(name.indexOf(head) + head.length);
+    const rest = afterHead.replace(/^[^a-zA-Z0-9$]+/, '');
 
-    const segments = splitMacroName(name, false);
-
-    return segments.slice(1).join(' ');
-}
-
-function escapeRegExp(value: string): string {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return { head, rest };
 }
