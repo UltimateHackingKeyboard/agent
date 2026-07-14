@@ -51,11 +51,10 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
         }
 
         const delayMs = Math.min(Math.max(Math.round(value * 1000), 0), UINT16_MAX);
-        this._delay = delayMs / 1000;
         this.macroAction.delay = delayMs;
-        this.validate();
+        this.delay = delayMs / 1000;
     }
 
-    isMacroValid = () => this.macroAction.delay !== 0;
+    isMacroValid = () => this.macroAction.delay > 0 && this.macroAction.delay <= UINT16_MAX;
 
 }
