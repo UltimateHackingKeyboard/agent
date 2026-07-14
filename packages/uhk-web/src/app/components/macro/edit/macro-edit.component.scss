@@ -28,7 +28,7 @@
 
 .macro-container-wrapper {
     position: relative;
-    height: 100%;
+    min-height: 100%;
     border-right: solid 1px var(--color-smart-macro-border-color);
 }
 
