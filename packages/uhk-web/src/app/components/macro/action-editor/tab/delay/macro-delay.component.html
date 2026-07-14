@@ -15,7 +15,7 @@
                        placeholder="Delay amount"
                        class="form-control"
                        [ngModel]="delay"
-                       (ngModelChange)="setDelay(macroDelayInput.value)">
+                       (ngModelChange)="setDelay(macroDelayInput.valueAsNumber)">
                 seconds
             </div>
         </div>

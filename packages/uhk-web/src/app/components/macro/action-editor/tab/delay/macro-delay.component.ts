@@ -46,6 +46,10 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
     }
 
     setDelay(value: number): void {
+        if (Number.isNaN(value)) {
+            return;
+        }
+
         const delayMs = Math.min(Math.max(Math.round(value * 1000), 0), UINT16_MAX);
         this._delay = delayMs / 1000;
         this.macroAction.delay = delayMs;
