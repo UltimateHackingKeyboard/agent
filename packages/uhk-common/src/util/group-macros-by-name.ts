@@ -19,6 +19,9 @@ interface MacroGroupingItem<TMacro extends GroupableMacroItem> {
     macro: TMacro;
 }
 
+const MACRO_NAME_SEPARATOR = /[^\p{L}\p{N}$]+/u;
+const LEADING_MACRO_NAME_SEPARATOR = /^[^\p{L}\p{N}$]+/u;
+
 export function groupMacrosByName<TMacro extends GroupableMacroItem>(
     macros: TMacro[],
     settings: MacroGroupingSettings
@@ -111,7 +114,7 @@ function getMacroMenuTreeNodeLabel<TMacro extends GroupableMacroItem>(node: Macr
 }
 
 export function splitMacroName(name: string, camelCaseSeparation: boolean): string[] {
-    let parts = name.split(/[^a-zA-Z0-9$]+/).filter(part => part.length > 0);
+    let parts = name.split(MACRO_NAME_SEPARATOR).filter(part => part.length > 0);
 
     if (camelCaseSeparation) {
         parts = parts.flatMap(splitCamelCaseSegment);
@@ -156,7 +159,7 @@ function splitFirstSegment(
 
     const head = segments[0];
     const afterHead = name.slice(name.indexOf(head) + head.length);
-    const rest = afterHead.replace(/^[^a-zA-Z0-9$]+/, '');
+    const rest = afterHead.replace(LEADING_MACRO_NAME_SEPARATOR, '');
 
     return { head, rest };
 }

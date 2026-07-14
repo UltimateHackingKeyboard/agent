@@ -33,6 +33,15 @@ describe('splitMacroName', () => {
         assert.deepEqual(splitMacroName('$onInit', true), ['$on', 'Init']);
         assert.deepEqual(splitMacroName('$onInit', false), ['$onInit']);
     });
+
+    it('preserves non-English letters when splitting on separators', ({ assert }) => {
+        assert.deepEqual(splitMacroName('Az én macróm', false), ['Az', 'én', 'macróm']);
+        assert.deepEqual(splitMacroName('Az-én-macróm', false), ['Az', 'én', 'macróm']);
+    });
+
+    it('keeps unicode numbers in a single segment', ({ assert }) => {
+        assert.deepEqual(splitMacroName('2²', false), ['2²']);
+    });
 });
 
 describe('groupMacrosByName', () => {
@@ -119,6 +128,20 @@ describe('groupMacrosByName', () => {
         assert.equal(result[0].type, 'group');
         assert.equal(result[0].label, '$on');
         assert.deepEqual(result[0].children?.map(child => child.displayName), ['Init', 'Join']);
+    });
+
+    it('groups non-English macro names that share a prefix', ({ assert }) => {
+        const macros = [
+            createMacro(1, 'Az én: első'),
+            createMacro(2, 'Az én: második'),
+        ];
+
+        const result = groupMacrosByName(macros, ENABLED_MACRO_GROUPING_SETTINGS);
+
+        assert.equal(result.length, 1);
+        assert.equal(result[0].type, 'group');
+        assert.equal(result[0].label, 'Az');
+        assert.deepEqual(result[0].children?.map(child => child.displayName), ['én: első', 'én: második']);
     });
 
     it('keeps parent-level remainders when deeper nesting does not apply', ({ assert }) => {
