@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { DEFAULT_DEVICE_NAME } from '../../util/constants.js';
 import { assertEnum, assertFloat, assertInt16, assertUInt16, assertUInt32, assertUInt8 } from '../assert.js';
 import { resolveSwitchKeymapActions } from '../resolve-switch-keymap-actions.js';
 import { UhkBuffer } from '../uhk-buffer.js';
@@ -537,7 +538,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
 
     private setDefaultDeviceName(): void {
         if (!this.deviceName || this.deviceName.trim().length === 0) {
-            this.deviceName = 'My UHK';
+            this.deviceName = DEFAULT_DEVICE_NAME;
         }
     }
 
