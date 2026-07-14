@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { faArrowsAlt, faArrowsAltV, faHandPaper, faHandRock, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
+    INT16_MAX,
+    INT16_MIN,
     MacroMouseSubAction,
     MouseButtons,
     MouseButtonMacroAction,
@@ -33,6 +35,8 @@ enum TabName {
 export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit, OnChanges {
     @Input() macroAction: MouseMacroAction;
 
+    INT16_MAX = INT16_MAX;
+    INT16_MIN = INT16_MIN;
     MouseButtons = MouseButtons;
     TabName = TabName;
     activeTab: TabName;
@@ -114,6 +118,17 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
         }
     }
 
+    setCoordinate(axis: 'x' | 'y', value: number | string): void {
+        const numericValue = Number(value);
+        if (Number.isNaN(numericValue)) {
+            return;
+        }
+
+        const action = this.macroAction as MoveMouseMacroAction | ScrollMouseMacroAction;
+        action[axis] = Math.min(Math.max(Math.round(numericValue), INT16_MIN), INT16_MAX);
+        this.validate();
+    }
+
     getTabName(action: MouseMacroAction): TabName {
         if (action instanceof MouseButtonMacroAction) {
             if (!action.action || action.isOnlyClickAction()) {
@@ -137,7 +152,9 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
             case ScrollMouseMacroAction: {
                 const { x, y } = this.macroAction as MoveMouseMacroAction;
                 return x !== undefined && x !== null && y !== undefined && y !== null &&
-                    (x !== 0 || y !== 0) && x < 10000 && x > -10000 && y < 10000 && y > -10000;
+                    (x !== 0 || y !== 0) &&
+                    x >= INT16_MIN && x <= INT16_MAX &&
+                    y >= INT16_MIN && y <= INT16_MAX;
             }
 
             case MouseButtonMacroAction: {

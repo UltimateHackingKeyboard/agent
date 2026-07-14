@@ -10,7 +10,7 @@
                 <input #macroDelayInput
                        type="number"
                        min="0"
-                       max="65"
+                       [max]="maxDelaySeconds"
                        step="0.1"
                        placeholder="Delay amount"
                        class="form-control"

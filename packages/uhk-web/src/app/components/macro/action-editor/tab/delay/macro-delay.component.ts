@@ -4,11 +4,12 @@ import {
     Input,
     OnInit
 } from '@angular/core';
-import { DelayMacroAction } from 'uhk-common';
+import { DelayMacroAction, UINT16_MAX } from 'uhk-common';
 
 import { MacroBaseComponent } from '../macro-base.component';
 
 const INITIAL_DELAY = 0.5; // In seconds
+const MAX_DELAY_SECONDS = UINT16_MAX / 1000;
 
 @Component({
     selector: 'macro-delay-tab',
@@ -21,6 +22,7 @@ const INITIAL_DELAY = 0.5; // In seconds
 export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: DelayMacroAction;
 
+    maxDelaySeconds = MAX_DELAY_SECONDS;
     presets: number[] = [0.1, 0.5, 1, 5, 10];
 
     get delay(): number {
@@ -44,8 +46,9 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
     }
 
     setDelay(value: number): void {
-        this._delay = Math.min(value, 65);
-        this.macroAction.delay = this._delay * 1000;
+        const delayMs = Math.min(Math.max(Math.round(value * 1000), 0), UINT16_MAX);
+        this._delay = delayMs / 1000;
+        this.macroAction.delay = delayMs;
         this.validate();
     }
 
