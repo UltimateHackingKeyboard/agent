@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 import {
     BackupUserConfigurationInfo,
     Buffer,
+    DEFAULT_DEVICE_NAME,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
     ConfigurationReply,
@@ -337,7 +338,9 @@ export class UserConfigEffects {
 
                         // Keep the connected keyboard's name when importing a config, so a single config
                         // can be shared across multiple keyboards while each retains its own name.
-                        userConfig.deviceName = deviceName;
+                        if (deviceName !== DEFAULT_DEVICE_NAME) {
+                            userConfig.deviceName = deviceName;
+                        }
 
                         if (payload.autoSave) {
                             return new ApplyUserConfigurationFromFileAction({

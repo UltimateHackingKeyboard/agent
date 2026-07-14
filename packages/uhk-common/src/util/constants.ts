@@ -4,5 +4,7 @@ export const AGENT_CONTRIBUTORS_GITHUB_API_URL = 'https://api.github.com/repos/U
 export const MAX_ALLOWED_MACROS = 255;
 export const MAX_ALLOWED_MACROS_TOOLTIP = `No more than ${MAX_ALLOWED_MACROS} macros are supported.`;
 
+export const DEFAULT_DEVICE_NAME = 'My UHK';
+
 export const UHK_EEPROM_SIZE = 32768;
 export const ERR_UPDATER_INVALID_SIGNATURE = 'ERR_UPDATER_INVALID_SIGNATURE'
