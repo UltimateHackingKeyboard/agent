@@ -83,6 +83,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
                     group: group.text,
                     additional: {
                         type: 'basic',
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                         scancode: Number.parseInt(child.id, 10),
                         ...child.additional
                     }

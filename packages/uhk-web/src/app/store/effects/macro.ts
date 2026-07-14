@@ -30,6 +30,7 @@ export class MacroEffects {
             tap(action => this.store.dispatch(new Keymaps.CheckMacroAction(action.payload))),
             withLatestFrom(this.store.select(getSelectedMacro)),
             map(([, newMacro]) => newMacro),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             tap(this.navigateToNewMacro.bind(this))
 
         ),
@@ -42,6 +43,7 @@ export class MacroEffects {
                 Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate),
             withLatestFrom(this.store.select(getSelectedMacro)),
             map(([, newMacro]) => newMacro),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             tap(this.navigateToNewMacro.bind(this))
         ),
     { dispatch: false }

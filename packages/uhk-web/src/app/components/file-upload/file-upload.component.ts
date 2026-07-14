@@ -32,6 +32,6 @@ export class FileUploadComponent {
 
             target.value = null;
         }.bind(this);
-        fileReader.readAsArrayBuffer(files[0]);
+        fileReader.readAsArrayBuffer(files[0] as Blob);
     }
 }

@@ -275,7 +275,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             }).pipe(
                 debounceTime(MACRO_CHANGE_DEBOUNCE_TIME),
                 distinctUntilChanged()
-            ).subscribe(data => {
+            ).subscribe((data: string) => {
                 // If the user modify the macro without saving then we update the macro text
                 if (this.isFocused) {
                     this.smartMacroDocService.updateCommand(data);
@@ -354,7 +354,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         data = data?.trim();
 
         let selection = this.editor.getSelection();
-        let cursorPosition;
+        let cursorPosition: monaco.IPosition;
         if (selection.isEmpty()) {
             const macroLines = this.editor.getValue().split(this.editor.getModel().getEOL());
             const lineNumber = selection.getPosition().lineNumber;

@@ -22,6 +22,7 @@ export class SecondSideMenuContainerComponent {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolveComponent(component: any): void {
         this.container.clear();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
         this.container.createComponent(componentFactory);
         this.cdRef.detectChanges();

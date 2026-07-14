@@ -38,7 +38,7 @@ export class DefaultUserConfigurationEffect {
             filter(routerState => routerState.url.startsWith('/add-keymap')),
             map(routerState => routerState.params.newKeymapAbbr),
             distinctUntilChanged(),
-            map(abbreviation => new AddKeymapSelectedAction(abbreviation))
+            map((abbreviation: string) => new AddKeymapSelectedAction(abbreviation))
         )
     );
 

@@ -452,7 +452,8 @@ export class UhkOperations {
             reportProgress(0);
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to keyboard');
             let shouldRecalculateLength = false;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
             const uhkBuffer = UhkBuffer.fromArray(buffer as any)
             const userConfiguration = new UserConfiguration()
             userConfiguration.fromBinary(uhkBuffer)
@@ -970,7 +971,7 @@ export class UhkOperations {
         };
     }
 
-    public async setVariable(variable: UsbVariables, value: number): Promise<void> {
+    public async setVariable(variable: UsbVariables, value: boolean | number): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Set Variable');
         await this.device.write(Buffer.from([UsbCommand.SetVariable, variable, value]));
         await this.waitUntilKeyboardBusy();

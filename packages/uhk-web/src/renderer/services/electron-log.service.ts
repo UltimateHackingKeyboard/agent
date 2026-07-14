@@ -16,6 +16,7 @@ export class ElectronLogService extends LogService {
     }
 
     error(...args: any[]): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         log.error(...args);
     }
 
@@ -24,6 +25,7 @@ export class ElectronLogService extends LogService {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.log(...args);
     }
 
@@ -32,6 +34,7 @@ export class ElectronLogService extends LogService {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.log(...args);
     }
 
@@ -40,10 +43,12 @@ export class ElectronLogService extends LogService {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.log(...args);
     }
 
     protected log(...args: any[]): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         log.log(...args);
     }
 }

@@ -39,7 +39,7 @@ export class MacroHeaderComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.macro) {
-            this.macroName.writeValue(changes.macro.currentValue.name);
+            this.macroName.writeValue(changes.macro.currentValue.name as string);
         }
     }
 

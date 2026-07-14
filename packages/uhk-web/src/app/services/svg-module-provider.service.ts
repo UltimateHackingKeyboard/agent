@@ -139,6 +139,7 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getKeyClusterLeft(): SvgModule {
         if (!this.keyClusterLeft) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             this.keyClusterLeft = new SvgModule(require('!xml-loader!../../modules/keyclusterleft/module.svg').svg);
         }
 
@@ -152,9 +153,13 @@ export class SvgModuleProviderService implements OnDestroy {
     private setModules() {
         switch (this.connectedDeviceId) {
             case UHK_80_DEVICE.id: {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk80-right/separator.svg').svg);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 this.right = new SvgModule(require('!xml-loader!../../devices/uhk80-right/layout.svg').svg);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-iso.svg').svg);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 this.ansiLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-ansi.svg').svg);
                 break;
             }
@@ -168,6 +173,7 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getTouchPadRight(): SvgModule {
         if (!this.touchPadRight) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             this.touchPadRight = new SvgModule(require('!xml-loader!../../modules/touchpadright/module.svg').svg);
         }
 
@@ -176,6 +182,7 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getTrackBallRight(): SvgModule {
         if (!this.trackBallRight) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             this.trackBallRight = new SvgModule(require('!xml-loader!../../modules/trackballright/module.svg').svg);
         }
 
@@ -184,6 +191,7 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getTrackPointRight(): SvgModule {
         if (!this.trackPointRight) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             this.trackPointRight = new SvgModule(require('!xml-loader!../../modules/trackpointright/module.svg').svg);
         }
 
@@ -191,9 +199,13 @@ export class SvgModuleProviderService implements OnDestroy {
     }
 
     private setUHK60Modules() {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk60-right/separator.svg').svg);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.right = new SvgModule(require('!xml-loader!../../devices/uhk60-right/layout.svg').svg);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk60-left/layout-iso.svg').svg);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.ansiLeft = new SvgModule(require('!xml-loader!../../modules/uhk60-left/layout-ansi.svg').svg);
     }
 }

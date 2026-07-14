@@ -144,7 +144,7 @@ export class DeviceEffects {
                     return
                 }
 
-                const addresses = [];
+                const addresses: string[] = [];
                 for (const hostConnection of hostConnections) {
                     if (hostConnection.hasAddress()) {
                         addresses.push(hostConnection.address);

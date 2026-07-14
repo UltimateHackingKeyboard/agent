@@ -126,7 +126,7 @@ export class McuManager {
     async sendCommand<T>(op: MGMT_OP_TYPE, group: MGMT_GROUP_TYPE, id: MGMT_OPERATION_TYPE, data?: unknown): Promise<NmpResponse<T>> {
         logger('Start send command: %o', {op, group, id, data});
 
-        let encodedData = [];
+        let encodedData: number[] = [];
         if (typeof data !== 'undefined') {
             // the command data is cbor encoded
             const buffer = cbor.encode(data);

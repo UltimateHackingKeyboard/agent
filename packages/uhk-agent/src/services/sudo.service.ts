@@ -15,6 +15,7 @@ export class SudoService {
                 private deviceService: DeviceService,
                 private rootDir: string) {
         this.logService.misc('[SudoService] App root dir: ', this.rootDir);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.setPrivilegeOnLinux, this.setPrivilege.bind(this));
     }
 

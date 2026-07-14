@@ -597,7 +597,7 @@ export class UhkHidDevice {
     }
 
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<void> {
-        let transfer;
+        let transfer: Buffer;
         this.logService.usbOps(`[UhkHidDevice] USB[T]: Send KbootCommand ${mapI2cAddressToModuleName(module)} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
             transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
@@ -652,7 +652,7 @@ export class UhkHidDevice {
             const count = Math.min(remainingNewConnections, MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE);
 
             for (let i = 0; i < count; i++) {
-                const address = [];
+                const address: number[] = [];
                 for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                     address.push(uhkBuffer.readUInt8());
                 }

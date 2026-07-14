@@ -1,8 +1,8 @@
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { SerialisationInfo } from '../serialisation-info.js';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action.js';
-import { KeyMacroAction } from './key-macro-action.js';
-import { MouseButtonMacroAction } from './mouse-button-macro-action.js';
+import { JsObjectKeyMacroAction, KeyMacroAction } from './key-macro-action.js';
+import { JsObjectMouseButtonMacroAction, MouseButtonMacroAction } from './mouse-button-macro-action.js';
 import { MoveMouseMacroAction } from './move-mouse-macro-action.js';
 import { ScrollMouseMacroAction } from './scroll-mouse-macro-action.js';
 import { DelayMacroAction } from './delay-macro-action.js';
@@ -73,9 +73,9 @@ export class Helper {
     static fromJSONObject(macroAction: any, serialisationInfo: SerialisationInfo): MacroAction {
         switch (macroAction.macroActionType) {
             case macroActionType.KeyMacroAction:
-                return new KeyMacroAction().fromJsonObject(macroAction, serialisationInfo);
+                return new KeyMacroAction().fromJsonObject(macroAction as JsObjectKeyMacroAction, serialisationInfo);
             case macroActionType.MouseButtonMacroAction:
-                return new MouseButtonMacroAction().fromJsonObject(macroAction, serialisationInfo);
+                return new MouseButtonMacroAction().fromJsonObject(macroAction as JsObjectMouseButtonMacroAction, serialisationInfo);
             case macroActionType.MoveMouseMacroAction:
                 return new MoveMouseMacroAction().fromJsonObject(macroAction, serialisationInfo);
             case macroActionType.ScrollMouseMacroAction:

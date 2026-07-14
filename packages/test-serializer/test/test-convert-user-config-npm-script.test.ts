@@ -4,9 +4,9 @@ import path from 'node:path';
 import { after, before, describe, it } from 'node:test';
 
 describe('convert-user-config-to-bin npm script', () => {
-    let rootDirPath;
-    let tmpDirPath;
-    let tmpConfigPath;
+    let rootDirPath: string;
+    let tmpDirPath: string;
+    let tmpConfigPath: string;
 
     before(() => {
         rootDirPath = path.join(import.meta.dirname, '..', '..', '..');

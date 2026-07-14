@@ -59,7 +59,7 @@ export class ContributorsEffect {
                     return new AgentContributorsAvailableAction(contributorsWithAvatars);
                 }
             ),
-            catchError(error => of(new AgentContributorsNotAvailableAction(error)))
+            catchError((error: Error) => of(new AgentContributorsNotAvailableAction(error)))
         )
     );
 

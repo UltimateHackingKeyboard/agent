@@ -172,7 +172,7 @@ export class KBoot {
         } catch (error) {
             logger(`Reset command error message: "${error.message}"`);
 
-            if (RESET_IGNORED_ERRORS.includes(error.message)) {
+            if (RESET_IGNORED_ERRORS.includes(error.message as string)) {
                 logger('Ignoring missing response from reset command.');
 
                 await this.close()

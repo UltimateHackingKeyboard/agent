@@ -6,7 +6,7 @@ import { UHK_EEPROM_SIZE } from './constants.js';
 import { shouldUpgradeAgent } from './should-upgrade-agent.js';
 
 export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfiguration => {
-    const data = JSON.parse(json);
+    const data: number[] = JSON.parse(json);
     const hardwareConfig = new HardwareConfiguration();
     hardwareConfig.fromBinary(UhkBuffer.fromArray(data));
 
@@ -32,7 +32,7 @@ export interface ParsedUserConfiguration {
 
 export const getUserConfigFromDeviceResponse = (json: string): ParsedUserConfiguration => {
     try {
-        const data = JSON.parse(json);
+        const data: number[] = JSON.parse(json);
         const uhkBuffer = UhkBuffer.fromArray(data)
         const userConfigMajorVersion = uhkBuffer.readUInt16();
         const userConfigMinorVersion = uhkBuffer.readUInt16();

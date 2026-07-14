@@ -2,6 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
 import { IpcEvents, LogService } from 'uhk-common';
+import { UpdateInfo } from '../models/update-info';
 import { AppState } from '../store';
 import { UpdateDownloadedAction, UpdateErrorAction } from '../store/actions/app-update.action';
 import { CheckForUpdateFailedAction, CheckForUpdateSuccessAction } from '../store/actions/auto-update-settings';
@@ -60,8 +61,7 @@ export class AppUpdateRendererService {
             this.logService.misc(IpcEvents.autoUpdater.autoUpdateDownloadProgress, arg);
         });
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloaded, (event: string, arg: any) => {
+        this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloaded, (event: string, arg: UpdateInfo) => {
             this.logService.misc(IpcEvents.autoUpdater.autoUpdateDownloaded, arg);
             this.dispatchStoreAction(new UpdateDownloadedAction(arg));
         });

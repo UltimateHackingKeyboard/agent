@@ -5,7 +5,7 @@ import { Macro } from '../macro.js';
 import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { KeyLabelAction } from './key-label-action.js';
-import { KeystrokeAction } from './keystroke-action.js';
+import { JsonObjectKeystrokeAction, KeystrokeAction } from './keystroke-action.js';
 import { NoneBlockAction } from './none-block-action.js';
 import { OtherAction } from './other-action.js';
 import { SwitchLayerAction } from './switch-layer-action.js';
@@ -152,7 +152,7 @@ export class Helper {
             case keyActionType.KeyLabelAction:
                 return new KeyLabelAction().fromJsonObject(keyAction)
             case keyActionType.KeystrokeAction: {
-                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction, serialisationInfo);
+                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction as JsonObjectKeystrokeAction, serialisationInfo);
                 if (isValidKeystrokeAction(keystrokeAction)) {
                     return keystrokeAction;
                 }

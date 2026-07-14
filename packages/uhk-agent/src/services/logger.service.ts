@@ -31,6 +31,7 @@ export class ElectronLogService extends LogService {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error(...args: any[]): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         log.error(...args);
     }
 
@@ -40,6 +41,7 @@ export class ElectronLogService extends LogService {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.log(...args);
     }
 
@@ -49,9 +51,9 @@ export class ElectronLogService extends LogService {
             return;
         }
 
-        if (LOG_WRITE_REG_EXP.test(args[0])) {
+        if (LOG_WRITE_REG_EXP.test(args[0] as string)) {
             this.log('%c' + args.join(' '), 'color:blue');
-        } else if (LOG_READ_REG_EXP.test(args[0])) {
+        } else if (LOG_READ_REG_EXP.test(args[0] as string)) {
             let errorCodeStartIndex = 0;
             let errorCodeEndIndex = 2;
 
@@ -66,6 +68,7 @@ export class ElectronLogService extends LogService {
                 this.log('%c' + args.join(' '), 'color:red');
             }
         } else {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             this.log(...args);
         }
     }
@@ -80,6 +83,7 @@ export class ElectronLogService extends LogService {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected log(...args: any[]): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         log.log(...args);
     }
 }

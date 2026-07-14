@@ -38,7 +38,7 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
         if (!this.macroAction) {
             this.macroAction = new KeyMacroAction();
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-argument
         this.defaultKeyAction = new KeystrokeAction(<any>this.macroAction);
         this.selectTab(this.getTabName(this.macroAction));
     }
@@ -76,7 +76,7 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     }
 
     getKeyMacroAction(): KeyMacroAction {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-argument
         const keyMacroAction = new KeyMacroAction(this.keypressTab.toKeyAction() as any);
         keyMacroAction.action = this.getActionType(this.activeTab);
         return keyMacroAction;

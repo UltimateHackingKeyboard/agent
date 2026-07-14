@@ -4,6 +4,8 @@ import { Action, Store } from '@ngrx/store';
 import {
     AreBleAddressesPairedIpcResponse,
     ChangeKeyboardLayoutIpcResponse,
+    ConfigSizesInfo,
+    ConfigurationReply,
     CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
     DeviceVersionInformation,
@@ -24,7 +26,6 @@ import {
     UploadFileData,
     UserConfiguration,
     UserConfigHistory,
-    VersionInformation,
     ZephyrLogEntry,
 } from 'uhk-common';
 
@@ -287,7 +288,7 @@ export class DeviceRendererService {
         });
 
         this.ipcRenderer.on(IpcEvents.device.loadConfigurationReply, (event: string, response: string) => {
-            this.dispachStoreAction(new LoadConfigFromDeviceReplyAction(JSON.parse(response)));
+            this.dispachStoreAction(new LoadConfigFromDeviceReplyAction(JSON.parse(response) as ConfigurationReply));
         });
 
         this.ipcRenderer.on(IpcEvents.device.updateFirmwareJson, (event: string, data: FirmwareJson) => {
@@ -315,7 +316,7 @@ export class DeviceRendererService {
         });
 
         this.ipcRenderer.on(IpcEvents.device.readConfigSizesReply, (event: string, response: string) => {
-            this.dispachStoreAction(new ReadConfigSizesReplyAction(JSON.parse(response)));
+            this.dispachStoreAction(new ReadConfigSizesReplyAction(JSON.parse(response) as ConfigSizesInfo));
         });
 
         this.ipcRenderer.on(IpcEvents.device.loadUserConfigHistoryReply, (event: string, response: UserConfigHistory) => {
