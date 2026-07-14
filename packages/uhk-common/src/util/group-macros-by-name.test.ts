@@ -75,8 +75,8 @@ describe('groupMacrosByName', () => {
         assert.equal(result[0].macro?.name, 'Brightness up');
         assert.equal(result[1].label, 'Doom');
         assert.equal(result[1].children?.length, 2);
-        assert.equal(result[1].children?.[0].displayName, 'Chainsaw');
-        assert.equal(result[1].children?.[1].displayName, 'Plasma gun');
+        assert.equal(result[1].children?.[0].macro?.name, 'Doom: Chainsaw');
+        assert.equal(result[1].children?.[1].macro?.name, 'Doom: Plasma gun');
     });
 
     it('does not create a group when there are fewer macros than minChildren', ({ assert }) => {
@@ -109,7 +109,7 @@ describe('groupMacrosByName', () => {
         assert.deepEqual(result.map(node => node.type), ['group', 'macro']);
         assert.equal(result[0].label, 'bind');
         assert.equal(result[0].children?.length, 2);
-        assert.deepEqual(result[0].children?.map(child => child.displayName), ['MouseLeft', 'MouseRight']);
+        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['bindMouseLeft', 'bindMouseRight']);
         assert.equal(result[1].macro?.name, 'brightnessUp');
     });
 
@@ -127,7 +127,7 @@ describe('groupMacrosByName', () => {
         assert.equal(result.length, 1);
         assert.equal(result[0].type, 'group');
         assert.equal(result[0].label, '$on');
-        assert.deepEqual(result[0].children?.map(child => child.displayName), ['Init', 'Join']);
+        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['$onInit', '$onJoin']);
     });
 
     it('groups non-English macro names that share a prefix', ({ assert }) => {
@@ -141,7 +141,7 @@ describe('groupMacrosByName', () => {
         assert.equal(result.length, 1);
         assert.equal(result[0].type, 'group');
         assert.equal(result[0].label, 'Az');
-        assert.deepEqual(result[0].children?.map(child => child.displayName), ['én: első', 'én: második']);
+        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['Az én: első', 'Az én: második']);
     });
 
     it('keeps parent-level remainders when deeper nesting does not apply', ({ assert }) => {
@@ -157,7 +157,62 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 1);
         assert.equal(result[0].label, 'Open');
-        assert.deepEqual(result[0].children?.map(child => child.displayName), ['daily sites', 'weekly sites']);
+        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['Open daily sites', 'Open weekly sites']);
+    });
+
+    it('places a macro named like a group inside that group', ({ assert }) => {
+        const macros = [
+            createMacro(1, 'Doom'),
+            createMacro(2, 'Doom: Chainsaw'),
+            createMacro(3, 'Doom: Plasma gun'),
+        ];
+
+        const result = groupMacrosByName(macros, ENABLED_MACRO_GROUPING_SETTINGS);
+
+        assert.equal(result.length, 1);
+        assert.equal(result[0].type, 'group');
+        assert.equal(result[0].label, 'Doom');
+        assert.deepEqual(result[0].children?.map(child => child.macro?.name), [
+            'Doom',
+            'Doom: Chainsaw',
+            'Doom: Plasma gun',
+        ]);
+    });
+
+    it('places an exact subgroup name inside a nested group', ({ assert }) => {
+        const macros = [
+            createMacro(1, 'Open: daily'),
+            createMacro(2, 'Open: daily: morning'),
+            createMacro(3, 'Open: daily: evening'),
+        ];
+
+        const result = groupMacrosByName(macros, {
+            ...ENABLED_MACRO_GROUPING_SETTINGS,
+            maxDepth: 2,
+        });
+
+        assert.equal(result.length, 1);
+        assert.equal(result[0].label, 'Open');
+        assert.equal(result[0].children?.length, 1);
+        assert.equal(result[0].children?.[0].type, 'group');
+        assert.equal(result[0].children?.[0].label, 'daily');
+        assert.deepEqual(result[0].children?.[0].children?.map(child => child.macro?.name), [
+            'Open: daily',
+            'Open: daily: evening',
+            'Open: daily: morning',
+        ]);
+    });
+
+    it('keeps a same-named macro outside when the group is not created', ({ assert }) => {
+        const macros = [
+            createMacro(1, 'Doom'),
+            createMacro(2, 'Doom: Chainsaw'),
+        ];
+
+        const result = groupMacrosByName(macros, ENABLED_MACRO_GROUPING_SETTINGS);
+
+        assert.equal(result.length, 2);
+        assert.deepEqual(result.map(node => node.macro?.name), ['Doom', 'Doom: Chainsaw']);
     });
 });
 

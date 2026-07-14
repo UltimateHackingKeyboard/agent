@@ -7,7 +7,6 @@ export interface GroupableMacroItem {
 
 export interface MacroMenuTreeNode<TMacro extends GroupableMacroItem = GroupableMacroItem> {
     children?: MacroMenuTreeNode<TMacro>[];
-    displayName?: string;
     label?: string;
     macro?: TMacro;
     path?: string;
@@ -49,16 +48,17 @@ function groupMacrosAtLevel<TMacro extends GroupableMacroItem>(
     const sortedItems = items.toSorted((a, b) => a.groupingName.localeCompare(b.groupingName));
 
     if (depth >= settings.maxDepth) {
-        return sortedItems.map(item => createMacroNode(item, depth));
+        return sortedItems.map(item => createMacroNode(item));
     }
 
     const ungrouped: MacroMenuTreeNode<TMacro>[] = [];
+    const ungroupedItems: MacroGroupingItem<TMacro>[] = [];
     const groups = new Map<string, { item: MacroGroupingItem<TMacro>; rest: string }[]>();
 
     for (const item of sortedItems) {
         const split = splitFirstSegment(item.groupingName, settings.camelCaseSeparation);
         if (!split) {
-            ungrouped.push(createMacroNode(item, depth));
+            ungroupedItems.push(item);
             continue;
         }
         const bucket = groups.get(split.head) ?? [];
@@ -66,11 +66,31 @@ function groupMacrosAtLevel<TMacro extends GroupableMacroItem>(
         groups.set(split.head, bucket);
     }
 
+    const remainingUngroupedItems: MacroGroupingItem<TMacro>[] = [];
+
+    for (const item of ungroupedItems) {
+        let grouped = false;
+
+        for (const [head, bucket] of groups) {
+            if (bucket.length >= settings.minChildren && item.groupingName === head) {
+                bucket.push({ item, rest: '' });
+                grouped = true;
+                break;
+            }
+        }
+
+        if (!grouped) {
+            remainingUngroupedItems.push(item);
+        }
+    }
+
     const groupedNodes: MacroMenuTreeNode<TMacro>[] = [];
 
     for (const [head, bucket] of groups) {
         if (bucket.length < settings.minChildren) {
-            for (const { item } of bucket) ungrouped.push(createMacroNode(item, depth));
+            for (const { item } of bucket) {
+                remainingUngroupedItems.push(item);
+            }
             continue;
         }
 
@@ -85,16 +105,18 @@ function groupMacrosAtLevel<TMacro extends GroupableMacroItem>(
         });
     }
 
+    for (const item of remainingUngroupedItems) {
+        ungrouped.push(createMacroNode(item));
+    }
+
     return sortMacroMenuTreeNodes([...ungrouped, ...groupedNodes]);
 }
 
 function createMacroNode<TMacro extends GroupableMacroItem>(
-    item: MacroGroupingItem<TMacro>,
-    depth: number
+    item: MacroGroupingItem<TMacro>
 ): MacroMenuTreeNode<TMacro> {
     return {
         type: 'macro',
-        displayName: depth > 0 ? item.groupingName : undefined,
         macro: item.macro
     };
 }
@@ -110,7 +132,7 @@ function getMacroMenuTreeNodeLabel<TMacro extends GroupableMacroItem>(node: Macr
         return node.label || '';
     }
 
-    return node.displayName || node.macro?.name || '';
+    return node.macro?.name || '';
 }
 
 export function splitMacroName(name: string, camelCaseSeparation: boolean): string[] {

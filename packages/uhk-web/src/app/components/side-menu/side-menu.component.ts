@@ -186,17 +186,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     getMacroDisplayName(node: MacroMenuTreeNode): string {
-        return node.displayName || node.macro?.name || '';
-    }
-
-    getMacroTitle(node: MacroMenuTreeNode): string | null {
-        const fullName = node.macro?.name;
-
-        if (!fullName || !node.displayName || node.displayName === fullName) {
-            return null;
-        }
-
-        return fullName;
+        return node.macro?.name || '';
     }
 
     addMacro() {
