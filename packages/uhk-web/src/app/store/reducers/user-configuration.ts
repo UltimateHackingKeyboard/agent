@@ -418,7 +418,7 @@ export function reducer(
                 copiedLayerOrigin: {
                     deviceName: state.userConfiguration.deviceName,
                     keymapName: currentKeymap.name,
-                    layerName: state.layerOptions.get(layerId)?.name ?? 'layer',
+                    layerName: state.layerOptions.get(layerId).name,
                 },
             };
         }
