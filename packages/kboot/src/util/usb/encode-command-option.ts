@@ -26,7 +26,7 @@ export const encodeCommandOption = (option: CommandOption): number[] => {
     ];
 
     const placeholders = new Array(32 - payload.length)
-        .fill(0);
+        .fill(0) as number[];
 
     return [...header, ...payload, ...placeholders];
 };

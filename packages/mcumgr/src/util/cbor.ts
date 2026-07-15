@@ -289,7 +289,7 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
         }
     }
 
-    function decodeItem() {
+    function decodeItem(): unknown {
         const initialByte = readUint8();
         const majorType = initialByte >> 5;
         const additionalInformation = initialByte & 0x1f;
@@ -366,7 +366,7 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
             case 5: {
                 const retObject = {};
                 for (i = 0; i < length || length < 0 && !readBreak(); ++i) {
-                    const key = decodeItem();
+                    const key = decodeItem() as string | number;
                     retObject[key] = decodeItem();
                 }
                 return retObject;
