@@ -161,7 +161,8 @@ export class KeymapEditComponent implements OnDestroy {
     navigateToModuleSettings(moduleId: number): void {
         this.store.dispatch(new NavigateToModuleSettings({
             backUrl: `/keymap/${encodeURIComponent(this.keymap.abbreviation)}?layer=${this.selectedLayer}`,
-            backText: `"${this.keymap.name}" keymap`,
+            backText: this.keymap.name,
+            backSuffix: ' keymap',
             moduleId,
         }));
     }

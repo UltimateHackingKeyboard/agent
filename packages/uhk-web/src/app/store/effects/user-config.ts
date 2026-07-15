@@ -121,6 +121,7 @@ export class UserConfigEffects {
                 ActionTypes.ReorderHostConnections, ActionTypes.RenameHostConnection, ActionTypes.SetHostConnectionSwitchover,
                 ActionTypes.LoadTypingBehaviorPreset,
             ),
+            filter(action => !isNavigateToMacroSaveKey(action)),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration), this.store.select(getConnectedDevice)),
             mergeMap(([action, config, prevUserConfiguration, uhkDeviceProduct]) => {
                 config = Object.assign(new UserConfiguration(), config);
@@ -376,6 +377,7 @@ export class UserConfigEffects {
                             [module.configPath],
                             {
                                 queryParams: {
+                                    backSuffix: action.payload.backSuffix,
                                     backText: action.payload.backText,
                                     backUrl: action.payload.backUrl,
                                 },
@@ -464,6 +466,15 @@ export class UserConfigEffects {
                 })
             );
     }
+}
+
+function isNavigateToMacroSaveKey(action: { type: string }): boolean {
+    if (action.type !== Keymaps.ActionTypes.SaveKey) {
+        return false;
+    }
+
+    const keyAction = (action as Keymaps.SaveKeyAction).payload.keyAction;
+    return keyAction.navigateToMacro && !keyAction.assignNewMacro;
 }
 
 function updateUserConfigurationWithLastSaveInfo(userConfiguration: UserConfiguration, rightModuleInfo: RightModuleInfo) {

@@ -1,5 +1,28 @@
+:host {
+    display: block;
+}
 
 .macro {
+    &__assignments {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        padding-top: 1.25em;
+    }
+
+    &__assignments-label {
+        margin-right: 0.35em;
+        white-space: nowrap;
+    }
+
+    &__assignment-link {
+        text-decoration: underline;
+        white-space: nowrap;
+    }
+
+    &__assignment-separator {
+        white-space: pre;
+    }
+
     &__remove {
         font-size: 0.75em;
         top: 7px;

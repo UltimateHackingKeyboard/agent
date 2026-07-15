@@ -14,6 +14,7 @@ export * from './firmware-upgrade-steps';
 export * from './last-edited-key';
 export * from './layer-option';
 export * from './load-user-configuration-from-file-payload';
+export * from './macro-key-assignment-view-model';
 export * from './macro-menu-item';
 export * from './modify-color-of-backlighting-color-palette-payload';
 export * from './navigation-payload';
