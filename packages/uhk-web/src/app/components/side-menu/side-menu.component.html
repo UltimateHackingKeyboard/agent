@@ -221,18 +221,18 @@
                              class="chevron float-end me-1"
                              (click)="toggleMenuItem('macro')"></fa-icon>
                 </div>
-                <ul [@toggler]="this.sideMenuState.macro.animation">
-                    <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: state.macroTree, depth: 0 }"></ng-container>
+                <ul class="sidebar__macro-tree" [@toggler]="this.sideMenuState.macro.animation">
+                    <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: state.macroTree }"></ng-container>
                 </ul>
             </li>
         </ul>
     </li>
 </ul>
 
-<ng-template #macroTree let-nodes let-depth="depth">
+<ng-template #macroTree let-nodes>
     <ng-container *ngFor="let node of nodes">
         <li *ngIf="node.type === 'macro'" class="sidebar__macro-tree-item">
-            <div class="sidebar__macro-tree-entry" [style.--macro-depth]="depth" [routerLinkActive]="['active']">
+            <div class="sidebar__macro-tree-entry" [routerLinkActive]="['active']">
                 <a [routerLink]="['/macro', node.macro.id]"
                    [class.disabled]="state.updatingFirmware">{{ getMacroDisplayName(node) }}</a>
                 <span class="sidebar__macro_count badge rounded-pill"
@@ -243,14 +243,13 @@
         </li>
         <li *ngIf="node.type === 'group'" class="sidebar__macro-tree-item">
             <div class="sidebar__macro-tree-entry sidebar__macro-group"
-                 [style.--macro-depth]="depth"
                  (click)="toggleMacroGroup(node.path)">
-                {{ node.label }}
+                {{ node.label }}…
                 <fa-icon [icon]="getMacroGroupArrowIcon(node.path)"
                          class="sidebar__macro-group-arrow"></fa-icon>
             </div>
-            <ul [@toggler]="getMacroGroupState(node.path).animation">
-                <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: node.children, depth: depth + 1 }"></ng-container>
+            <ul class="sidebar__macro-group-children" [@toggler]="getMacroGroupState(node.path).animation">
+                <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: node.children }"></ng-container>
             </ul>
         </li>
     </ng-container>

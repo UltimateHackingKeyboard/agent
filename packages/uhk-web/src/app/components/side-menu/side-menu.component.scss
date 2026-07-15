@@ -142,8 +142,22 @@ ul {
         }
     }
 
+    // Indentation is purely structural: it comes from the nested <ul> lists, not
+    // from any per-leaf padding. The root list supplies the base indent and each
+    // nested group list adds one step, so depth accumulates through the DOM.
     &__macro-tree-entry {
-        padding: 0.125rem 0 0.125rem calc(#{$macro-tree-base-indent} + var(--macro-depth, 0) * #{$macro-tree-indent-step});
+        padding: 0.125rem 0;
+    }
+
+    &__macro-tree {
+        width: auto;
+        margin-left: $macro-tree-base-indent;
+    }
+
+    &__macro-group-children {
+        width: auto;
+        padding-left: $macro-tree-indent-step;
+        border-left: 1px solid silver;
     }
 
     &__macro-tree-item {
@@ -179,6 +193,7 @@ ul {
 
     &__macro-group {
         cursor: pointer;
+        font-weight: 500;
 
         &-arrow {
             float: right;
