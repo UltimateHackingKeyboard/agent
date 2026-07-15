@@ -18,11 +18,11 @@
              placement="bottom-right"
              (click)="duplicateMacro()"></fa-icon>
 </uhk-header>
-<div *ngIf="assignments.length" class="macro__assignments">
-    <span class="macro__assignments-label">Used on:</span>
+<div *ngIf="assignments.length" class="my-2 small">
+    <span class="me-1">Used on:</span>
     <ng-container *ngFor="let assignment of assignments; let last = last">
-        <a class="macro__assignment-link"
+        <a class="text-nowrap"
            [routerLink]="['/keymap', assignment.keymapAbbreviation]"
-           [queryParams]="getKeymapQueryParams(assignment)">{{ assignment.label }}</a><span *ngIf="!last" class="macro__assignment-separator">, </span>
+           [queryParams]="{ layer: assignment.layerId, module: assignment.moduleId, key: assignment.keyId }">{{ assignment.label }}</a><span *ngIf="!last">, </span>
     </ng-container>
 </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
@@ -6,18 +6,19 @@ import { SplitGutterInteractionEvent } from 'angular-split';
 import { isEqual } from 'lodash';
 import { Macro, MacroAction } from 'uhk-common';
 
-import { Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 
 import {
-    AddMacroActionAction,
-    DuplicateMacroActionAction,
-    DeleteMacroActionAction,
-    ReorderMacroActionAction,
-    SaveMacroActionAction,
-    SelectMacroActionAction
-} from '../../../store/actions/macro';
+    DuplicateMacroActionPayload,
+    MacroKeyAssignmentViewModel,
+    SelectedMacroAction,
+    SelectedMacroActionIdModel
+} from '../../../models';
+import { MapperService } from '../../../services/mapper.service';
 import {
     AppState,
+    getDefaultUserConfiguration,
+    getKeymaps,
     getSelectedMacro,
     getSelectedMacroAction,
     getSmartMacroPanelVisibility,
@@ -28,9 +29,16 @@ import {
     maxMacroCountReached,
     selectSmartMacroDocUrl
 } from '../../../store';
-
-import { DuplicateMacroActionPayload, SelectedMacroAction, SelectedMacroActionIdModel } from '../../../models';
+import {
+    AddMacroActionAction,
+    DeleteMacroActionAction,
+    DuplicateMacroActionAction,
+    ReorderMacroActionAction,
+    SaveMacroActionAction,
+    SelectMacroActionAction
+} from '../../../store/actions/macro';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
+import { buildMacroKeyAssignmentViewModels } from '../../../util/build-macro-key-assignment-view-models';
 
 @Component({
     selector: 'macro-edit',
@@ -45,6 +53,7 @@ import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../st
 export class MacroEditComponent implements OnDestroy {
     faCaretDown = faCaretDown;
     macro: Macro;
+    assignments: MacroKeyAssignmentViewModel[] = [];
     isNew$: Observable<boolean>;
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
@@ -64,12 +73,26 @@ export class MacroEditComponent implements OnDestroy {
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef,
                 private route: ActivatedRoute,
-                private router: Router) {
-        this.subscriptions.add(store.select(getSelectedMacro)
-            .subscribe((macro: Macro) => {
+                private router: Router,
+                private mapper: MapperService) {
+        this.subscriptions.add(
+            combineLatest([
+                store.select(getSelectedMacro),
+                store.select(getKeymaps),
+                store.select(getDefaultUserConfiguration),
+            ]).subscribe(([macro, keymaps, defaultUserConfiguration]) => {
                 this.macro = macro;
+                this.assignments = macro
+                    ? buildMacroKeyAssignmentViewModels({
+                        keymaps,
+                        macroId: macro.id,
+                        defaultUserConfiguration,
+                        mapper: this.mapper,
+                    })
+                    : [];
                 this.cdRef.markForCheck();
-            }));
+            })
+        );
 
         this.isNew$ = this.store.select(isSelectedMacroNew);
         this.isMacroCommandSupported$ = this.store.select(isMacroCommandSupported);

@@ -26,7 +26,7 @@ export class BackToComponent implements OnDestroy {
                 const backUrl = new URL(params.backUrl as string, window.location.origin);
                 this.backUrl = backUrl.pathname;
                 this.backText = params.backText;
-                this.backSuffix = params.backSuffix ?? '';
+                this.backSuffix = params.backSuffix || '';
                 this.queryParams = {};
                 for (const key of backUrl.searchParams.keys()) {
                     this.queryParams[key] = backUrl.searchParams.get(key);

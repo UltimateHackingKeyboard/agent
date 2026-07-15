@@ -1,4 +1,4 @@
-import { Keymap, LayerName, PlayMacroAction } from '../config-serializer/index.js';
+import { Keymap, LayerName, PlayMacroAction } from 'uhk-common';
 
 export interface MacroKeyAssignment {
     keymapAbbreviation: string;

@@ -6,7 +6,6 @@ export * from './convert-array-to-hex-string.js';
 export * from './create-md5-hash.js';
 export * from './date-formatter.js';
 export * from './disable-agent-upgrade-protection.js';
-export * from './find-macro-key-assignments.js';
 export * from './find-uhk-module-by-id.js';
 export * from './get-formatted-timestamp.js';
 export * from './get-md5-hash-from-file-name.js';

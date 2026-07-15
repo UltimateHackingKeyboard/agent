@@ -1,0 +1,29 @@
+---
+description: Keep UI and presentation code out of uhk-common
+alwaysApply: true
+---
+
+# Package boundaries: uhk-common vs uhk-web
+
+`uhk-common` is for shared, UI-agnostic domain logic (config serializers, USB helpers, pure data transforms). Do **not** put presentation-oriented helpers there.
+
+## Belong in `uhk-web` (or uhk-agent), not `uhk-common`
+
+- Display labels, breadcrumbs, menu grouping, view-model mappers
+- Anything that formats data for Angular templates
+- Code that only Agent UI consumers need, even if it looks "pure"
+
+## Belong in `uhk-common`
+
+- Config/device models and serialization
+- Algorithms that both Electron main and renderer need without UI assumptions
+
+```typescript
+// ❌ BAD — lives in uhk-common only because tests were convenient there
+export function findMacroKeyAssignments(...): MacroKeyAssignment[] { /* for macro page UI */ }
+
+// ✅ GOOD — presentation helper next to the UI that uses it
+// packages/uhk-web/src/app/util/find-macro-key-assignments.ts
+```
+
+If you want unit tests for UI helpers and `uhk-web` has no runner yet, still put the code in `uhk-web` and add tests there; do not grow UI surface area in `uhk-common` for convenience.

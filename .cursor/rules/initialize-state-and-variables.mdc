@@ -1,12 +1,13 @@
 ---
-description: Initialize variables and NgRx state with concrete defaults
-globs: **/*.{ts,tsx}
-alwaysApply: false
+description: Initialize variables and NgRx state with concrete defaults; avoid optional chaining smell
+alwaysApply: true
 ---
 
 # Initialize variables and NgRx state
 
 Initialize primitives and objects at declaration whenever a sensible default exists. The goal is typed, predictable values—not defensive `?.` and `??` scattered through selectors, templates, and components.
+
+Treat widespread optional chaining (`?.`) and nullish coalescing (`??`) as a code smell: they often hide missing initialization or the wrong selector. Prefer concrete defaults and explicit control flow (`if` / early return) so optionality is intentional, not lazy.
 
 ## General TypeScript
 
