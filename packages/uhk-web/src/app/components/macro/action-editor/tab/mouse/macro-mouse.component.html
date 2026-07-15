@@ -42,22 +42,22 @@
                     <input id="move-mouse-x"
                            type="number"
                            class="form-control"
-                           [(ngModel)]="macroAction['x']"
-                           (ngModelChange)="validate()"
-                           min="-9999"
-                           max="9999"
-                           maxlength="4"> pixels
+                           [ngModel]="macroAction['x']"
+                           (ngModelChange)="setCoordinate('x', $event)"
+                           [min]="INT16_MIN"
+                           [max]="INT16_MAX"
+                           maxlength="6"> pixels
                 </div>
                 <div class="mb-2">
                     <label for="move-mouse-y">Y:</label>
                     <input id="move-mouse-y"
                            type="number"
                            class="form-control"
-                           [(ngModel)]="macroAction['y']"
-                           (ngModelChange)="validate()"
-                           min="-9999"
-                           max="9999"
-                           maxlength="4"> pixels
+                           [ngModel]="macroAction['y']"
+                           (ngModelChange)="setCoordinate('y', $event)"
+                           [min]="INT16_MIN"
+                           [max]="INT16_MAX"
+                           maxlength="6"> pixels
                 </div>
             </div>
         </div>
@@ -69,22 +69,22 @@
                     <input id="scroll-mouse-x"
                            type="number"
                            class="form-control"
-                           [(ngModel)]="macroAction['x']"
-                           (ngModelChange)="validate()"
-                           min="-9999"
-                           max="9999"
-                           maxlength="4"> pixels
+                           [ngModel]="macroAction['x']"
+                           (ngModelChange)="setCoordinate('x', $event)"
+                           [min]="INT16_MIN"
+                           [max]="INT16_MAX"
+                           maxlength="6"> pixels
                 </div>
                 <div class="mb-2">
                     <label for="scroll-mouse-y">Y:</label>
                     <input id="scroll-mouse-y"
                            type="number"
                            class="form-control"
-                           [(ngModel)]="macroAction['y']"
-                           (ngModelChange)="validate()"
-                           min="-9999"
-                           max="9999"
-                           maxlength="4"> pixels
+                           [ngModel]="macroAction['y']"
+                           (ngModelChange)="setCoordinate('y', $event)"
+                           [min]="INT16_MIN"
+                           [max]="INT16_MAX"
+                           maxlength="6"> pixels
                 </div>
             </div>
         </div>
