@@ -30,7 +30,7 @@ export class DefaultUserConfigurationEffect {
         .pipe(
             ofType(Device.ActionTypes.ConnectionStateChanged),
             withLatestFrom(this.store.select(getConnectedDevice)),
-            map(([, connectedDevice]) => connectedDevice?.id ?? null),
+            map(([, connectedDevice]) => connectedDevice ? connectedDevice.id : null),
             distinctUntilChanged(),
             map(() => new LoadDefaultUserConfigurationAction())
         )
@@ -41,7 +41,7 @@ export class DefaultUserConfigurationEffect {
             ofType<LoadDefaultUserConfigurationAction>(ActionTypes.LoadDefaultUserConfiguration),
             withLatestFrom(this.store.select(getConnectedDevice)),
             map(([_, connectedDevice]) => {
-                if (connectedDevice?.id === UHK_80_DEVICE.id) {
+                if (connectedDevice && connectedDevice.id === UHK_80_DEVICE.id) {
                     return new LoadDefaultUserConfigurationSuccessAction(this.defaultUserConfigurationService.getDefault80());
                 }
 

@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { Keymap } from 'uhk-common';
 
 import { AppState, getDefaultUserConfigurationKeymaps } from '../../../store';
-import { LoadDefaultUserConfigurationAction } from '../../../store/actions/default-user-configuration.actions';
 
 @Component(({
     selector: 'keymap-add-secondary-menu',
@@ -14,15 +13,10 @@ import { LoadDefaultUserConfigurationAction } from '../../../store/actions/defau
     templateUrl: './keymap-add-secondary-menu.component.html',
     styleUrls: ['./keymap-add-secondary-menu.component.scss']
 }))
-export class KeymapAddSecondaryMenuComponent implements OnInit {
+export class KeymapAddSecondaryMenuComponent {
     faKeyboard = faKeyboard;
-    keymaps$: Observable<Array<Keymap>>;
+    keymaps$: Observable<Array<Keymap>> = this.store.select(getDefaultUserConfigurationKeymaps);
 
     constructor(private store: Store<AppState>) {
-    }
-
-    ngOnInit(): void {
-        this.store.dispatch(new LoadDefaultUserConfigurationAction());
-        this.keymaps$ = this.store.select(getDefaultUserConfigurationKeymaps);
     }
 }

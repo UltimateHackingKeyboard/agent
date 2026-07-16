@@ -6,7 +6,7 @@ import { SplitGutterInteractionEvent } from 'angular-split';
 import { isEqual } from 'lodash';
 import { Macro, MacroAction } from 'uhk-common';
 
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, map, Observable, Subscription } from 'rxjs';
 
 import {
     DuplicateMacroActionPayload,
@@ -53,7 +53,7 @@ import { buildMacroKeyAssignmentViewModels } from '../../../util/build-macro-key
 export class MacroEditComponent implements OnDestroy {
     faCaretDown = faCaretDown;
     macro: Macro;
-    assignments: MacroKeyAssignmentViewModel[] = [];
+    assignments$: Observable<MacroKeyAssignmentViewModel[]>;
     isNew$: Observable<boolean>;
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
@@ -76,22 +76,24 @@ export class MacroEditComponent implements OnDestroy {
                 private router: Router,
                 private mapper: MapperService) {
         this.subscriptions.add(
-            combineLatest([
-                store.select(getSelectedMacro),
-                store.select(getKeymaps),
-                store.select(getDefaultUserConfiguration),
-            ]).subscribe(([macro, keymaps, defaultUserConfiguration]) => {
+            store.select(getSelectedMacro).subscribe(macro => {
                 this.macro = macro;
-                this.assignments = macro
-                    ? buildMacroKeyAssignmentViewModels({
-                        keymaps,
-                        macroId: macro.id,
-                        defaultUserConfiguration,
-                        mapper: this.mapper,
-                    })
-                    : [];
                 this.cdRef.markForCheck();
             })
+        );
+        this.assignments$ = combineLatest([
+            store.select(getSelectedMacro),
+            store.select(getKeymaps),
+            store.select(getDefaultUserConfiguration),
+        ]).pipe(
+            map(([macro, keymaps, defaultUserConfiguration]) => macro
+                ? buildMacroKeyAssignmentViewModels({
+                    keymaps,
+                    macroId: macro.id,
+                    defaultUserConfiguration,
+                    mapper: this.mapper,
+                })
+                : [])
         );
 
         this.isNew$ = this.store.select(isSelectedMacroNew);

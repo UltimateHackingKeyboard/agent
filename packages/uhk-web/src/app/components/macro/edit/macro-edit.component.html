@@ -10,7 +10,7 @@
                             [macro]="macro"
                             [isNew]="isNew$ | async"
                             [maxMacroCountReached]="maxMacroCountReached$ | async"
-                            [assignments]="assignments"
+                            [assignments]="(assignments$ | async) ?? []"
                     ></macro-header>
                     <macro-list
                         [macro]="macro"

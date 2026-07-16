@@ -1,4 +1,4 @@
-import { Keymap, LayerName, UserConfiguration } from 'uhk-common';
+import { Keymap, UserConfiguration } from 'uhk-common';
 
 import { MacroKeyAssignmentViewModel } from '../models';
 import { MapperService } from '../services/mapper.service';
