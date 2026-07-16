@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 
 import { Keymap, Layer, LayerName, Module, PlayMacroAction } from 'uhk-common';
 
-import { findMacroKeyAssignments } from './find-macro-key-assignments';
+import { findMacroKeyAssignments } from './find-macro-key-assignments.js';
 
 interface CreateKeymapWithMacroAssignmentOptions {
     abbreviation: string;

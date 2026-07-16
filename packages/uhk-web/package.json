@@ -11,9 +11,11 @@
     "server:renderer": "ng build --project=uhk-renderer --watch",
     "lint": "run-p -snc lint:*",
     "lint:ng": "ng lint",
-    "lint:style": "stylelint \"src/**/*.scss\""
+    "lint:style": "stylelint \"src/**/*.scss\"",
+    "test": "node --loader=ts-node/esm --test \"**/*.test.ts\""
   },
   "private": true,
+  "type": "module",
   "license": "See in LICENSE",
   "devDependencies": {
     "@angular-devkit/build-angular": "20.3.28",

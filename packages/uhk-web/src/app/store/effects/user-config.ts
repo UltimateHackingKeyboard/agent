@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { routerNavigatedAction, RouterNavigatedAction } from '@ngrx/router-store';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -468,7 +469,7 @@ export class UserConfigEffects {
     }
 }
 
-function isNavigateToMacroSaveKey(action: { type: string }): boolean {
+function isNavigateToMacroSaveKey(action: Action): boolean {
     if (action.type !== Keymaps.ActionTypes.SaveKey) {
         return false;
     }

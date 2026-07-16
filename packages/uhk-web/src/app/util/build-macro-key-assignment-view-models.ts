@@ -2,12 +2,11 @@ import { Keymap, LayerName, UserConfiguration } from 'uhk-common';
 
 import { MacroKeyAssignmentViewModel } from '../models';
 import { MapperService } from '../services/mapper.service';
-import { initLayerOptions } from '../store/reducers/layer-options';
+import { LAYER_OPTIONS } from '../store/reducers/layer-options';
 import { findMacroKeyAssignments, MacroKeyAssignment } from './find-macro-key-assignments';
 import { getDefaultQwertyKeyLabel } from './get-default-key-label';
 
 const MACRO_KEY_ASSIGNMENT_SEPARATOR = ' ⭢ ';
-const LAYER_OPTIONS = initLayerOptions();
 
 export interface BuildMacroKeyAssignmentViewModelsOptions {
     keymaps: Keymap[];
@@ -23,9 +22,6 @@ export function buildMacroKeyAssignmentViewModels(
         .sort(compareAssignments)
         .map(assignment => {
             const layerOption = LAYER_OPTIONS.get(assignment.layerId);
-            const layerName = layerOption
-                ? layerOption.name
-                : LayerName[assignment.layerId];
             const keyLabel = getDefaultQwertyKeyLabel({
                 defaultUserConfiguration: options.defaultUserConfiguration,
                 moduleId: assignment.moduleId,
@@ -38,7 +34,7 @@ export function buildMacroKeyAssignmentViewModels(
                 layerId: assignment.layerId,
                 moduleId: assignment.moduleId,
                 keyId: assignment.keyId,
-                label: `${assignment.keymapName}${MACRO_KEY_ASSIGNMENT_SEPARATOR}${layerName}${MACRO_KEY_ASSIGNMENT_SEPARATOR}${keyLabel}`,
+                label: `${assignment.keymapName}${MACRO_KEY_ASSIGNMENT_SEPARATOR}${layerOption.name}${MACRO_KEY_ASSIGNMENT_SEPARATOR}${keyLabel}`,
             };
         });
 }
@@ -50,10 +46,8 @@ function compareAssignments(first: MacroKeyAssignment, second: MacroKeyAssignmen
         return keymapComparison;
     }
 
-    const firstLayerOption = LAYER_OPTIONS.get(first.layerId);
-    const secondLayerOption = LAYER_OPTIONS.get(second.layerId);
-    const firstLayerOrder = firstLayerOption ? firstLayerOption.order : 0;
-    const secondLayerOrder = secondLayerOption ? secondLayerOption.order : 0;
+    const firstLayerOrder = LAYER_OPTIONS.get(first.layerId).order;
+    const secondLayerOrder = LAYER_OPTIONS.get(second.layerId).order;
 
     if (firstLayerOrder !== secondLayerOrder) {
         return firstLayerOrder - secondLayerOrder;
