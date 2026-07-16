@@ -856,10 +856,10 @@ export function reducer(
                 };
             }
             else if (originalPlayMacroAction && payload.keyAction.navigateToMacro) {
-                newState = {
-                    ...newState,
+                return {
+                    ...state,
                     selectedMacroId: originalPlayMacroAction.macroId
-                }
+                };
             }
 
             return {

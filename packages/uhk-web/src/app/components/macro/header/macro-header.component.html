@@ -18,4 +18,11 @@
              placement="bottom-right"
              (click)="duplicateMacro()"></fa-icon>
 </uhk-header>
-<back-to/>
+<div *ngIf="assignments.length" class="mt-3 mb-2">
+    <span class="me-1">Used on:</span>
+    <ng-container *ngFor="let assignment of assignments; let last = last">
+        <a class="text-nowrap"
+           [routerLink]="['/keymap', assignment.keymapAbbreviation]"
+           [queryParams]="{ layer: assignment.layerId, module: assignment.moduleId, key: assignment.keyId }">{{ assignment.label }}</a><span *ngIf="!last">, </span>
+    </ng-container>
+</div>

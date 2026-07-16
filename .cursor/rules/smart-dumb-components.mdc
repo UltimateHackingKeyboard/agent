@@ -1,0 +1,34 @@
+---
+description: Prefer smart containers / dumb leaf components with store-side calculations
+alwaysApply: true
+---
+
+# Smart / dumb components
+
+Follow the smart/dumb (container/presentational) pattern already used in this codebase.
+
+## Responsibilities
+
+- **Store / selectors / smart parents**: derive view models, sort/filter/map domain data, combine streams.
+- **Leaf components**: receive `@Input()`s, render them, emit `@Output()`s / dispatch obvious user intents. Avoid reading the store just to compute display data.
+
+```typescript
+// ❌ BAD — deep leaf component selects and calculates
+class MacroHeaderComponent {
+  constructor(store: Store) {
+    store.select(getKeymaps).subscribe(keymaps => this.assignments = map(keymaps));
+  }
+}
+
+// ✅ GOOD — smart parent selects; leaf renders
+// macro-edit (smart)
+assignments$ = this.store.select(getSelectedMacroKeyAssignments);
+
+// template
+<macro-header [macro]="macro" [assignments]="assignments$ | async"></macro-header>
+
+// macro-header (dumb regarding this data)
+@Input() assignments: MacroKeyAssignmentViewModel[] = [];
+```
+
+Existing leaf components that already inject `Store` only to `dispatch` actions are acceptable when inherited; do not expand them with new selectors or calculation logic.

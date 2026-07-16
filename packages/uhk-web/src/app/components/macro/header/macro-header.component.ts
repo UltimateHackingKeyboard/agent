@@ -12,6 +12,7 @@ import { Macro, MAX_ALLOWED_MACROS_TOOLTIP } from 'uhk-common';
 
 import { DuplicateMacroAction, EditMacroNameAction, RemoveMacroAction } from '../../../store/actions/macro';
 import { AppState } from '../../../store';
+import { MacroKeyAssignmentViewModel } from '../../../models';
 import * as util from '../../../util';
 import { AutoGrowInputComponent } from '../../auto-grow-input';
 
@@ -26,6 +27,7 @@ export class MacroHeaderComponent implements OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
     @Input() maxMacroCountReached: boolean;
+    @Input() assignments: MacroKeyAssignmentViewModel[] = [];
 
     @ViewChild(AutoGrowInputComponent, { static: true }) macroName: AutoGrowInputComponent;
 
