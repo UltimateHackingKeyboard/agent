@@ -43,8 +43,7 @@ export class AppUpdateRendererService {
     }
 
     private registerEvents() {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.ipcRenderer.on(IpcEvents.autoUpdater.updateAvailable, (event: string, arg: any) => {
+        this.ipcRenderer.on(IpcEvents.autoUpdater.updateAvailable, (event: string, arg: UpdateInfo) => {
             this.logService.misc(IpcEvents.autoUpdater.updateAvailable, arg);
             this.dispatchStoreAction(new UpdateAvailableAction(arg));
         });
