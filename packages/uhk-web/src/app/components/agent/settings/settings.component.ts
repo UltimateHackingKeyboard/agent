@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-import { AppTheme, AppThemeSelect, MACRO_GROUPING_MAX_DEPTH, MacroGroupingSettings } from 'uhk-common';
+import { AppTheme, AppThemeSelect, MacroGroupingSettings } from 'uhk-common';
 import {
     AppState,
     appUpdateSettingsState,
@@ -17,6 +17,7 @@ import {
     getSupportedThemes,
     keyboardHalvesAlwaysJoined
 } from '../../../store';
+import { MACRO_GROUPING_MAX_DEPTH } from '../../../util/group-macros-by-name';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,

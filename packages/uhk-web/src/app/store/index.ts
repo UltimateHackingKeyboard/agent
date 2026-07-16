@@ -21,7 +21,6 @@ import {
     LEFT_KEY_CLUSTER_MODULE,
     LeftSlotModules,
     MAX_ALLOWED_MACROS,
-    groupMacrosByName,
     PlayMacroAction,
     RIGHT_TRACKPOINT_MODULE,
     RightSlotModules,
@@ -60,6 +59,7 @@ import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
 import { defaultUhkThemeColors } from '../util/default-uhk-theme-colors';
 import { escapeHtml } from '../util/escape-html';
+import { groupMacrosByName } from '../util/group-macros-by-name';
 import { parseStatusBuffer } from '../util/status-buffer-parser';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 

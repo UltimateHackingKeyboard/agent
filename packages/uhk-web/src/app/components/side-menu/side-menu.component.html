@@ -234,7 +234,7 @@
         <li *ngIf="node.type === 'macro'" class="sidebar__macro-tree-item">
             <div class="sidebar__macro-tree-entry" [routerLinkActive]="['active']">
                 <a [routerLink]="['/macro', node.macro.id]"
-                   [class.disabled]="state.updatingFirmware">{{ getMacroDisplayName(node) }}</a>
+                   [class.disabled]="state.updatingFirmware">{{ node.macro.name }}</a>
                 <span class="sidebar__macro_count badge rounded-pill"
                       ngbTooltip="This is the number of times the macro is used across all keymaps."
                       placement="bottom"

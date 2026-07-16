@@ -4,7 +4,6 @@ import {
     CommandLineArgs,
     DEFAULT_MACRO_GROUPING_SETTINGS,
     disableAgentUpgradeProtection,
-    normalizeMacroGroupingSettings,
     HardwareConfiguration,
     KeyboardLayout,
     MacroGroupingSettings,
@@ -13,6 +12,8 @@ import {
     runInElectron,
     UserConfiguration,
 } from 'uhk-common';
+
+import { normalizeMacroGroupingSettings } from '../../util/group-macros-by-name';
 
 import * as App from '../actions/app';
 import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } from '../actions/user-config';

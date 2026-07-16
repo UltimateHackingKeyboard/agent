@@ -6,7 +6,7 @@ $level-1-item-spacing: 0.25rem 1rem 0.25rem 1.5rem;
 $level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
 $macro-tree-base-indent: 2rem;
 $macro-tree-indent-step: 0.75rem;
-// Keep MACRO_GROUPING_MAX_DEPTH in uhk-common in sync with these layout values.
+// Keep MACRO_GROUPING_MAX_DEPTH in util/group-macros-by-name.ts in sync with these layout values.
 
 :host {
     background-color: var(--color-sidemenu-bg);

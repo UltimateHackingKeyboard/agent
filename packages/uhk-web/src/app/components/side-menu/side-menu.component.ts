@@ -32,12 +32,13 @@ import { Store } from '@ngrx/store';
 
 import { combineLatest, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { findMacroGroupAncestorPaths, MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
+import { MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
 
 import { AppState, getSelectedMacro, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
 import { DeviceUiStates, MacroMenuTreeNode, SideMenuPageState } from '../../models';
+import { findMacroGroupAncestorPaths } from '../../util/group-macros-by-name';
 
 interface SideMenuItemState {
     icon: IconDefinition;
@@ -195,10 +196,6 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
             : faChevronRight;
     }
 
-    getMacroDisplayName(node: MacroMenuTreeNode): string {
-        return node.macro?.name || '';
-    }
-
     addMacro() {
         this.store.dispatch(new AddMacroAction());
     }
@@ -228,7 +225,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     private syncMacroGroupState(): void {
         const nextState: Record<string, SideMenuItemState> = {};
 
-        for (const path of this.collectMacroGroupPaths(this.state?.macroTree || [])) {
+        for (const path of this.collectMacroGroupPaths(this.state.macroTree)) {
             nextState[path] = this.macroGroupState[path] || {
                 icon: faChevronUp,
                 animation: 'active'
@@ -240,11 +237,11 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
 
     private collectMacroGroupPaths(nodes: MacroMenuTreeNode[]): string[] {
         return nodes.flatMap(node => {
-            if (node.type !== 'group' || !node.path) {
+            if (node.type !== 'group') {
                 return [];
             }
 
-            return [node.path, ...this.collectMacroGroupPaths(node.children || [])];
+            return [node.path, ...this.collectMacroGroupPaths(node.children)];
         });
     }
 }

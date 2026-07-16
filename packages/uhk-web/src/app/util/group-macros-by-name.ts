@@ -1,21 +1,65 @@
-import { MacroGroupingSettings, normalizeMacroGroupingSettings } from '../models/macro-grouping-settings.js';
+import {
+    DEFAULT_MACRO_GROUPING_SETTINGS,
+    MACRO_GROUPING_MIN_DEPTH,
+    MacroGroupingSettings,
+} from 'uhk-common';
 
-export interface GroupableMacroItem {
-    id: number;
-    name: string;
-}
+import { GroupableMacroItem, MacroMenuTreeNode } from '../models/macro-menu-tree-node';
 
-export interface MacroMenuTreeNode<TMacro extends GroupableMacroItem = GroupableMacroItem> {
-    children?: MacroMenuTreeNode<TMacro>[];
-    label?: string;
-    macro?: TMacro;
-    path?: string;
-    type: 'group' | 'macro';
+export type { GroupableMacroItem };
+
+// Mirrors side-menu.component.scss ($side-menu-width, $macro-tree-base-indent, $macro-tree-indent-step).
+const MACRO_TREE_SIDE_MENU_WIDTH_PX = 250;
+const MACRO_TREE_LEVEL1_PADDING_PX = 24;
+const MACRO_TREE_BASE_INDENT_PX = 32;
+const MACRO_TREE_INDENT_STEP_PX = 12;
+const MACRO_TREE_RESERVED_RIGHT_PX = 48;
+const MACRO_TREE_MIN_LABEL_WIDTH_PX = 72;
+
+/**
+ * Deepest macro-tree depth the sidebar layout can fit before labels get too narrow.
+ * The CSS indent is unbounded; this limit comes from the 250px sidebar width.
+ */
+export const MACRO_GROUPING_MAX_DEPTH = Math.max(
+    MACRO_GROUPING_MIN_DEPTH,
+    Math.floor(
+        (MACRO_TREE_SIDE_MENU_WIDTH_PX
+            - MACRO_TREE_LEVEL1_PADDING_PX
+            - MACRO_TREE_BASE_INDENT_PX
+            - MACRO_TREE_RESERVED_RIGHT_PX
+            - MACRO_TREE_MIN_LABEL_WIDTH_PX)
+        / MACRO_TREE_INDENT_STEP_PX
+    )
+);
+
+export function normalizeMacroGroupingSettings(
+    settings?: Partial<MacroGroupingSettings>
+): MacroGroupingSettings {
+    const merged: MacroGroupingSettings = {
+        ...DEFAULT_MACRO_GROUPING_SETTINGS,
+        ...settings,
+    };
+
+    return {
+        ...merged,
+        maxDepth: Math.min(
+            MACRO_GROUPING_MAX_DEPTH,
+            Math.max(MACRO_GROUPING_MIN_DEPTH, merged.maxDepth)
+        ),
+        minChildren: Math.min(10, Math.max(2, merged.minChildren)),
+    };
 }
 
 interface MacroGroupingItem<TMacro extends GroupableMacroItem> {
     groupingName: string;
     macro: TMacro;
+}
+
+interface GroupMacrosAtLevelOptions<TMacro extends GroupableMacroItem> {
+    depth: number;
+    items: MacroGroupingItem<TMacro>[];
+    parentPath: string;
+    settings: MacroGroupingSettings;
 }
 
 const MACRO_NAME_SEPARATOR = /[^\p{L}\p{N}$]+/u;
@@ -36,16 +80,19 @@ export function groupMacrosByName<TMacro extends GroupableMacroItem>(
         macro
     }));
 
-    return groupMacrosAtLevel(items, normalizedSettings, 0, '');
+    return groupMacrosAtLevel({
+        items,
+        settings: normalizedSettings,
+        depth: 0,
+        parentPath: '',
+    });
 }
 
 function groupMacrosAtLevel<TMacro extends GroupableMacroItem>(
-    items: MacroGroupingItem<TMacro>[],
-    settings: MacroGroupingSettings,
-    depth: number,
-    parentPath: string
+    options: GroupMacrosAtLevelOptions<TMacro>
 ): MacroMenuTreeNode<TMacro>[] {
-    const sortedItems = items.toSorted((a, b) => a.groupingName.localeCompare(b.groupingName));
+    const { depth, items, parentPath, settings } = options;
+    const sortedItems = [...items].sort((a, b) => a.groupingName.localeCompare(b.groupingName));
 
     if (depth >= settings.maxDepth) {
         return sortedItems.map(item => createMacroNode(item));
@@ -99,7 +146,12 @@ function groupMacrosAtLevel<TMacro extends GroupableMacroItem>(
 
         groupedNodes.push({
             type: 'group',
-            children: groupMacrosAtLevel(childItems, settings, depth + 1, groupPath),
+            children: groupMacrosAtLevel({
+                items: childItems,
+                settings,
+                depth: depth + 1,
+                parentPath: groupPath,
+            }),
             label: head,
             path: groupPath,
         });
@@ -129,10 +181,10 @@ function sortMacroMenuTreeNodes<TMacro extends GroupableMacroItem>(
 
 function getMacroMenuTreeNodeLabel<TMacro extends GroupableMacroItem>(node: MacroMenuTreeNode<TMacro>): string {
     if (node.type === 'group') {
-        return node.label || '';
+        return node.label;
     }
 
-    return node.macro?.name || '';
+    return node.macro.name;
 }
 
 export function findMacroGroupAncestorPaths<TMacro extends GroupableMacroItem>(
@@ -141,11 +193,11 @@ export function findMacroGroupAncestorPaths<TMacro extends GroupableMacroItem>(
     ancestorPaths: string[] = []
 ): string[] | null {
     for (const node of nodes) {
-        if (node.type === 'macro' && node.macro?.id === macroId) {
+        if (node.type === 'macro' && node.macro.id === macroId) {
             return ancestorPaths;
         }
 
-        if (node.type === 'group' && node.path && node.children) {
+        if (node.type === 'group') {
             const found = findMacroGroupAncestorPaths(
                 node.children,
                 macroId,

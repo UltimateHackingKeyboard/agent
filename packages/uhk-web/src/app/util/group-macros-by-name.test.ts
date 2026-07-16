@@ -1,14 +1,13 @@
 import { describe, it } from 'node:test';
 
-import {
-    DEFAULT_MACRO_GROUPING_SETTINGS,
-    MACRO_GROUPING_MAX_DEPTH,
-    normalizeMacroGroupingSettings,
-} from '../models/macro-grouping-settings.js';
+import { DEFAULT_MACRO_GROUPING_SETTINGS } from 'uhk-common';
+
 import {
     findMacroGroupAncestorPaths,
     groupMacrosByName,
     GroupableMacroItem,
+    MACRO_GROUPING_MAX_DEPTH,
+    normalizeMacroGroupingSettings,
     splitMacroName
 } from './group-macros-by-name.js';
 
@@ -77,11 +76,13 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 2);
         assert.deepEqual(result.map(node => node.type), ['macro', 'group']);
-        assert.equal(result[0].macro?.name, 'Brightness up');
-        assert.equal(result[1].label, 'Doom');
-        assert.equal(result[1].children?.length, 2);
-        assert.equal(result[1].children?.[0].macro?.name, 'Doom: Chainsaw');
-        assert.equal(result[1].children?.[1].macro?.name, 'Doom: Plasma gun');
+        assert.equal(result[0].type === 'macro' ? result[0].macro.name : '', 'Brightness up');
+        assert.equal(result[1].type === 'group' ? result[1].label : '', 'Doom');
+        assert.equal(result[1].type === 'group' ? result[1].children.length : 0, 2);
+        if (result[1].type === 'group') {
+            assert.equal(result[1].children[0].type === 'macro' ? result[1].children[0].macro.name : '', 'Doom: Chainsaw');
+            assert.equal(result[1].children[1].type === 'macro' ? result[1].children[1].macro.name : '', 'Doom: Plasma gun');
+        }
     });
 
     it('does not create a group when there are fewer macros than minChildren', ({ assert }) => {
@@ -94,8 +95,8 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 2);
         assert.deepEqual(result.map(node => node.type), ['macro', 'macro']);
-        assert.equal(result[0].macro?.name, 'Brightness up');
-        assert.equal(result[1].macro?.name, 'Doom: Chainsaw');
+        assert.equal(result[0].type === 'macro' ? result[0].macro.name : '', 'Brightness up');
+        assert.equal(result[1].type === 'macro' ? result[1].macro.name : '', 'Doom: Chainsaw');
     });
 
     it('groups by camel case when enabled', ({ assert }) => {
@@ -112,10 +113,15 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 2);
         assert.deepEqual(result.map(node => node.type), ['group', 'macro']);
-        assert.equal(result[0].label, 'bind');
-        assert.equal(result[0].children?.length, 2);
-        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['bindMouseLeft', 'bindMouseRight']);
-        assert.equal(result[1].macro?.name, 'brightnessUp');
+        assert.equal(result[0].type === 'group' ? result[0].label : '', 'bind');
+        if (result[0].type === 'group') {
+            assert.equal(result[0].children.length, 2);
+            assert.deepEqual(
+                result[0].children.map(child => child.type === 'macro' ? child.macro.name : ''),
+                ['bindMouseLeft', 'bindMouseRight']
+            );
+        }
+        assert.equal(result[1].type === 'macro' ? result[1].macro.name : '', 'brightnessUp');
     });
 
     it('groups dollar-prefixed smart macro names under the dollar prefix', ({ assert }) => {
@@ -131,8 +137,13 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 1);
         assert.equal(result[0].type, 'group');
-        assert.equal(result[0].label, '$on');
-        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['$onInit', '$onJoin']);
+        if (result[0].type === 'group') {
+            assert.equal(result[0].label, '$on');
+            assert.deepEqual(
+                result[0].children.map(child => child.type === 'macro' ? child.macro.name : ''),
+                ['$onInit', '$onJoin']
+            );
+        }
     });
 
     it('groups non-English macro names that share a prefix', ({ assert }) => {
@@ -145,8 +156,13 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 1);
         assert.equal(result[0].type, 'group');
-        assert.equal(result[0].label, 'Az');
-        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['Az én: első', 'Az én: második']);
+        if (result[0].type === 'group') {
+            assert.equal(result[0].label, 'Az');
+            assert.deepEqual(
+                result[0].children.map(child => child.type === 'macro' ? child.macro.name : ''),
+                ['Az én: első', 'Az én: második']
+            );
+        }
     });
 
     it('keeps parent-level remainders when deeper nesting does not apply', ({ assert }) => {
@@ -161,8 +177,13 @@ describe('groupMacrosByName', () => {
         });
 
         assert.equal(result.length, 1);
-        assert.equal(result[0].label, 'Open');
-        assert.deepEqual(result[0].children?.map(child => child.macro?.name), ['Open daily sites', 'Open weekly sites']);
+        if (result[0].type === 'group') {
+            assert.equal(result[0].label, 'Open');
+            assert.deepEqual(
+                result[0].children.map(child => child.type === 'macro' ? child.macro.name : ''),
+                ['Open daily sites', 'Open weekly sites']
+            );
+        }
     });
 
     it('places a macro named like a group inside that group', ({ assert }) => {
@@ -176,12 +197,13 @@ describe('groupMacrosByName', () => {
 
         assert.equal(result.length, 1);
         assert.equal(result[0].type, 'group');
-        assert.equal(result[0].label, 'Doom');
-        assert.deepEqual(result[0].children?.map(child => child.macro?.name), [
-            'Doom',
-            'Doom: Chainsaw',
-            'Doom: Plasma gun',
-        ]);
+        if (result[0].type === 'group') {
+            assert.equal(result[0].label, 'Doom');
+            assert.deepEqual(
+                result[0].children.map(child => child.type === 'macro' ? child.macro.name : ''),
+                ['Doom', 'Doom: Chainsaw', 'Doom: Plasma gun']
+            );
+        }
     });
 
     it('places an exact subgroup name inside a nested group', ({ assert }) => {
@@ -197,15 +219,18 @@ describe('groupMacrosByName', () => {
         });
 
         assert.equal(result.length, 1);
-        assert.equal(result[0].label, 'Open');
-        assert.equal(result[0].children?.length, 1);
-        assert.equal(result[0].children?.[0].type, 'group');
-        assert.equal(result[0].children?.[0].label, 'daily');
-        assert.deepEqual(result[0].children?.[0].children?.map(child => child.macro?.name), [
-            'Open: daily',
-            'Open: daily: evening',
-            'Open: daily: morning',
-        ]);
+        if (result[0].type === 'group') {
+            assert.equal(result[0].label, 'Open');
+            assert.equal(result[0].children.length, 1);
+            assert.equal(result[0].children[0].type, 'group');
+            if (result[0].children[0].type === 'group') {
+                assert.equal(result[0].children[0].label, 'daily');
+                assert.deepEqual(
+                    result[0].children[0].children.map(child => child.type === 'macro' ? child.macro.name : ''),
+                    ['Open: daily', 'Open: daily: evening', 'Open: daily: morning']
+                );
+            }
+        }
     });
 
     it('keeps a same-named macro outside when the group is not created', ({ assert }) => {
@@ -217,7 +242,10 @@ describe('groupMacrosByName', () => {
         const result = groupMacrosByName(macros, ENABLED_MACRO_GROUPING_SETTINGS);
 
         assert.equal(result.length, 2);
-        assert.deepEqual(result.map(node => node.macro?.name), ['Doom', 'Doom: Chainsaw']);
+        assert.deepEqual(
+            result.map(node => node.type === 'macro' ? node.macro.name : ''),
+            ['Doom', 'Doom: Chainsaw']
+        );
     });
 });
 
