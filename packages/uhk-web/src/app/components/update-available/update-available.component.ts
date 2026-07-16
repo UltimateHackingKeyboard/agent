@@ -1,6 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-
-import { UpdateInfo } from '../../models/update-info';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
     selector: 'app-update-available',
@@ -10,7 +8,8 @@ import { UpdateInfo } from '../../models/update-info';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpdateAvailableComponent {
-    @Input() updateInfo: UpdateInfo;
+    protected readonly agentChangelogUrl =
+        'https://github.com/UltimateHackingKeyboard/agent/blob/master/CHANGELOG.md';
 
     @Output() updateApp = new EventEmitter<null>();
     @Output() doNotUpdateApp = new EventEmitter<null>();

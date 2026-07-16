@@ -24,7 +24,6 @@ import {
     runningInElectron,
     saveToKeyboardState,
     keypressCapturing,
-    getUpdateInfo,
     firstAttemptOfSaveToKeyboard,
     isStatusBufferErrorHidden,
     getOutOfSpaceWaringData,
@@ -33,7 +32,6 @@ import {
 import { StartDonglePairingAction } from './store/actions/dongle-pairing.action';
 import { AddNewPairedDevicesToHostConnectionsAction } from './store/actions/user-config';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
-import { UpdateInfo } from './models/update-info';
 import {
     CloseErrorPanelAction,
     ShowErrorPanelAction,
@@ -113,7 +111,6 @@ export class MainAppComponent implements OnDestroy {
     newPairedDevicesState: BleAddingState;
     showFirmwareUpgradePanel: boolean;
     showUpdateAvailable: boolean;
-    updateInfo$: Observable<UpdateInfo>;
     deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
@@ -188,7 +185,6 @@ export class MainAppComponent implements OnDestroy {
                 this.showUpdateAvailable = data;
                 this.cdRef.markForCheck();
             });
-        this.updateInfo$ = store.select(getUpdateInfo);
         this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
         this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)

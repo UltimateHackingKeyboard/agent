@@ -1,15 +1,19 @@
 <div class="app-update-available-wrapper" role="alert">
-        A new Agent version has been <span *ngIf="updateInfo.isPrerelease">pre-</span>released.
+    A new Agent update is available.
 
-        <button type="button"
-                class="btn btn-link text-underline"
-                (click)="updateApp.emit()" >Update now!</button>
+    <a [href]="agentChangelogUrl"
+       class="btn btn-link text-underline"
+       externalUrl>Review changelog</a>
 
-        <button type="button"
-                class="btn btn-link float-end"
-                data-dismiss="alert"
-                aria-label="Close"
-                (click)="doNotUpdateApp.emit()">
-            <span aria-hidden="true">&times;</span>
-        </button>
+    <button type="button"
+            class="btn btn-link text-underline"
+            (click)="updateApp.emit()">Update</button>
+
+    <button type="button"
+            class="btn btn-link float-end"
+            data-dismiss="alert"
+            aria-label="Close"
+            (click)="doNotUpdateApp.emit()">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>

@@ -1,32 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
-import { first, map, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { ERR_UPDATER_INVALID_SIGNATURE, LogService, NotificationType } from 'uhk-common';
 
 import {
     ActionTypes,
+    ClearUpdateAvailabilityAction,
     ForceUpdateAction,
     InvalidCodesignSignatureAction,
+    ResetUpdateDismissAction,
     UpdateAppAction,
     UpdateAvailableAction,
+    UpdateDownloadedAction,
     UpdateErrorAction
 } from '../actions/app-update.action';
 import { ActionTypes as AutoUpdateActionTypes, CheckForUpdateNowAction } from '../actions/auto-update-settings';
 import { ShowNotificationAction } from '../actions/app';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { AppState, isForceUpdate } from '../index';
+import { AppState, isForceUpdate, isUpdateDownloaded, isUpdateRequested } from '../index';
 
 @Injectable()
 export class AppUpdateEffect {
-    appStart$ = createEffect(() => this.actions$
+    updateApp$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.UpdateApp),
-            first(),
-            tap(() => {
-                this.appUpdateRendererService.sendUpdateAndRestartApp();
+            withLatestFrom(this.store.select(isUpdateDownloaded)),
+            tap(([, updateDownloaded]) => {
+                if (updateDownloaded) {
+                    this.appUpdateRendererService.sendUpdateAndRestartApp();
+                } else {
+                    this.appUpdateRendererService.downloadUpdate();
+                }
             })
         ),
     { dispatch: false }
@@ -35,6 +41,7 @@ export class AppUpdateEffect {
     checkForUpdate$ = createEffect(() => this.actions$
         .pipe(
             ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CheckForUpdateNow),
+            tap(() => this.store.dispatch(new ResetUpdateDismissAction())),
             map(action => action.payload),
             tap((allowPrerelease: boolean) => {
                 this.logService.misc('[AppUpdateEffect] call checkForUpdate');
@@ -55,19 +62,29 @@ export class AppUpdateEffect {
     { dispatch: false }
     );
 
-    updateAvailable$ = createEffect(() => this.actions$
+    forceUpdateDownload$ = createEffect(() => this.actions$
         .pipe(
             ofType<UpdateAvailableAction>(ActionTypes.UpdateAvailable),
             withLatestFrom(this.store.select(isForceUpdate)),
-            map(([, forceUpdate]) => {
+            tap(([, forceUpdate]) => {
                 if (forceUpdate) {
-                    return new UpdateAppAction();
+                    this.appUpdateRendererService.downloadUpdate();
                 }
-
-                return EMPTY;
             })
         ),
     { dispatch: false }
+    );
+
+    autoInstallAfterDownload$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<UpdateDownloadedAction>(ActionTypes.UpdateDownloaded),
+            withLatestFrom(
+                this.store.select(isForceUpdate),
+                this.store.select(isUpdateRequested)
+            ),
+            filter(([, forceUpdate, updateRequested]) => forceUpdate || updateRequested),
+            map(() => new UpdateAppAction())
+        )
     );
 
     handleError$ = createEffect(() => this.actions$

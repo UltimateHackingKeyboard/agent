@@ -10,7 +10,9 @@ export enum ActionTypes {
     DoNotUpdateApp = '[app-update] do not update app',
     UpdateDownloaded = '[app-update] update downloaded',
     Updating = '[app-update] updating',
-    UpdateError = '[app-update] error'
+    UpdateError = '[app-update] error',
+    ResetUpdateDismiss = '[app-update] reset update dismiss',
+    ClearUpdateAvailability = '[app-update] clear update availability',
 }
 
 export class ForceUpdateAction implements Action {
@@ -23,6 +25,9 @@ export class InvalidCodesignSignatureAction implements Action {
 
 export class UpdateAvailableAction implements Action {
     type = ActionTypes.UpdateAvailable;
+
+    constructor(public payload: UpdateInfo) {
+    }
 }
 
 export class UpdateAppAction implements Action {
@@ -31,6 +36,14 @@ export class UpdateAppAction implements Action {
 
 export class DoNotUpdateAppAction implements Action {
     type = ActionTypes.DoNotUpdateApp;
+}
+
+export class ResetUpdateDismissAction implements Action {
+    type = ActionTypes.ResetUpdateDismiss;
+}
+
+export class ClearUpdateAvailabilityAction implements Action {
+    type = ActionTypes.ClearUpdateAvailability;
 }
 
 export class UpdateDownloadedAction implements Action {
@@ -52,10 +65,13 @@ export class UpdateErrorAction implements Action {
 }
 
 export type Actions
-    = UpdateAvailableAction
+    = ForceUpdateAction
+    | UpdateAvailableAction
     | InvalidCodesignSignatureAction
     | UpdateAppAction
     | DoNotUpdateAppAction
+    | ResetUpdateDismissAction
+    | ClearUpdateAvailabilityAction
     | UpdateDownloadedAction
     | UpdatingAction
     | UpdateErrorAction;

@@ -4,7 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { IpcEvents, LogService } from 'uhk-common';
 import { UpdateInfo } from '../models/update-info';
 import { AppState } from '../store';
-import { UpdateDownloadedAction, UpdateErrorAction } from '../store/actions/app-update.action';
+import { UpdateAvailableAction, ClearUpdateAvailabilityAction, UpdateDownloadedAction, UpdateErrorAction } from '../store/actions/app-update.action';
 import { CheckForUpdateFailedAction, CheckForUpdateSuccessAction } from '../store/actions/auto-update-settings';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 
@@ -34,6 +34,10 @@ export class AppUpdateRendererService {
         this.ipcRenderer.send(IpcEvents.autoUpdater.updateAndRestart);
     }
 
+    downloadUpdate(): void {
+        this.ipcRenderer.send(IpcEvents.autoUpdater.downloadUpdate);
+    }
+
     checkForUpdate(allowPrerelease: boolean): void {
         this.ipcRenderer.send(IpcEvents.autoUpdater.checkForUpdate, allowPrerelease);
     }
@@ -42,10 +46,12 @@ export class AppUpdateRendererService {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.ipcRenderer.on(IpcEvents.autoUpdater.updateAvailable, (event: string, arg: any) => {
             this.logService.misc(IpcEvents.autoUpdater.updateAvailable, arg);
+            this.dispatchStoreAction(new UpdateAvailableAction(arg));
         });
 
         this.ipcRenderer.on(IpcEvents.autoUpdater.updateNotAvailable, () => {
             this.logService.misc(IpcEvents.autoUpdater.updateNotAvailable);
+            this.dispatchStoreAction(new ClearUpdateAvailabilityAction());
             this.dispatchStoreAction(new CheckForUpdateSuccessAction('No update available'));
         });
 
