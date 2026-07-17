@@ -29,6 +29,7 @@ export enum ActionTypes {
     SetupPermissionError = '[app] Setup permission error',
     ToggleAnimationEnabled = '[app] Toggle animation enabled',
     ToggleKeyboardHalvesAlwaysJoined = '[app] Toggle keyboard halves always joined',
+    ToggleMinimizeToTray = '[app] Toggle minimize to tray',
     SetAppTheme = '[app] Set application theme',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
@@ -173,6 +174,13 @@ export class ToggleKeyboardHalvesAlwaysJoinedAction implements Action {
     }
 }
 
+export class ToggleMinimizeToTrayAction implements Action {
+    type = ActionTypes.ToggleMinimizeToTray;
+
+    constructor(public payload: boolean) {
+    }
+}
+
 export class SetAppThemeAction implements Action {
     type = ActionTypes.SetAppTheme;
 
@@ -235,6 +243,7 @@ export type Actions
     | SetupPermissionErrorAction
     | ToggleAnimationEnabledAction
     | ToggleKeyboardHalvesAlwaysJoinedAction
+    | ToggleMinimizeToTrayAction
     | SetAppThemeAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction

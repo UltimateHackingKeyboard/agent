@@ -60,6 +60,7 @@ export class ApplicationEffects {
                             everAttemptedSavingToKeyboard: false,
                             animationEnabled: true,
                             keyboardHalvesAlwaysJoined: false,
+                            minimizeToTray: false,
                             ...appSettings
                         };
 
@@ -146,6 +147,7 @@ export class ApplicationEffects {
                 ActionTypes.SetAppTheme,
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,
+                ActionTypes.ToggleMinimizeToTray,
                 AdvanceSettingsActionTypes.toggleAlwaysEnableAdvancedMode,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration,

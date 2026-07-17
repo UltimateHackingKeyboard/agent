@@ -21,6 +21,7 @@ import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 import { SmartMacroDocService } from './services/smart-macro-doc.service';
+import { TrayService } from './services/tray.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
@@ -58,6 +59,7 @@ let appService: AppService;
 let sudoService: SudoService;
 let packagesDir: string;
 let smartMacroDocService: SmartMacroDocService;
+let trayService: TrayService;
 
 let areServicesInited = false;
 
@@ -89,6 +91,7 @@ async function createWindow() {
 
     logger.misc('[Electron Main] Create new window.');
 
+    const iconPath = path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png');
     const loadedWindowState = loadWindowState(logger);
     if(!smartMacroDocService.isRunning) {
         await smartMacroDocService.start();
@@ -106,10 +109,13 @@ async function createWindow() {
             spellcheck: false,
             preload: path.join(import.meta.dirname, 'preload.js')
         },
-        icon: path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png'),
+        icon: iconPath,
         backgroundColor: await getWindowBackgroundColor(),
         show: false
     });
+
+    trayService = new TrayService(logger, iconPath);
+    trayService.init(win);
 
     if (loadedWindowState.isFullScreen) {
         win.setFullScreen(true);
@@ -143,7 +149,11 @@ async function createWindow() {
     });
 
     win.once('ready-to-show', () => {
-        win.show();
+        if (options['start-minimized-to-tray']) {
+            trayService.startInTray();
+        } else {
+            win.show();
+        }
     });
 
     win.webContents.on('did-finish-load', () => {
@@ -273,6 +283,10 @@ if (isSecondInstance) {
         app.exit();
     });
 
+    app.on('before-quit', () => {
+        trayService?.markQuitting();
+    });
+
     app.on('will-quit', () => {
     });
 
@@ -284,16 +298,15 @@ if (isSecondInstance) {
                 .catch((error) => {
                     logger.error('[Electron Main] when activating the app: ', error);
                 });
+        } else if (!win.isVisible()) {
+            trayService.showWindow();
         }
     });
 
     app.on('second-instance', () => {
         // Someone tried to run a second instance, we should focus our window.
         if (win) {
-            if (win.isMinimized()) {
-                win.restore();
-            }
-            win.focus();
+            trayService.showWindow();
         }
     });
 }

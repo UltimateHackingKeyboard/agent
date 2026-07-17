@@ -20,6 +20,7 @@ const DEFAULT_ERROR_PANEL_HEIGHT = 10;
 export interface State {
     appTheme: AppTheme;
     animationEnabled: boolean;
+    minimizeToTray: boolean;
     errorPanelHeight: number;
     isRunningOnWayland: boolean;
     started: boolean;
@@ -43,6 +44,7 @@ export interface State {
 export const initialState: State = {
     appTheme: AppTheme.System,
     animationEnabled: true,
+    minimizeToTray: false,
     errorPanelHeight: DEFAULT_ERROR_PANEL_HEIGHT,
     isRunningOnWayland: false,
     started: false,
@@ -207,7 +209,8 @@ export function reducer(
                 errorPanelHeight: settings.errorPanelHeight || DEFAULT_ERROR_PANEL_HEIGHT,
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
                 animationEnabled: settings.animationEnabled,
-                appTheme: settings.appTheme || AppTheme.System
+                appTheme: settings.appTheme || AppTheme.System,
+                minimizeToTray: settings.minimizeToTray ?? false,
             };
         }
 
@@ -221,6 +224,12 @@ export function reducer(
             return {
                 ...state,
                 animationEnabled: (action as App.ToggleAnimationEnabledAction).payload
+            };
+
+        case App.ActionTypes.ToggleMinimizeToTray:
+            return {
+                ...state,
+                minimizeToTray: (action as App.ToggleMinimizeToTrayAction).payload
             };
 
         case App.ActionTypes.SetAppTheme:
@@ -266,6 +275,7 @@ export const keypressCapturing = (state: State): boolean => state.keypressCaptur
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
 export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;
+export const getMinimizeToTray = (state: State): boolean => state.minimizeToTray;
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
 export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;
 export const getPlatform = (state: State): string => state.platform;

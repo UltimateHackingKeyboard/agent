@@ -202,6 +202,7 @@ export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindow
 export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp.getEverAttemptedSavingToKeyboard);
 export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
 export const getAnimationEnabled = createSelector(appState, fromApp.getAnimationEnabled);
+export const getMinimizeToTray = createSelector(appState, fromApp.getMinimizeToTray);
 export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
 export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeColors => {
     return  defaultUhkThemeColors(theme);
@@ -849,6 +850,7 @@ export const getApplicationSettings = createSelector(
             appTheme: app.appTheme,
             backlightingColorPalette,
             keyboardHalvesAlwaysJoined,
+            minimizeToTray: app.minimizeToTray,
             alwaysEnableAdvancedMode,
             smartMacroPanelWidth
         };
