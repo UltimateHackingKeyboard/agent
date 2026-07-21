@@ -149,11 +149,15 @@ async function createWindow() {
     });
 
     win.once('ready-to-show', () => {
-        if (options['start-minimized-to-tray']) {
-            trayService.startInTray();
-        } else {
-            win.show();
-        }
+        void (async () => {
+            await trayService.initTrayIfEnabled();
+
+            if (options['start-minimized-to-tray']) {
+                trayService.startInTray();
+            } else {
+                win.show();
+            }
+        })();
     });
 
     win.webContents.on('did-finish-load', () => {

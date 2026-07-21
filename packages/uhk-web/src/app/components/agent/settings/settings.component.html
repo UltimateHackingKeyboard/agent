@@ -18,6 +18,11 @@
                    (change)="toggleMinimizeToTray($event.target.checked)"
             > Minimize to system tray
         </label>
+        <circle-tooltip
+            *ngIf="isLinux$ | async"
+            [tooltip]="minimizeToTrayTooltip"
+            width="300"
+        />
     </div>
 </div>
 
@@ -82,4 +87,8 @@
 
 <ng-template #systemThemeTooltip>
     <p class="text-start mb-0">The <strong>Follow operating system theme</strong> option may not be supported on all Linux distributions.</p>
+</ng-template>
+
+<ng-template #minimizeToTrayTooltip>
+    <p class="text-start mb-0">On Linux, disabling this option stops minimize-to-tray behaviour immediately, but the tray icon may remain visible until Agent is restarted.</p>
 </ng-template>

@@ -26,6 +26,7 @@ import {
     SaveApplicationSettingsSuccessAction,
     SetAppThemeAction,
     ShowNotificationAction,
+    ToggleMinimizeToTrayAction,
     UndoLastAction
 } from '../actions/app';
 import { ActionTypes as UpdateActionTypes } from '../actions/auto-update-settings';
@@ -172,6 +173,20 @@ export class ApplicationEffects {
                 if ((window as any).setUhkTheme) {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (window as any).setUhkTheme(theme);
+                }
+            })
+        ),
+    { dispatch: false }
+    );
+
+    minimizeToTrayChanged$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<ToggleMinimizeToTrayAction>(ActionTypes.ToggleMinimizeToTray),
+            map(action => action.payload),
+            withLatestFrom(this.store.select(runningInElectron)),
+            tap(([enabled, inElectron]) => {
+                if (inElectron) {
+                    this.appRendererService.setMinimizeToTray(enabled);
                 }
             })
         ),
