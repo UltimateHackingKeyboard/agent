@@ -11,7 +11,7 @@
   },
   "license": "See in LICENSE",
   "dependencies": {
-    "@fastify/static": "9.1.3",
+    "@fastify/static": "10.1.2",
     "@vscode/sudo-prompt": "9.3.2",
     "command-line-args": "6.0.2",
     "command-line-usage": "7.0.4",
