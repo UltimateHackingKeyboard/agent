@@ -13,6 +13,7 @@ export enum ActionTypes {
     UpdateError = '[app-update] error',
     ResetUpdateDismiss = '[app-update] reset update dismiss',
     ClearUpdateAvailability = '[app-update] clear update availability',
+    UpdateDownloadProgress = '[app-update] update download progress',
 }
 
 export class ForceUpdateAction implements Action {
@@ -53,6 +54,13 @@ export class UpdateDownloadedAction implements Action {
     }
 }
 
+export class UpdateDownloadProgressAction implements Action {
+    type = ActionTypes.UpdateDownloadProgress;
+
+    constructor(public payload: number) {
+    }
+}
+
 export class UpdatingAction implements Action {
     type = ActionTypes.Updating;
 }
@@ -73,5 +81,6 @@ export type Actions
     | ResetUpdateDismissAction
     | ClearUpdateAvailabilityAction
     | UpdateDownloadedAction
+    | UpdateDownloadProgressAction
     | UpdatingAction
     | UpdateErrorAction;

@@ -19,6 +19,7 @@ import {
     getNewPairedDevicesState,
     getErrorPanelHeight,
     getShowAppUpdateAvailable,
+    getAppUpdateNotificationViewModel,
     getParsedStatusBuffer,
     deviceConfigurationLoaded,
     runningInElectron,
@@ -32,6 +33,7 @@ import {
 import { StartDonglePairingAction } from './store/actions/dongle-pairing.action';
 import { AddNewPairedDevicesToHostConnectionsAction } from './store/actions/user-config';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
+import { AppUpdateNotificationViewModel } from './models/app-update-notification-view-model';
 import {
     CloseErrorPanelAction,
     ShowErrorPanelAction,
@@ -111,6 +113,7 @@ export class MainAppComponent implements OnDestroy {
     newPairedDevicesState: BleAddingState;
     showFirmwareUpgradePanel: boolean;
     showUpdateAvailable: boolean;
+    appUpdateNotification$: Observable<AppUpdateNotificationViewModel>;
     deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
@@ -185,6 +188,7 @@ export class MainAppComponent implements OnDestroy {
                 this.showUpdateAvailable = data;
                 this.cdRef.markForCheck();
             });
+        this.appUpdateNotification$ = store.select(getAppUpdateNotificationViewModel);
         this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
         this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)

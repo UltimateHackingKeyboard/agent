@@ -1,12 +1,17 @@
 import * as AppUpdate from '../actions/app-update.action';
 import { UpdateInfo } from '../../models/update-info';
-import { UpdateAvailableAction, UpdateDownloadedAction } from '../actions/app-update.action';
+import {
+    UpdateAvailableAction,
+    UpdateDownloadedAction,
+    UpdateDownloadProgressAction
+} from '../actions/app-update.action';
 
 export interface State {
     forceUpdate: boolean;
     updateAvailable: boolean;
     updateDownloaded: boolean;
     updateRequested: boolean;
+    downloadProgressPercent: number | null;
     doNotUpdateApp: boolean;
     updateInfo: UpdateInfo;
 }
@@ -16,6 +21,7 @@ export const initialState: State = {
     updateAvailable: false,
     updateDownloaded: false,
     updateRequested: false,
+    downloadProgressPercent: null,
     doNotUpdateApp: false,
     updateInfo: {
         isPrerelease: false,
@@ -37,7 +43,8 @@ export function reducer(state = initialState, action: AppUpdate.Actions) {
                 ...state,
                 updateAvailable: false,
                 updateDownloaded: false,
-                updateRequested: false
+                updateRequested: false,
+                downloadProgressPercent: null
             };
 
         case AppUpdate.ActionTypes.ForceUpdate:
@@ -56,13 +63,21 @@ export function reducer(state = initialState, action: AppUpdate.Actions) {
         case AppUpdate.ActionTypes.UpdateApp:
             return {
                 ...state,
-                updateRequested: !state.updateDownloaded
+                updateRequested: !state.updateDownloaded,
+                downloadProgressPercent: state.updateDownloaded ? state.downloadProgressPercent : null
+            };
+
+        case AppUpdate.ActionTypes.UpdateDownloadProgress:
+            return {
+                ...state,
+                downloadProgressPercent: (action as UpdateDownloadProgressAction).payload
             };
 
         case AppUpdate.ActionTypes.UpdateDownloaded:
             return {
                 ...state,
                 updateDownloaded: true,
+                downloadProgressPercent: null,
                 updateInfo: (action as UpdateDownloadedAction).payload ?? initialState.updateInfo
             };
 
@@ -75,7 +90,8 @@ export function reducer(state = initialState, action: AppUpdate.Actions) {
         case AppUpdate.ActionTypes.UpdateError:
             return {
                 ...state,
-                updateRequested: false
+                updateRequested: false,
+                downloadProgressPercent: null
             };
 
         default:
@@ -89,3 +105,5 @@ export const getUpdateInfo = (state: State) => state.updateInfo;
 export const isForceUpdate = (state: State) => state.forceUpdate;
 export const isUpdateRequested = (state: State) => state.updateRequested;
 export const isUpdateDownloaded = (state: State) => state.updateDownloaded;
+export const getDownloadProgressPercent = (state: State) => state.downloadProgressPercent;
+export const isUpdateDownloading = (state: State) => state.updateRequested && !state.updateDownloaded;

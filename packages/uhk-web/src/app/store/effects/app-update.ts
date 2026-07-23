@@ -18,7 +18,7 @@ import {
 import { ActionTypes as AutoUpdateActionTypes, CheckForUpdateNowAction } from '../actions/auto-update-settings';
 import { ShowNotificationAction } from '../actions/app';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { AppState, isForceUpdate, isUpdateDownloaded, isUpdateRequested } from '../index';
+import { AppState, isForceUpdate, isUpdateDownloaded } from '../index';
 
 @Injectable()
 export class AppUpdateEffect {
@@ -77,11 +77,8 @@ export class AppUpdateEffect {
     autoInstallAfterDownload$ = createEffect(() => this.actions$
         .pipe(
             ofType<UpdateDownloadedAction>(ActionTypes.UpdateDownloaded),
-            withLatestFrom(
-                this.store.select(isForceUpdate),
-                this.store.select(isUpdateRequested)
-            ),
-            filter(([, forceUpdate, updateRequested]) => forceUpdate || updateRequested),
+            withLatestFrom(this.store.select(isForceUpdate)),
+            filter(([, forceUpdate]) => forceUpdate),
             map(() => new UpdateAppAction())
         )
     );

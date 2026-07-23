@@ -1,17 +1,42 @@
 <div class="app-update-available-wrapper" role="alert">
-    A new Agent update is available.
+    <div class="update-available-row">
+        <span>A new Agent update is available.</span>
 
-    <a href="https://github.com/UltimateHackingKeyboard/agent/blob/master/CHANGELOG.md"
-       class="btn btn-link text-underline"
-       externalUrl>Review changelog</a>
+        <a href="https://github.com/UltimateHackingKeyboard/agent/blob/master/CHANGELOG.md"
+           externalUrl>Review changelog</a>
+
+        <button *ngIf="!notification.updateDownloaded && !notification.isDownloading"
+                type="button"
+                class="update-action"
+                (click)="updateApp.emit()">Download update</button>
+
+        <span *ngIf="notification.isDownloading">
+            Downloading… {{ notification.downloadProgressPercent ?? 0 }}%
+        </span>
+
+        <button *ngIf="notification.updateDownloaded && !notification.hasUnsavedChanges"
+                type="button"
+                class="update-action"
+                (click)="updateApp.emit()">Finish update</button>
+    </div>
+
+    <div *ngIf="notification.updateDownloaded && notification.hasUnsavedChanges"
+         class="update-available-row">
+        <span>Unsaved changes will be lost when Agent restarts.</span>
+
+        <button type="button"
+                class="update-action"
+                mwlConfirmationPopover
+                popoverTitle="Agent will restart to finish the update. Save your configuration to the keyboard first if you want to keep your changes."
+                placement="bottom"
+                confirmText="Finish update"
+                cancelText="Cancel"
+                (click)="$event.preventDefault()"
+                (confirm)="updateApp.emit()">Finish update</button>
+    </div>
 
     <button type="button"
-            class="btn btn-link text-underline"
-            (click)="updateApp.emit()">Update</button>
-
-    <button type="button"
-            class="btn btn-link float-end"
-            data-dismiss="alert"
+            class="update-action dismiss"
             aria-label="Close"
             (click)="doNotUpdateApp.emit()">
         <span aria-hidden="true">&times;</span>

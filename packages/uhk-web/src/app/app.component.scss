@@ -61,6 +61,10 @@ app-update-available {
     left: 0;
     right: 0;
     z-index: 1000;
+
+    &.two-line {
+        height: $main-content-top-margin-on-update-two-line;
+    }
 }
 
 .show-error-panel-button {
@@ -108,6 +112,15 @@ app-update-available {
     top: $main-content-top-margin-on-update;
 }
 
+.top-notification-panel-visible:has(app-update-available.two-line) .secondary-menu-wrapper,
+.top-notification-panel-visible:has(app-update-available.two-line) side-menu {
+    top: $main-content-top-margin-on-update-two-line;
+}
+
 .top-notification-panel-visible .inner-content {
     padding-top: $main-content-top-margin-on-update;
+}
+
+.top-notification-panel-visible:has(app-update-available.two-line) .inner-content {
+    padding-top: $main-content-top-margin-on-update-two-line;
 }
