@@ -7,7 +7,6 @@ import { ERR_UPDATER_INVALID_SIGNATURE, LogService, NotificationType } from 'uhk
 
 import {
     ActionTypes,
-    ClearUpdateAvailabilityAction,
     ForceUpdateAction,
     InvalidCodesignSignatureAction,
     ResetUpdateDismissAction,
@@ -41,9 +40,9 @@ export class AppUpdateEffect {
     checkForUpdate$ = createEffect(() => this.actions$
         .pipe(
             ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CheckForUpdateNow),
-            tap(() => this.store.dispatch(new ResetUpdateDismissAction())),
             map(action => action.payload),
             tap((allowPrerelease: boolean) => {
+                this.store.dispatch(new ResetUpdateDismissAction());
                 this.logService.misc('[AppUpdateEffect] call checkForUpdate');
                 this.appUpdateRendererService.checkForUpdate(allowPrerelease);
             })

@@ -8,9 +8,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpdateAvailableComponent {
-    protected readonly agentChangelogUrl =
-        'https://github.com/UltimateHackingKeyboard/agent/blob/master/CHANGELOG.md';
-
     @Output() updateApp = new EventEmitter<null>();
     @Output() doNotUpdateApp = new EventEmitter<null>();
 }

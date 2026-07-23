@@ -89,7 +89,10 @@ export class AppUpdateService extends MainServiceBase {
 
         ipcMain.on(IpcEvents.autoUpdater.downloadUpdate, () => {
             this.logService.misc('[AppUpdateService] download update from renderer process');
-            this.downloadUpdate();
+            autoUpdater.downloadUpdate()
+                .catch((error) => {
+                    this.logService.error('[AppUpdateService] Error when downloading update: ', error);
+                });
         });
 
         ipcMain.on(IpcEvents.app.appStarted, () => {
@@ -132,13 +135,6 @@ export class AppUpdateService extends MainServiceBase {
             })
             .catch(error => {
                 this.logService.error('[AppUpdateService] checkForUpdate error:', error);
-            });
-    }
-
-    private downloadUpdate(): void {
-        autoUpdater.downloadUpdate()
-            .catch((error) => {
-                this.logService.error('[AppUpdateService] Error when downloading update: ', error);
             });
     }
 
