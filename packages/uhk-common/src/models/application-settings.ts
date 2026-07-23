@@ -1,3 +1,4 @@
+import { MacroGroupingSettings } from './macro-grouping-settings.js';
 import { RgbColorInterface } from './rgb-color-interface.js';
 
 export enum AppTheme {
@@ -38,4 +39,8 @@ export interface ApplicationSettings {
      * If true, the Advanced settings menu is shown on Agent startup.
      */
     alwaysEnableAdvancedMode?: boolean;
+    /**
+     * Sidebar macro grouping preferences.
+     */
+    macroGrouping?: Partial<MacroGroupingSettings>;
 }

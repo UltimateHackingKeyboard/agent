@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, Notification } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, MacroGroupingSettings, Notification } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 import { NavigationPayload } from '../../models';
 
@@ -29,6 +29,7 @@ export enum ActionTypes {
     SetupPermissionError = '[app] Setup permission error',
     ToggleAnimationEnabled = '[app] Toggle animation enabled',
     ToggleKeyboardHalvesAlwaysJoined = '[app] Toggle keyboard halves always joined',
+    SetMacroGroupingSettings = '[app] Set macro grouping settings',
     ToggleMinimizeToTray = '[app] Toggle minimize to tray',
     SetAppTheme = '[app] Set application theme',
     LoadAppStartInfo = '[app] Load app start info',
@@ -174,6 +175,13 @@ export class ToggleKeyboardHalvesAlwaysJoinedAction implements Action {
     }
 }
 
+export class SetMacroGroupingSettingsAction implements Action {
+    type = ActionTypes.SetMacroGroupingSettings;
+
+    constructor(public payload: Partial<MacroGroupingSettings>) {
+    }
+}
+
 export class ToggleMinimizeToTrayAction implements Action {
     type = ActionTypes.ToggleMinimizeToTray;
 
@@ -243,6 +251,7 @@ export type Actions
     | SetupPermissionErrorAction
     | ToggleAnimationEnabledAction
     | ToggleKeyboardHalvesAlwaysJoinedAction
+    | SetMacroGroupingSettingsAction
     | ToggleMinimizeToTrayAction
     | SetAppThemeAction
     | LoadAppStartInfoAction

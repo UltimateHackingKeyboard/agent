@@ -4,6 +4,9 @@
 $level-0-item-spacing: 0.5rem 0.5rem;
 $level-1-item-spacing: 0.25rem 1rem 0.25rem 1.5rem;
 $level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
+$macro-tree-base-indent: 2rem;
+$macro-tree-indent-step: 0.75rem;
+// Keep MACRO_GROUPING_MAX_DEPTH in util/group-macros-by-name.ts in sync with these layout values.
 
 :host {
     background-color: var(--color-sidemenu-bg);
@@ -139,10 +142,73 @@ ul {
         }
     }
 
+    // Indentation is purely structural: it comes from the nested <ul> lists, not
+    // from any per-leaf padding. The root list supplies the base indent and each
+    // nested group list adds one step, so depth accumulates through the DOM.
+    &__macro-tree-entry {
+        padding: 0.125rem 0;
+    }
+
+    &__macro-tree {
+        width: auto;
+        margin-left: $macro-tree-base-indent;
+    }
+
+    &__macro-group-children {
+        width: auto;
+        padding-left: $macro-tree-indent-step;
+        border-left: 1px solid silver;
+    }
+
+    &__macro-tree-item {
+        position: relative;
+
+        &.active,
+        .active {
+            background-color: var(--color-sidemenu-active-bg);
+            color: var(--color-sidemenu-active-text);
+
+            a {
+                color: var(--color-sidemenu-active-text);
+            }
+
+            &:hover {
+                background-color: var(--color-sidemenu-active-bg);
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            width: 100%;
+
+            &.disabled {
+                opacity: 0.65;
+            }
+        }
+    }
+
+    &__macro-group {
+        cursor: pointer;
+        font-weight: 500;
+
+        &-arrow {
+            float: right;
+            font-size: 0.65rem;
+            line-height: inherit;
+            margin-right: 0.25rem;
+            opacity: 0.45;
+        }
+    }
+
     // General hover over menu items.
     &__level-0,
     &__level-1,
-    &__level-2 {
+    &__level-2,
+    &__macro-tree-entry {
         &:hover {
             background-color: var(--color-hover-link-color);
 

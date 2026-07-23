@@ -2,14 +2,18 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
     AppTheme,
     CommandLineArgs,
+    DEFAULT_MACRO_GROUPING_SETTINGS,
     disableAgentUpgradeProtection,
     HardwareConfiguration,
     KeyboardLayout,
+    MacroGroupingSettings,
     Notification,
     NotificationType,
     runInElectron,
     UserConfiguration,
 } from 'uhk-common';
+
+import { normalizeMacroGroupingSettings } from '../../util/group-macros-by-name';
 
 import * as App from '../actions/app';
 import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } from '../actions/user-config';
@@ -38,6 +42,7 @@ export interface State {
     osVersion?: string;
     keypressCapturing: boolean;
     everAttemptedSavingToKeyboard: boolean;
+    macroGrouping: MacroGroupingSettings;
     udevFileContent: string;
 }
 
@@ -56,6 +61,7 @@ export const initialState: State = {
     privilegeWhatWillThisDoClicked: false,
     keypressCapturing: false,
     everAttemptedSavingToKeyboard: false,
+    macroGrouping: DEFAULT_MACRO_GROUPING_SETTINGS,
     udevFileContent: ''
 };
 
@@ -210,6 +216,7 @@ export function reducer(
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
                 animationEnabled: settings.animationEnabled,
                 appTheme: settings.appTheme || AppTheme.System,
+                macroGrouping: normalizeMacroGroupingSettings(settings.macroGrouping),
                 minimizeToTray: settings.minimizeToTray ?? false,
             };
         }
@@ -224,6 +231,15 @@ export function reducer(
             return {
                 ...state,
                 animationEnabled: (action as App.ToggleAnimationEnabledAction).payload
+            };
+
+        case App.ActionTypes.SetMacroGroupingSettings:
+            return {
+                ...state,
+                macroGrouping: normalizeMacroGroupingSettings({
+                    ...state.macroGrouping,
+                    ...(action as App.SetMacroGroupingSettingsAction).payload
+                })
             };
 
         case App.ActionTypes.ToggleMinimizeToTray:
@@ -275,6 +291,7 @@ export const keypressCapturing = (state: State): boolean => state.keypressCaptur
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
 export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;
+export const getMacroGroupingSettings = (state: State): MacroGroupingSettings => state.macroGrouping;
 export const getMinimizeToTray = (state: State): boolean => state.minimizeToTray;
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
 export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;

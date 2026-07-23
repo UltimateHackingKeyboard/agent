@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-import { AppTheme, AppThemeSelect } from 'uhk-common';
+import { AppTheme, AppThemeSelect, MacroGroupingSettings } from 'uhk-common';
 import {
     AppState,
     appUpdateSettingsState,
@@ -12,11 +12,13 @@ import {
     getAnimationEnabled,
     getAppTheme,
     getIsAdvancedSettingsMenuVisible,
+    getMacroGroupingSettings,
     getMinimizeToTray,
     getOperatingSystem,
     getSupportedThemes,
     keyboardHalvesAlwaysJoined,
 } from '../../../store';
+import { MACRO_GROUPING_MAX_DEPTH } from '../../../util/group-macros-by-name';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,
@@ -25,6 +27,7 @@ import {
 import {
     OpenConfigFolderAction,
     SetAppThemeAction,
+    SetMacroGroupingSettingsAction,
     ToggleAnimationEnabledAction,
     ToggleKeyboardHalvesAlwaysJoinedAction,
     ToggleMinimizeToTrayAction,
@@ -52,6 +55,8 @@ export class SettingsComponent {
     keyboardHalvesAlwaysJoined$: Observable<boolean>;
     alwaysEnableAdvancedMode$: Observable<boolean>;
     alwaysEnableAdvancedModeSettingVisible$: Observable<boolean>;
+    macroGroupingSettings$: Observable<MacroGroupingSettings>;
+    macroGroupingMaxDepth = MACRO_GROUPING_MAX_DEPTH;
 
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
@@ -63,6 +68,7 @@ export class SettingsComponent {
         this.keyboardHalvesAlwaysJoined$ = store.select(keyboardHalvesAlwaysJoined);
         this.alwaysEnableAdvancedMode$ = store.select(getAlwaysEnableAdvancedMode);
         this.alwaysEnableAdvancedModeSettingVisible$ = store.select(getIsAdvancedSettingsMenuVisible);
+        this.macroGroupingSettings$ = store.select(getMacroGroupingSettings);
     }
 
     openConfigFolder(): void {
@@ -95,6 +101,10 @@ export class SettingsComponent {
 
     toggleAlwaysEnableAdvancedMode(enabled: boolean): void {
         this.store.dispatch(new ToggleAlwaysEnableAdvancedModeAction(enabled));
+    }
+
+    updateMacroGroupingSettings(settings: Partial<MacroGroupingSettings>): void {
+        this.store.dispatch(new SetMacroGroupingSettingsAction(settings));
     }
 
 }

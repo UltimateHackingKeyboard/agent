@@ -45,6 +45,7 @@ import {
     FirmwareUpgradeState,
     HistoryFileInfo,
     MacroMenuItem,
+    MacroMenuTreeNode,
     ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
     OutOfSpaceWarningType,
@@ -58,6 +59,7 @@ import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
 import { defaultUhkThemeColors } from '../util/default-uhk-theme-colors';
 import { escapeHtml } from '../util/escape-html';
+import { groupMacrosByName } from '../util/group-macros-by-name';
 import { parseStatusBuffer } from '../util/status-buffer-parser';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 
@@ -202,6 +204,7 @@ export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindow
 export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp.getEverAttemptedSavingToKeyboard);
 export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
 export const getAnimationEnabled = createSelector(appState, fromApp.getAnimationEnabled);
+export const getMacroGroupingSettings = createSelector(appState, fromApp.getMacroGroupingSettings);
 export const getMinimizeToTray = createSelector(appState, fromApp.getMinimizeToTray);
 export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
 export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeColors => {
@@ -572,6 +575,8 @@ export const getSideMenuPageState = createSelector(
     isLeftHalfPairing,
     getRouterState,
     getSelectedKeymap,
+    getSelectedMacro,
+    getMacroGroupingSettings,
     (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
@@ -584,9 +589,12 @@ export const getSideMenuPageState = createSelector(
         donglePairingState,
         leftHalfPairing,
         routerState,
-        selectedKeymap
+        selectedKeymap,
+        selectedMacro,
+        macroGroupingSettings
     ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
+        const macroTree = groupMacrosByName(macros, macroGroupingSettings);
 
         return {
             advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
@@ -598,11 +606,13 @@ export const getSideMenuPageState = createSelector(
             keymapQueryParams: {
                 layer: selectedLayerOption.id
             },
+            macroTree,
             macros,
             maxMacroCountReached: macros.length >= MAX_ALLOWED_MACROS,
             restoreUserConfiguration,
             deviceUiState: runningInElectronValue ? uiState : DeviceUiStates.UserConfigLoaded,
             selectedKeymap: routerState?.state?.url?.startsWith('/keymap') ? selectedKeymap : undefined,
+            selectedMacro,
         };
     }
 );
@@ -835,12 +845,14 @@ export const getApplicationSettings = createSelector(
     backlightingColorPalette,
     keyboardHalvesAlwaysJoined,
     getAlwaysEnableAdvancedMode,
+    getMacroGroupingSettings,
     (updateSettingsState,
         app,
         smartMacroPanelWidth,
         backlightingColorPalette,
         keyboardHalvesAlwaysJoined,
         alwaysEnableAdvancedMode,
+        macroGrouping,
     ): ApplicationSettings => {
         return {
             errorPanelHeight: app.errorPanelHeight,
@@ -852,6 +864,7 @@ export const getApplicationSettings = createSelector(
             keyboardHalvesAlwaysJoined,
             minimizeToTray: app.minimizeToTray,
             alwaysEnableAdvancedMode,
+            macroGrouping,
             smartMacroPanelWidth
         };
     });

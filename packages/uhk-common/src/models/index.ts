@@ -1,4 +1,5 @@
 export * from './application-settings.js';
+export * from './macro-grouping-settings.js';
 export * from './backup-user-configuration.js';
 export * from './backup-user-configuration-info.js';
 export * from './ble-address-pair.js';
