@@ -20,9 +20,9 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@lerna-lite/cli": "5.4.0",
-    "@lerna-lite/exec": "5.4.0",
-    "@lerna-lite/run": "5.4.0",
+    "@lerna-lite/cli": "5.4.1",
+    "@lerna-lite/exec": "5.4.1",
+    "@lerna-lite/run": "5.4.1",
     "@types/command-line-args": "5.2.3",
     "@types/command-line-usage": "5.0.4",
     "@types/decompress": "4.2.7",
