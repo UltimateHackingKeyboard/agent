@@ -36,6 +36,7 @@ import {
 } from 'uhk-common';
 import { environment } from '../../environments/environment';
 import {
+    AppUpdateNotificationViewModel,
     ConfigSizeState,
     DeviceUiStates,
     DongleOperations,
@@ -216,6 +217,8 @@ export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
 export const getUpdateInfo = createSelector(appUpdateState, fromAppUpdate.getUpdateInfo);
 export const isForceUpdate = createSelector(appUpdateState, fromAppUpdate.isForceUpdate);
+export const isUpdateRequested = createSelector(appUpdateState, fromAppUpdate.isUpdateRequested);
+export const isUpdateDownloaded = createSelector(appUpdateState, fromAppUpdate.isUpdateDownloaded);
 
 export const appUpdateSettingsState = (state: AppState) => state.autoUpdateSettings;
 
@@ -420,6 +423,16 @@ export const getOutOfSpaceWaringData = createSelector(getConfigSizesState, getOu
         show: configSizeState.allUsage > configSizeState.capacity
     }));
 export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
+export const getAppUpdateNotificationViewModel = createSelector(
+    appUpdateState,
+    saveToKeyboardStateSelector,
+    (appUpdate, saveToKeyboard): AppUpdateNotificationViewModel => ({
+        updateDownloaded: appUpdate.updateDownloaded,
+        isDownloading: fromAppUpdate.isUpdateDownloading(appUpdate),
+        downloadProgressPercent: appUpdate.downloadProgressPercent,
+        hasUnsavedChanges: saveToKeyboard.showButton,
+    })
+);
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, getOutOfSpaceWaringData,
     (electron, saveToKeyboard, outOfSpaceWarning) => {
         if (!electron) {

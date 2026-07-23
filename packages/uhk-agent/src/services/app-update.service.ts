@@ -46,14 +46,8 @@ export class AppUpdateService extends MainServiceBase {
         });
 
         autoUpdater.on('update-available', (info: UpdateInfo) => {
-            this.logService.misc('[AppUpdateService] update available. Downloading started');
-            autoUpdater.downloadUpdate()
-                .then(() => {
-                    this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
-                })
-                .catch((error) => {
-                    this.logService.error('[AppUpdateService] Error when reporting update available: ', error);
-                });
+            this.logService.misc('[AppUpdateService] update available');
+            this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
         });
 
         autoUpdater.on('update-not-available', (info: UpdateInfo) => {
@@ -93,13 +87,21 @@ export class AppUpdateService extends MainServiceBase {
             return autoUpdater.quitAndInstall(true, true);
         });
 
+        ipcMain.on(IpcEvents.autoUpdater.downloadUpdate, () => {
+            this.logService.misc('[AppUpdateService] download update from renderer process');
+            autoUpdater.downloadUpdate()
+                .catch((error) => {
+                    this.logService.error('[AppUpdateService] Error when downloading update: ', error);
+                });
+        });
+
         ipcMain.on(IpcEvents.app.appStarted, () => {
             this.logService.misc('[AppUpdateService] app started');
             this.checkForUpdateAtStartup()
                 .then((checkForUpdate) => {
                     if (checkForUpdate) {
                         this.sendAutoUpdateNotification = false;
-                        this.logService.misc('[AppUpdateService] app started. Automatically check for update.');
+                        this.logService.misc('[AppUpdateService] app started. Check for new Agent version on startup.');
                         this.checkForUpdate();
                     }
                 })
