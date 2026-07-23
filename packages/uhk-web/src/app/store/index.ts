@@ -574,6 +574,7 @@ export const getSideMenuPageState = createSelector(
     isLeftHalfPairing,
     getRouterState,
     getSelectedKeymap,
+    getSelectedMacro,
     getMacroGroupingSettings,
     (
         runningInElectronValue: boolean,
@@ -588,6 +589,7 @@ export const getSideMenuPageState = createSelector(
         leftHalfPairing,
         routerState,
         selectedKeymap,
+        selectedMacro,
         macroGroupingSettings
     ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
@@ -609,6 +611,7 @@ export const getSideMenuPageState = createSelector(
             restoreUserConfiguration,
             deviceUiState: runningInElectronValue ? uiState : DeviceUiStates.UserConfigLoaded,
             selectedKeymap: routerState?.state?.url?.startsWith('/keymap') ? selectedKeymap : undefined,
+            selectedMacro,
         };
     }
 );

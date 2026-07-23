@@ -30,8 +30,7 @@ import {
 
 import { Store } from '@ngrx/store';
 
-import { combineLatest, Subscription } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
 
 import { AppState, getSelectedMacro, getSideMenuPageState } from '../../store';
@@ -122,19 +121,13 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.stateSubscription = combineLatest([
-            this.store.select(getSideMenuPageState),
-            this.store.select(getSelectedMacro).pipe(
-                map(macro => macro?.id),
-                distinctUntilChanged()
-            )
-        ]).subscribe(([data, selectedMacroId]) => {
+        this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
             this.state = data;
             this.isBatterySettingsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.isConnectionsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.calculateDeviceAnimationState();
-            if (selectedMacroId !== undefined) {
-                this.expandMacroGroupsForMacro(selectedMacroId, data.macroTree);
+            if (data.selectedMacro?.id !== undefined) {
+                this.expandMacroGroupsForMacro(data.selectedMacro.id, data.macroTree);
             }
             this.syncMacroGroupState();
             this.cdRef.markForCheck();

@@ -230,10 +230,9 @@ function splitCamelCaseSegment(segment: string): string[] {
     for (let index = 0; index < segment.length; index++) {
         const character = segment[index];
 
-        if (index > 0
-            && /[A-Z]/.test(character)
-            && current.length > 0
-            && /[a-z0-9]$/.test(current)) {
+        if (current.length > 0
+            && /\p{Lu}/u.test(character)
+            && /[\p{Ll}\p{Nd}]$/u.test(current)) {
             parts.push(current);
             current = character;
         } else {

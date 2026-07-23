@@ -1,5 +1,5 @@
 import { Params } from '@angular/router';
-import { Keymap, UhkDeviceProduct } from 'uhk-common';
+import { Keymap, Macro, UhkDeviceProduct } from 'uhk-common';
 
 import { MacroMenuItem } from './macro-menu-item';
 import { MacroMenuTreeNode } from './macro-menu-tree-node';
@@ -19,4 +19,5 @@ export interface SideMenuPageState {
     deviceUiState?: DeviceUiStates;
     connectedDevice?: UhkDeviceProduct;
     selectedKeymap: Keymap | undefined;
+    selectedMacro: Macro | undefined;
 }
