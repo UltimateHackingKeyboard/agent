@@ -25,7 +25,7 @@
     "uhk-fs": "file:../uhk-fs"
   },
   "peerDependencies": {
-    "node-hid": ">= 3.3.0",
+    "node-hid": ">= 3.4.0",
     "serialport": ">= 13.0.0"
   }
 }
