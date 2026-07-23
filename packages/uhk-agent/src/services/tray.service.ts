@@ -2,7 +2,10 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, nativeTheme, Tray } fro
 import path from 'node:path';
 import { IpcEvents, LogService } from 'uhk-common';
 
+import { WindowState } from '../models/window-state';
 import { MainServiceBase } from './main-service-base';
+
+type SavedWindowDisplayState = Pick<WindowState, 'isMaximized' | 'isFullScreen'>;
 
 const MINIMIZE_SUPPRESS_MS = 500;
 
@@ -134,9 +137,9 @@ export class TrayService extends MainServiceBase {
         });
     }
 
-    startInTray(): void {
+    startInTray(savedState?: Partial<SavedWindowDisplayState>): void {
         this.ensureTray();
-        this.hideToTray();
+        this.hideToTray(savedState);
     }
 
     private clearSuppressMinimizeTimer() {
@@ -188,18 +191,29 @@ export class TrayService extends MainServiceBase {
         ipcMain.on(IpcEvents.app.minimizeToTrayChanged, this.minimizeToTrayChangedHandler);
     }
 
+    private applySavedWindowDisplayState(savedState: Partial<SavedWindowDisplayState>): void {
+        this.wasFullScreenBeforeTray = savedState.isFullScreen ?? false;
+        this.wasMaximizedBeforeTray = !this.wasFullScreenBeforeTray && (savedState.isMaximized ?? false);
+        this.isMaximized = this.wasMaximizedBeforeTray;
+    }
+
     private captureWindowStateBeforeTray(win: BrowserWindow): void {
         this.wasFullScreenBeforeTray = win.isFullScreen();
         this.wasMaximizedBeforeTray = this.isMaximized || win.isMaximized();
     }
 
-    private hideToTray(): void {
+    private hideToTray(savedState?: Partial<SavedWindowDisplayState>): void {
         const win = this.getWindow();
         if (!win) {
             return;
         }
 
-        this.captureWindowStateBeforeTray(win);
+        if (savedState) {
+            this.applySavedWindowDisplayState(savedState);
+        } else {
+            this.captureWindowStateBeforeTray(win);
+        }
+
         this.hiddenToTray = true;
         this.runWithMinimizeSuppressed(() => {
             if (process.platform === 'linux') {

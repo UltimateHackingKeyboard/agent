@@ -120,10 +120,13 @@ async function createWindow() {
         trayService.init(win);
     }
 
-    if (loadedWindowState.isFullScreen) {
-        win.setFullScreen(true);
-    } else if (loadedWindowState.isMaximized) {
-        win.maximize();
+    const startMinimizedToTray = !!options['start-minimized-to-tray'];
+    if (!startMinimizedToTray) {
+        if (loadedWindowState.isFullScreen) {
+            win.setFullScreen(true);
+        } else if (loadedWindowState.isMaximized) {
+            win.maximize();
+        }
     }
 
     setMenu(win, options.devtools);
@@ -155,8 +158,11 @@ async function createWindow() {
         void (async () => {
             await trayService.initTrayIfEnabled();
 
-            if (options['start-minimized-to-tray']) {
-                trayService.startInTray();
+            if (startMinimizedToTray) {
+                trayService.startInTray({
+                    isFullScreen: loadedWindowState.isFullScreen,
+                    isMaximized: loadedWindowState.isMaximized,
+                });
             } else {
                 win.show();
             }
