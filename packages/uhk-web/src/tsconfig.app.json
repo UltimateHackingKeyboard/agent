@@ -16,6 +16,7 @@
     "polyfills.ts"
   ],
   "exclude": [
+    "**/*.test.ts",
     "main-renderer.ts",
     "renderer"
   ]

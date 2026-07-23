@@ -144,6 +144,7 @@ export class ApplicationEffects {
             ofType(
                 ActionTypes.ErrorPanelSizeChanged,
                 ActionTypes.SetAppTheme,
+                ActionTypes.SetMacroGroupingSettings,
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,
                 AdvanceSettingsActionTypes.toggleAlwaysEnableAdvancedMode,
