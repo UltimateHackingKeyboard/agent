@@ -16,14 +16,19 @@ import {
     getOperatingSystem,
     getSupportedThemes,
     keyboardHalvesAlwaysJoined,
-    runningInElectron
 } from '../../../store';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
-import { OpenConfigFolderAction, SetAppThemeAction, ToggleAnimationEnabledAction, ToggleKeyboardHalvesAlwaysJoinedAction, ToggleMinimizeToTrayAction } from '../../../store/actions/app';
+import {
+    OpenConfigFolderAction,
+    SetAppThemeAction,
+    ToggleAnimationEnabledAction,
+    ToggleKeyboardHalvesAlwaysJoinedAction,
+    ToggleMinimizeToTrayAction,
+} from '../../../store/actions/app';
 import { ToggleAlwaysEnableAdvancedModeAction } from '../../../store/actions/advance-settings.action';
 import { OperatingSystem } from '../../../models/operating-system';
 
@@ -40,7 +45,6 @@ export class SettingsComponent {
     updateSettingsState$: Observable<UpdateSettingsState>;
     animationEnabled$: Observable<boolean>;
     minimizeToTray$: Observable<boolean>;
-    runningInElectron$: Observable<boolean>;
     appTheme$: Observable<AppTheme>;
     themes$: Observable<AppThemeSelect[]>;
     isLinux$: Observable<boolean>;
@@ -53,7 +57,6 @@ export class SettingsComponent {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
         this.animationEnabled$ = store.select(getAnimationEnabled);
         this.minimizeToTray$ = store.select(getMinimizeToTray);
-        this.runningInElectron$ = store.select(runningInElectron);
         this.appTheme$ = store.select(getAppTheme);
         this.themes$ = store.select(getSupportedThemes);
         this.isLinux$ = store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));

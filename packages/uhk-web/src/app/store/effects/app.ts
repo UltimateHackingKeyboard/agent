@@ -183,11 +183,8 @@ export class ApplicationEffects {
         .pipe(
             ofType<ToggleMinimizeToTrayAction>(ActionTypes.ToggleMinimizeToTray),
             map(action => action.payload),
-            withLatestFrom(this.store.select(runningInElectron)),
-            tap(([enabled, inElectron]) => {
-                if (inElectron) {
-                    this.appRendererService.setMinimizeToTray(enabled);
-                }
+            tap((enabled) => {
+                this.appRendererService.setMinimizeToTray(enabled);
             })
         ),
     { dispatch: false }

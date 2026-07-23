@@ -2,11 +2,9 @@ import { ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { UpdateInfo, ProgressInfo } from 'builder-util-runtime';
 import isDev from 'electron-is-dev';
-import storage from 'electron-settings';
 import { inspect } from 'node:util';
 
 import {
-    ApplicationSettings,
     CommandLineArgs,
     ERR_UPDATER_INVALID_SIGNATURE,
     IpcEvents,
@@ -143,17 +141,4 @@ export class AppUpdateService extends MainServiceBase {
 
         return checkForUpdateOnStartUp;
     }
-
-    private async getApplicationSettings(): Promise<ApplicationSettings> {
-        const value = await storage.get('application-settings');
-        if (!value) {
-            return {
-                checkForUpdateOnStartUp: true,
-                everAttemptedSavingToKeyboard: false
-            };
-        }
-
-        return JSON.parse(<string>value);
-    }
-
 }

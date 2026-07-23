@@ -91,7 +91,6 @@ async function createWindow() {
 
     logger.misc('[Electron Main] Create new window.');
 
-    const iconPath = path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png');
     const loadedWindowState = loadWindowState(logger);
     if(!smartMacroDocService.isRunning) {
         await smartMacroDocService.start();
@@ -109,13 +108,17 @@ async function createWindow() {
             spellcheck: false,
             preload: path.join(import.meta.dirname, 'preload.js')
         },
-        icon: iconPath,
+        icon: path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png'),
         backgroundColor: await getWindowBackgroundColor(),
         show: false
     });
 
-    trayService = new TrayService(logger, iconPath);
-    trayService.init(win);
+    if (!trayService) {
+        trayService = new TrayService(logger, win);
+    }
+    else {
+        trayService.init(win);
+    }
 
     if (loadedWindowState.isFullScreen) {
         win.setFullScreen(true);
@@ -219,6 +222,8 @@ async function windowClosed() {
     sudoService = null;
     await smartMacroDocService.stop();
     smartMacroDocService = null;
+    trayService?.destroy();
+    trayService = null;
 }
 
 if (isSecondInstance) {
@@ -287,13 +292,6 @@ if (isSecondInstance) {
         app.exit();
     });
 
-    app.on('before-quit', () => {
-        trayService?.markQuitting();
-    });
-
-    app.on('will-quit', () => {
-    });
-
     app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
@@ -303,15 +301,13 @@ if (isSecondInstance) {
                     logger.error('[Electron Main] when activating the app: ', error);
                 });
         } else if (!win.isVisible()) {
-            trayService.showWindow();
+            trayService.revealWindow();
         }
     });
 
     app.on('second-instance', () => {
         // Someone tried to run a second instance, we should focus our window.
-        if (win) {
-            trayService.showWindow();
-        }
+        trayService.revealWindow();
     });
 }
 // In this file you can include the rest of your app's specific main process
