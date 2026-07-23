@@ -227,9 +227,9 @@ function splitCamelCaseSegment(segment: string): string[] {
     const parts: string[] = [];
     let current = '';
 
-    for (let index = 0; index < segment.length; index++) {
-        const character = segment[index];
-
+    // for...of iterates by code point, so surrogate pairs
+    // (e.g. emoji, characters outside the BMP) stay intact
+    for (const character of segment) {
         if (current.length > 0
             && /\p{Lu}/u.test(character)
             && /[\p{Ll}\p{Nd}]$/u.test(current)) {
