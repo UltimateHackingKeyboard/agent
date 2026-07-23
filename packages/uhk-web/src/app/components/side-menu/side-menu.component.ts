@@ -33,7 +33,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { MAX_ALLOWED_MACROS_TOOLTIP, UHK_80_DEVICE } from 'uhk-common';
 
-import { AppState, getSelectedMacro, getSideMenuPageState } from '../../store';
+import { AppState, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
 import { DeviceUiStates, MacroMenuTreeNode, SideMenuPageState } from '../../models';
