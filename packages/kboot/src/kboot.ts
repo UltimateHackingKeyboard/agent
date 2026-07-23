@@ -172,7 +172,10 @@ export class KBoot {
         } catch (error) {
             logger(`Reset command error message: "${error.message}"`);
 
-            if (RESET_IGNORED_ERRORS.includes(error.message as string)) {
+            if (RESET_IGNORED_ERRORS.includes(error.message as string)
+                || error.message.startsWith('Cannot write to hid device:')
+                || error.message.startsWith('could not read data from device:')
+            ) {
                 logger('Ignoring missing response from reset command.');
 
                 await this.close()
