@@ -21,6 +21,7 @@ import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 import { SmartMacroDocService } from './services/smart-macro-doc.service';
+import { TrayService } from './services/tray.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
@@ -58,6 +59,7 @@ let appService: AppService;
 let sudoService: SudoService;
 let packagesDir: string;
 let smartMacroDocService: SmartMacroDocService;
+let trayService: TrayService;
 
 let areServicesInited = false;
 
@@ -111,10 +113,20 @@ async function createWindow() {
         show: false
     });
 
-    if (loadedWindowState.isFullScreen) {
-        win.setFullScreen(true);
-    } else if (loadedWindowState.isMaximized) {
-        win.maximize();
+    if (!trayService) {
+        trayService = new TrayService(logger, win);
+    }
+    else {
+        trayService.init(win);
+    }
+
+    const startMinimizedToTray = !!options['start-minimized-to-tray'];
+    if (!startMinimizedToTray) {
+        if (loadedWindowState.isFullScreen) {
+            win.setFullScreen(true);
+        } else if (loadedWindowState.isMaximized) {
+            win.maximize();
+        }
     }
 
     setMenu(win, options.devtools);
@@ -143,7 +155,18 @@ async function createWindow() {
     });
 
     win.once('ready-to-show', () => {
-        win.show();
+        void (async () => {
+            await trayService.initTrayIfEnabled();
+
+            if (startMinimizedToTray) {
+                trayService.startInTray({
+                    isFullScreen: loadedWindowState.isFullScreen,
+                    isMaximized: loadedWindowState.isMaximized,
+                });
+            } else {
+                win.show();
+            }
+        })();
     });
 
     win.webContents.on('did-finish-load', () => {
@@ -205,6 +228,8 @@ async function windowClosed() {
     sudoService = null;
     await smartMacroDocService.stop();
     smartMacroDocService = null;
+    trayService?.destroy();
+    trayService = null;
 }
 
 if (isSecondInstance) {
@@ -273,9 +298,6 @@ if (isSecondInstance) {
         app.exit();
     });
 
-    app.on('will-quit', () => {
-    });
-
     app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
@@ -284,17 +306,14 @@ if (isSecondInstance) {
                 .catch((error) => {
                     logger.error('[Electron Main] when activating the app: ', error);
                 });
+        } else if (!win.isVisible()) {
+            trayService.revealWindow();
         }
     });
 
     app.on('second-instance', () => {
         // Someone tried to run a second instance, we should focus our window.
-        if (win) {
-            if (win.isMinimized()) {
-                win.restore();
-            }
-            win.focus();
-        }
+        trayService.revealWindow();
     });
 }
 // In this file you can include the rest of your app's specific main process

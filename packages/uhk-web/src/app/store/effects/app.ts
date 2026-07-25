@@ -26,6 +26,7 @@ import {
     SaveApplicationSettingsSuccessAction,
     SetAppThemeAction,
     ShowNotificationAction,
+    ToggleMinimizeToTrayAction,
     UndoLastAction
 } from '../actions/app';
 import { ActionTypes as UpdateActionTypes } from '../actions/auto-update-settings';
@@ -60,6 +61,7 @@ export class ApplicationEffects {
                             everAttemptedSavingToKeyboard: false,
                             animationEnabled: true,
                             keyboardHalvesAlwaysJoined: false,
+                            minimizeToTray: false,
                             ...appSettings
                         };
 
@@ -147,6 +149,7 @@ export class ApplicationEffects {
                 ActionTypes.SetMacroGroupingSettings,
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,
+                ActionTypes.ToggleMinimizeToTray,
                 AdvanceSettingsActionTypes.toggleAlwaysEnableAdvancedMode,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration,
@@ -172,6 +175,17 @@ export class ApplicationEffects {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (window as any).setUhkTheme(theme);
                 }
+            })
+        ),
+    { dispatch: false }
+    );
+
+    minimizeToTrayChanged$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<ToggleMinimizeToTrayAction>(ActionTypes.ToggleMinimizeToTray),
+            map(action => action.payload),
+            tap((enabled) => {
+                this.appRendererService.setMinimizeToTray(enabled);
             })
         ),
     { dispatch: false }

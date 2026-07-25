@@ -1,9 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { AppStartInfo, IpcEvents, LogService } from 'uhk-common';
+import { AppStartInfo, IpcEvents, LogService, NotificationType } from 'uhk-common';
 import { AppState } from '../store';
-import { ElectronMainLogReceivedAction, ProcessAppStartInfoAction } from '../store/actions/app';
+import { ElectronMainLogReceivedAction, ProcessAppStartInfoAction, ShowNotificationAction } from '../store/actions/app';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 
 @Injectable()
@@ -36,9 +36,21 @@ export class AppRendererService {
         this.ipcRenderer.send(IpcEvents.app.openUrl, url);
     }
 
+    setMinimizeToTray(enabled: boolean): void {
+        this.logService.misc(`[AppRendererService] set minimize to tray: ${enabled}`);
+        this.ipcRenderer.send(IpcEvents.app.minimizeToTrayChanged, enabled);
+    }
+
     private registerEvents() {
         this.ipcRenderer.on(IpcEvents.app.getAppStartInfoReply, (event: string, arg: AppStartInfo) => {
             this.dispatchStoreAction(new ProcessAppStartInfoAction(arg));
+        });
+
+        this.ipcRenderer.on(IpcEvents.app.minimizeToTrayDisabledOnLinux, () => {
+            this.dispatchStoreAction(new ShowNotificationAction({
+                type: NotificationType.Info,
+                message: 'The tray icon will disappear after you restart Agent.'
+            }));
         });
 
         this.ipcRenderer.on('__ELECTRON_LOG_IPC__', (event: string, { level, data }) => {

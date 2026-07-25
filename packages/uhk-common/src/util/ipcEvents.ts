@@ -6,6 +6,8 @@ export class App {
     public static readonly openConfigFolder = 'open-config-folder';
     public static readonly openUrl = 'open-url';
     public static readonly getConfig = 'app-get-config';
+    public static readonly minimizeToTrayChanged = 'app-minimize-to-tray-changed';
+    public static readonly minimizeToTrayDisabledOnLinux = 'app-minimize-to-tray-disabled-on-linux';
     public static readonly setConfig = 'app-set-config';
 }
 
