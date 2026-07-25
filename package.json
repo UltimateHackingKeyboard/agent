@@ -62,7 +62,8 @@
     "webpack-cli": "7.2.1"
   },
   "scripts": {
-    "postinstall": "lerna exec npm ci",
+    "install": "npm ci --ignore-scripts && npm run postinstall",
+    "postinstall": "lerna exec npm ci -- --ignore-scripts",
     "test": "lerna run test",
     "lint": "lerna run lint",
     "e2e": "lerna run e2e --scope uhk-web",
