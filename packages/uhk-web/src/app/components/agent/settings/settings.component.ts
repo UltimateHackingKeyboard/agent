@@ -13,9 +13,10 @@ import {
     getAppTheme,
     getIsAdvancedSettingsMenuVisible,
     getMacroGroupingSettings,
+    getMinimizeToTray,
     getOperatingSystem,
     getSupportedThemes,
-    keyboardHalvesAlwaysJoined
+    keyboardHalvesAlwaysJoined,
 } from '../../../store';
 import { MACRO_GROUPING_MAX_DEPTH } from '../../../util/group-macros-by-name';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
@@ -23,7 +24,14 @@ import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
-import { OpenConfigFolderAction, SetAppThemeAction, SetMacroGroupingSettingsAction, ToggleAnimationEnabledAction, ToggleKeyboardHalvesAlwaysJoinedAction } from '../../../store/actions/app';
+import {
+    OpenConfigFolderAction,
+    SetAppThemeAction,
+    SetMacroGroupingSettingsAction,
+    ToggleAnimationEnabledAction,
+    ToggleKeyboardHalvesAlwaysJoinedAction,
+    ToggleMinimizeToTrayAction,
+} from '../../../store/actions/app';
 import { ToggleAlwaysEnableAdvancedModeAction } from '../../../store/actions/advance-settings.action';
 import { OperatingSystem } from '../../../models/operating-system';
 
@@ -39,6 +47,7 @@ import { OperatingSystem } from '../../../models/operating-system';
 export class SettingsComponent {
     updateSettingsState$: Observable<UpdateSettingsState>;
     animationEnabled$: Observable<boolean>;
+    minimizeToTray$: Observable<boolean>;
     appTheme$: Observable<AppTheme>;
     themes$: Observable<AppThemeSelect[]>;
     isLinux$: Observable<boolean>;
@@ -52,6 +61,7 @@ export class SettingsComponent {
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
         this.animationEnabled$ = store.select(getAnimationEnabled);
+        this.minimizeToTray$ = store.select(getMinimizeToTray);
         this.appTheme$ = store.select(getAppTheme);
         this.themes$ = store.select(getSupportedThemes);
         this.isLinux$ = store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
@@ -83,6 +93,10 @@ export class SettingsComponent {
 
     toggleKeyboardHalvesAlwaysJoined(enabled: boolean): void {
         this.store.dispatch(new ToggleKeyboardHalvesAlwaysJoinedAction(enabled));
+    }
+
+    toggleMinimizeToTray(enabled: boolean): void {
+        this.store.dispatch(new ToggleMinimizeToTrayAction(enabled));
     }
 
     toggleAlwaysEnableAdvancedMode(enabled: boolean): void {

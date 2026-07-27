@@ -28,6 +28,10 @@ export interface ApplicationSettings {
      */
     keyboardHalvesAlwaysJoined?: boolean;
     /**
+     * If true, minimizing the Agent window hides it to the system tray instead of the taskbar.
+     */
+    minimizeToTray?: boolean;
+    /**
      * Smart Macro panel width in percent;
      */
     smartMacroPanelWidth?: number;

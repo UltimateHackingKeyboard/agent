@@ -1,4 +1,5 @@
-import { LogService } from 'uhk-common';
+import storage from 'electron-settings';
+import { ApplicationSettings, LogService } from 'uhk-common';
 
 export class MainServiceBase {
     constructor(protected logService: LogService,
@@ -12,6 +13,18 @@ export class MainServiceBase {
         }
 
         this.win.webContents.send(message, arg);
+    }
+
+    protected async getApplicationSettings(): Promise<ApplicationSettings> {
+        const value = await storage.get('application-settings');
+        if (!value) {
+            return {
+                checkForUpdateOnStartUp: true,
+                everAttemptedSavingToKeyboard: false
+            };
+        }
+
+        return JSON.parse(<string>value);
     }
 
 }
