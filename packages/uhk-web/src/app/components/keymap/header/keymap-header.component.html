@@ -18,6 +18,12 @@
                  placement="bottom"
                  (click)="setDefault()"
         ></fa-icon>
+        <span *ngIf="inactiveKeymapTooltip"
+              class="text-muted"
+              [ngbTooltip]="inactiveKeymapTooltip"
+              tooltipClass="tooltip-inactive-keymap"
+              container="body"
+              placement="bottom">(inactive)</span>
         <fa-icon [icon]="faTrash"
                  [ngbTooltip]="trashTitle"
                  tooltipClass="tooltip-nowrap"

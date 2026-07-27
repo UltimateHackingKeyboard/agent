@@ -32,6 +32,7 @@ export interface State {
     dongle?: Dongle;
     isKeyboardLayoutChanging: boolean;
     isPairedWithDongle?: boolean;
+    activeKeymapIndex?: number;
     connectedDevice: UhkDeviceProduct;
     hasPermission: boolean;
     hideStatusBufferError: boolean;
@@ -154,6 +155,7 @@ export function reducer(state = initialState, action: Action): State {
                 bleDeviceConnected: data.bleDeviceConnected,
                 dongle: data.dongle,
                 isPairedWithDongle: data.isPairedWithDongle,
+                activeKeymapIndex: data.activeKeymapIndex,
                 connectedDevice: data.connectedDevice,
                 deviceConnectionStateLoaded: true,
                 hasPermission: data.hasPermission,
@@ -467,6 +469,7 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 };
 
 export const getConnectedDevice = (state: State) => state.connectedDevice;
+export const getActiveKeymapIndex = (state: State) => state.activeKeymapIndex;
 export const getHostConnectionPairState = (state: State): Record<string, boolean> => state.hostConnectionPairState;
 export const getLeftHalfDetected = (state: State) => state.leftHalfDetected;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;

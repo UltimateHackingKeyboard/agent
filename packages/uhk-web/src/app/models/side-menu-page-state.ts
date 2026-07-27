@@ -10,6 +10,7 @@ export interface SideMenuPageState {
     runInElectron: boolean;
     updatingFirmware: boolean;
     deviceName: string;
+    activeKeymapIndex?: number;
     keymaps: Keymap[];
     keymapQueryParams: Params;
     macroTree: MacroMenuTreeNode[];

@@ -23,6 +23,7 @@ import {
     getSecondaryRoleOptions,
     getSelectedKeymap,
     getSelectedLayerOption,
+    inactiveKeymapTooltip,
     isBacklightingColoring,
     isKeymapDeletable,
     lastEditedKey,
@@ -73,6 +74,7 @@ export class KeymapEditComponent implements OnDestroy {
     secondaryRoleOptions$: Observable<SelectOptionData[]>;
     selectedPaletteColorIndex$: Observable<number>;
     showColorPalette$: Observable<boolean>;
+    inactiveKeymapTooltip$: Observable<string>;
 
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
@@ -134,6 +136,7 @@ export class KeymapEditComponent implements OnDestroy {
         this.showColorPalette$ = this.store.select(showColorPalette);
         this.paletteColors$ = this.store.select(backlightingColorPalette);
         this.selectedPaletteColorIndex$ = this.store.select(selectedBacklightingColorIndex);
+        this.inactiveKeymapTooltip$ = this.store.select(inactiveKeymapTooltip);
     }
 
     ngOnDestroy(): void {

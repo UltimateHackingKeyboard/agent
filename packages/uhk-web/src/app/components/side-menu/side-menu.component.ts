@@ -16,6 +16,7 @@ import {
     faChevronDown,
     faChevronRight,
     faChevronUp,
+    faCircle,
     faCog,
     faExclamationTriangle,
     faInfoCircle,
@@ -100,6 +101,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
             animation: 'active'
         }
     };
+    faCircle = faCircle;
     faCog = faCog;
     faExclamationTriangle = faExclamationTriangle;
     faInfoCircle = faInfoCircle;

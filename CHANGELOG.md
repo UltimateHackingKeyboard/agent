@@ -6,6 +6,10 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [Unreleased]
+
+- Show which keymap is currently active on the keyboard in the sidebar, and mark inactive keymaps in the header. `DEVICEPROTOCOL:MINOR`
+
 ## [10.1.0] - 2026-06-23
 
 Firmware: 17.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v17.2.0)] | Device Protocol: 4.17.0 | User Config: 14.0.0 | Hardware Config: 1.0.0

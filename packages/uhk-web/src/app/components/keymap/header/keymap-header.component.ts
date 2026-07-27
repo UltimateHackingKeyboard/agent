@@ -41,6 +41,7 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
 
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
+    @Input() inactiveKeymapTooltip = '';
 
     @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef<HTMLInputElement>;
     @ViewChild(AutoGrowInputComponent, { static: true }) keymapName: AutoGrowInputComponent;

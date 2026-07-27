@@ -20,6 +20,7 @@ newPairedDevice: ${state.newPairedDevice ? 'yes' : 'no'} | \
 leftKeyboardHalfSlot:${state.leftKeyboardHalfSlot} | \
 leftModuleSlot:${state.leftModuleSlot} | \
 rightModuleSlot:${state.rightModuleSlot} | \
+keymapIndex:${state.activeKeymapIndex} | \
 layer:${state.activeLayerName} ${state.activeLayerToggled ? 'toggled' : ''}`
         );
     } catch (error) {

@@ -4,6 +4,7 @@ export interface DeviceState {
     isZephyrLogAvailable: boolean;
     areHalvesMerged: boolean;
     isLeftHalfConnected: boolean;
+    activeKeymapIndex: number;
     activeLayerNumber: number;
     activeLayerName: string;
     activeLayerToggled: boolean;

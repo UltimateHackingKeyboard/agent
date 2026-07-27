@@ -189,10 +189,16 @@
                              (click)="toggleMenuItem('keymap')"></fa-icon>
                 </div>
                 <ul [@toggler]="this.sideMenuState.keymap.animation">
-                    <li *ngFor="let keymap of state.keymaps" class="sidebar__level-2--item">
+                    <li *ngFor="let keymap of state.keymaps; let keymapIndex = index" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [class.active]="state.selectedKeymap?.abbreviation === keymap.abbreviation">
                             <a [routerLink]="['/keymap', keymap.abbreviation]" [queryParams]="state.keymapQueryParams"
                                [class.disabled]="state.updatingFirmware">{{keymap.name}}</a>
+                            <fa-icon *ngIf="state.activeKeymapIndex === keymapIndex"
+                                     [icon]="faCircle"
+                                     class="sidebar__active-keymap"
+                                     ngbTooltip="This is the keymap currently active on the keyboard. The star marks the default keymap that activates when powering the keyboard."
+                                     container="body"
+                                     placement="bottom"></fa-icon>
                             <fa-icon *ngIf="keymap.isDefault"
                                      [icon]="faStar"
                                      class="sidebar__fav"

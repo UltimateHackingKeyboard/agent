@@ -405,6 +405,7 @@ export class UhkHidDevice {
 
         if (result.connectedDevice && result.hasPermission && result.communicationInterfaceAvailable) {
             const deviceState = await this.getDeviceState();
+            result.activeKeymapIndex = deviceState.activeKeymapIndex;
             result.halvesInfo = calculateHalvesState(deviceState);
             result.isMacroStatusDirty = deviceState.isMacroStatusDirty;
             result.isZephyrLogAvailable = deviceState.isZephyrLogAvailable;
@@ -623,6 +624,7 @@ export class UhkHidDevice {
             isMacroStatusDirty: buffer[7] !== 0,
             areHalvesMerged: isBitSet(buffer[2], 0),
             isLeftHalfConnected: buffer[3] !== 0,
+            activeKeymapIndex: buffer[8],
             activeLayerNumber,
             activeLayerName: LAYER_NUMBER_TO_STRING[activeLayerNumber],
             activeLayerToggled: (buffer[6] & 0x80) === 1,
