@@ -9,6 +9,10 @@ export interface DeviceConnectionState {
     // UHK80 connected via bluetooth
     bleDeviceConnected: boolean;
     isPairedWithDongle?: boolean;
+    /**
+     * Index of the keymap currently active on the keyboard (GetDeviceState byte 8).
+     */
+    activeKeymapIndex?: number;
     connectedDevice?: UhkDeviceProduct;
     dongle: Dongle;
     leftHalfBootloaderActive: boolean;

@@ -118,7 +118,8 @@ ul {
                     color: var(--color-sidemenu-active-text);
                 }
 
-                .fa-star {
+                .fa-star,
+                .sidebar__active-keymap {
                     color: var(--color-sidemenu-active-text);
                 }
 
@@ -225,6 +226,18 @@ ul {
         right: 19px;
         top: 3px;
         z-index: 50;
+    }
+
+    &__active-keymap {
+        font-size: 0.55rem;
+        position: absolute;
+        right: 19px;
+        top: 6px;
+        z-index: 50;
+    }
+
+    &__level-2:has(.sidebar__active-keymap) .sidebar__fav {
+        right: 34px;
     }
 
     &__macro_count {

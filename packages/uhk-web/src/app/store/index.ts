@@ -13,6 +13,7 @@ import {
     HardwareModules,
     HistoryFileInfo as CommonHistoryFileInfo,
     HostConnections,
+    isDeviceProtocolSupportActiveKeymapIndex,
     isVersionGt,
     isVersionGteV1CanUndefined,
     Keymap,
@@ -312,6 +313,44 @@ export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
 export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiState);
 export const getConnectedDevice = createSelector(deviceState, fromDevice.getConnectedDevice);
+export const getActiveKeymapIndex = createSelector(
+    deviceState,
+    getHardwareModules,
+    (state, hardwareModules): number | undefined => {
+        if (!isDeviceProtocolSupportActiveKeymapIndex(hardwareModules.rightModuleInfo?.deviceProtocolVersion)) {
+            return undefined;
+        }
+
+        return fromDevice.getActiveKeymapIndex(state);
+    }
+);
+export const inactiveKeymapTooltip = createSelector(
+    runningInElectron,
+    getUserConfiguration,
+    getSelectedKeymap,
+    getActiveKeymapIndex,
+    (electron, userConfiguration, selectedKeymap, activeKeymapIndex): string => {
+        if (!electron || activeKeymapIndex === undefined || !selectedKeymap) {
+            return '';
+        }
+
+        const selectedKeymapIndex = userConfiguration.keymaps
+            .findIndex(keymap => keymap.abbreviation === selectedKeymap.abbreviation);
+
+        if (selectedKeymapIndex === -1 || selectedKeymapIndex === activeKeymapIndex) {
+            return '';
+        }
+
+        const activeKeymapName = userConfiguration.keymaps[activeKeymapIndex]?.name;
+
+        if (!activeKeymapName) {
+            return '';
+        }
+
+        return `This keymap is not currently active on the keyboard. ` +
+            `The sidebar dot marks the active keymap, which is currently ${activeKeymapName}.`;
+    }
+);
 export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.getSkipFirmwareUpgrade);
 export const isKeyboardLayoutChanging = createSelector(deviceState, fromDevice.isKeyboardLayoutChanging);
 export const keyboardHalvesAlwaysJoined = createSelector(deviceState, fromDevice.keyboardHalvesAlwaysJoined);
@@ -582,6 +621,7 @@ export const getSideMenuPageState = createSelector(
     getRestoreUserConfiguration,
     calculateDeviceUiState,
     getConnectedDevice,
+    getActiveKeymapIndex,
     getIsAdvancedSettingsMenuVisible,
     getSelectedLayerOption,
     getDonglePairingState,
@@ -597,6 +637,7 @@ export const getSideMenuPageState = createSelector(
         restoreUserConfiguration: boolean,
         uiState,
         connectedDevice,
+        activeKeymapIndex,
         isAdvancedSettingsMenuVisible,
         selectedLayerOption,
         donglePairingState,
@@ -615,6 +656,7 @@ export const getSideMenuPageState = createSelector(
             runInElectron: runningInElectronValue,
             updatingFirmware: updatingFirmwareValue || donglePairingState.operation !== DongleOperations.None || leftHalfPairing,
             deviceName: userConfiguration.deviceName,
+            activeKeymapIndex: runningInElectronValue ? activeKeymapIndex : undefined,
             keymaps: userConfiguration.keymaps,
             keymapQueryParams: {
                 layer: selectedLayerOption.id

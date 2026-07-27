@@ -285,6 +285,11 @@ kbd {
     max-width: 320px;
 }
 
+.tooltip-inactive-keymap .tooltip-inner {
+    width: 320px;
+    max-width: 320px;
+}
+
 mwl-confirmation-popover-window {
     .popover {
         &.bottom {

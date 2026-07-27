@@ -1,6 +1,7 @@
 <ng-template [ngIf]="keymap">
     <keymap-header [keymap]="keymap"
                    [deletable]="deletable$ | async"
+                   [inactiveKeymapTooltip]="(inactiveKeymapTooltip$ | async) || ''"
     ></keymap-header>
     <svg-keyboard-wrap [keymap]="keymap"
                        [halvesInfo]="halvesInfo$ | async"
