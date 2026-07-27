@@ -1,7 +1,7 @@
 <div class="main-div" [class.top-notification-panel-visible]="isTopNotificationPanelVisible()">
-    <app-update-available *ngIf="showUpdateAvailable"
+    <app-update-available *ngIf="showUpdateAvailable && (appUpdateNotification$ | async) as appUpdateNotification"
                           [@topNotificationPanelVisible]
-                          [updateInfo]="updateInfo$ | async"
+                          [notification]="appUpdateNotification"
                           (updateApp)="updateApp()"
                           (doNotUpdateApp)="doNotUpdateApp()">
     </app-update-available>

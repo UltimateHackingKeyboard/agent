@@ -4,7 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { IpcEvents, LogService } from 'uhk-common';
 import { UpdateInfo } from '../models/update-info';
 import { AppState } from '../store';
-import { UpdateDownloadedAction, UpdateErrorAction } from '../store/actions/app-update.action';
+import { UpdateAvailableAction, ClearUpdateAvailabilityAction, UpdateDownloadedAction, UpdateDownloadProgressAction, UpdateErrorAction } from '../store/actions/app-update.action';
 import { CheckForUpdateFailedAction, CheckForUpdateSuccessAction } from '../store/actions/auto-update-settings';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 
@@ -34,18 +34,23 @@ export class AppUpdateRendererService {
         this.ipcRenderer.send(IpcEvents.autoUpdater.updateAndRestart);
     }
 
+    downloadUpdate(): void {
+        this.ipcRenderer.send(IpcEvents.autoUpdater.downloadUpdate);
+    }
+
     checkForUpdate(allowPrerelease: boolean): void {
         this.ipcRenderer.send(IpcEvents.autoUpdater.checkForUpdate, allowPrerelease);
     }
 
     private registerEvents() {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.ipcRenderer.on(IpcEvents.autoUpdater.updateAvailable, (event: string, arg: any) => {
+        this.ipcRenderer.on(IpcEvents.autoUpdater.updateAvailable, (event: string, arg: UpdateInfo) => {
             this.logService.misc(IpcEvents.autoUpdater.updateAvailable, arg);
+            this.dispatchStoreAction(new UpdateAvailableAction(arg));
         });
 
         this.ipcRenderer.on(IpcEvents.autoUpdater.updateNotAvailable, () => {
             this.logService.misc(IpcEvents.autoUpdater.updateNotAvailable);
+            this.dispatchStoreAction(new ClearUpdateAvailabilityAction());
             this.dispatchStoreAction(new CheckForUpdateSuccessAction('No update available'));
         });
 
@@ -56,9 +61,10 @@ export class AppUpdateRendererService {
             this.dispatchStoreAction(new UpdateErrorAction(arg));
         });
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloadProgress, (event: string, arg: any) => {
+        this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloadProgress, (event: string, arg: { percent?: number }) => {
             this.logService.misc(IpcEvents.autoUpdater.autoUpdateDownloadProgress, arg);
+            const percent = typeof arg.percent === 'number' ? Math.round(arg.percent) : 0;
+            this.dispatchStoreAction(new UpdateDownloadProgressAction(percent));
         });
 
         this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloaded, (event: string, arg: UpdateInfo) => {

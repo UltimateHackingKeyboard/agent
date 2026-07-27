@@ -1,6 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 
-import { UpdateInfo } from '../../models/update-info';
+import {
+    AppUpdateNotificationViewModel,
+    initialAppUpdateNotificationViewModel,
+} from '../../models/app-update-notification-view-model';
 
 @Component({
     selector: 'app-update-available',
@@ -10,7 +13,12 @@ import { UpdateInfo } from '../../models/update-info';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpdateAvailableComponent {
-    @Input() updateInfo: UpdateInfo;
+    @Input() notification: AppUpdateNotificationViewModel = initialAppUpdateNotificationViewModel;
+
+    @HostBinding('class.two-line')
+    get isTwoLine(): boolean {
+        return this.notification.updateDownloaded && this.notification.hasUnsavedChanges;
+    }
 
     @Output() updateApp = new EventEmitter<null>();
     @Output() doNotUpdateApp = new EventEmitter<null>();

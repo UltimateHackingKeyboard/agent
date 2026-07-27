@@ -1,3 +1,4 @@
+export * from './app-update-notification-view-model';
 export * from './apply-user-configuration-from-file-payload';
 export * from './backlighting-option';
 export * from './ble-adding-state';
