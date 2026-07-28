@@ -1,7 +1,7 @@
 :host {
     margin-top: 0.5em;
 
-    span.placeholder {
+    .placeholder {
         color: gray;
         display: inline-block;
 
@@ -10,9 +10,15 @@
         }
     }
 
-    span.editable,
-    span.placeholder {
+    .editable,
+    .placeholder {
         cursor: pointer;
+    }
+
+    .editable-text__trigger {
+        color: inherit;
+        text-decoration: none;
+        white-space: normal;
     }
 
     textarea.text-editor {

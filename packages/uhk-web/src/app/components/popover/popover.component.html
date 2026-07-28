@@ -3,18 +3,23 @@
 >
     <div class="arrowCustom"></div>
     <div class="popover-title menu-tabs">
-        <ul class="nav nav-tabs popover-menu">
+        <ul class="nav nav-tabs popover-menu" role="tablist">
             <li *ngFor="let tab of tabHeaders; trackBy:trackTabHeader"
                 class="nav-item"
                 [class.active]="activeTab === tab.tabName"
-                [class.disabled]="tab.disabled"
-                (click)="selectTab(tab)">
-                <a class="nav-link menu-tabs--item"
+                [class.disabled]="tab.disabled">
+                <button class="nav-link menu-tabs--item"
+                    type="button"
+                    role="tab"
                     [class.active]="activeTab === tab.tabName"
-                    [class.disabled]="tab.disabled">
+                    [class.disabled]="tab.disabled"
+                    [attr.aria-selected]="activeTab === tab.tabName"
+                    [attr.tabindex]="activeTab === tab.tabName ? 0 : -1"
+                    [disabled]="tab.disabled"
+                    (click)="selectTab(tab)">
                     <fa-icon [icon]="tab.icon"></fa-icon>
                     <span>{{ tab.text }}</span>
-                </a>
+                </button>
             </li>
         </ul>
     </div>
