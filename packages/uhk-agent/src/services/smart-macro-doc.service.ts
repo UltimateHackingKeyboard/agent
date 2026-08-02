@@ -56,9 +56,19 @@ export class SmartMacroDocService {
         try {
             this.logService.misc(serviceLogMessage('starting...'));
             const firmwarePathData = getDefaultFirmwarePath(this.rootDir);
-            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
-            await copySmartMacroLoadingHtml(this.rootDir, this.logService);
-            await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
+            // Bundled smart-macro docs are optional for keymap editing. A copy
+            // failure (e.g. EACCES against a leftover read-only tree from an
+            // immutable install prefix) must not abort createWindow().
+            try {
+                await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+                await copySmartMacroLoadingHtml(this.rootDir, this.logService);
+                await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
+            } catch (err) {
+                this.logService.error(
+                    serviceLogMessage('documentation setup failed; continuing without bundled smart-macro docs'),
+                    err
+                );
+            }
             this.logService.misc(serviceLogMessage('get free TCP port'));
             this.port = await getPort();
             this.logService.misc(serviceLogMessage(`acquired TCP port: ${this.port}`));
