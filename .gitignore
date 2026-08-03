@@ -8,5 +8,6 @@ dist
 *.sublime-workspace
 tmp/
 .env
+repos/
 !smart-macro-docs/node_modules
 !smart-macro-docs/node_modules/**/dist
