@@ -1237,6 +1237,9 @@ export class DeviceService {
                     const state = await this.device.getDeviceConnectionStateAsync();
                     if (!isEqual(state, this.savedState)) {
                         const newState = cloneDeep(state);
+                        const becameAvailable = state.hasPermission
+                            && state.communicationInterfaceAvailable
+                            && !(this.savedState?.hasPermission && this.savedState?.communicationInterfaceAvailable);
 
                         if (state.hasPermission && state.communicationInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
@@ -1279,7 +1282,12 @@ export class DeviceService {
                                 await this.dongleZephyrLogService.disable();
                             }
 
-                            this._checkStatusBuffer = true;
+                            // Only pull the status buffer when the device newly becomes available.
+                            // Re-reading on every connection-state field change drains leftovers from
+                            // a previous partial read (or an empty buffer) and overwrites the UI (#3025).
+                            if (becameAvailable) {
+                                this._checkStatusBuffer = true;
+                            }
                         } else {
                             deviceProtocolVersion = undefined;
                             state.hardwareModules = {

@@ -812,27 +812,45 @@ export class UhkOperations {
         return convertSlaveI2cErrorBuffer(responseBuffer, slaveId);
     }
 
-    public async getVariable(variableId: UsbVariables, iteration: number = 0): Promise<number | string> {
-        this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
-        const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
-        const responseBuffer = await this.device.write(buffer);
-
+    public async getVariable(variableId: UsbVariables): Promise<number | string> {
         if (variableId === UsbVariables.statusBuffer || variableId === UsbVariables.ShellBuffer) {
-            let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
-            this.logService.misc(`[DeviceOperation] status buffer segment: ${message}`);
-            if (message.length === responseBuffer.length - 1 && iteration < 20) {
-                message += await this.getVariable(variableId, iteration + 1);
+            // Firmware status buffer is STATUS_BUFFER_MAX_LENGTH (3000); shell buffer is 2048.
+            // Each USB transfer returns at most (report length - 1) payload bytes (~62).
+            // The previous hard cap of 20 iterations (~1260 bytes) left unread data in the device,
+            // which the next poll then showed alone and overwrote the UI (#3025).
+            const maxIterations = 100;
+            let message = '';
+
+            for (let iteration = 0; iteration < maxIterations; iteration++) {
+                this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
+                const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
+                const responseBuffer = await this.device.write(buffer);
+                const segment = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
+                this.logService.misc(`[DeviceOperation] status buffer segment: ${segment}`);
+                message += segment;
+
+                if (segment.length !== responseBuffer.length - 1) {
+                    break;
+                }
+
+                if (iteration === maxIterations - 1) {
+                    this.logService.error(`[DeviceOperation] ${UsbVariables[variableId]} truncated after ${maxIterations} USB transfers`);
+                }
             }
 
             // The shell buffer carries a raw VT100 stream (colors, cursor control) that must be
             // forwarded verbatim to the terminal emulator. Only the macro status buffer gets the
             // dedup/reorder normalization.
-            if (iteration === 0 && variableId === UsbVariables.statusBuffer) {
+            if (variableId === UsbVariables.statusBuffer) {
                 message = normalizeStatusBuffer(message);
             }
 
             return message;
         }
+
+        this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}`);
+        const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
+        const responseBuffer = await this.device.write(buffer);
 
         return responseBuffer[1];
     }
