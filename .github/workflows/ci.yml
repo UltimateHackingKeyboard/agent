@@ -107,16 +107,17 @@ jobs:
           retention-days: 30
 
       - name: Run build-archiver
-        uses: UltimateHackingKeyboard/build-archiver@v0.0.7
-        if: github.ref == 'refs/heads/master' && github.event.repository.fork == false
+        uses: UltimateHackingKeyboard/build-archiver@v0.0.9
+        if: github.event.repository.fork == false && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
         with:
           FILE_PATTERN: "dist/UHK.Agent-*-linux-x86_64.AppImage\ndist/UHK.Agent-*-linux-arm64.AppImage\ndist/UHK.Agent-*-mac.dmg\ndist/UHK.Agent-*-win*.exe"
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          S3_ACCESS_KEY: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_SECRET }}
-          S3_ACCESS_KEY_ID: ${{ secrets.UHK_BUILD_ARCHIVER_AWS_ACCESS_KEY }}
+          S3_ACCESS_KEY: ${{ secrets.UHK_BUILD_ARCHIVER_B2_ACCESS_SECRET }}
+          S3_ACCESS_KEY_ID: ${{ secrets.UHK_BUILD_ARCHIVER_B2_ACCESS_KEY }}
           S3_BUCKET: "uhk-build-archives"
+          S3_ENDPOINT: https://s3.us-east-005.backblazeb2.com
           S3_KEY_PREFIX: "agent/"
-          S3_REGION: "eu-central-1"
+          S3_REGION: "us-east-005"
 
   updateReleaseNotes:
     name: Update release notes
