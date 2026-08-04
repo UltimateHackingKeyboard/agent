@@ -125,6 +125,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     recordAnimation: string;
     recording: boolean;
     labelType: LabelTypes;
+    accessibleLabel = 'Unassigned key';
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     labelSource: any;
@@ -140,6 +141,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private layerOptionMap = initLayerOptions();
     private isMouseMoveDispatched = false;
     private isMouseHover = false;
+    private isFocused = false;
 
     constructor(
         private sanitizer: DomSanitizer,
@@ -170,6 +172,17 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         return this.fillColor;
     }
 
+    @HostBinding('attr.role')
+    readonly role = 'button';
+
+    @HostBinding('attr.tabindex')
+    readonly tabIndex = 0;
+
+    @HostBinding('attr.aria-label')
+    get ariaLabel(): string {
+        return this.accessibleLabel;
+    }
+
     @HostBinding('attr.fill')
     get fill(): SafeStyle {
         return this.fillColor;
@@ -182,7 +195,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @HostBinding('attr.stroke-width')
     get strokeWidth(): SafeStyle {
-        return this.isActive ? '3' : '1';
+        return this.isActive || this.isFocused ? '3' : '1';
     }
 
     @HostBinding('style')
@@ -199,20 +212,51 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @HostListener('click', ['$event'])
     onClick(e: MouseEvent) {
+        this.activateKey(e.shiftKey, e.altKey, false);
+    }
+
+    @HostListener('keydown', ['$event'])
+    onHostKeyDown(e: KeyboardEvent) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.stopPropagation();
+            this.activateKey(e.shiftKey, e.altKey, true);
+        }
+    }
+
+    @HostListener('focus')
+    onFocus() {
+        this.isFocused = true;
+        this.setColors();
+    }
+
+    @HostListener('blur')
+    onBlur() {
+        this.isFocused = false;
+        this.setColors();
+    }
+
+    private activateKey(shiftPressed: boolean, altPressed: boolean, keyboardTriggered: boolean) {
         this.reset();
         this.keyClick.emit({
             keyTarget: this.element.nativeElement,
-            shiftPressed: e.shiftKey,
-            altPressed: e.altKey
+            keyboardTriggered,
+            shiftPressed,
+            altPressed
         });
         this.pressedShiftLocation = -1;
         this.pressedAltLocation = -1;
+
+        if (!keyboardTriggered) {
+            setTimeout(() => this.element.nativeElement.blur());
+        }
     }
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(e: MouseEvent) {
 
         if ((e.which === 0 || e.button === 0)) {
+            e.preventDefault();
             this.mouseMoveService.leftButtonDown();
             this.dragAndDropService.leftButtonDown({
                 keyId: this.svgKey.id,
@@ -410,6 +454,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         this.labelType = LabelTypes.OneLineText;
         this.labelSource = undefined;
         this.secondaryText = undefined;
+        this.accessibleLabel = 'Unassigned key';
 
         if (!this.keyAction) {
             return;
@@ -566,6 +611,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         } else {
             this.labelSource = undefined;
         }
+
+        this.accessibleLabel = this.buildAccessibleLabel();
     }
 
     private blinkSvgRec(): void {
@@ -600,13 +647,79 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                     : themeColors.selectedKeyColor2;
             } else if (this.isMouseHover && !this.mouseMoveService.isColoring) {
                 this.fillColor = colors.hoverColorAsHex;
+                if (this.isFocused) {
+                    this.strokeColor = themeColors.selectedKeyColor;
+                }
+            } else if (this.isFocused) {
+                this.strokeColor = themeColors.selectedKeyColor;
             }
         } else {
             if (this.isActive) {
                 this.fillColor = 'var(--color-keyboard-key-active)';
             } else if (this.isMouseHover) {
                 this.fillColor = 'var(--color-keyboard-key-hover)';
+                if (this.isFocused) {
+                    this.strokeColor = themeColors.selectedKeyColor;
+                }
+            } else if (this.isFocused) {
+                this.strokeColor = themeColors.selectedKeyColor;
             }
         }
+    }
+
+    private buildAccessibleLabel(): string {
+        if (!this.keyAction) {
+            return 'Unassigned key';
+        }
+
+        if (this.keyAction instanceof KeystrokeAction) {
+            const parts: string[] = [];
+
+            if (this.keyAction.hasActiveModifier()) {
+                parts.push(this.keyAction.getModifierList().join(' + '));
+            }
+
+            if (this.keyAction.hasScancode()) {
+                parts.push(this.mapper.scanCodeToText(this.keyAction.scancode, this.keyAction.type).join(' '));
+            }
+
+            if (parts.length === 0) {
+                parts.push('Keystroke');
+            }
+
+            if (this.keyAction.hasSecondaryRoleAction()) {
+                parts.push(`secondary role ${this.mapper.getSecondaryRoleText(this.keyAction.secondaryRoleAction)}`);
+            }
+
+            return parts.join(', ');
+        }
+
+        if (this.keyAction instanceof SwitchLayerAction) {
+            const layerName = this.layerOptionMap.get(this.keyAction.layer)?.name || 'unknown';
+            return `Switch to ${layerName} layer`;
+        }
+
+        if (this.keyAction instanceof SwitchKeymapAction) {
+            return `Switch to keymap ${this.keyAction.keymapAbbreviation}`;
+        }
+
+        if (this.keyAction instanceof PlayMacroAction) {
+            const macroName = this.macroMap.get(this.keyAction.macroId)?.name;
+            return macroName ? `Play macro ${macroName}` : 'Play macro';
+        }
+
+        if (this.keyAction instanceof MouseAction) {
+            return 'Mouse action';
+        }
+
+        if (this.keyAction instanceof ConnectionsAction) {
+            return 'Host connection action';
+        }
+
+        if (this.keyAction instanceof OtherAction) {
+            return 'Other action';
+        }
+
+        return 'Assigned key action';
     }
 }

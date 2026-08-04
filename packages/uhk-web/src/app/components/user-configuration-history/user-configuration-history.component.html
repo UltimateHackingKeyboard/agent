@@ -23,18 +23,18 @@
                 confirmText="Yes"
                 cancelText="No"
                 [isOpen]="showDeleteUserConfigHistoryPopoverIndex === index"
-                (click)="onSelectTab(index)"
                 (contextmenu)="onTabContextmenuClick(index)"
                 (confirm)="deleteUserConfigHistory.emit(tab.deviceUniqueId)"
                 (isOpenChange)="onDeletePopoverOpenChange($event, index)"
             >
-                <a class="nav-link"
-                   [class.active]="state.selectedTabIndex === index"
-                   [class.fw-bold]="tab.isCurrentDevice"
-                   [attr.title]="tab.tooltip"
-                >
+                <button type="button"
+                        class="nav-link"
+                        [class.active]="state.selectedTabIndex === index"
+                        [class.fw-bold]="tab.isCurrentDevice"
+                        [attr.title]="tab.tooltip"
+                        (click)="onSelectTab(index)">
                     <span>{{ tab.displayText }}</span>
-                </a>
+                </button>
            </li>
         </ul>
 
@@ -45,12 +45,13 @@
                         {{ fileInfo.timestamp }}
                     </span>
 
-                    <span class="btn btn-link btn-padding-0"
-                          *ngIf="fileInfo.showRestore"
-                          (click)="getUserConfigFromHistory.emit(fileInfo.file)"
-                          [class.disabled]="state.disabled">
-                                {{ fileInfo.displayText }}
-                    </span>
+                    <button type="button"
+                            class="btn btn-link btn-padding-0"
+                            *ngIf="fileInfo.showRestore"
+                            (click)="getUserConfigFromHistory.emit(fileInfo.file)"
+                            [disabled]="state.disabled">
+                        {{ fileInfo.displayText }}
+                    </button>
 
                     <span class="btn btn-link btn-padding-0 current"
                           *ngIf="!fileInfo.showRestore">
@@ -69,12 +70,13 @@
                     {{ fileInfo.timestamp }}
                 </span>
 
-                <span class="btn btn-link btn-padding-0"
-                      *ngIf="fileInfo.showRestore"
-                      (click)="getUserConfigFromHistory.emit(fileInfo.file)"
-                      [class.disabled]="state.disabled">
-                            {{ fileInfo.displayText }}
-                </span>
+                <button type="button"
+                        class="btn btn-link btn-padding-0"
+                        *ngIf="fileInfo.showRestore"
+                        (click)="getUserConfigFromHistory.emit(fileInfo.file)"
+                        [disabled]="state.disabled">
+                    {{ fileInfo.displayText }}
+                </button>
 
                 <span class="btn btn-link btn-padding-0 current"
                       *ngIf="!fileInfo.showRestore">

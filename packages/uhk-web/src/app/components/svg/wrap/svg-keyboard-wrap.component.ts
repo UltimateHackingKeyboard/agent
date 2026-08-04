@@ -152,6 +152,7 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
 
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
+    private restoreFocusAfterPopoverClose = false;
     private animationSubscription = new Subscription();
     private openPopoverSubscription = new Subscription();
 
@@ -241,6 +242,8 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {
+        this.restoreFocusAfterPopoverClose = !!event.keyboardTriggered;
+
         if (this.isBacklightingColoring) {
             this.store.dispatch(new SetKeyColorAction({
                 keymap: this.keymap,
@@ -372,9 +375,17 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     hidePopover(): void {
+        const keyElementToRefocus = this.animationState === 'opened' && this.restoreFocusAfterPopoverClose
+            ? this.keyElement
+            : undefined;
         this.animationState = 'closed';
         this.selectedKey = undefined;
         this.popoverInitKeyAction = null;
+        this.restoreFocusAfterPopoverClose = false;
+
+        if (keyElementToRefocus) {
+            setTimeout(() => keyElementToRefocus.focus());
+        }
     }
 
     onDescriptionChanged(description: string): void {
