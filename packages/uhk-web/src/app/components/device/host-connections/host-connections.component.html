@@ -9,6 +9,10 @@
         <th>
         </th>
         <th>
+            Slot
+            <circle-tooltip tooltip="The slot number this connection occupies. Connection key actions bind to slot numbers, so a key bound to a slot always switches to whichever connection sits in it." />
+        </th>
+        <th>
             Type
         </th>
         <th>
@@ -33,6 +37,9 @@
             <i
                class="uhk-icon uhk-icon-vertical-grip-icon movable"
                aria-hidden="true"></i>
+        </td>
+        <td class="slot-number">
+            {{ index + 1 }}
         </td>
         <td>
             {{hostConnection.type | hostConnectionTypeLabelPipe}}
@@ -82,7 +89,7 @@
     </tbody>
     <tfoot *ngIf="foldedSlotCount > 0">
     <tr>
-        <td colspan="6">
+        <td colspan="7">
             <button type="button"
                     class="btn btn-link p-0 fold-toggle"
                     (click)="toggleFoldedSlots()"

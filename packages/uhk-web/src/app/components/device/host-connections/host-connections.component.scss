@@ -18,6 +18,11 @@ table {
 
     tr.empty-host-connection td {
         opacity: 0.5;
+
+        // The slot number is the point of showing an empty row, so keep it legible.
+        &.slot-number {
+            opacity: 1;
+        }
     }
 
     tfoot td {

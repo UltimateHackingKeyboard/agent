@@ -6,7 +6,6 @@ import {
     ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_SET,
     BUILTIN_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESETS,
     BacklightingMode,
-    ConnectionsAction,
     CUSTOM_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET_NAME,
     CUSTOM_ADVANCED_SECONDARY_ROLE_TOOLTIP,
     emptyHostConnection,
@@ -1182,40 +1181,13 @@ export function reducer(
         case UserConfig.ActionTypes.ReorderHostConnections: {
             const payload = (action as UserConfig.ReorderHostConnectionsAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            const processedConnectionActions = new WeakSet<ConnectionsAction>()
+            // Connections actions bind to slots rather than to hosts, so reordering deliberately
+            // leaves their hostConnectionId alone: a key bound to slot 3 keeps meaning slot 3, and
+            // now triggers whichever host was moved into that slot.
             userConfiguration.hostConnections = payload.map((reorderedConnection, index) => {
                 if (reorderedConnection.index === index) {
                     return reorderedConnection;
                 }
-
-                userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
-                    keymap = Object.assign(new Keymap(), keymap)
-                    keymap.layers = keymap.layers.map(layer => {
-                        layer = Object.assign(new Layer(), layer);
-                        layer.modules = layer.modules.map(module => {
-                            module = Object.assign(new Module(), module);
-                            module.keyActions = module.keyActions.map(keyAction => {
-                                if (keyAction instanceof ConnectionsAction
-                                    && keyAction.hostConnectionId === reorderedConnection.index
-                                    && !processedConnectionActions.has(keyAction)) {
-                                    const newKeyAction = new ConnectionsAction(keyAction);
-                                    newKeyAction.hostConnectionId = index;
-                                    processedConnectionActions.add(newKeyAction);
-
-                                    return newKeyAction;
-                                }
-
-                                return keyAction;
-                            })
-
-                            return module;
-                        })
-
-                        return layer;
-                    })
-
-                    return keymap;
-                })
 
                 const newConnection = new HostConnection(reorderedConnection);
                 newConnection.index = index;
