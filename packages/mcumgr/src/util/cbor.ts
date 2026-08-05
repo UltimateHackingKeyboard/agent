@@ -245,7 +245,7 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
             return readUint64();
         if (additionalInformation === 31)
             return -1;
-        throw "Invalid length encoding";
+        throw new Error("Invalid length encoding");
     }
     function readIndefiniteStringLength(majorType: number): number {
         const initialByte = readUint8();
@@ -253,7 +253,7 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
             return -1;
         const length = readLength(initialByte & 0x1f);
         if (length < 0 || (initialByte >> 5) !== majorType)
-            throw "Invalid indefinite length element";
+            throw new Error("Invalid indefinite length element");
         return length;
     }
 
@@ -309,7 +309,7 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
 
         length = readLength(additionalInformation);
         if (length < 0 && (majorType < 2 || 6 < majorType))
-            throw "Invalid length";
+            throw new Error("Invalid length");
 
         switch (majorType) {
             case 0: {
@@ -395,6 +395,6 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
 
     const ret = decodeItem();
     if (offset !== data.byteLength)
-        throw "Remaining bytes";
+        throw new Error("Remaining bytes");
     return ret;
 }

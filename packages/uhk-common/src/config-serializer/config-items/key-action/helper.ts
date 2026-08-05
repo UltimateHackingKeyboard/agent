@@ -84,7 +84,7 @@ export class Helper {
             case KeyActionId.PlayMacroAction:
                 return new PlayMacroAction().fromBinary(buffer, serialisationInfo, macros);
             default:
-                throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
+                throw new Error(`Invalid KeyAction first byte: ${keyActionFirstByte}`);
         }
     }
 
@@ -176,7 +176,7 @@ export class Helper {
             case keyActionType.NoneBlockAction:
                 return new NoneBlockAction().fromJsonObject(keyAction, serialisationInfo);
             default:
-                throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
+                throw new Error(`Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`);
         }
     }
 }
