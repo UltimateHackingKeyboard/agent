@@ -59,7 +59,7 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.66.0",
     "webpack": "5.109.2",
-    "webpack-cli": "7.2.1"
+    "webpack-cli": "7.2.2"
   },
   "scripts": {
     "install": "npm ci --ignore-scripts && npm run postinstall",
