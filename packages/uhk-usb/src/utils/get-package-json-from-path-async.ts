@@ -13,7 +13,7 @@ export const getPackageJsonFromPathAsync = async (filePath: string): Promise<any
             try {
                 json = JSON.parse(data);
             } catch (e) {
-                return reject(e);
+                return reject(e as Error);
             }
 
             return resolve(json);
