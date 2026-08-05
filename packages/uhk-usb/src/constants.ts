@@ -62,7 +62,8 @@ export enum DevicePropertyIds {
     BleAddress = 9,
     PairedRightPeerBleAddress = 10,
     PairingStatus = 11,
-    NewPairings = 12
+    NewPairings = 12,
+    NewPairingsWithSlots = 13
 }
 
 export enum EnumerationModes {

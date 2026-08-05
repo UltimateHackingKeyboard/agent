@@ -177,6 +177,10 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
 
     @assertUInt16 keystrokeDelay: number;
 
+    bluetoothAlwaysAdvertise: boolean;
+
+    bluetoothKeepConnectionsAlive: boolean;
+
     hostConnections: HostConnection[] = [];
 
     moduleConfigurations: ModuleConfiguration[] = [];
@@ -230,6 +234,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             case 12:
             case 13:
             case 14:
+            case 15:
                 this.fromJsonObjectV9(jsonObject);
                 break;
 
@@ -254,6 +259,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         this.migrateToV12_1();
         this.migrateToV13();
         this.migrateToV14();
+        this.migrateToV15();
 
         this.recalculateConfigurationLength();
 
@@ -291,6 +297,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             case 12:
             case 13:
             case 14:
+            case 15:
                 this.fromBinaryV9(buffer);
                 break;
 
@@ -363,6 +370,10 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             this.userConfigurationLength = 0;
         }
 
+        if (this.migrateToV15()) {
+            this.userConfigurationLength = 0;
+        }
+
         if (this.userConfigurationLength === 0) {
             this.recalculateConfigurationLength();
         }
@@ -429,6 +440,9 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             keyBacklightBrightnessChargingDefault: this.keyBacklightBrightnessChargingDefault,
             batteryChargingMode: BatteryChargingMode[this.batteryChargingMode],
 
+            bluetoothAlwaysAdvertise: this.bluetoothAlwaysAdvertise,
+            bluetoothKeepConnectionsAlive: this.bluetoothKeepConnectionsAlive,
+
             hostConnections: this.hostConnections.map(hostConnection => hostConnection.toJsonObject()),
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.getSerialisationInfo(), this.macros)),
@@ -493,6 +507,8 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         buffer.writeBoolean(this.secondaryRoleAdvancedStrategyTriggerFromSameHalf);
         buffer.writeUInt8(this.secondaryRoleAdvancedStrategyMinimumHoldTime);
         buffer.writeUInt8(this.secondaryRoleAdvancedStrategyTimeoutType);
+        buffer.writeBoolean(this.bluetoothAlwaysAdvertise);
+        buffer.writeBoolean(this.bluetoothKeepConnectionsAlive);
 
         for(let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
             const hostConnection = this.hostConnections[i];
@@ -847,6 +863,11 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
             this.secondaryRoleAdvancedStrategyTimeoutType = buffer.readUInt8();
         }
 
+        if (isSerialisationInfoGte(serialisationInfo, '15.0.0')) {
+            this.bluetoothAlwaysAdvertise = buffer.readBoolean();
+            this.bluetoothKeepConnectionsAlive = buffer.readBoolean();
+        }
+
         this.hostConnections = [];
         for (let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
             const hostConnection = new HostConnection().fromBinary(buffer, serialisationInfo);
@@ -1135,6 +1156,11 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         if (isSerialisationInfoGte(serialisationInfo, '9.99.0')) {
             this.keyBacklightBrightnessChargingDefault = jsonObject.keyBacklightBrightnessChargingDefault;
             this.batteryChargingMode = BatteryChargingMode[jsonObject.batteryChargingMode as string];
+        }
+
+        if (isSerialisationInfoGte(serialisationInfo, '15.0.0')) {
+            this.bluetoothAlwaysAdvertise = jsonObject.bluetoothAlwaysAdvertise;
+            this.bluetoothKeepConnectionsAlive = jsonObject.bluetoothKeepConnectionsAlive;
         }
 
         this.hostConnections = jsonObject.hostConnections.map((hostConnection: any, index: number) => {
@@ -1505,6 +1531,25 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         this.secondaryRoleAdvancedStrategyTriggerFromSameHalf = true;
         this.secondaryRoleAdvancedStrategyMinimumHoldTime = 0;
         this.secondaryRoleAdvancedStrategyTimeoutType = SecondaryRoleAdvancedStrategyTimeoutType.Active;
+
+        return true;
+    }
+
+    private migrateToV15(): boolean {
+        if (this.userConfigMajorVersion > 14) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 15;
+        this.userConfigMinorVersion = 0;
+        this.userConfigPatchVersion = 0;
+
+        // Pre-v15 firmware operated in multipoint mode, but singlepoint is the new default,
+        // so migrated configurations deliberately change behaviour here.
+        this.bluetoothAlwaysAdvertise = false;
+        this.bluetoothKeepConnectionsAlive = false;
+
+        return true;
     }
 
     private getSerialisationInfo(): SerialisationInfo {

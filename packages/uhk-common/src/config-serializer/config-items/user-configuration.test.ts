@@ -11,7 +11,7 @@ describe('user-configuration', () => {
 
     it('should transform an empty config', ({ assert }) => {
         jsonTester( assert, {
-            userConfigMajorVersion: 14,
+            userConfigMajorVersion: 15,
             userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             lastSaveAgentTag: '',
@@ -65,6 +65,8 @@ describe('user-configuration', () => {
             keyBacklightFadeOutBatteryTimeout: 0,
             keyBacklightBrightnessChargingDefault: 50,
             batteryChargingMode: 'Full',
+            bluetoothAlwaysAdvertise: false,
+            bluetoothKeepConnectionsAlive: false,
             hostConnections: [
                 {
                     type: 'UsbRight',

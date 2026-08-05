@@ -12,12 +12,14 @@ import {
     FIRMWARE_UPGRADE_METHODS,
     HalvesInfo,
     isBitSet,
+    isDeviceProtocolSupportNewPairingsWithSlots,
     isEqualArray,
     isVersionLt,
     LeftSlotModules,
     LogService,
     mapI2cAddressToModuleName,
     ModuleSlotToI2cAddress,
+    NewPairedDevice,
     ProtocolVersions,
     RightSlotModules,
     UdevRulesInfo,
@@ -75,6 +77,7 @@ export const BOOTLOADER_TIMEOUT_MS = 5000;
 export const UHK_HID_DEVICE_NOT_CONNECTED = '[UhkHidDevice] Device is not connected';
 
 const MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE = 10;
+const MAX_BLE_ADDRESSES_IN_NEW_PAIRING_WITH_SLOTS_RESPONSE = 8;
 /**
  * HID API wrapper to support unified logging and async write
  */
@@ -636,10 +639,16 @@ export class UhkHidDevice {
         };
     }
 
-    async getPairedDevices(): Promise<string[]> {
+    async getPairedDevices(): Promise<NewPairedDevice[]> {
+        const protocolVersions = await this.getProtocolVersions();
+
+        if (isDeviceProtocolSupportNewPairingsWithSlots(protocolVersions.deviceProtocolVersion)) {
+            return this.getPairedDevicesWithSlots();
+        }
+
         this.logService.misc('[UhkHidDevice] Read paired devices');
         let iteration = 0;
-        const result: string[] = [];
+        const result: NewPairedDevice[] = [];
 
         while (true) {
             this.logService.usb('[UhkHidDevice] USB[T]: Read paired devices');
@@ -658,10 +667,52 @@ export class UhkHidDevice {
                 for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                     address.push(uhkBuffer.readUInt8());
                 }
-                result.push(convertBleAddressArrayToString(address));
+                result.push({ address: convertBleAddressArrayToString(address) });
             }
 
             if (remainingNewConnections <= MAX_BLE_ADDRESSES_IN_NEW_PAIRING_RESPONSE) {
+                break;
+            }
+
+            iteration += 1;
+        }
+
+        return result;
+    }
+
+    /**
+     * Same paging shape as {@link DevicePropertyIds.NewPairings}, but every entry also carries the host
+     * connection slot the firmware wants the bond to end up in, and a page holds 8 entries instead of 10.
+     */
+    private async getPairedDevicesWithSlots(): Promise<NewPairedDevice[]> {
+        this.logService.misc('[UhkHidDevice] Read paired devices with slots');
+        let iteration = 0;
+        const result: NewPairedDevice[] = [];
+
+        while (true) {
+            this.logService.usb('[UhkHidDevice] USB[T]: Read paired devices with slots');
+            const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.NewPairingsWithSlots, iteration]);
+            const buffer = await this.write(command);
+            const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+            // skip the first byte
+            uhkBuffer.readUInt8();
+
+            const remainingNewConnections = uhkBuffer.readUInt8();
+
+            const count = Math.min(remainingNewConnections, MAX_BLE_ADDRESSES_IN_NEW_PAIRING_WITH_SLOTS_RESPONSE);
+
+            for (let i = 0; i < count; i++) {
+                const address: number[] = [];
+                for (let j = 0; j < BLE_ADDRESS_LENGTH; j++) {
+                    address.push(uhkBuffer.readUInt8());
+                }
+                result.push({
+                    address: convertBleAddressArrayToString(address),
+                    slot: uhkBuffer.readUInt8(),
+                });
+            }
+
+            if (remainingNewConnections <= MAX_BLE_ADDRESSES_IN_NEW_PAIRING_WITH_SLOTS_RESPONSE) {
                 break;
             }
 

@@ -42,6 +42,7 @@ export class Helper {
             case 12:
             case 13:
             case 14:
+            case 15:
                 return this.fromUhkBufferV1(buffer, macros, serialisationInfo);
 
             default:
@@ -133,6 +134,7 @@ export class Helper {
             case 12:
             case 13:
             case 14:
+            case 15:
                 return this.fromJSONObjectV1(keyAction, macros, serialisationInfo);
 
             default:

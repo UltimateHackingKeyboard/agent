@@ -15,6 +15,7 @@ export * from './is-bit-set.js';
 export * from './is-device-protocol-support-active-keymap-index.js';
 export * from './is-device-protocol-support-firmware-checksum.js';
 export * from './is-device-protocol-support-git-info.js';
+export * from './is-device-protocol-support-new-pairings-with-slots.js';
 export * from './is-device-protocol-support-status-error.js';
 export * from './is-equal-array.js';
 export * from './is-official-uhk-firmware.js';
