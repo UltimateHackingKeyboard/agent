@@ -814,38 +814,7 @@ export class UhkOperations {
 
     public async getVariable(variableId: UsbVariables): Promise<number | string> {
         if (variableId === UsbVariables.statusBuffer || variableId === UsbVariables.ShellBuffer) {
-            // Firmware status buffer is STATUS_BUFFER_MAX_LENGTH (3000); shell buffer is 2048.
-            // Each USB transfer returns at most (report length - 1) payload bytes (~62).
-            // The previous hard cap of 20 iterations (~1260 bytes) left unread data in the device,
-            // which the next poll then showed alone and overwrote the UI (#3025).
-            const maxIterations = 100;
-            let message = '';
-
-            for (let iteration = 0; iteration < maxIterations; iteration++) {
-                this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
-                const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
-                const responseBuffer = await this.device.write(buffer);
-                const segment = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
-                this.logService.misc(`[DeviceOperation] status buffer segment: ${segment}`);
-                message += segment;
-
-                if (segment.length !== responseBuffer.length - 1) {
-                    break;
-                }
-
-                if (iteration === maxIterations - 1) {
-                    this.logService.error(`[DeviceOperation] ${UsbVariables[variableId]} truncated after ${maxIterations} USB transfers`);
-                }
-            }
-
-            // The shell buffer carries a raw VT100 stream (colors, cursor control) that must be
-            // forwarded verbatim to the terminal emulator. Only the macro status buffer gets the
-            // dedup/reorder normalization.
-            if (variableId === UsbVariables.statusBuffer) {
-                message = normalizeStatusBuffer(message);
-            }
-
-            return message;
+            return this.getVariableWithIteration(variableId);
         }
 
         this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}`);
@@ -853,6 +822,43 @@ export class UhkOperations {
         const responseBuffer = await this.device.write(buffer);
 
         return responseBuffer[1];
+    }
+
+    private async getVariableWithIteration(variableId: UsbVariables): Promise<string> {
+        // Firmware status buffer is STATUS_BUFFER_MAX_LENGTH (3000); shell buffer is 2048.
+        // Each USB transfer returns at most (report length - 1) payload bytes (~62).
+        // The buffers are NUL terminated strings.
+        // The maxIterations is a safeguard against infinite loops.
+        const maxIterations = 100;
+        let message = '';
+
+        for (let iteration = 0; iteration < maxIterations; iteration++) {
+            this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
+            const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
+            const responseBuffer = await this.device.write(buffer);
+            const segment = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
+            this.logService.misc(`[DeviceOperation] status buffer segment: ${segment}`);
+            message += segment;
+
+            // The content of the variable is a NUL terminated string.
+            // When the segment length is not equal to the buffer length - 1, the buffer is complete.
+            if (segment.length !== responseBuffer.length - 1) {
+                break;
+            }
+
+            if (iteration === maxIterations) {
+                this.logService.error(`[DeviceOperation] ${UsbVariables[variableId]} truncated after ${maxIterations} USB transfers`);
+            }
+        }
+
+        // The shell buffer carries a raw VT100 stream (colors, cursor control) that must be
+        // forwarded verbatim to the terminal emulator. Only the macro status buffer gets the
+        // dedup/reorder normalization.
+        if (variableId === UsbVariables.statusBuffer) {
+            message = normalizeStatusBuffer(message);
+        }
+
+        return message;
     }
 
     public async pairToDongle(dongle: UhkHidDevice) : Promise<BleAddressPair> {
