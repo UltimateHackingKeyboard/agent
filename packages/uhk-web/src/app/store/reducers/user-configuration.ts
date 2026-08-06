@@ -1374,8 +1374,9 @@ export function reducer(
             const {index} = (action as DonglePairing.DeleteHostConnectionSuccessAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration.hostConnections = [...state.userConfiguration.hostConnections];
-            userConfiguration.hostConnections.splice(index, 1);
-            userConfiguration.hostConnections.push(emptyHostConnection());
+            // Slots are positional, so deleting empties the slot in place instead of compacting the
+            // array, which would renumber every connection below it.
+            userConfiguration.hostConnections[index] = emptyHostConnection();
 
             return  {
                 ...state,
