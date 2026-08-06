@@ -6,7 +6,6 @@ import {
     ADVANCED_SECONDARY_ROLE_CONFIGURATION_FIELD_SET,
     BUILTIN_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESETS,
     BacklightingMode,
-    ConnectionsAction,
     CUSTOM_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET_NAME,
     CUSTOM_ADVANCED_SECONDARY_ROLE_TOOLTIP,
     emptyHostConnection,
@@ -30,6 +29,7 @@ import {
     Module,
     ModuleConfiguration,
     MODULES_NONE_CONFIGS,
+    NewPairedDevice,
     NoneAction,
     PlayMacroAction,
     RgbColor,
@@ -89,7 +89,7 @@ export interface State {
     lastEditedKey: LastEditedKey;
     layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
-    newPairedDevices: string[];
+    newPairedDevices: NewPairedDevice[];
     newPairedDevicesAdding: boolean;
     newerUserConfiguration?: NewerUserConfiguration;
     selectedLayerOption: LayerOption;
@@ -148,19 +148,37 @@ export function reducer(
 
         case UserConfig.ActionTypes.AddNewPairedDevicesToHostConnections: {
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            userConfiguration.hostConnections = state.userConfiguration.hostConnections.filter(hostConnection => hostConnection.type !== HostConnections.Empty);
-            for (const bleAddress of state.newPairedDevices) {
+            const hostConnections = state.userConfiguration.hostConnections.map(hostConnection => new HostConnection(hostConnection));
+
+            // The slots the firmware reports are indices into the full array, so it must stay
+            // addressable by index and the existing connections must keep their positions.
+            for (let i = hostConnections.length; i < HOST_CONNECTION_COUNT_MAX; i++) {
+                hostConnections.push(emptyHostConnection());
+            }
+
+            for (const newPairedDevice of state.newPairedDevices) {
                 const hostConnection = new HostConnection();
                 hostConnection.type = HostConnections.BLE;
-                hostConnection.address = bleAddress;
-                hostConnection.name = generateHostConnectionName(userConfiguration.hostConnections, 'Bluetooth device');
+                hostConnection.address = newPairedDevice.address;
+                hostConnection.name = generateHostConnectionName(hostConnections, 'Bluetooth device');
 
-                userConfiguration.hostConnections.push(hostConnection);
+                const slot = findHostConnectionSlot(hostConnections, newPairedDevice.slot);
+
+                if (slot === -1) {
+                    // Unreachable while any slot is still empty, so this only happens when the
+                    // keyboard really has more than HOST_CONNECTION_COUNT_MAX hosts. Overflowing the
+                    // array is what puts the UI into the TooMuchHostConnections state, which asks
+                    // the user to delete connections.
+                    hostConnection.index = hostConnections.length;
+                    hostConnections.push(hostConnection);
+                }
+                else {
+                    hostConnection.index = slot;
+                    hostConnections[slot] = hostConnection;
+                }
             }
 
-            for (let i = userConfiguration.hostConnections.length; i < HOST_CONNECTION_COUNT_MAX; i++) {
-                userConfiguration.hostConnections.push(emptyHostConnection());
-            }
+            userConfiguration.hostConnections = hostConnections;
 
             return {
                 ...state,
@@ -1163,40 +1181,13 @@ export function reducer(
         case UserConfig.ActionTypes.ReorderHostConnections: {
             const payload = (action as UserConfig.ReorderHostConnectionsAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            const processedConnectionActions = new WeakSet<ConnectionsAction>()
+            // Connections actions bind to slots rather than to hosts, so reordering deliberately
+            // leaves their hostConnectionId alone: a key bound to slot 3 keeps meaning slot 3, and
+            // now triggers whichever host was moved into that slot.
             userConfiguration.hostConnections = payload.map((reorderedConnection, index) => {
                 if (reorderedConnection.index === index) {
                     return reorderedConnection;
                 }
-
-                userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
-                    keymap = Object.assign(new Keymap(), keymap)
-                    keymap.layers = keymap.layers.map(layer => {
-                        layer = Object.assign(new Layer(), layer);
-                        layer.modules = layer.modules.map(module => {
-                            module = Object.assign(new Module(), module);
-                            module.keyActions = module.keyActions.map(keyAction => {
-                                if (keyAction instanceof ConnectionsAction
-                                    && keyAction.hostConnectionId === reorderedConnection.index
-                                    && !processedConnectionActions.has(keyAction)) {
-                                    const newKeyAction = new ConnectionsAction(keyAction);
-                                    newKeyAction.hostConnectionId = index;
-                                    processedConnectionActions.add(newKeyAction);
-
-                                    return newKeyAction;
-                                }
-
-                                return keyAction;
-                            })
-
-                            return module;
-                        })
-
-                        return layer;
-                    })
-
-                    return keymap;
-                })
 
                 const newConnection = new HostConnection(reorderedConnection);
                 newConnection.index = index;
@@ -1383,8 +1374,9 @@ export function reducer(
             const {index} = (action as DonglePairing.DeleteHostConnectionSuccessAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration.hostConnections = [...state.userConfiguration.hostConnections];
-            userConfiguration.hostConnections.splice(index, 1);
-            userConfiguration.hostConnections.push(emptyHostConnection());
+            // Slots are positional, so deleting empties the slot in place instead of compacting the
+            // array, which would renumber every connection below it.
+            userConfiguration.hostConnections[index] = emptyHostConnection();
 
             return  {
                 ...state,
@@ -1820,6 +1812,21 @@ function addNewMacroToState(state: State): State {
         selectedMacroId: newMacro.id,
         isSelectedMacroNew: true
     };
+}
+
+/**
+ * Returns the slot a newly paired device should occupy: the one the firmware asked for when it is
+ * free, otherwise the first empty slot, or -1 when every slot is taken.
+ */
+function findHostConnectionSlot(hostConnections: HostConnection[], preferredSlot: number | undefined): number {
+    const isSlotEmpty = (slot: number): boolean =>
+        slot >= 0 && slot < hostConnections.length && hostConnections[slot].type === HostConnections.Empty;
+
+    if (preferredSlot !== undefined && isSlotEmpty(preferredSlot)) {
+        return preferredSlot;
+    }
+
+    return hostConnections.findIndex(hostConnection => hostConnection.type === HostConnections.Empty);
 }
 
 function generateHostConnectionName(hostConnections: HostConnection[], baseName: string): string {

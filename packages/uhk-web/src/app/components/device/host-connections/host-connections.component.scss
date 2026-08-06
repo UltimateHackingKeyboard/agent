@@ -15,6 +15,44 @@ table {
             }
         }
     }
+
+    tr.empty-host-connection td {
+        opacity: 0.5;
+
+        // The slot number is the point of showing an empty row, so keep it legible.
+        &.slot-number {
+            opacity: 1;
+        }
+    }
+
+    tfoot td {
+        border-bottom: none;
+    }
+
+    .fold-toggle {
+        text-decoration: none;
+    }
+}
+
+.multipoint-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    // Keep the switch at control size rather than letting it scale with the heading font.
+    .form-check {
+        margin-bottom: 0;
+        font-size: 1rem;
+    }
+
+    label {
+        margin-bottom: 0;
+        cursor: pointer;
+    }
+}
+
+.multipoint-options {
+    padding-left: 2.5rem;
 }
 
 // Dragula styles

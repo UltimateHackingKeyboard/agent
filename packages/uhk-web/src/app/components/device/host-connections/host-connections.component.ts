@@ -1,10 +1,17 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
-import { faCircleExclamation, faCircleNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+    faChevronDown,
+    faChevronUp,
+    faCircleExclamation,
+    faCircleNodes,
+    faSpinner,
+    faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { HostConnection } from 'uhk-common';
+import { HostConnection, HostConnections } from 'uhk-common';
 
 import { EraseBleSettingsButtonState } from '../../../models';
 import { CheckAreHostConnectionsPairedAction, EraseBleSettingAction } from '../../../store/actions/device';
@@ -13,8 +20,15 @@ import {
     RenameHostConnectionAction,
     ReorderHostConnectionsAction,
     SetHostConnectionSwitchoverAction,
+    SetUserConfigurationValueAction,
 } from '../../../store/actions/user-config';
-import { AppState, getEraseBleSettingsButtonState, getHostConnections, getHostConnectionPairState } from '../../../store/index';
+import {
+    AppState,
+    getEraseBleSettingsButtonState,
+    getHostConnections,
+    getHostConnectionPairState,
+    getUserConfiguration,
+} from '../../../store/index';
 
 @Component({
     selector: 'host-connections',
@@ -30,15 +44,28 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     faSpinner = faSpinner;
     faTrash = faTrash;
     faCircleExclamation = faCircleExclamation;
+    faChevronDown = faChevronDown;
+    faChevronUp = faChevronUp;
 
     hostConnectionPairState: Record<string, boolean> = {};
     eraseBleSettingsButtonState: EraseBleSettingsButtonState;
     hostConnections: HostConnection[] = [] as HostConnection[];
     dragAndDropGroup = 'HOST_CONNECTION';
 
+    bluetoothAlwaysAdvertise = false;
+    bluetoothKeepConnectionsAlive = false;
+
+    /**
+     * The trailing run of empty slots is folded away by default, otherwise the table is
+     * always HOST_CONNECTION_COUNT_MAX rows tall. Empty slots between used ones stay visible.
+     */
+    showFoldedSlots = false;
+    foldedSlotCount = 0;
+
     private hostConnectionPairStateSubscription: Subscription;
     private eraseBleSettingsSubscription: Subscription;
     private hostConnectionsSubscription: Subscription;
+    private userConfigurationSubscription: Subscription;
 
     constructor(private dragulaService: DragulaService,
                 private cdRef: ChangeDetectorRef,
@@ -79,6 +106,13 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
         this.hostConnectionsSubscription = this.store.select(getHostConnections)
             .subscribe(hostConnections => {
                 this.hostConnections = hostConnections;
+                this.foldedSlotCount = this.countTrailingEmptySlots(hostConnections);
+                this.cdRef.markForCheck();
+            });
+        this.userConfigurationSubscription = this.store.select(getUserConfiguration)
+            .subscribe(userConfiguration => {
+                this.bluetoothAlwaysAdvertise = userConfiguration.bluetoothAlwaysAdvertise;
+                this.bluetoothKeepConnectionsAlive = userConfiguration.bluetoothKeepConnectionsAlive;
                 this.cdRef.markForCheck();
             });
     }
@@ -88,6 +122,7 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
         this.eraseBleSettingsSubscription?.unsubscribe();
         this.hostConnectionPairStateSubscription?.unsubscribe();
         this.hostConnectionsSubscription?.unsubscribe();
+        this.userConfigurationSubscription?.unsubscribe();
     }
 
     deleteHostConnection(index: number, hostConnection: HostConnection): void {
@@ -113,7 +148,68 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
         this.store.dispatch(new SetHostConnectionSwitchoverAction({index, checked}));
     }
 
+    isEmpty(hostConnection: HostConnection): boolean {
+        return hostConnection.type === HostConnections.Empty;
+    }
+
     showNotPairedTooltip(hostConnection: HostConnection): boolean {
         return hostConnection.hasAddress() && !this.hostConnectionPairState[hostConnection.address];
+    }
+
+    /**
+     * The folded slots are always a suffix of the array, so the rendered rows keep lining up
+     * one-to-one with the drag and drop model indices.
+     */
+    get visibleHostConnectionCount(): number {
+        if (this.showFoldedSlots) {
+            return this.hostConnections.length;
+        }
+
+        return this.hostConnections.length - this.foldedSlotCount;
+    }
+
+    toggleFoldedSlots(): void {
+        this.showFoldedSlots = !this.showFoldedSlots;
+    }
+
+    get multipointEnabled(): boolean {
+        return this.bluetoothKeepConnectionsAlive;
+    }
+
+    setMultipointEnabled(enabled: boolean): void {
+        // Both options together make up multipoint operation, so the toggle drives both. Either one
+        // can be turned back off afterwards, except that always advertise keeps them alive.
+        this.setUserConfigurationValue('bluetoothKeepConnectionsAlive', enabled);
+        this.setUserConfigurationValue('bluetoothAlwaysAdvertise', enabled);
+    }
+
+    setBluetoothAlwaysAdvertise(checked: boolean): void {
+        this.setUserConfigurationValue('bluetoothAlwaysAdvertise', checked);
+
+        // Advertising while connected is only meaningful if the existing connections are kept.
+        if (checked) {
+            this.setUserConfigurationValue('bluetoothKeepConnectionsAlive', true);
+        }
+    }
+
+    private setUserConfigurationValue(propertyName: string, value: boolean): void {
+        if (this[propertyName] === value) {
+            return;
+        }
+
+        this.store.dispatch(new SetUserConfigurationValueAction({
+            propertyName,
+            value,
+        }));
+    }
+
+    private countTrailingEmptySlots(hostConnections: HostConnection[]): number {
+        let count = 0;
+
+        for (let i = hostConnections.length - 1; i >= 0 && this.isEmpty(hostConnections[i]); i--) {
+            count++;
+        }
+
+        return count;
     }
 }
