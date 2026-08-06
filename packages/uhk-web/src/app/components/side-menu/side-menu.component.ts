@@ -7,7 +7,8 @@ import {
     OnDestroy,
     OnInit,
     Renderer2,
-    SimpleChanges
+    SimpleChanges,
+    inject,
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -115,12 +116,9 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     maxAllowedMacrosTooltip = MAX_ALLOWED_MACROS_TOOLTIP;
     macroGroupState: Record<string, SideMenuItemState> = {};
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private stateSubscription: Subscription;
-
-    constructor(private store: Store<AppState>,
-                private renderer: Renderer2,
-                private cdRef: ChangeDetectorRef) {
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnInit(): void {
         this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {

@@ -1,6 +1,6 @@
 import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,8 +10,8 @@ import { DeviceUiStates } from '../models';
 
 @Injectable()
 export class UhkMultiDeviceGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     canActivate(): Observable<boolean | UrlTree> {
         return this.store.select(calculateDeviceUiState)

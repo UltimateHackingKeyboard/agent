@@ -6,7 +6,8 @@ import {
     OnChanges,
     OnInit,
     Output,
-    SimpleChanges
+    SimpleChanges,
+    inject,
 } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { faCode, faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
@@ -89,7 +90,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     faGripLinesVertical = faGripLinesVertical;
     isCommand = false;
 
-    constructor(private mapper: MapperService) { }
+    private readonly mapper = inject(MapperService);
 
     ngOnInit() {
         this.updateView();

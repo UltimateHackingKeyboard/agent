@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -20,11 +20,9 @@ export class PrivilegeCheckerComponent implements OnInit, OnDestroy {
     state: PrivilagePageSate;
     platform: string;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private stateSubscription = new Subscription();
-
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnInit(): void {
         this.stateSubscription.add(

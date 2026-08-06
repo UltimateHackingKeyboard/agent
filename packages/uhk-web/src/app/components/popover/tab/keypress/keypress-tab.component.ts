@@ -7,7 +7,8 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { NgSelectComponent } from '@ng-select/ng-select';
@@ -61,11 +62,13 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     warningVisible: boolean;
     faInfoCircle = faInfoCircle;
 
-    constructor(private mapper: MapperService,
-                private cdRef: ChangeDetectorRef) {
+    private readonly mapper = inject(MapperService);
+    private readonly cdRef = inject(ChangeDetectorRef);
+
+    constructor() {
         super();
-        this.leftModifiers = mapper.getLeftKeyModifiers();
-        this.rightModifiers = mapper.getRightKeyModifiers();
+        this.leftModifiers = this.mapper.getLeftKeyModifiers();
+        this.rightModifiers = this.mapper.getRightKeyModifiers();
 
         this.scanCodeGroups = [{
             id: '0',

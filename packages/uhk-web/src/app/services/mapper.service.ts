@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { KeyModifiers, KeystrokeType, SecondaryRoleAction } from 'uhk-common';
 import { Subscription } from 'rxjs';
@@ -30,8 +30,10 @@ export class MapperService implements OnDestroy {
     private operatingSystem: OperatingSystem;
     private osSubscription: Subscription;
 
-    constructor(private store: Store<AppState>) {
-        this.osSubscription = store
+    private readonly store = inject<Store<AppState>>(Store);
+
+    constructor() {
+        this.osSubscription = this.store
             .select(getOperatingSystem)
             .subscribe(os => {
                 this.operatingSystem = os;

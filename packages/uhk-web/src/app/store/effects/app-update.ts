@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
@@ -22,6 +22,11 @@ import { AppState, isForceUpdate, isUpdateDownloaded } from '../index';
 
 @Injectable()
 export class AppUpdateEffect {
+    private readonly actions$ = inject(Actions);
+    private readonly appUpdateRendererService = inject(AppUpdateRendererService);
+    private readonly logService = inject(LogService);
+    private readonly store = inject<Store<AppState>>(Store);
+
     updateApp$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.UpdateApp),
@@ -99,11 +104,5 @@ export class AppUpdateEffect {
             })
         )
     );
-
-    constructor(private actions$: Actions,
-                private appUpdateRendererService: AppUpdateRendererService,
-                private logService: LogService,
-                private store: Store<AppState>) {
-    }
 
 }

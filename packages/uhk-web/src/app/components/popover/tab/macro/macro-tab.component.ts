@@ -1,4 +1,16 @@
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    inject,
+} from '@angular/core';
 import { faCirclePlus, faCircleMinus, faPlus, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -40,12 +52,14 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     selectedMacroIndex: number;
     showMacroArguments = false;
     showMacroArgumentsTooltip: string;
+
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscription: Subscription;
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
+    constructor() {
         super();
-        this.subscription = store.select(getMacros)
+        this.subscription = this.store.select(getMacros)
             .subscribe((macros: Macro[]) => this.macros = macros);
         this.macroOptions = [];
         this.selectedMacroIndex = 0;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RgbColor } from 'colord';
@@ -76,16 +76,17 @@ export class KeymapEditComponent implements OnDestroy {
     showColorPalette$: Observable<boolean>;
     inactiveKeymapTooltip$: Observable<string>;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
     private queryParamsSubscription: Subscription;
     private selectedLayer: LayerName;
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(protected store: Store<AppState>,
-                private route: ActivatedRoute,
-                private router: Router,
-                private cdRef: ChangeDetectorRef) {
-        this.routeSubscription = route
+    constructor() {
+        this.routeSubscription = this.route
             .params
             .pipe(
                 map(params => params.abbr)
@@ -95,10 +96,10 @@ export class KeymapEditComponent implements OnDestroy {
                     abbr = decodeURIComponent(abbr)
                 }
 
-                store.dispatch(new SelectKeymapAction(abbr));
+                this.store.dispatch(new SelectKeymapAction(abbr));
             });
 
-        this.queryParamsSubscription = route.queryParams.subscribe(params => {
+        this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
             this.selectedLayer = params.layer ? +params.layer : LayerName.base;
             this.store.dispatch(new SelectLayerAction(this.selectedLayer));
 
@@ -113,24 +114,24 @@ export class KeymapEditComponent implements OnDestroy {
             }));
         });
 
-        this.backlightingMode$ = store.select(backlightingMode);
-        this.currentLayer$ = store.select(getSelectedLayerOption);
-        this.copiedLayerOrigin$ = store.select(getCopiedLayerOrigin);
-        this.keymap$ = store.select(getSelectedKeymap);
+        this.backlightingMode$ = this.store.select(backlightingMode);
+        this.currentLayer$ = this.store.select(getSelectedLayerOption);
+        this.copiedLayerOrigin$ = this.store.select(getCopiedLayerOrigin);
+        this.keymap$ = this.store.select(getSelectedKeymap);
         this.keymapSubscription = this.keymap$
             .subscribe(keymap => {
                 this.keymap = keymap;
                 this.cdRef.markForCheck();
             });
 
-        this.deletable$ = store.select(isKeymapDeletable);
-        this.hasCopiedLayer$ = store.select(getHasCopiedLayer);
+        this.deletable$ = this.store.select(isKeymapDeletable);
+        this.hasCopiedLayer$ = this.store.select(getHasCopiedLayer);
 
-        this.keyboardLayout$ = store.select(getKeyboardLayout);
-        this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
-        this.lastEditedKey$ = store.select(lastEditedKey);
-        this.halvesInfo$ = store.select(getHalvesInfo);
-        this.isBacklightingColoring$ = store.select(isBacklightingColoring);
+        this.keyboardLayout$ = this.store.select(getKeyboardLayout);
+        this.allowLayerDoubleTap$ = this.store.select(layerDoubleTapSupported);
+        this.lastEditedKey$ = this.store.select(lastEditedKey);
+        this.halvesInfo$ = this.store.select(getHalvesInfo);
+        this.isBacklightingColoring$ = this.store.select(isBacklightingColoring);
         this.layerOptions$ = this.store.select(getLayerOptions);
         this.secondaryRoleOptions$ = this.store.select(getSecondaryRoleOptions);
         this.showColorPalette$ = this.store.select(showColorPalette);

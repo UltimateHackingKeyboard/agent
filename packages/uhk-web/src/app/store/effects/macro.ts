@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -14,6 +14,9 @@ import { SelectMacroAction } from '../actions/macro';
 
 @Injectable()
 export class MacroEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     macroNavigated$ = createEffect(() => this.actions$
         .pipe(
@@ -68,10 +71,5 @@ export class MacroEffects {
         }
 
         return this.router.navigate(['/macro']);
-    }
-
-    constructor(private actions$: Actions,
-                private router: Router,
-                private store: Store<AppState>) {
     }
 }

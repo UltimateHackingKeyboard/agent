@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED, ROUTER_NAVIGATION, RouterNavigatedAction} from '@ngrx/router-store';
@@ -88,6 +88,13 @@ import { RouterState } from '../router-util';
 
 @Injectable()
 export class DeviceEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly appRendererService = inject(AppRendererService);
+    private readonly dataStorageRepository = inject(DataStorageRepositoryService);
+    private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
+    private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     changeDevice$ = createEffect(() => this.actions$
         .pipe(
@@ -586,15 +593,6 @@ export class DeviceEffects {
             })
         )
     );
-
-    constructor(private actions$: Actions,
-                private router: Router,
-                private appRendererService: AppRendererService,
-                private deviceRendererService: DeviceRendererService,
-                private store: Store<AppState>,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private defaultUserConfigurationService: DefaultUserConfigurationService) {
-    }
 
     private sendUserConfigToKeyboard(
         userConfiguration: UserConfiguration,

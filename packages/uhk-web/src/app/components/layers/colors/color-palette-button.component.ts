@@ -9,7 +9,8 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
@@ -43,10 +44,11 @@ export class ColorPaletteButtonComponent implements OnChanges {
     editColor = '#000000';
     faCheck = faCheck;
 
+    private readonly host = inject(ElementRef);
     private mouseIn = false;
+    private readonly tooltip = inject(NgbTooltip);
 
-    constructor(private host: ElementRef,
-                private tooltip: NgbTooltip) {
+    constructor() {
         this.tooltip.autoClose = false;
         this.tooltip.placement = 'top';
         this.tooltip.triggers = 'manual';

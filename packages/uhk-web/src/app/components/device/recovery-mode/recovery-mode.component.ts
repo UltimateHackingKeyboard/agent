@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { faWrench } from '@fortawesome/free-solid-svg-icons';
@@ -26,11 +26,9 @@ export class RecoveryModeComponent implements OnDestroy, OnInit {
     xtermLog$: Observable<Array<XtermLog>>;
     faWrench = faWrench;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private recoverPageStateSubscription: Subscription;
-
-    constructor(private cdRef: ChangeDetectorRef,
-                private store: Store<AppState>) {
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnDestroy(): void {
         this.recoverPageStateSubscription?.unsubscribe();

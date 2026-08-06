@@ -5,7 +5,8 @@ import {
     ElementRef,
     OnDestroy,
     OnInit,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
@@ -72,15 +73,16 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     UHK_DONGLE = UHK_DONGLE;
     UHK_80_DEVICE_LEFT = UHK_80_DEVICE_LEFT;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private i2cErrorsLength = 0;
     private stateSubscription: Subscription;
     private connectedDeviceSubscription: Subscription;
     private dongleSubscription: Subscription;
     private keyboardLayoutSubscription: Subscription;
     private leftHalfDetectedSubscription: Subscription;
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
+    constructor() {
         this.state = initialState();
         this.isKeyboardLayoutChanging$ = this.store.select(isKeyboardLayoutChanging);
     }

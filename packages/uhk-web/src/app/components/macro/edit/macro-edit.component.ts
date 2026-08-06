@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
@@ -68,18 +68,20 @@ export class MacroEditComponent implements OnDestroy {
         left: 100,
         right: 0
     };
+
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly mapper = inject(MapperService);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscriptions = new Subscription();
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef,
-                private route: ActivatedRoute,
-                private router: Router,
-                private mapper: MapperService) {
+    constructor() {
         this.subscriptions.add(
             combineLatest([
-                store.select(getSelectedMacro),
-                store.select(getKeymaps),
-                store.select(getDefaultUserConfiguration),
+                this.store.select(getSelectedMacro),
+                this.store.select(getKeymaps),
+                this.store.select(getDefaultUserConfiguration),
             ]).subscribe(([macro, keymaps, defaultUserConfiguration]) => {
                 this.macro = macro;
                 this.assignments = macro
@@ -97,8 +99,8 @@ export class MacroEditComponent implements OnDestroy {
         this.isNew$ = this.store.select(isSelectedMacroNew);
         this.isMacroCommandSupported$ = this.store.select(isMacroCommandSupported);
         this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
-        this.maxMacroCountReached$ = store.select(maxMacroCountReached);
-        this.subscriptions.add(store.select(getSmartMacroPanelWidth)
+        this.maxMacroCountReached$ = this.store.select(maxMacroCountReached);
+        this.subscriptions.add(this.store.select(getSmartMacroPanelWidth)
             .subscribe((width: number) => {
                 this.smartMacroPanelSizes = {
                     left: 100 - width,
@@ -106,9 +108,9 @@ export class MacroEditComponent implements OnDestroy {
                 };
                 this.cdRef.markForCheck();
             }));
-        this.selectedMacroAction$ = store.select(getSelectedMacroAction);
-        this.smartMacroDocUrl$ = store.select(selectSmartMacroDocUrl);
-        this.smartMacroPanelVisibility$ = store.select(getSmartMacroPanelVisibility);
+        this.selectedMacroAction$ = this.store.select(getSelectedMacroAction);
+        this.smartMacroDocUrl$ = this.store.select(selectSmartMacroDocUrl);
+        this.smartMacroPanelVisibility$ = this.store.select(getSmartMacroPanelVisibility);
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             if (params.actionIndex) {
                 if (params.actionIndex === 'new') {

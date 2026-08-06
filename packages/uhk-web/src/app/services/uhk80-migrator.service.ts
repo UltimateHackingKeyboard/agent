@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import {
@@ -20,13 +20,12 @@ import { DefaultUserConfigurationService } from './default-user-configuration.se
 @Injectable({ providedIn: 'root' })
 export class Uhk80MigratorService implements OnDestroy {
     private connectedDevice: UhkDeviceProduct;
+    private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
     private platform: string;
+    private readonly store = inject<Store<AppState>>(Store);
     private subscriptions = new Subscription();
 
-    constructor(
-        private defaultUserConfigurationService: DefaultUserConfigurationService,
-        private store: Store<AppState>,
-    ) {
+    constructor() {
         this.subscriptions.add(this.store.select(getConnectedDevice).subscribe(device => {
             this.connectedDevice = device;
         }));

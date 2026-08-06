@@ -6,7 +6,8 @@ import {
     Input,
     OnDestroy,
     Output,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -65,9 +66,7 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     private cancelPending = false;
     private changeObserver$: Observer<number>;
     private changeDebounceTime: number = 300;
-
-    constructor(private sanitizer: DomSanitizer) {
-    }
+    private readonly sanitizer = inject(DomSanitizer);
 
     ngOnDestroy() {
         if (this.changeObserver$) {
