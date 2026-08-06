@@ -1544,10 +1544,11 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         this.userConfigMinorVersion = 0;
         this.userConfigPatchVersion = 0;
 
-        // Pre-v15 firmware operated in multipoint mode, but singlepoint is the new default,
-        // so migrated configurations deliberately change behaviour here.
-        this.bluetoothAlwaysAdvertise = false;
-        this.bluetoothKeepConnectionsAlive = false;
+        // Pre-v15 firmware always operated in multipoint mode, so upgraded configurations keep it
+        // to avoid changing the behaviour of an existing keyboard. Fresh configurations default to
+        // singlepoint instead, which is set in user-config-80.json rather than here.
+        this.bluetoothAlwaysAdvertise = true;
+        this.bluetoothKeepConnectionsAlive = true;
 
         return true;
     }
