@@ -1,9 +1,9 @@
 import debug from 'debug';
 import {setTimeout} from 'node:timers/promises';
+import crc16 from 'crc16-xmodem';
 import {SerialPort} from 'serialport';
 
 import { Peripheral } from './peripheral.js';
-import crc16 from './util/crc16.js';
 import toUint16 from './util/to-uint16.js';
 import convertToHex from './util/convert-to-hex.js';
 import fromUint16 from "./util/from-uint16.js";
