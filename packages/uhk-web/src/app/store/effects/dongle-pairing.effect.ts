@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType} from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, tap, withLatestFrom } from 'rxjs/operators';
@@ -20,6 +20,9 @@ import { AppState, getDongle } from '../index';
 
 @Injectable()
 export class DonglePairingEffect {
+    private readonly actions$ = inject(Actions);
+    private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly store = inject<Store<AppState>>(Store);
 
     deleteHostConnection$ = createEffect(() => this.actions$
         .pipe(
@@ -84,9 +87,4 @@ export class DonglePairingEffect {
                 return new SaveConfigurationAction(true);
             })
         ));
-
-    constructor(private actions$: Actions,
-                private deviceRendererService: DeviceRendererService,
-                private store: Store<AppState>,
-    ){}
 }

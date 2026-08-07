@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../store';
@@ -9,9 +9,8 @@ import { OpenUrlInNewWindowAction } from '../../store/actions/app';
     standalone: false,
 })
 export class ExternalUrlDirective {
-    constructor(private el: ElementRef,
-                private store: Store<AppState>) {
-    }
+    private readonly el = inject(ElementRef);
+    private readonly store = inject<Store<AppState>>(Store);
 
     @HostListener('click', ['$event'])
     onClick($event: MouseEvent): void {

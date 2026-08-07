@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED, RouterNavigatedAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
@@ -18,6 +18,10 @@ import { RouterState } from '../router-util';
 
 @Injectable()
 export class DefaultUserConfigurationEffect {
+    private readonly actions$ = inject(Actions);
+    private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
+    private readonly store = inject<Store<AppState>>(Store);
+
     loadDefaultUserConfigurationOnAppStart$ = createEffect(() => this.actions$
         .pipe(
             ofType(AppActions.ActionTypes.AppBootstrapped),
@@ -61,9 +65,4 @@ export class DefaultUserConfigurationEffect {
             map((abbreviation: string) => new AddKeymapSelectedAction(abbreviation))
         )
     );
-
-    constructor(private actions$: Actions,
-                private defaultUserConfigurationService: DefaultUserConfigurationService,
-                private store: Store<AppState>,
-    ) {}
 }

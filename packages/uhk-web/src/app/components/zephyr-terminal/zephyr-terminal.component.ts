@@ -8,6 +8,7 @@ import {
     OnDestroy,
     SimpleChanges,
     ViewChild,
+    inject,
 } from '@angular/core';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Actions, ofType } from '@ngrx/effects';
@@ -54,19 +55,16 @@ export class ZephyrTerminalComponent implements AfterViewInit, OnChanges, OnDest
 
     @ViewChild('terminal', { static: true }) terminalElement: ElementRef<HTMLDivElement>;
 
+    private readonly actions$ = inject(Actions);
     private isLogRestored = false
     private isPasting = false;
+    private readonly logService = inject(LogService);
     private terminal: Terminal;
     private fitAddon: FitAddon;
     private logSubscription: Subscription;
+    private readonly store = inject<Store<AppState>>(Store);
 
     protected readonly faCopy = faCopy;
-
-    constructor(
-        private logService: LogService,
-        private store: Store<AppState>,
-        private actions$: Actions,
-    ) {}
 
     ngAfterViewInit(): void {
         this.terminal = new Terminal({

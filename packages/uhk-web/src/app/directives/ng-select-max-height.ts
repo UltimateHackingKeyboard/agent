@@ -1,4 +1,4 @@
-import { OnDestroy, Directive, OutputRefSubscription } from '@angular/core';
+import { OnDestroy, Directive, OutputRefSubscription, inject } from '@angular/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
 const MAX_HEIGHT_OFFSET = 20;
@@ -8,9 +8,12 @@ const MAX_HEIGHT_OFFSET = 20;
     standalone: false,
 })
 export class NgSelectMaxHeight implements OnDestroy {
+    private readonly host = inject(NgSelectComponent);
     private openSubscription: OutputRefSubscription;
 
-    constructor(private host: NgSelectComponent) {
+    constructor() {
+        const host = this.host;
+
         this.openSubscription = host.openEvent.subscribe(() => {
             // do it after the dropdown panel is rendered
             setTimeout(()=> {

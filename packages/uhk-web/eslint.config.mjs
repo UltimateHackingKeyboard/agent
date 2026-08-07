@@ -27,7 +27,6 @@ export default tsEslint.config(
             '@angular-eslint/no-output-native': 'off',
             '@angular-eslint/no-output-on-prefix': 'off',
             '@angular-eslint/prefer-standalone': 'off',
-            '@angular-eslint/prefer-inject': 'off',
         },
     },
     {

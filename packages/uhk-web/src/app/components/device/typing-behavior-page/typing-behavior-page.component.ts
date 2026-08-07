@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -72,11 +72,10 @@ export class TypingBehaviorPage implements AdvancedSecondaryRoleConfiguration, O
         },
     ]
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private userConfigSubscription: Subscription;
+    private readonly store = inject<Store<AppState>>(Store);
     private typingBehaviorPresetsSubscription: Subscription;
-
-    constructor(private store: Store<AppState>,
-        private cdRef: ChangeDetectorRef) {}
 
     ngOnInit(): void {
         this.userConfigSubscription = this.store.select(getUserConfiguration)

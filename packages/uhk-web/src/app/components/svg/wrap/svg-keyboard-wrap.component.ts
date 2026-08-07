@@ -13,7 +13,8 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
@@ -150,19 +151,18 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     topPosition: number = 0;
     leftPosition: number = 0;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly element = inject(ElementRef);
+    private readonly mapper = inject(MapperService);
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
     private restoreFocusAfterPopoverClose = false;
     private animationSubscription = new Subscription();
     private openPopoverSubscription = new Subscription();
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(
-        private store: Store<AppState>,
-        private mapper: MapperService,
-        private element: ElementRef,
-        private cdRef: ChangeDetectorRef,
-        private router: Router
-    ) {
+    constructor() {
         this.animationState = 'closed';
         this.keyEditConfig = {
             moduleId: undefined,

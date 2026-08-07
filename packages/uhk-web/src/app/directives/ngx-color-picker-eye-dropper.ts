@@ -1,4 +1,4 @@
-import { Directive, OnDestroy, OnInit } from '@angular/core';
+import { Directive, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ColorPickerDirective } from 'ngx-color-picker';
 import { Subscription } from 'rxjs';
@@ -10,11 +10,9 @@ import { AppState, isColorPickerEyeDropperEnabled } from '../store/index';
     standalone: true,
 })
 export class NgxColorPickerEyeDropper implements OnDestroy, OnInit {
+    private readonly colorPicker = inject(ColorPickerDirective);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscription: Subscription;
-
-    constructor(private store: Store<AppState>,
-                private colorPicker: ColorPickerDirective) {
-    }
 
     ngOnInit() {
         this.subscription = this.store.select(isColorPickerEyeDropperEnabled)

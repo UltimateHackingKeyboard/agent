@@ -11,7 +11,8 @@ import {
     Output,
     ChangeDetectionStrategy,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -132,6 +133,11 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     secondaryText: string;
     textColor: string;
     viewBox: string;
+    private readonly captureService = inject(CaptureService);
+    private readonly dragAndDropService = inject(KeyActionDragAndDropService);
+    private readonly element = inject(ElementRef);
+    private readonly mapper = inject(MapperService);
+    private readonly mouseMoveService = inject(KeyActionColoringService);
     private scanCodePressed = false;
     private pressedShiftLocation = -1;
     private pressedAltLocation = -1;
@@ -142,19 +148,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private isMouseMoveDispatched = false;
     private isMouseHover = false;
     private isFocused = false;
-
-    constructor(
-        private sanitizer: DomSanitizer,
-        private mapper: MapperService,
-        private store: Store<AppState>,
-        private element: ElementRef,
-        private cdRef: ChangeDetectorRef,
-        private captureService: CaptureService,
-        private dragAndDropService: KeyActionDragAndDropService,
-        private mouseMoveService: KeyActionColoringService
-    ) {
-    }
-
+    private readonly sanitizer = inject(DomSanitizer);
+    private readonly store = inject<Store<AppState>>(Store);
 
     @HostBinding('@blink')
     get blinkAnimationBinding() {

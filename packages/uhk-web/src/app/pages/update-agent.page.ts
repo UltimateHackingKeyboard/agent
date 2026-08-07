@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
@@ -83,20 +83,21 @@ export class UpdateAgentPageComponent implements OnDestroy {
     upgradeAgentTooltip$: Observable<string>;
     newerUserConfiguration: NewerUserConfiguration;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscriptions = new Subscription();
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef,
-                private router: Router,) {
-        this.subscriptions.add(store.select(isForceUpdate).subscribe(value => {
+    constructor() {
+        this.subscriptions.add(this.store.select(isForceUpdate).subscribe(value => {
             this.isForceUpdate = value;
-            cdRef.markForCheck();
+            this.cdRef.markForCheck();
         }));
-        this.subscriptions.add(store.select(getNewerUserConfiguration).subscribe(newerUserConfiguration => {
+        this.subscriptions.add(this.store.select(getNewerUserConfiguration).subscribe(newerUserConfiguration => {
             this.newerUserConfiguration = newerUserConfiguration
-            cdRef.markForCheck();
+            this.cdRef.markForCheck();
         }));
-        this.upgradeAgentTooltip$ = store.select(upgradeAgentTooltip);
+        this.upgradeAgentTooltip$ = this.store.select(upgradeAgentTooltip);
     }
 
     ngOnDestroy(): void {

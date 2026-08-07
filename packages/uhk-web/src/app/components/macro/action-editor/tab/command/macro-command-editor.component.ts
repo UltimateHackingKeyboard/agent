@@ -6,7 +6,7 @@ import {
     Component,
     EventEmitter,
     forwardRef,
-    Inject,
+    inject,
     Input,
     OnChanges,
     OnDestroy,
@@ -88,6 +88,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     containerHeight = '54px';
 
     private actionIndexQueryParam: string | undefined;
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly document = inject<Document>(DOCUMENT);
     private columnNr = 1;
     private lineHeight = 18;
     private lineNr = 1;
@@ -95,14 +97,13 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     private insertingMacro = false;
     private changeObserver$: Observer<string>;
     private cursorPositionChange$: Observer<Position>;
+    private readonly logService = inject(LogService);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
+    private readonly smartMacroDocService = inject(SmartMacroDocService);
     private subscriptions = new Subscription();
 
-    constructor(private cdRef: ChangeDetectorRef,
-                @Inject(DOCUMENT) private document: Document,
-                private logService: LogService,
-                private smartMacroDocService: SmartMacroDocService,
-                private route: ActivatedRoute,
-                private router: Router) {
+    constructor() {
         // https://stackoverflow.com/questions/58271107/offset-between-text-and-cursor-with-the-monaco-editor-angular-under-chrome-m
         this.document.fonts.ready.then(() => {
             if (this.editor) {

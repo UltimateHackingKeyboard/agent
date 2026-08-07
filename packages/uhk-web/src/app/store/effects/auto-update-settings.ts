@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
@@ -16,6 +16,7 @@ import { ShowNotificationAction } from '../actions/app';
 
 @Injectable()
 export class AutoUpdateSettingsEffects {
+    private readonly actions$ = inject(Actions);
 
     sendNotification$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
@@ -30,7 +31,4 @@ export class AutoUpdateSettingsEffects {
             })
         )
     );
-
-    constructor(private actions$: Actions) {
-    }
 }

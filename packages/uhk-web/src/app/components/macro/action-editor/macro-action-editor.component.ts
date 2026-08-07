@@ -9,7 +9,8 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { faCode, faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
@@ -64,8 +65,7 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
     faClock = faClock;
     faCode = faCode;
 
-    constructor(private _cdRef: ChangeDetectorRef) {
-    }
+    private readonly _cdRef = inject(ChangeDetectorRef);
 
     ngAfterViewInit(): void {
         const isValid = this.selectedTab && this.selectedTab.isMacroValid();

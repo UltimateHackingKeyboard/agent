@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -41,6 +41,14 @@ import { DataStorageRepositoryService } from '../../services/datastorage-reposit
 
 @Injectable()
 export class ApplicationEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly appRendererService = inject(AppRendererService);
+    private readonly appUpdateRendererService = inject(AppUpdateRendererService);
+    private readonly dataStorageRepository = inject(DataStorageRepositoryService);
+    private readonly logService = inject(LogService);
+    private readonly notifierService = inject(NotifierService);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     appStart$ = createEffect(() => this.actions$
         .pipe(
@@ -204,14 +212,4 @@ export class ApplicationEffects {
         ),
     { dispatch: false }
     );
-
-    constructor(private actions$: Actions,
-                private notifierService: NotifierService,
-                private appUpdateRendererService: AppUpdateRendererService,
-                private appRendererService: AppRendererService,
-                private logService: LogService,
-                private store: Store<AppState>,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private router: Router) {
-    }
 }

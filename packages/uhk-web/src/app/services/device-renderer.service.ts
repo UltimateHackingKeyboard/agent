@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
 import {
@@ -79,10 +79,12 @@ import {
 
 @Injectable()
 export class DeviceRendererService {
-    constructor(private store: Store<AppState>,
-                private zone: NgZone,
-                private ipcRenderer: IpcCommonRenderer,
-                private logService: LogService) {
+    private readonly ipcRenderer = inject(IpcCommonRenderer);
+    private readonly logService = inject(LogService);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly zone = inject(NgZone);
+
+    constructor() {
         this.registerEvents();
         this.logService.misc('[DeviceRendererService] init success ');
     }
