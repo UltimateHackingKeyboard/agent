@@ -425,9 +425,13 @@ export class DeviceEffects {
     resetUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.ResetUserConfiguration),
-            withLatestFrom(this.store.select(getConnectedDevice)),
-            switchMap(([, uhkDeviceProduct]) => {
+            withLatestFrom(this.store.select(getConnectedDevice), this.store.select(getUserConfiguration)),
+            switchMap(([, uhkDeviceProduct, currentUserConfiguration]) => {
                 const config = this.defaultUserConfigurationService.getResetUserConfiguration(uhkDeviceProduct);
+                // The keyboard name belongs to the keyboard rather than to the configuration,
+                // so a factory reset must not replace it with the default name.
+                config.deviceName = currentUserConfiguration.deviceName || config.deviceName;
+
                 return of(new LoadResetUserConfigurationAction(config));
             })
         )
