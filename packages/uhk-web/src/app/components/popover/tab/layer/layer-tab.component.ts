@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostBinding,
+    Input,
+    OnChanges,
+    SimpleChanges,
+    inject,
+} from '@angular/core';
 import { copyRgbColor, KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode, UserConfiguration } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -45,7 +54,9 @@ export class LayerTabComponent extends Tab implements OnChanges {
     lockLayerWhenDoubleTapping: boolean;
     showWarning= false;
 
-    constructor(private cdRef: ChangeDetectorRef) {
+    private readonly cdRef = inject(ChangeDetectorRef);
+
+    constructor() {
         super();
         this.toggle = 'active';
         this.layer = LayerName.mod;

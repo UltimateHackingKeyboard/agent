@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { UploadFileData } from 'uhk-common';
@@ -43,9 +43,10 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     savingUserConfig: boolean;
     faSlidersH = faSlidersH;
 
+    private readonly store = inject<Store<AppState>>(Store);
     private subscription = new Subscription();
 
-    constructor(private store: Store<AppState>) {
+    constructor() {
         this.hasRecoverableLEDSpace$ = this.store.select(hasRecoverableLEDSpace);
         this.configSizesProgressBarState$ = this.store.select(getConfigSizesProgressBarState);
         this.userConfigHistoryState$ = this.store.select(getUserConfigHistoryComponentState);

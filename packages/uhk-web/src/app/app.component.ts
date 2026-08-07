@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { faPuzzlePiece, faArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -126,33 +126,33 @@ export class MainAppComponent implements OnDestroy {
         bottom: 0
     };
     statusBuffer: string;
+    private readonly actions$ = inject(Actions);
     private actionsSubscription: Subscription;
+    private readonly cdRef = inject(ChangeDetectorRef);
     private donglePairingStateSubscription: Subscription;
     private newPairedDevicesStateSubscription: Subscription;
     private errorPanelHeightSubscription: Subscription;
+    private readonly keyboardSvgExportService = inject(KeyboardSvgExportService);
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
     private keypressCapturingSubscription: Subscription;
+    private readonly notificationService = inject(NotifierService);
     private showFirmwareUpgradePanelSubscription: Subscription;
     private showUpdateAvailableSubscription: Subscription;
     private outOfSpaceWarningSubscription: Subscription;
     private routeDataSubscription: Subscription;
     private statusBufferSubscription: Subscription;
     private secondSideMenuComponent: unknown;
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
 
-    constructor(private store: Store<AppState>,
-                private route: ActivatedRoute,
-                private router: Router,
-                private cdRef: ChangeDetectorRef,
-                private actions$: Actions,
-                private keyboardSvgExportService: KeyboardSvgExportService,
-                private notificationService: NotifierService,
-        ) {
-        this.actionsSubscription = actions$.pipe(
+    constructor() {
+        this.actionsSubscription = this.actions$.pipe(
             ofType(AppUpdateActionTypes.InvalidCodesignSignature)
         )
         .subscribe(() => {
-            notificationService.show({
+            this.notificationService.show({
                 message: '',
                 type: 'info',
                 template: this.manuallyUpdateNotificationTmpl,
@@ -160,17 +160,17 @@ export class MainAppComponent implements OnDestroy {
             })
         })
 
-        this.donglePairingStateSubscription = store.select(getDonglePairingState)
+        this.donglePairingStateSubscription = this.store.select(getDonglePairingState)
             .subscribe(data => {
                 this.donglePairingState = data;
                 this.cdRef.markForCheck();
             });
-        this.newPairedDevicesStateSubscription = store.select(getNewPairedDevicesState)
+        this.newPairedDevicesStateSubscription = this.store.select(getNewPairedDevicesState)
             .subscribe(data => {
                 this.newPairedDevicesState = data;
                 this.cdRef.markForCheck();
             });
-        this.errorPanelHeightSubscription = store.select(getErrorPanelHeight)
+        this.errorPanelHeightSubscription = this.store.select(getErrorPanelHeight)
             .subscribe(height => {
                 this.splitSizes = {
                     top: 100 - height,
@@ -178,26 +178,26 @@ export class MainAppComponent implements OnDestroy {
                 };
                 this.cdRef.markForCheck();
             });
-        this.showFirmwareUpgradePanelSubscription = store.select(getShowFirmwareUpgradePanel)
+        this.showFirmwareUpgradePanelSubscription = this.store.select(getShowFirmwareUpgradePanel)
             .subscribe(data => {
                 this.showFirmwareUpgradePanel = data;
                 this.cdRef.markForCheck();
             });
-        this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
+        this.showUpdateAvailableSubscription = this.store.select(getShowAppUpdateAvailable)
             .subscribe(data => {
                 this.showUpdateAvailable = data;
                 this.cdRef.markForCheck();
             });
-        this.appUpdateNotification$ = store.select(getAppUpdateNotificationViewModel);
-        this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
-        this.runningInElectron$ = store.select(runningInElectron);
-        this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)
+        this.appUpdateNotification$ = this.store.select(getAppUpdateNotificationViewModel);
+        this.deviceConfigurationLoaded$ = this.store.select(deviceConfigurationLoaded);
+        this.runningInElectron$ = this.store.select(runningInElectron);
+        this.saveToKeyboardStateSubscription = this.store.select(saveToKeyboardState)
             .subscribe(data => this.saveToKeyboardState = data);
-        this.keypressCapturingSubscription = store.select(keypressCapturing)
+        this.keypressCapturingSubscription = this.store.select(keypressCapturing)
             .subscribe(data => this.keypressCapturing = data);
-        this.firstAttemptOfSaveToKeyboard$ = store.select(firstAttemptOfSaveToKeyboard);
-        this.isStatusBufferErrorHidden$ = store.select(isStatusBufferErrorHidden);
-        this.outOfSpaceWarningSubscription = store.select(getOutOfSpaceWaringData)
+        this.firstAttemptOfSaveToKeyboard$ = this.store.select(firstAttemptOfSaveToKeyboard);
+        this.isStatusBufferErrorHidden$ = this.store.select(isStatusBufferErrorHidden);
+        this.outOfSpaceWarningSubscription = this.store.select(getOutOfSpaceWaringData)
             .subscribe(data => this.outOfSpaceWarning = data);
         this.routeDataSubscription = this.router.events.pipe(
             filter((event: Event) => event instanceof NavigationEnd)
@@ -226,7 +226,7 @@ export class MainAppComponent implements OnDestroy {
                 this.cdRef.detectChanges();
             }
         });
-        this.statusBufferSubscription = store.select(getParsedStatusBuffer)
+        this.statusBufferSubscription = this.store.select(getParsedStatusBuffer)
             .subscribe(data => {
                 this.statusBuffer = data;
                 this.cdRef.markForCheck();

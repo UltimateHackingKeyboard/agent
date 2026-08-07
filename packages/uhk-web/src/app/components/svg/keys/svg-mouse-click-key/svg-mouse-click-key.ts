@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges, inject } from '@angular/core';
 
 import { MapperService } from '../../../../services/mapper.service';
 import { getContentWidth } from '../../../../util/index';
@@ -18,7 +18,9 @@ export class SvgMouseClickKeyComponent implements OnChanges {
     fontSize = MAX_FONT_SIZE;
     icon: string;
 
-    constructor(private mapper: MapperService) {
+    private readonly mapper = inject(MapperService);
+
+    constructor() {
         this.icon = this.mapper.getIcon('mouse');
     }
 

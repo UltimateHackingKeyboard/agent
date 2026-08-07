@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -19,7 +19,9 @@ import { AppState, getConfigurationLoadingProgress } from '../../store';
 export class LoadingDevicePageComponent {
     progressPercent$: Observable<number>;
 
-    constructor(store: Store<AppState>) {
-        this.progressPercent$ = store.select(getConfigurationLoadingProgress);
+    private readonly store = inject<Store<AppState>>(Store);
+
+    constructor() {
+        this.progressPercent$ = this.store.select(getConfigurationLoadingProgress);
     }
 }

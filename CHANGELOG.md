@@ -6,9 +6,25 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [Unreleased]
+## [11.0.0] - 2026-08-07
 
-- Show which keymap is currently active on the keyboard in the sidebar, and mark inactive keymaps in the header. `DEVICEPROTOCOL:MINOR`
+Firmware: 18.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v18.0.0)] | Device Protocol: 4.19.0 | User Config: 15.0.0 | Hardware Config: 1.0.0
+
+- Show progress bar when starting Agent.
+- Improve Firmware screen:
+  - Show progress bar when flashing firmwares.
+  - Hide the log by default
+  - Make "connect device" requests more prominent.
+- Add copy/paste layer support.
+- Show macro key assignments on the macro editor page.
+- Require user approval before downloading Agent updates.
+- Add minimize to tray support.
+- Indicate UHK's currently active keymap in Agent.
+- Fix: make doc destination writable.
+- Fix: stop status buffer from splitting and dropping binding lines
+- Accesibility: improve click-only controls behavior.
+- Make host connection management slot-focused instead of host-focused.
+- Group macros in the sidebar
 
 ## [10.1.0] - 2026-06-23
 

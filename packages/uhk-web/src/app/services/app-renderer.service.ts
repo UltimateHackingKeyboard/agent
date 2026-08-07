@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
 import { AppStartInfo, IpcEvents, LogService, NotificationType } from 'uhk-common';
@@ -8,10 +8,12 @@ import { IpcCommonRenderer } from './ipc-common-renderer';
 
 @Injectable()
 export class AppRendererService {
-    constructor(private store: Store<AppState>,
-                private zone: NgZone,
-                private ipcRenderer: IpcCommonRenderer,
-                private logService: LogService) {
+    private readonly ipcRenderer = inject(IpcCommonRenderer);
+    private readonly logService = inject(LogService);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly zone = inject(NgZone);
+
+    constructor() {
         this.registerEvents();
         this.logService.misc('[AppRendererService] init success ');
     }

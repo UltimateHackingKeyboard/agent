@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject } from '@angular/core';
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { defaultRgbColor, RgbColorInterface } from 'uhk-common';
@@ -12,15 +11,14 @@ import { AppState, isBacklightingColoring, selectedBacklightingColor } from '../
  */
 @Injectable()
 export class KeyActionColoringService implements OnDestroy {
+    private readonly _document = inject<Document>(DOCUMENT);
     private coloring = false;
     private isLeftButtonDown = false;
     private _selectedBacklightingColor: RgbColorInterface = defaultRgbColor();
+    private readonly _store = inject<Store<AppState>>(Store);
     private subscriptions = new Subscription();
 
-    constructor(
-        @Inject(DOCUMENT) private _document: Document,
-        private _store: Store<AppState>
-    ) {
+    constructor() {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this._document.addEventListener('mouseup', this.leftButtonUp.bind(this));
         this.subscriptions.add(this._store.select(isBacklightingColoring).subscribe(coloring => this.coloring = coloring));

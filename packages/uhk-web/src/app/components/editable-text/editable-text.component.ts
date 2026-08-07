@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -18,6 +18,8 @@ export class EditableTextComponent implements ControlValueAccessor {
     originalText: string;
     editing = false;
 
+    private readonly cdr = inject(ChangeDetectorRef);
+
     get isSaveDisabled(): boolean {
         return !this.text || this.text.trim().length === 0;
     }
@@ -28,10 +30,6 @@ export class EditableTextComponent implements ControlValueAccessor {
         }
 
         return this.text.split('\n');
-    }
-
-    constructor(private cdr: ChangeDetectorRef) {
-
     }
 
     writeValue(obj: string): void {

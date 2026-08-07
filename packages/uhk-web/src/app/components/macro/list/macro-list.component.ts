@@ -6,6 +6,7 @@ import {
     Input,
     OnDestroy,
     Output,
+    inject,
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula';
@@ -82,11 +83,12 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
     scrollTopPosition: number;
     isMacroReordering = false;
 
+    private readonly dragulaService = inject(DragulaService);
     private scrollToBottomIntervalTimer: number;
     private scrollToBottomSetTimeoutTimer: number;
 
-    constructor(private dragulaService: DragulaService) {
-        dragulaService.createGroup(this.MACRO_ACTIONS, {
+    constructor() {
+        this.dragulaService.createGroup(this.MACRO_ACTIONS, {
             moves: (el, container, handle) => {
                 if (!handle) {
                     return false;

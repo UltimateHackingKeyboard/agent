@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
@@ -48,10 +48,8 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     };
     faSlidersH = faSlidersH;
 
+    private readonly store = inject<Store<AppState>>(Store);
     private userConfigSubscription: Subscription;
-
-    constructor(private store: Store<AppState>) {
-    }
 
     ngOnInit(): void {
         this.userConfigSubscription = this.store.select(getUserConfiguration)

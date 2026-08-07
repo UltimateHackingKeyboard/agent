@@ -52,8 +52,8 @@ function assertInteger(target: any, key: string, min: number, max: number) {
     function setter(newVal: any) {
         if (this[priv] !== newVal) {
             if (newVal < min || newVal > max) {
-                throw `${target.constructor.name}.${key}: ` +
-                    `Integer ${newVal} is outside the valid [${min}, ${max}] interval`;
+                throw new Error(`${target.constructor.name}.${key}: ` +
+                    `Integer ${newVal} is outside the valid [${min}, ${max}] interval`);
             }
             this[priv] = newVal;
         }
@@ -82,7 +82,7 @@ export function assertEnum<E>(enumerated: E) {
 
             if (this[priv] !== newVal) {
                 if (enumerated[newVal] === undefined) {
-                    throw `${target.constructor.name}.${key}: ${newVal} is not enum`;
+                    throw new Error(`${target.constructor.name}.${key}: ${newVal} is not enum`);
                 }
                 this[priv] = newVal;
             }

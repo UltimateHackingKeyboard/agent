@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -33,8 +33,10 @@ import { SkipFirmwareUpgradeAction, UpdateFirmwareAction } from '../store/action
 export class UpdateFirmwarePageComponent {
     upgradeFirmwareTooltip$: Observable<string>;
 
-    constructor(private store: Store<AppState>) {
-        this.upgradeFirmwareTooltip$ = store.select(upgradeFirmwareTooltip);
+    private readonly store = inject<Store<AppState>>(Store);
+
+    constructor() {
+        this.upgradeFirmwareTooltip$ = this.store.select(upgradeFirmwareTooltip);
     }
 
     onUpdate(): void {

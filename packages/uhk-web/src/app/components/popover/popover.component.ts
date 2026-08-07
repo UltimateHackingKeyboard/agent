@@ -8,7 +8,8 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faBan, faClone, faKeyboard, faMousePointer, faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -143,15 +144,17 @@ export class PopoverComponent implements OnChanges {
     layerOptions$: Observable<LayerOption[]>;
     userConfiguration$: Observable<UserConfiguration>;
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-        this.uhkThemeColors$ = store.select(getUhkThemeColors);
-        this.keymap$ = store.select(getSelectedKeymap);
-        this.keymaps$ = store.select(getKeymaps);
-        this.keymapOptions$ = store.select(getKeymapOptions);
-        this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
-        this.layerOptions$ = store.select(getLayerOptions);
-        this.userConfiguration$ = store.select(getUserConfiguration);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly cdRef = inject(ChangeDetectorRef);
+
+    constructor() {
+        this.uhkThemeColors$ = this.store.select(getUhkThemeColors);
+        this.keymap$ = this.store.select(getSelectedKeymap);
+        this.keymaps$ = this.store.select(getKeymaps);
+        this.keymapOptions$ = this.store.select(getKeymapOptions);
+        this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
+        this.layerOptions$ = this.store.select(getLayerOptions);
+        this.userConfiguration$ =this.store.select(getUserConfiguration);
     }
 
     ngOnChanges(change: SimpleChanges) {

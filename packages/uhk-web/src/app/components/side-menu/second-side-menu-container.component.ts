@@ -4,7 +4,8 @@ import {
     Component,
     ComponentFactoryResolver,
     ViewChild,
-    ViewContainerRef
+    ViewContainerRef,
+    inject,
 } from '@angular/core';
 
 @Component(({
@@ -16,8 +17,8 @@ import {
 export class SecondSideMenuContainerComponent {
     @ViewChild('secondaryContainer', { read: ViewContainerRef }) container;
 
-    constructor(private componentFactoryResolver: ComponentFactoryResolver,
-                private cdRef: ChangeDetectorRef) { }
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly componentFactoryResolver = inject(ComponentFactoryResolver);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolveComponent(component: any): void {
