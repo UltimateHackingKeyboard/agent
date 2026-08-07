@@ -172,15 +172,8 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
         this.showFoldedSlots = !this.showFoldedSlots;
     }
 
-    get multipointEnabled(): boolean {
-        return this.bluetoothKeepConnectionsAlive;
-    }
-
-    setMultipointEnabled(enabled: boolean): void {
-        // Both options together make up multipoint operation, so the toggle drives both. Either one
-        // can be turned back off afterwards, except that always advertise keeps them alive.
-        this.setUserConfigurationValue('bluetoothKeepConnectionsAlive', enabled);
-        this.setUserConfigurationValue('bluetoothAlwaysAdvertise', enabled);
+    setBluetoothKeepConnectionsAlive(checked: boolean): void {
+        this.setUserConfigurationValue('bluetoothKeepConnectionsAlive', checked);
     }
 
     setBluetoothAlwaysAdvertise(checked: boolean): void {
@@ -193,14 +186,14 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     }
 
     private setUserConfigurationValue(propertyName: string, value: boolean): void {
-        if (this[propertyName] === value) {
-            return;
-        }
+        const hasChanged = this[propertyName] !== value;
 
-        this.store.dispatch(new SetUserConfigurationValueAction({
-            propertyName,
-            value,
-        }));
+        if (hasChanged) {
+            this.store.dispatch(new SetUserConfigurationValueAction({
+                propertyName,
+                value,
+            }));
+        }
     }
 
     private countTrailingEmptySlots(hostConnections: HostConnection[]): number {

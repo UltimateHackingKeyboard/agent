@@ -119,36 +119,27 @@
     Delete device pairings
 </button>
 
-<h3 class="pt-4 multipoint-title">
-    <span class="form-check form-switch">
-        <input type="checkbox"
-               class="form-check-input"
-               id="multipoint-switch"
-               role="switch"
-               [ngModel]="multipointEnabled"
-               (ngModelChange)="setMultipointEnabled($event)"
-        >
-    </span>
-    <label for="multipoint-switch">Multipoint operation</label>
+<h3 class="pt-4">
+    Multipoint operation
     <circle-tooltip [tooltip]="multipointTooltip"
                     [width]="450" />
     <ng-template #multipointTooltip>
-        <p>When turned off, the UHK operates in <em>singlepoint</em> mode: it talks to one Bluetooth host at
-        a time, and connecting to another host drops the current connection. This is what most Bluetooth
-        keyboards do.</p>
-        When turned on, the UHK keeps several Bluetooth hosts connected at once, so switching between them
+        <p>With neither option enabled, the UHK operates in <em>singlepoint</em> mode: it talks to one
+        Bluetooth host at a time, and connecting to another host drops the current connection. This is
+        what most Bluetooth keyboards do.</p>
+        Otherwise the UHK keeps several Bluetooth hosts connected at once, so switching between them
         is instant.
     </ng-template>
 </h3>
 
-<div *ngIf="multipointEnabled" class="multipoint-options">
+<div class="multipoint-options">
     <div class="form-check">
         <input type="checkbox"
                class="form-check-input"
                id="keep-connections-alive"
                [disabled]="bluetoothAlwaysAdvertise"
                [ngModel]="bluetoothKeepConnectionsAlive"
-               (ngModelChange)="setMultipointEnabled($event)"
+               (ngModelChange)="setBluetoothKeepConnectionsAlive($event)"
         >
         <label class="form-check-label" for="keep-connections-alive">
             Keep connections alive
