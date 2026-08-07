@@ -168,9 +168,10 @@ export class MacroEditComponent implements OnDestroy {
 
         this.router.navigate([], {
             queryParams: {
-                actionIndex: model?.id,
-                inlineEdit: model?.inlineEdit
-            }
+                actionIndex: model?.id ?? null,
+                inlineEdit: model?.inlineEdit ?? null
+            },
+            queryParamsHandling: 'merge',
         });
     }
 
@@ -190,7 +191,11 @@ export class MacroEditComponent implements OnDestroy {
     private hideActiveEditor(): void {
         if (!this.selectedMacroActionIdModel?.inlineEdit) {
             this.router.navigate([], {
-                queryParams: {},
+                queryParams: {
+                    actionIndex: null,
+                    inlineEdit: null,
+                },
+                queryParamsHandling: 'merge',
             });
         }
     }

@@ -428,6 +428,15 @@ export class UserConfigEffects {
     resetKeymapQueryParams$ = createEffect(() => this.actions$
         .pipe(
             ofType(Keymaps.ActionTypes.SaveKey, Keymaps.ActionTypes.ClosePopover),
+            filter(action => {
+                if (action.type !== Keymaps.ActionTypes.SaveKey) {
+                    return true;
+                }
+
+                const keyAction = (action as Keymaps.SaveKeyAction).payload.keyAction;
+
+                return !keyAction.navigateToMacro && !keyAction.assignNewMacro;
+            }),
             tap(() => {
                 this.router.navigate([], {
                     queryParams: {
