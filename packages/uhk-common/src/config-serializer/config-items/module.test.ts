@@ -4,14 +4,17 @@ import { UhkBuffer } from '../uhk-buffer.js';
 import {
     KeystrokeAction,
     KeystrokeType,
+    Macro,
     MacroArgumentAction,
     Module,
     PlayMacroAction,
+    UserConfiguration,
 } from './index.js';
 import { DEFAULT_SERIALISATION_INFO } from './serialisation-info.js';
 
 describe('module key labels', () => {
-    const macros = [{ id: 1 }];
+    const macros: Macro[] = [Object.assign(new Macro(), { id: 1 })];
+    const userConfiguration = Object.assign(new UserConfiguration(), { macros });
     const serialisationInfo = DEFAULT_SERIALISATION_INFO;
 
     function createLabeledKeystroke(): KeystrokeAction {
@@ -27,8 +30,8 @@ describe('module key labels', () => {
         module.id = 0;
         module.keyActions = [createLabeledKeystroke()];
 
-        const json = module.toJsonObject(serialisationInfo, macros as any);
-        const restored = new Module().fromJsonObject(json, macros as any, serialisationInfo);
+        const json = module.toJsonObject(serialisationInfo, macros);
+        const restored = new Module().fromJsonObject(json, macros, serialisationInfo);
 
         assert.strictEqual(restored.keyActions[0].label, 'Hello note');
         assert.ok(restored.keyActions[0] instanceof KeystrokeAction);
@@ -40,10 +43,10 @@ describe('module key labels', () => {
         module.keyActions = [createLabeledKeystroke()];
 
         const buffer = new UhkBuffer();
-        module.toBinary(buffer, serialisationInfo, { macros } as any);
+        module.toBinary(buffer, serialisationInfo, userConfiguration);
         buffer.offset = 0;
 
-        const restored = new Module().fromBinary(buffer, macros as any, serialisationInfo);
+        const restored = new Module().fromBinary(buffer, macros, serialisationInfo);
 
         assert.strictEqual(restored.keyActions.length, 1);
         assert.strictEqual(restored.keyActions[0].label, 'Hello note');
@@ -62,10 +65,10 @@ describe('module key labels', () => {
         module.keyActions = [playMacroAction];
 
         const buffer = new UhkBuffer();
-        module.toBinary(buffer, serialisationInfo, { macros } as any);
+        module.toBinary(buffer, serialisationInfo, userConfiguration);
         buffer.offset = 0;
 
-        const restored = new Module().fromBinary(buffer, macros as any, serialisationInfo);
+        const restored = new Module().fromBinary(buffer, macros, serialisationInfo);
         const restoredPlayMacro = restored.keyActions[0] as PlayMacroAction;
 
         assert.ok(restoredPlayMacro instanceof PlayMacroAction);
@@ -83,7 +86,7 @@ describe('module key labels', () => {
         keystrokeAction.scancode = 4;
         module.keyActions = [keystrokeAction];
 
-        const json = module.toJsonObject(serialisationInfo, macros as any);
+        const json = module.toJsonObject(serialisationInfo, macros);
 
         assert.strictEqual(json.keyActions[0].label, undefined);
     });
