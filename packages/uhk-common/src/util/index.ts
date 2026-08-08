@@ -20,6 +20,7 @@ export * from './is-device-protocol-support-status-error.js';
 export * from './is-equal-array.js';
 export * from './is-official-uhk-firmware.js';
 export * from './is-same-firmware.js';
+export * from './is-user-config-version-higher-than-firmware.js';
 export * from './map-i2c-address-to-module-name.js';
 export * from './map-i2c-address-to-slot-id.js';
 export * from './should-upgrade-agent.js';

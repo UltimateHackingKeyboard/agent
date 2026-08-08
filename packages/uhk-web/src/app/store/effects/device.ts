@@ -12,6 +12,7 @@ import {
     HardwareConfiguration,
     HOST_CONNECTION_COUNT_MAX,
     IpcResponse,
+    isUserConfigVersionHigherThanFirmware,
     NotificationType,
     shouldUpgradeFirmware,
     UdevRulesInfo,
@@ -346,26 +347,38 @@ export class DeviceEffects {
         .pipe(
             ofType<SaveConfigurationAction>(ActionTypes.SaveConfiguration),
             withLatestFrom(this.store, this.store.select(getShowFirmwareUpgradePanel)),
-            tap(([action, state, shouldUpgradeFirmware]) => {
+            mergeMap(([action, state, shouldUpgradeFirmware]) => {
                 if (shouldUpgradeFirmware) {
                     this.router.navigate(['/update-firmware']);
-                    return;
+                    return EMPTY;
                 }
 
                 if (state.userConfiguration.userConfiguration.hostConnections.length > HOST_CONNECTION_COUNT_MAX) {
                     this.router.navigate(['/host-connections']);
-                    return;
+                    return EMPTY;
+                }
+
+                const userConfig = state.userConfiguration.userConfiguration;
+                const firmwareUserConfigVersion = state.device.modules.rightModuleInfo?.userConfigVersion;
+                if (isUserConfigVersionHigherThanFirmware(userConfig.getSemanticVersion(), firmwareUserConfigVersion)) {
+                    return [
+                        new ShowNotificationAction({
+                            type: NotificationType.Error,
+                            message: `This configuration (user config ${userConfig.getSemanticVersion()}) is newer than what the firmware supports (${firmwareUserConfigVersion}). Please update the firmware or use a compatible configuration.`
+                        }),
+                        new SaveToKeyboardSuccessFailed()
+                    ];
                 }
 
                 setTimeout(() => this.sendUserConfigToKeyboard(
-                    state.userConfiguration.userConfiguration,
+                    userConfig,
                     state.app.hardwareConfig,
                     action.payload),
                 100);
-            }),
-            switchMap(() => EMPTY)
-        ),
-    { dispatch: false }
+
+                return EMPTY;
+            })
+        )
     );
 
     saveConfigurationReply$ = createEffect(() => this.actions$

@@ -18,6 +18,7 @@ import {
     LogService,
     NotificationType,
     RightModuleInfo,
+    shouldUpgradeAgent,
     UHK_60_DEVICE,
     UhkBuffer,
     UhkDeviceProduct,
@@ -72,7 +73,6 @@ import {
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
-import { LoadUserConfigurationFromFilePayload } from '../../models';
 import { RouterState } from '../router-util.js';
 
 @Injectable()
@@ -328,10 +328,14 @@ export class UserConfigEffects {
     loadUserConfigurationFromFile$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile),
-            withLatestFrom(this.store.select(getUserConfiguration)),
-            map(([action, currentUserConfiguration]): [LoadUserConfigurationFromFilePayload, string] =>
-                [action.payload, currentUserConfiguration.deviceName]),
-            map(([payload, deviceName]: [LoadUserConfigurationFromFilePayload, string]) => {
+            withLatestFrom(
+                this.store.select(getUserConfiguration),
+                this.store.select(disableUpdateAgentProtection),
+            ),
+            map(([action, currentUserConfiguration, disableUpdateAgentProtection]) => {
+                const payload = action.payload;
+                const deviceName = currentUserConfiguration.deviceName;
+
                 try {
                     let userConfig = new UserConfiguration();
 
@@ -344,6 +348,14 @@ export class UserConfigEffects {
                     }
 
                     if (userConfig.userConfigMajorVersion) {
+                        const userConfigVersion = userConfig.getSemanticVersion();
+                        if (shouldUpgradeAgent(userConfigVersion, disableUpdateAgentProtection)) {
+                            return new ShowNotificationAction({
+                                type: NotificationType.Error,
+                                message: `This configuration (user config ${userConfigVersion}) is newer than what this Agent supports (${VERSIONS.userConfigVersion}). Please update Agent.`
+                            });
+                        }
+
                         userConfig = this.uhk80MigratorService.migrate(userConfig);
 
                         // Keep the connected keyboard's name when importing a config, so a single config
