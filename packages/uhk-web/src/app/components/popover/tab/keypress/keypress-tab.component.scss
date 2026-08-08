@@ -1,6 +1,7 @@
 :host {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     position: relative;
 
     .scancode-options {
@@ -8,8 +9,7 @@
         flex-direction: row;
         align-items: center;
         flex-wrap: wrap;
-
-        margin-bottom: 10px;
+        gap: 0.5rem 0;
         margin-top: 2px;
 
         > b {
@@ -32,6 +32,7 @@
         flex-direction: row;
         align-items: center;
         flex-wrap: wrap;
+        gap: 0.5rem 0;
 
         > b {
             margin-right: 4px;
@@ -45,7 +46,6 @@
     .long-press-container {
         display: flex;
         flex-direction: row;
-        margin-top: 10px;
 
         > b {
             margin-right: 0.6em;
@@ -99,7 +99,6 @@
         display: inline-block;
         width: 200px;
         min-width: 154px;
-        margin-bottom: 0.5rem;
     }
 
     .secondary-role-groups-container {
@@ -108,7 +107,6 @@
     }
 
     .remap-warning {
-        margin-top: 10px;
         margin-bottom: 0;
         padding-top: 5px;
         padding-bottom: 5px;
