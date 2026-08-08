@@ -1,12 +1,10 @@
-import { Keymap, LayerName, UserConfiguration } from 'uhk-common';
+import { Keymap, UserConfiguration } from 'uhk-common';
 
 import { MacroKeyAssignmentViewModel } from '../models';
 import { MapperService } from '../services/mapper.service';
 import { LAYER_OPTIONS } from '../store/reducers/layer-options';
 import { findMacroKeyAssignments, MacroKeyAssignment } from './find-macro-key-assignments';
-import { getDefaultQwertyKeyLabel } from './get-default-key-label';
-
-const MACRO_KEY_ASSIGNMENT_SEPARATOR = ' ⭢ ';
+import { formatMacroKeyAssignmentLabel } from './format-macro-key-assignment-label';
 
 export interface BuildMacroKeyAssignmentViewModelsOptions {
     keymaps: Keymap[];
@@ -20,23 +18,20 @@ export function buildMacroKeyAssignmentViewModels(
 ): MacroKeyAssignmentViewModel[] {
     return findMacroKeyAssignments(options.keymaps, options.macroId)
         .sort(compareAssignments)
-        .map(assignment => {
-            const layerOption = LAYER_OPTIONS.get(assignment.layerId);
-            const keyLabel = getDefaultQwertyKeyLabel({
-                defaultUserConfiguration: options.defaultUserConfiguration,
-                moduleId: assignment.moduleId,
-                keyId: assignment.keyId,
-                mapper: options.mapper,
-            });
-
-            return {
-                keymapAbbreviation: assignment.keymapAbbreviation,
+        .map(assignment => ({
+            keymapAbbreviation: assignment.keymapAbbreviation,
+            layerId: assignment.layerId,
+            moduleId: assignment.moduleId,
+            keyId: assignment.keyId,
+            label: formatMacroKeyAssignmentLabel({
+                keymapName: assignment.keymapName,
                 layerId: assignment.layerId,
                 moduleId: assignment.moduleId,
                 keyId: assignment.keyId,
-                label: `${assignment.keymapName}${MACRO_KEY_ASSIGNMENT_SEPARATOR}${layerOption.name}${MACRO_KEY_ASSIGNMENT_SEPARATOR}${keyLabel}`,
-            };
-        });
+                defaultUserConfiguration: options.defaultUserConfiguration,
+                mapper: options.mapper,
+            }),
+        }));
 }
 
 function compareAssignments(first: MacroKeyAssignment, second: MacroKeyAssignment): number {
