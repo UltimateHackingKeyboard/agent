@@ -119,25 +119,13 @@
     Delete device pairings
 </button>
 
-<h3 class="pt-4">
-    Multipoint operation
-    <circle-tooltip [tooltip]="multipointTooltip"
-                    [width]="450" />
-    <ng-template #multipointTooltip>
-        <p>With neither option enabled, the UHK operates in <em>singlepoint</em> mode: it talks to one
-        Bluetooth host at a time, and connecting to another host drops the current connection. This is
-        what most Bluetooth keyboards do.</p>
-        Otherwise the UHK keeps several Bluetooth hosts connected at once, so switching between them
-        is instant.
-    </ng-template>
-</h3>
+<h3 class="pt-4">Multipoint operation</h3>
 
 <div class="multipoint-options">
     <div class="form-check">
         <input type="checkbox"
                class="form-check-input"
                id="keep-connections-alive"
-               [disabled]="bluetoothAlwaysAdvertise"
                [ngModel]="bluetoothKeepConnectionsAlive"
                (ngModelChange)="setBluetoothKeepConnectionsAlive($event)"
         >
@@ -145,11 +133,23 @@
             Keep connections alive
         </label>
         <circle-tooltip [tooltip]="keepConnectionsAliveTooltip"
+                        tooltipClass="tooltip-text-start"
                         [width]="450" />
         <ng-template #keepConnectionsAliveTooltip>
             <p>Keeps every connected Bluetooth host connected instead of dropping the old connection when
-            you switch to another host. This is what makes switching instant.</p>
-            Required by <em>Always advertise</em>.
+            you switch to another host. Without this, the UHK operates in <em>singlepoint</em> mode like
+            most Bluetooth keyboards: it talks to one host at a time.</p>
+            <b>Pros:</b>
+            <ul>
+                <li>Instant switching between connected hosts</li>
+            </ul>
+            <b>Cons:</b>
+            <ul>
+                <li>Stuttering mouse movement (due to BLE scheduling conflicts)</li>
+                <li>Increased latency</li>
+                <li>UHK permanently stealing input focus of non-active but connected hosts (e.g. the
+                    on-screen keyboard not popping up)</li>
+            </ul>
         </ng-template>
     </div>
 
@@ -164,10 +164,23 @@
             Always advertise
         </label>
         <circle-tooltip [tooltip]="alwaysAdvertiseTooltip"
+                        tooltipClass="tooltip-text-start"
                         [width]="450" />
         <ng-template #alwaysAdvertiseTooltip>
             <p>Keeps the UHK discoverable even while it is already connected, so a further host can connect
             without you having to free up a connection first.</p>
+            <b>Pros:</b>
+            <ul>
+                <li>Hosts can pair or connect without dropping an existing connection first</li>
+            </ul>
+            <b>Cons:</b>
+            <ul>
+                <li>Security risk: nearby infected devices can easily detect the UHK and try to exploit
+                    possible vulnerabilities</li>
+                <li>Privacy risk: others may snoop on advertising</li>
+                <li>Neighbors may try to connect, causing unnecessary nuisance</li>
+                <li>Aggressive reconnection loops</li>
+            </ul>
         </ng-template>
     </div>
 </div>

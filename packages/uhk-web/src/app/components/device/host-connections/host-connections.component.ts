@@ -174,6 +174,11 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
 
     setBluetoothKeepConnectionsAlive(checked: boolean): void {
         this.setUserConfigurationValue('bluetoothKeepConnectionsAlive', checked);
+
+        // Advertising while connected is only meaningful if the existing connections are kept.
+        if (!checked) {
+            this.setUserConfigurationValue('bluetoothAlwaysAdvertise', false);
+        }
     }
 
     setBluetoothAlwaysAdvertise(checked: boolean): void {

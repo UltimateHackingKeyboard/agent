@@ -290,6 +290,19 @@ kbd {
     max-width: 320px;
 }
 
+.tooltip-text-start .tooltip-inner {
+    text-align: start;
+
+    ul {
+        margin-bottom: 0.5rem;
+        padding-left: 1.25rem;
+    }
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
 mwl-confirmation-popover-window {
     .popover {
         &.bottom {
