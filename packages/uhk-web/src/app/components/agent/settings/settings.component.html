@@ -60,20 +60,29 @@
     </div>
 </div>
 
-<div class="col-12 col-md-6 mb-0 mt-2">
+<div class="col-12 mb-0 mt-2">
     <div class="d-flex align-items-center">
         <label class="mb-0 me-2">Theme</label>
-        <ng-select
-            class="theme-selector"
-            [items]="themes$ | async"
-            [ngModel]="appTheme$ | async"
-            (ngModelChange)="selectTheme($event)"
-            [clearable]="false"
-            bindLabel="text"
-            bindValue="id"
-        />
+        <div class="btn-group"
+             role="group"
+             aria-label="Theme"
+             *ngIf="appTheme$ | async as appTheme">
+            <button *ngFor="let theme of themes"
+                    type="button"
+                    class="btn"
+                    [class.btn-primary]="appTheme === theme.id"
+                    [class.btn-default]="appTheme !== theme.id"
+                    [attr.aria-pressed]="appTheme === theme.id"
+                    [ngbTooltip]="theme.text"
+                    triggers="hover"
+                    (click)="selectTheme(theme.id)"
+            >
+                <fa-icon [icon]="theme.icon"></fa-icon>
+            </button>
+        </div>
         <circle-tooltip
             *ngIf="isLinux$ | async"
+            class="ms-2"
             [tooltip]="systemThemeTooltip"
             width="300"
         />
