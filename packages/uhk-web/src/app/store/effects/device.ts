@@ -364,7 +364,7 @@ export class DeviceEffects {
                     return [
                         new ShowNotificationAction({
                             type: NotificationType.Error,
-                            message: `This configuration (user config ${userConfig.getSemanticVersion()}) is newer than what the firmware supports (${firmwareUserConfigVersion}). Please update the firmware or use a compatible configuration.`
+                            message: `The user configuration version (${userConfig.getSemanticVersion()}) is too high for this firmware (supports up to ${firmwareUserConfigVersion}). Please update the firmware or use a compatible configuration.`
                         }),
                         new SaveToKeyboardSuccessFailed()
                     ];
