@@ -31,6 +31,6 @@
     <ng-container *ngFor="let assignment of assignments; let last = last">
         <a class="text-nowrap"
            [routerLink]="['/keymap', assignment.keymapAbbreviation]"
-           [queryParams]="{ layer: assignment.layerId, module: assignment.moduleId, key: assignment.keyId }">{{ assignment.label }}</a><span *ngIf="!last">, </span>
+           [queryParams]="{ layer: assignment.layerId, module: assignment.moduleId, key: assignment.keyId }">{{ assignment.label }}</a><span *ngIf="!last" class="mx-1">|</span>
     </ng-container>
 </div>
