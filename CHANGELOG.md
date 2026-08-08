@@ -25,6 +25,7 @@ Firmware: 18.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/
 - Accesibility: improve click-only controls behavior.
 - Make host connection management slot-focused instead of host-focused.
 - Group macros in the sidebar
+- Fix: refuse importing a user configuration newer than Agent supports, and refuse saving one newer than the firmware supports.
 
 ## [10.1.0] - 2026-06-23
 

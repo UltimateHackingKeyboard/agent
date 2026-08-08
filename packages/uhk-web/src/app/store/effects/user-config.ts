@@ -15,9 +15,13 @@ import {
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
     ConfigurationReply,
+    isUserConfigVersionHigherThanFirmware,
     LogService,
     NotificationType,
+    readUserConfigurationVersionFromBinary,
+    readUserConfigurationVersionFromJsonObject,
     RightModuleInfo,
+    shouldUpgradeAgent,
     UHK_60_DEVICE,
     UhkBuffer,
     UhkDeviceProduct,
@@ -72,7 +76,6 @@ import {
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
-import { LoadUserConfigurationFromFilePayload } from '../../models';
 import { RouterState } from '../router-util.js';
 
 @Injectable()
@@ -328,19 +331,52 @@ export class UserConfigEffects {
     loadUserConfigurationFromFile$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile),
-            withLatestFrom(this.store.select(getUserConfiguration)),
-            map(([action, currentUserConfiguration]): [LoadUserConfigurationFromFilePayload, string] =>
-                [action.payload, currentUserConfiguration.deviceName]),
-            map(([payload, deviceName]: [LoadUserConfigurationFromFilePayload, string]) => {
+            withLatestFrom(
+                this.store.select(getUserConfiguration),
+                this.store.select(disableUpdateAgentProtection),
+                this.store.select(getHardwareModules),
+            ),
+            map(([action, currentUserConfiguration, disableUpdateAgentProtection, hardwareModules]) => {
+                const payload = action.payload;
+                const deviceName = currentUserConfiguration.deviceName;
+                const firmwareUserConfigVersion = hardwareModules.rightModuleInfo?.userConfigVersion;
+                const userConfigTooHighForAgentNotification = (importedVersion: string) => new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: `The imported user configuration version (${importedVersion}) is too high for this Agent (supports up to ${VERSIONS.userConfigVersion}). Please update Agent.`
+                });
+                const userConfigTooHighForFirmwareNotification = (importedVersion: string) => new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: `The imported user configuration version (${importedVersion}) is too high for this firmware (supports up to ${firmwareUserConfigVersion}). Please update the firmware or use a compatible configuration.`
+                });
+
+                let importedUserConfigVersion: string | undefined;
+
                 try {
                     let userConfig = new UserConfiguration();
 
                     if (payload.uploadFileData.filename.endsWith('.bin')) {
-                        userConfig.fromBinary(UhkBuffer.fromArray(payload.uploadFileData.data));
+                        const uhkBuffer = UhkBuffer.fromArray(payload.uploadFileData.data);
+                        importedUserConfigVersion = readUserConfigurationVersionFromBinary(uhkBuffer);
+                        if (shouldUpgradeAgent(importedUserConfigVersion, disableUpdateAgentProtection)) {
+                            return userConfigTooHighForAgentNotification(importedUserConfigVersion);
+                        }
+                        if (isUserConfigVersionHigherThanFirmware(importedUserConfigVersion, firmwareUserConfigVersion)) {
+                            return userConfigTooHighForFirmwareNotification(importedUserConfigVersion);
+                        }
+                        userConfig.fromBinary(uhkBuffer);
                     } else {
                         const buffer = Buffer.from(payload.uploadFileData.data);
-                        const json = buffer.toString();
-                        userConfig.fromJsonObject(JSON.parse(json));
+                        const json = JSON.parse(buffer.toString());
+                        importedUserConfigVersion = readUserConfigurationVersionFromJsonObject(json);
+                        if (importedUserConfigVersion
+                            && shouldUpgradeAgent(importedUserConfigVersion, disableUpdateAgentProtection)) {
+                            return userConfigTooHighForAgentNotification(importedUserConfigVersion);
+                        }
+                        if (importedUserConfigVersion
+                            && isUserConfigVersionHigherThanFirmware(importedUserConfigVersion, firmwareUserConfigVersion)) {
+                            return userConfigTooHighForFirmwareNotification(importedUserConfigVersion);
+                        }
+                        userConfig.fromJsonObject(json);
                     }
 
                     if (userConfig.userConfigMajorVersion) {
@@ -367,6 +403,15 @@ export class UserConfigEffects {
                         message: 'Invalid configuration specified.'
                     });
                 } catch (err) {
+                    if (importedUserConfigVersion
+                        && shouldUpgradeAgent(importedUserConfigVersion, false)) {
+                        return userConfigTooHighForAgentNotification(importedUserConfigVersion);
+                    }
+                    if (importedUserConfigVersion
+                        && isUserConfigVersionHigherThanFirmware(importedUserConfigVersion, firmwareUserConfigVersion)) {
+                        return userConfigTooHighForFirmwareNotification(importedUserConfigVersion);
+                    }
+
                     return new ShowNotificationAction({
                         type: NotificationType.Error,
                         message: 'Invalid configuration specified.'

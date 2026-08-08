@@ -3,6 +3,7 @@ import { Buffer } from '../buffer.js';
 
 import { HardwareConfiguration, UhkBuffer, UserConfiguration } from '../config-serializer/index.js';
 import { UHK_EEPROM_SIZE } from './constants.js';
+import { readUserConfigurationVersionFromBinary } from './read-user-configuration-version.js';
 import { shouldUpgradeAgent } from './should-upgrade-agent.js';
 
 export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfiguration => {
@@ -34,12 +35,7 @@ export const getUserConfigFromDeviceResponse = (json: string): ParsedUserConfigu
     try {
         const data: number[] = JSON.parse(json);
         const uhkBuffer = UhkBuffer.fromArray(data)
-        const userConfigMajorVersion = uhkBuffer.readUInt16();
-        const userConfigMinorVersion = uhkBuffer.readUInt16();
-        const userConfigPatchVersion = uhkBuffer.readUInt16();
-        uhkBuffer.offset = 0;
-
-        const userConfigurationVersion = `${userConfigMajorVersion}.${userConfigMinorVersion}.${userConfigPatchVersion}`
+        const userConfigurationVersion = readUserConfigurationVersionFromBinary(uhkBuffer);
         if (shouldUpgradeAgent(userConfigurationVersion, false)) {
             return {
                 result: 'newer',
