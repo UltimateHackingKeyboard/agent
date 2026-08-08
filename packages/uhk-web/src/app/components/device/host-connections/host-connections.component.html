@@ -9,6 +9,10 @@
         <th>
         </th>
         <th>
+            Slot
+            <circle-tooltip tooltip="The slot number this connection occupies. Connection key actions bind to slot numbers, so a key bound to a slot always switches to whichever connection sits in it." />
+        </th>
+        <th>
             Type
         </th>
         <th>
@@ -27,11 +31,15 @@
     </thead>
     <tbody [dragula]="dragAndDropGroup" [dragulaModel]="hostConnections" (dragulaModelChange)="hostConnectionsReordered($event)">
     <ng-container *ngFor="let hostConnection of hostConnections; let index = index">
-    <tr *ngIf="hostConnection.type !== 0">
+    <tr *ngIf="index < visibleHostConnectionCount"
+        [class.empty-host-connection]="isEmpty(hostConnection)">
         <td>
             <i
                class="uhk-icon uhk-icon-vertical-grip-icon movable"
                aria-hidden="true"></i>
+        </td>
+        <td class="slot-number">
+            {{ index + 1 }}
         </td>
         <td>
             {{hostConnection.type | hostConnectionTypeLabelPipe}}
@@ -40,13 +48,15 @@
             {{ hostConnection.address || '—' }}
         </td>
         <td>
-            <auto-grow-input [alignToParentWidth]="false"
+            <auto-grow-input *ngIf="!isEmpty(hostConnection)"
+                             [alignToParentWidth]="false"
                              [ngModel]="hostConnection.name"
                              (ngModelChange)="renameHostConnection(index, $event)"
            />
         </td>
         <td class="text-center">
-            <input type="checkbox"
+            <input *ngIf="!isEmpty(hostConnection)"
+                   type="checkbox"
                    class="form-check-input"
                    [ngModel]="hostConnection.switchover"
                    (ngModelChange)="setHostConnectionSwitchover(index, $event)"
@@ -77,6 +87,20 @@
     </tr>
     </ng-container>
     </tbody>
+    <tfoot *ngIf="foldedSlotCount > 0">
+    <tr>
+        <td colspan="7">
+            <button type="button"
+                    class="btn btn-link p-0 fold-toggle"
+                    (click)="toggleFoldedSlots()"
+            >
+                <fa-icon [icon]="showFoldedSlots ? faChevronUp : faChevronDown" class="me-2" />
+                <span *ngIf="showFoldedSlots">Hide the {{ foldedSlotCount }} unused slots</span>
+                <span *ngIf="!showFoldedSlots">Show {{ foldedSlotCount }} unused slots</span>
+            </button>
+        </td>
+    </tr>
+    </tfoot>
 </table>
 
 <button *ngIf="eraseBleSettingsButtonState.visible"
@@ -94,3 +118,69 @@
              animation="spin" />
     Delete device pairings
 </button>
+
+<h3 class="pt-4">Multipoint operation</h3>
+
+<div class="multipoint-options">
+    <div class="form-check">
+        <input type="checkbox"
+               class="form-check-input"
+               id="keep-connections-alive"
+               [ngModel]="bluetoothKeepConnectionsAlive"
+               (ngModelChange)="setBluetoothKeepConnectionsAlive($event)"
+        >
+        <label class="form-check-label" for="keep-connections-alive">
+            Keep connections alive
+        </label>
+        <circle-tooltip [tooltip]="keepConnectionsAliveTooltip"
+                        tooltipClass="tooltip-text-start"
+                        [width]="450" />
+        <ng-template #keepConnectionsAliveTooltip>
+            <p>Keeps every connected Bluetooth host connected instead of dropping the old connection when
+            you switch to another host. Without this, the UHK operates in <em>singlepoint</em> mode like
+            most Bluetooth keyboards: it talks to one host at a time.</p>
+            <b>Pros:</b>
+            <ul>
+                <li>Instant switching between connected hosts</li>
+            </ul>
+            <b>Cons:</b>
+            <ul>
+                <li>Stuttering mouse movement (due to BLE scheduling conflicts)</li>
+                <li>Increased latency</li>
+                <li>UHK permanently stealing input focus of non-active but connected hosts (e.g. the
+                    on-screen keyboard not popping up)</li>
+            </ul>
+        </ng-template>
+    </div>
+
+    <div class="form-check mt-2">
+        <input type="checkbox"
+               class="form-check-input"
+               id="always-advertise"
+               [ngModel]="bluetoothAlwaysAdvertise"
+               (ngModelChange)="setBluetoothAlwaysAdvertise($event)"
+        >
+        <label class="form-check-label" for="always-advertise">
+            Always advertise
+        </label>
+        <circle-tooltip [tooltip]="alwaysAdvertiseTooltip"
+                        tooltipClass="tooltip-text-start"
+                        [width]="450" />
+        <ng-template #alwaysAdvertiseTooltip>
+            <p>Keeps the UHK discoverable even while it is already connected, so a further host can connect
+            without you having to free up a connection first.</p>
+            <b>Pros:</b>
+            <ul>
+                <li>Hosts can pair or connect without dropping an existing connection first</li>
+            </ul>
+            <b>Cons:</b>
+            <ul>
+                <li>Security risk: nearby infected devices can easily detect the UHK and try to exploit
+                    possible vulnerabilities</li>
+                <li>Privacy risk: others may snoop on advertising</li>
+                <li>Neighbors may try to connect, causing unnecessary nuisance</li>
+                <li>Aggressive reconnection loops</li>
+            </ul>
+        </ng-template>
+    </div>
+</div>

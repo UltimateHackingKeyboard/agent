@@ -1,6 +1,7 @@
 import { Dongle } from './dongle.js';
 import { HalvesInfo } from './halves-info.js';
 import { HardwareModules } from './hardware-modules.js';
+import { NewPairedDevice } from './new-paired-device.js';
 import { UdevRulesInfo } from './udev-rules-info.js';
 import { UhkDeviceProduct } from './uhk-products.js';
 
@@ -29,8 +30,8 @@ export interface DeviceConnectionState {
     halvesInfo: HalvesInfo;
     hardwareModules?: HardwareModules;
     /**
-     * The BLE addresses of the devices that paired with the keyboard but not is the hostConnections of the user configuration.
+     * The devices that paired with the keyboard but not is the hostConnections of the user configuration.
      */
-    newPairedDevices: string[];
+    newPairedDevices: NewPairedDevice[];
     udevRulesInfo: UdevRulesInfo;
 }
