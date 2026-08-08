@@ -171,8 +171,10 @@ export class ScancodeSelectComponent implements OnChanges {
     onSearchInput(value: string): void {
         this.inputValue = value;
         this.searchTerm = value;
-        this.markedIndex = 0;
         this.rebuildFilteredView();
+        // Prefer the custom M/B/S tag on Enter when the term is an exact custom
+        // scancode pattern (e.g. B5), even if a named key shares that scancode.
+        this.markedIndex = this.showTag ? this.flatOptions.length : 0;
         this.cdRef.markForCheck();
     }
 
@@ -201,11 +203,12 @@ export class ScancodeSelectComponent implements OnChanges {
     }
 
     selectTag(): void {
-        if (!this.addTag || !this.searchTerm) {
+        const term = this.searchTerm.trim();
+        if (!this.addTag || !term) {
             return;
         }
 
-        const result = this.addTag(this.searchTerm);
+        const result = this.addTag(term);
         if (result && typeof result !== 'boolean') {
             this.selectedIdChange.emit(result.id);
         }
@@ -325,8 +328,10 @@ export class ScancodeSelectComponent implements OnChanges {
         this.tagLabel = term && this.addTagText ? this.addTagText(term) : '';
 
         const navigableCount = this.flatOptions.length + (this.showTag ? 1 : 0);
-        if (this.markedIndex >= navigableCount) {
-            this.markedIndex = Math.max(0, navigableCount - 1);
+        if (navigableCount === 0) {
+            this.markedIndex = 0;
+        } else if (this.markedIndex >= navigableCount) {
+            this.markedIndex = navigableCount - 1;
         }
     }
 

@@ -235,26 +235,32 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     addTagText(term: string): string {
-        const mediaSearchResult = isMediaSearch(term);
+        const normalizedTerm = term.trim();
+        if (!normalizedTerm) {
+            return '';
+        }
 
-        if (mediaSearchResult.isMatch &&
-            !this.scanCodeGroups
-                .some(x => x.additional?.type === 'media' && x.additional?.scancode === mediaSearchResult.scancode)) {
+        // Allow M/B/S tags whenever that exact id is new. A named key may already
+        // use the same scancode (e.g. letter "B" is basic scancode 5), but users
+        // still need to be able to add "B5" as an explicit custom entry.
+        const idExists = this.scanCodeGroups
+            .some(option => option.id.toLowerCase() === normalizedTerm.toLowerCase());
+        if (idExists) {
+            return '';
+        }
+
+        const mediaSearchResult = isMediaSearch(normalizedTerm);
+        if (mediaSearchResult.isMatch) {
             return `Media scancode: ${mediaSearchResult.scancode}`;
         }
 
-        const basicSearchResult = isBasicSearch(term);
-
-        if (basicSearchResult.isMatch &&
-            !this.scanCodeGroups
-                .some(x => x.additional?.type === 'basic' && x.additional?.scancode === basicSearchResult.scancode)) {
+        const basicSearchResult = isBasicSearch(normalizedTerm);
+        if (basicSearchResult.isMatch) {
             return `Basic scancode: ${basicSearchResult.scancode}`;
         }
 
-        const systemSearchResult = isSystemSearch(term);
-        if (systemSearchResult.isMatch &&
-            !this.scanCodeGroups
-                .some(x => x.additional?.type === 'system' && x.additional?.scancode === systemSearchResult.scancode)) {
+        const systemSearchResult = isSystemSearch(normalizedTerm);
+        if (systemSearchResult.isMatch) {
             return `System scancode: ${systemSearchResult.scancode}`;
         }
 
