@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { MapperService } from '../../../../services/mapper.service';
 
@@ -14,7 +14,7 @@ export class SvgMouseMoveKeyComponent implements OnChanges {
     mouseIcon: string;
     directionIcon: string;
 
-    constructor(private mapper: MapperService) { }
+    private readonly mapper = inject(MapperService);
 
     ngOnChanges() {
         this.mouseIcon = this.mapper.getIcon('mouse');

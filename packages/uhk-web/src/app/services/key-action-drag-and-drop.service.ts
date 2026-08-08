@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { colord } from 'colord';
@@ -54,10 +54,10 @@ export class KeyActionDragAndDropService implements OnDestroy {
         y: 0
     };
 
-    constructor(
-        @Inject(DOCUMENT) private _document: Document,
-        private _store: Store<AppState>
-    ) {
+    private readonly _document = inject<Document>(DOCUMENT);
+    private readonly _store = inject<Store<AppState>>(Store);
+
+    constructor() {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this._document.addEventListener('mouseup', this.leftButtonUp.bind(this));
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument

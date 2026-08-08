@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -68,30 +68,31 @@ export class DeviceFirmwareComponent implements OnDestroy {
     faExclamationTriangle = faExclamationTriangle;
     moduleFirmwareUpgradeStates = ModuleFirmwareUpgradeStates;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscription = new Subscription();
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-        this.flashFirmwareButtonDisabled$ = store.select(flashFirmwareButtonDisabled);
-        this.xtermLog$ = store.select(xtermLog);
+    constructor() {
+        this.flashFirmwareButtonDisabled$ = this.store.select(flashFirmwareButtonDisabled);
+        this.xtermLog$ = this.store.select(xtermLog);
         this.hasLogText$ = this.xtermLog$.pipe(
             map(logs => (logs || []).some(log => log.message?.trim().length > 0))
         );
-        this.subscription.add(store.select(getFirmwareUpgradeState).subscribe(data => {
+        this.subscription.add(this.store.select(getFirmwareUpgradeState).subscribe(data => {
             this.firmwareUpgradeStates = data;
             this.cdRef.markForCheck();
         }));
-        this.runningOnNotSupportedWindows$ = store.select(runningOnNotSupportedWindows);
-        this.firmwareUpgradeAllowed$ = store.select(firmwareUpgradeAllowed);
-        this.subscription.add(store.select(firmwareUpgradeFailed).subscribe(data => {
+        this.runningOnNotSupportedWindows$ = this.store.select(runningOnNotSupportedWindows);
+        this.firmwareUpgradeAllowed$ = this.store.select(firmwareUpgradeAllowed);
+        this.subscription.add(this.store.select(firmwareUpgradeFailed).subscribe(data => {
             this.firmwareUpgradeFailed = data;
             this.scrollToTheEndOfTheLogs();
         }));
-        this.subscription.add(store.select(firmwareUpgradeSuccess).subscribe(data => {
+        this.subscription.add(this.store.select(firmwareUpgradeSuccess).subscribe(data => {
             this.firmwareUpgradeSuccess = data;
             this.scrollToTheEndOfTheLogs();
         }));
-        this.subscription.add(store.select(getPlatform).subscribe(data => {
+        this.subscription.add(this.store.select(getPlatform).subscribe(data => {
             this.platform = data;
             this.cdRef.markForCheck();
         }))

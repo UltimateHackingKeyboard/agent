@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
     selector: 'back-to',
     standalone: false,
     template: `
-        <div *ngIf="backUrl" class="my-2">
+        <div *ngIf="backUrl" class="mt-3">
             Back to <a [routerLink]="[backUrl]" [queryParams]="queryParams">{{ backText }}</a>{{ backSuffix }}
         </div>
     `,
@@ -17,11 +17,12 @@ export class BackToComponent implements OnDestroy {
     backSuffix = '';
     queryParams = {};
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly route = inject(ActivatedRoute);
     private routeSubscription: Subscription;
 
-    constructor(private route: ActivatedRoute,
-                private cdRef: ChangeDetectorRef) {
-        this.routeSubscription = route.queryParams.subscribe(params => {
+    constructor() {
+        this.routeSubscription = this.route.queryParams.subscribe(params => {
             if (params.backUrl) {
                 const backUrl = new URL(params.backUrl as string, window.location.origin);
                 this.backUrl = backUrl.pathname;
@@ -35,7 +36,7 @@ export class BackToComponent implements OnDestroy {
                 this.backUrl = undefined;
             }
 
-            cdRef.markForCheck();
+            this.cdRef.markForCheck();
         });
     }
 

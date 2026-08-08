@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { LogService } from 'uhk-common';
 
@@ -7,9 +7,8 @@ import { LogService } from 'uhk-common';
     providedIn: 'root'
 })
 export class KeyboardSvgExportService {
-    constructor(@Inject(DOCUMENT) private document: Document,
-                private logService: LogService) {
-    }
+    private readonly document = inject<Document>(DOCUMENT);
+    private readonly logService = inject(LogService);
 
     public async downloadSvgKeyboard(): Promise<void> {
         this.logService.misc('[KeyboardSvgExportService] start to export.');

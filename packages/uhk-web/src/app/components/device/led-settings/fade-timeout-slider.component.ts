@@ -97,9 +97,6 @@ export class FadeTimeoutSliderComponent implements ControlValueAccessor{
         this._model = value;
     }
 
-    constructor(private _cdRef: ChangeDetectorRef) {
-    }
-
     writeValue(obj: string): void {
         if (this.model === obj) {
             return;

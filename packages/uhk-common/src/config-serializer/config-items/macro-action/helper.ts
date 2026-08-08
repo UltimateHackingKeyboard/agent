@@ -45,7 +45,7 @@ export class Helper {
             case MacroActionId.CommandMacroAction:
                 return new CommandMacroAction().fromBinary(buffer, serialisationInfo);
             default:
-                throw `Invalid MacroAction first byte: ${macroActionFirstByte}`;
+                throw new Error(`Invalid MacroAction first byte: ${macroActionFirstByte}`);
         }
     }
 
@@ -87,7 +87,7 @@ export class Helper {
             case macroActionType.CommandMacroAction:
                 return new CommandMacroAction().fromJsonObject(macroAction, serialisationInfo);
             default:
-                throw `Invalid MacroAction.macroActionType: "${macroAction.macroActionType}"`;
+                throw new Error(`Invalid MacroAction.macroActionType: "${macroAction.macroActionType}"`);
         }
     }
 }

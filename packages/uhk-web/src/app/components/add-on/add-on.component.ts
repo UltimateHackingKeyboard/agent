@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -80,11 +80,12 @@ export class AddOnComponent implements OnDestroy {
 
     moduleConfiguration = new ModuleConfiguration();
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscription: Subscription;
 
-    constructor(private store:Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-        this.subscription = store.select(getSelectedModuleConfiguration)
+    constructor() {
+        this.subscription = this.store.select(getSelectedModuleConfiguration)
             .subscribe((moduleConfiguration) => {
                 this.moduleConfiguration = moduleConfiguration;
 

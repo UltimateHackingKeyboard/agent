@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { routerNavigatedAction, RouterNavigatedAction } from '@ngrx/router-store';
@@ -77,6 +77,14 @@ import { RouterState } from '../router-util.js';
 
 @Injectable()
 export class UserConfigEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly dataStorageRepository = inject(DataStorageRepositoryService);
+    private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
+    private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly logService = inject(LogService);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly uhk80MigratorService = inject(Uhk80MigratorService);
 
     loadUserConfig$ = createEffect(() => this.actions$
         .pipe(
@@ -420,6 +428,15 @@ export class UserConfigEffects {
     resetKeymapQueryParams$ = createEffect(() => this.actions$
         .pipe(
             ofType(Keymaps.ActionTypes.SaveKey, Keymaps.ActionTypes.ClosePopover),
+            filter(action => {
+                if (action.type !== Keymaps.ActionTypes.SaveKey) {
+                    return true;
+                }
+
+                const keyAction = (action as Keymaps.SaveKeyAction).payload.keyAction;
+
+                return !keyAction.navigateToMacro && !keyAction.assignNewMacro;
+            }),
             tap(() => {
                 this.router.navigate([], {
                     queryParams: {
@@ -434,17 +451,6 @@ export class UserConfigEffects {
         ),
     { dispatch: false }
     );
-
-    constructor(private actions$: Actions,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private store: Store<AppState>,
-                private defaultUserConfigurationService: DefaultUserConfigurationService,
-                private deviceRendererService: DeviceRendererService,
-                private logService: LogService,
-                private router: Router,
-                private uhk80MigratorService: Uhk80MigratorService,
-    ) {
-    }
 
     private getUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): Observable<UserConfiguration> {
         return this.dataStorageRepository.getConfig(uhkDeviceProduct)

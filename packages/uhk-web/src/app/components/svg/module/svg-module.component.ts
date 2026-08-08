@@ -4,7 +4,8 @@ import {
     Input,
     OnDestroy,
     Output,
-    ChangeDetectionStrategy
+    ChangeDetectionStrategy,
+    inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BacklightingMode, HostConnection, KeyAction, Macro, UhkThemeColors } from 'uhk-common';
@@ -54,8 +55,11 @@ export class SvgModuleComponent implements OnDestroy {
     macroMap: Map<number, Macro>;
     private macroMapSubscription: Subscription;
     private hostConnectionsSubscription: Subscription;
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(private store: Store<AppState>) {
+    constructor() {
+        const store = this.store;
+
         this.keyboardKeys = [];
         this.macroMapSubscription = store.select(getMacroMap)
             .subscribe(map => this.macroMap = map);

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, inject } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
 import {
@@ -62,18 +62,18 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     showFoldedSlots = false;
     foldedSlotCount = 0;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly dragulaService = inject(DragulaService);
     private hostConnectionPairStateSubscription: Subscription;
     private eraseBleSettingsSubscription: Subscription;
     private hostConnectionsSubscription: Subscription;
     private userConfigurationSubscription: Subscription;
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(private dragulaService: DragulaService,
-                private cdRef: ChangeDetectorRef,
-                private store: Store<AppState>) {
-
+    constructor() {
         this.store.dispatch(new CheckAreHostConnectionsPairedAction());
 
-        dragulaService.createGroup(this.dragAndDropGroup, {
+        this.dragulaService.createGroup(this.dragAndDropGroup, {
             moves: (el, container, handle) => {
                 if (!handle) {
                     return false;

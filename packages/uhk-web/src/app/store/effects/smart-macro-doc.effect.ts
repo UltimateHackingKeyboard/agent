@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { distinctUntilChanged, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
@@ -14,6 +14,13 @@ import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds, ru
 
 @Injectable()
 export class SmartMacroDocEffect {
+    private readonly actions$ = inject(Actions);
+    private readonly completionItemProvider = inject(MonacoEditorCompletionItemProvider);
+    private readonly logService = inject(LogService);
+    private readonly smartMacroDocRendererService = inject(SmartMacroDocRendererService);
+    private readonly smartMacroDocService = inject(SmartMacroDocService);
+    private readonly store = inject<Store<AppState>>(Store);
+
     appStart$ = createEffect(() => this.actions$
         .pipe(
             ofType(AppActions.ActionTypes.AppBootstrapped),
@@ -64,14 +71,6 @@ export class SmartMacroDocEffect {
         ),
     { dispatch: false }
     );
-
-    constructor(private actions$: Actions,
-                private completionItemProvider: MonacoEditorCompletionItemProvider,
-                private logService: LogService,
-                private smartMacroDocRendererService: SmartMacroDocRendererService,
-                private smartMacroDocService: SmartMacroDocService,
-                private store: Store<AppState>) {
-    }
 
     private sendMessageContext(modulesIds: Array<number>, firmwareRepoInfo: FirmwareRepoInfo): void {
         this.smartMacroDocService.sendMessage({

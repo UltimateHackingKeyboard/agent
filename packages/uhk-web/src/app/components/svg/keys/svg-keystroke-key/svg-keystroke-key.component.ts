@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy, inject } from '@angular/core';
 import { KeyModifiers, KeystrokeAction } from 'uhk-common';
 
 import { MapperService } from '../../../../services/mapper.service';
@@ -58,7 +58,9 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
     thisSecondaryRoleText: string;
     subComponentSecondaryRoleText: string;
 
-    constructor(private mapper: MapperService) {
+    private readonly mapper = inject(MapperService);
+
+    constructor() {
         this.modifierIconNames = {};
         this.textContainer = new SvgAttributes();
         this.modifierContainer = new SvgAttributes();

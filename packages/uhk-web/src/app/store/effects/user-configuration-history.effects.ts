@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap, map } from 'rxjs/operators';
 import { NotificationType } from 'uhk-common';
@@ -15,6 +15,8 @@ import {
 
 @Injectable()
 export class UserConfigurationHistoryEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly deviceRendererService = inject(DeviceRendererService);
 
     deleteUserConfigHistory$ = createEffect(() => this.actions$
             .pipe(
@@ -64,9 +66,4 @@ export class UserConfigurationHistoryEffects {
         ),
     { dispatch: false }
     );
-
-    constructor(private actions$: Actions,
-                private deviceRendererService: DeviceRendererService
-    ) {
-    }
 }

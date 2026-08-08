@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import {
@@ -41,9 +41,10 @@ export class SvgModuleProviderService implements OnDestroy {
     private trackBallRight: SvgModule;
     private trackPointRight: SvgModule;
     private connectedDeviceId = UHK_60_V2_DEVICE.id;
+    private readonly _store = inject<Store<AppState>>(Store);
     private subscriptions = new Subscription();
 
-    constructor(private _store: Store<AppState>) {
+    constructor() {
         this.setUHK60Modules();
 
         this.subscriptions.add(this._store.select(getConnectedDevice).subscribe(device => {
