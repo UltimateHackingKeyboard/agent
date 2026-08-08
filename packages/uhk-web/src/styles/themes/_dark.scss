@@ -126,6 +126,8 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
 
     --color-select-active-bg: #{$color-select-active-bg};
     --color-select-active-text: #{$color-select-active-text};
+    --color-select-hover-bg: #{$color-select-hover-bg};
+    --color-select-hover-text: #{$color-select-hover-text};
 
     --color-configuration-history-text: #{$color-text};
 

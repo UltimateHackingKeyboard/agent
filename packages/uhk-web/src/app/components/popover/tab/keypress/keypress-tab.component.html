@@ -1,32 +1,14 @@
 <div class="scancode-options">
     <b class="setting-label mb-2">Scancode:</b>
     <div class="scancode-container">
-        <ng-select #scancodeSelect
-                   [addTag]="addTagFn.bind(this)"
-                   [clearable]="false"
-                   [editableSearchTerm]="true"
-                   [items]="scanCodeGroups"
-                   [ngModel]="selectedScancodeOption?.id"
-                   [searchFn]="searchFn"
-                   bindLabel="text"
-                   bindValue="id"
-                   groupBy="group"
-                   (ngModelChange)="onScancodeChange($event)"
-                   select-max-height
-        >
-            <ng-template ng-option-tmp let-item="item">
-                <span>
-                  <span>{{ item.text }}</span>
-                <span class="float-end">
-                      {{ item.additional?.explanation}}
-                  </span>
-                </span>
-            </ng-template>
-
-            <ng-template ng-tag-tmp let-search="searchTerm">
-                {{ addTagText(search) }}
-            </ng-template>
-        </ng-select>
+        <scancode-select
+            [addTag]="addTag"
+            [addTagText]="getAddTagText"
+            [items]="scanCodeGroups"
+            [searchFn]="searchFn"
+            [selectedId]="selectedScancodeOption?.id || ''"
+            (selectedIdChange)="onScancodeChange($event)"
+        ></scancode-select>
     </div>
     <ng-template #scanCodeTooltip>
         <p>Labels are shown according to en-US character-to-scancode mapping. This means that output may differ from the label if your computer uses layout different from en-US. In such case, you need to pick the character of the desired key according to the en-US layout.</p>
