@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faCog, faDesktop, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-import { AppTheme, AppThemeSelect, MacroGroupingSettings } from 'uhk-common';
+import { AppTheme, MacroGroupingSettings } from 'uhk-common';
 import {
     AppState,
     appUpdateSettingsState,
@@ -15,7 +16,6 @@ import {
     getMacroGroupingSettings,
     getMinimizeToTray,
     getOperatingSystem,
-    getSupportedThemes,
     keyboardHalvesAlwaysJoined,
 } from '../../../store';
 import { MACRO_GROUPING_MAX_DEPTH } from '../../../util/group-macros-by-name';
@@ -35,6 +35,12 @@ import {
 import { ToggleAlwaysEnableAdvancedModeAction } from '../../../store/actions/advance-settings.action';
 import { OperatingSystem } from '../../../models/operating-system';
 
+type ThemeOption = {
+    id: AppTheme;
+    text: string;
+    icon: IconDefinition;
+};
+
 @Component({
     selector: 'settings',
     standalone: false,
@@ -49,7 +55,6 @@ export class SettingsComponent {
     animationEnabled$: Observable<boolean>;
     minimizeToTray$: Observable<boolean>;
     appTheme$: Observable<AppTheme>;
-    themes$: Observable<AppThemeSelect[]>;
     isLinux$: Observable<boolean>;
     faCog = faCog;
     keyboardHalvesAlwaysJoined$: Observable<boolean>;
@@ -57,6 +62,11 @@ export class SettingsComponent {
     alwaysEnableAdvancedModeSettingVisible$: Observable<boolean>;
     macroGroupingSettings$: Observable<MacroGroupingSettings>;
     macroGroupingMaxDepth = MACRO_GROUPING_MAX_DEPTH;
+    themes: ThemeOption[] = [
+        { id: AppTheme.System, text: 'Follow operating system theme', icon: faDesktop },
+        { id: AppTheme.Light, text: 'Light', icon: faSun },
+        { id: AppTheme.Dark, text: 'Dark', icon: faMoon },
+    ];
 
     private readonly store = inject<Store<AppState>>(Store);
 
@@ -65,7 +75,6 @@ export class SettingsComponent {
         this.animationEnabled$ = this.store.select(getAnimationEnabled);
         this.minimizeToTray$ = this.store.select(getMinimizeToTray);
         this.appTheme$ = this.store.select(getAppTheme);
-        this.themes$ = this.store.select(getSupportedThemes);
         this.isLinux$ = this.store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
         this.keyboardHalvesAlwaysJoined$ = this.store.select(keyboardHalvesAlwaysJoined);
         this.alwaysEnableAdvancedMode$ = this.store.select(getAlwaysEnableAdvancedMode);

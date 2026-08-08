@@ -4,7 +4,6 @@ import { storeFreeze } from 'ngrx-store-freeze';
 import {
     ApplicationSettings,
     AppTheme,
-    AppThemeSelect,
     BacklightingMode,
         createMd5Hash,
     FirmwareRepoInfo,
@@ -788,14 +787,6 @@ export const getUserConfigHistoryComponentState = createSelector(
 
         return result;
     });
-
-export const getSupportedThemes = (): AppThemeSelect[] => {
-    return [
-        { id: AppTheme.System, text: 'Follow operating system theme' },
-        { id: AppTheme.Light, text: 'Light' },
-        { id: AppTheme.Dark, text: 'Dark' }
-    ];
-};
 
 export const getStateFirmwareUpgradeState = createSelector(firmwareState, fromFirmware.firmwareUpgradeState);
 export const getFirmwareUpgradeState = createSelector(runningInElectron, getStateFirmwareUpgradeState,

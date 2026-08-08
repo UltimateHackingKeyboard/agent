@@ -7,11 +7,6 @@ export enum AppTheme {
     Dark = 'dark'
 }
 
-export type AppThemeSelect = {
-    id: AppTheme;
-    text: string;
-};
-
 export interface ApplicationSettings {
     checkForUpdateOnStartUp: boolean;
     /**
