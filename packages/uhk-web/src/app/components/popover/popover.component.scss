@@ -115,6 +115,31 @@
     background-color: var(--color-popover-bg-light);
 }
 
+.popover-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6em;
+    padding: 0 24px 12px;
+    background-color: var(--color-popover-bg-light);
+
+    .popover-note__label {
+        margin-top: 0.35rem;
+        margin-bottom: 0;
+    }
+
+    textarea {
+        flex: 1;
+        resize: vertical;
+        min-height: 3.5rem;
+        border-width: 1px;
+
+        &:focus {
+            border-width: 1px;
+            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2);
+        }
+    }
+}
+
 .pe-10 {
     padding-right: 10px;
 }

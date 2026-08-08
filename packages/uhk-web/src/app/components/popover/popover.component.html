@@ -74,6 +74,16 @@
                   (validAction)="setKeyActionValidState($event)"
         ></none-tab>
     </div>
+    <div class="popover-note" *ngIf="showNote">
+        <label class="popover-note__label" for="key-note"><b>Note:</b></label>
+        <textarea id="key-note"
+                  #noteTextarea
+                  class="form-control"
+                  [rows]="noteRows"
+                  [ngModel]="note"
+                  (ngModelChange)="onNoteChange($event)"
+                  aria-label="Note for this key"></textarea>
+    </div>
     <div class="row popover-action">
         <div class="col-8 ps-2">
             <form class="popover-action-form">
@@ -117,7 +127,18 @@
             </form>
         </div>
 
-        <div class="col-4 d-flex p-0 justify-content-end">
+        <div class="col-4 d-flex p-0 justify-content-end align-items-center">
+            <button class="btn btn-sm btn-default me-2"
+                    type="button"
+                    [class.active]="showNote"
+                    [attr.aria-pressed]="showNote"
+                    [ngbTooltip]="noteTooltip"
+                    #noteTooltipRef="ngbTooltip"
+                    triggers="hover"
+                    aria-label="Toggle note"
+                    (click)="toggleNote(noteTooltipRef)">
+                <fa-icon [icon]="faNoteSticky" aria-hidden="true"></fa-icon>
+            </button>
             <button class="btn btn-sm btn-default me-2" type="button" (click)="onCancelClick()"> Cancel</button>
             <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button"
                     (click)="onRemapKey()"> Remap key

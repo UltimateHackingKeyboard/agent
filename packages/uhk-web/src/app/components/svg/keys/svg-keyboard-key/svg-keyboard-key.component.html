@@ -39,6 +39,11 @@
 </svg:g>
 
 <svg:g [attr.transform]="calcTransform()">
+<svg:path *ngIf="hasNote && svgKey.width"
+          class="note-marker"
+          [attr.d]="noteMarkerPath"
+          [attr.transform]="svgKey.noteMarkerTransform"
+/>
 <ng-template [ngIf]="recording">
     <svg:circle
         [@recording]="recordAnimation"

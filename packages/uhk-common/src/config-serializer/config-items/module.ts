@@ -90,7 +90,10 @@ export class Module {
             id: this.id,
             keyActions: this.keyActions.map(keyAction => {
                 if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))) {
-                    return keyAction.toJsonObject(serialisationInfo, macros);
+                    return {
+                        ...keyAction.toJsonObject(serialisationInfo, macros),
+                        ...labelToJson(keyAction)
+                    };
                 }
 
                 return new NoneAction().toJsonObject(serialisationInfo);
@@ -105,6 +108,7 @@ export class Module {
         const keyActions = this.getCompressedKeyActions()
         for (const keyAction of keyActions) {
             keyAction.toBinary(buffer, serialisationInfo, userConfiguration);
+            writeKeyLabelAction(buffer, keyAction);
         }
     }
 
@@ -137,8 +141,12 @@ export class Module {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObjectV1(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.id = jsonObject.id;
-        this.keyActions = jsonObject.keyActions.map((keyAction) => {
-            return KeyActionHelper.fromJSONObject(keyAction, macros, serialisationInfo);
+        this.keyActions = jsonObject.keyActions.map((keyActionJson) => {
+            const keyAction = KeyActionHelper.fromJSONObject(keyActionJson, macros, serialisationInfo);
+            if (keyActionJson?.label) {
+                keyAction.label = keyActionJson.label;
+            }
+            return keyAction;
         });
     }
 
@@ -152,9 +160,11 @@ export class Module {
         while (processedKeyActionsCount < keyActionsLength) {
             const keyAction = KeyActionHelper.createKeyAction(buffer, macros, serialisationInfo)
 
-            if (KeyLabelAction instanceof KeyLabelAction) {
-                // TODO: implement it in other PR
-                //  related to https://github.com/UltimateHackingKeyboard/agent/issues/2289
+            if (keyAction instanceof KeyLabelAction) {
+                if (!lastKeyAction) {
+                    throw Error(`${processedKeyActionsCount} key label has no preceding key action`);
+                }
+                lastKeyAction.label = keyAction.label;
             }
             else if (keyAction instanceof MacroArgumentAction) {
                 if (lastKeyAction instanceof PlayMacroAction) {
@@ -192,13 +202,14 @@ export class Module {
         for (let i = 0; i < this.keyActions.length;) {
             const keyAction = this.keyActions[i] || new NoneAction();
 
-            if (keyAction instanceof NoneAction) {
+            if (keyAction instanceof NoneAction && !keyAction.label) {
                 let blockCount = 1
 
                 for (let j = i + 1; j < this.keyActions.length; j++) {
                     const nextAction = this.keyActions[j] || new NoneAction();
 
                     if (nextAction instanceof NoneAction
+                        && !nextAction.label
                         && keyAction.r === nextAction.r
                         && keyAction.g === nextAction.g
                         && keyAction.b === nextAction.b) {
@@ -244,10 +255,30 @@ export class Module {
                 count += keyAction.macroArguments.length;
             }
 
-            // TODO: Extend when implement KeyLabelAction
+            if (keyAction?.label) {
+                count++;
+            }
         }
 
         return count;
     }
 
+}
+
+function labelToJson(keyAction: KeyAction): { label?: string } {
+    if (keyAction.label) {
+        return { label: keyAction.label };
+    }
+
+    return {};
+}
+
+function writeKeyLabelAction(buffer: UhkBuffer, keyAction: KeyAction): void {
+    if (!keyAction.label) {
+        return;
+    }
+
+    const keyLabelAction = new KeyLabelAction();
+    keyLabelAction.label = keyAction.label;
+    keyLabelAction.toBinary(buffer);
 }

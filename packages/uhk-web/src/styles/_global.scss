@@ -308,6 +308,24 @@ kbd {
     }
 }
 
+.tooltip.note-tooltip {
+    --bs-tooltip-max-width: none;
+    --bs-tooltip-padding-x: 0.35rem;
+    --bs-tooltip-padding-y: 0.35rem;
+    --tooltip-max-width: none;
+    line-height: 1.25;
+
+    .tooltip-inner {
+        width: fit-content;
+        max-width: 14rem;
+        padding: 0.35rem;
+        font-size: 0.9375rem;
+        text-align: center;
+        line-height: 1.25;
+        white-space: pre-wrap;
+    }
+}
+
 mwl-confirmation-popover-window {
     .popover {
         &.bottom {

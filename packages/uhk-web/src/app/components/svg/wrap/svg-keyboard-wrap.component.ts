@@ -141,7 +141,9 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
         posTop: number,
         posLeft: number,
         content: Observable<NameValuePair[]>,
-        show: boolean
+        show: boolean,
+        isNote: boolean,
+        note: string
     };
     layers: Layer[];
     keyPosition: ClientRect;
@@ -175,7 +177,9 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
             posTop: 0,
             posLeft: 0,
             content: of([]),
-            show: false
+            show: false,
+            isNote: false,
+            note: ''
         };
 
         this.animationSubscription =
@@ -265,18 +269,20 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     onKeyHover(event: SvgKeyHoverEvent): void {
-        if (this.tooltipEnabled) {
-            const keyActionToEdit: KeyAction = this.layers
-                .find(layer => layer.id === this.currentLayer.id)
-                .modules
-                .find(findModuleById(event.moduleId))
-                .keyActions[event.keyId];
+        const keyActionToEdit: KeyAction = this.layers
+            .find(layer => layer.id === this.currentLayer.id)
+            .modules
+            .find(findModuleById(event.moduleId))
+            .keyActions[event.keyId];
 
-            if (event.over) {
+        if (event.over) {
+            if (keyActionToEdit?.label) {
+                this.showNoteTooltip(keyActionToEdit, event.event);
+            } else if (this.tooltipEnabled) {
                 this.showTooltip(keyActionToEdit, event.event);
-            } else {
-                this.hideTooltip();
             }
+        } else {
+            this.hideTooltip();
         }
     }
 
@@ -348,21 +354,26 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
             return;
         }
 
-        const el = event.target as Element;
-        const position: ClientRect = el.getBoundingClientRect();
-        let posLeft: number = this.tooltipData.posLeft;
-        let posTop: number = this.tooltipData.posTop;
+        this.tooltipData = {
+            ...this.getTooltipPosition(event),
+            content: this.getKeyActionContent(keyAction),
+            show: true,
+            isNote: false,
+            note: ''
+        };
+    }
 
-        if (el.tagName === 'g') {
-            posLeft = position.left + (position.width / 2);
-            posTop = position.top + position.height;
+    showNoteTooltip(keyAction: KeyAction, event: MouseEvent): void {
+        if (!keyAction?.label) {
+            return;
         }
 
         this.tooltipData = {
-            posLeft: posLeft,
-            posTop: posTop,
-            content: this.getKeyActionContent(keyAction),
-            show: true
+            ...this.getTooltipPosition(event),
+            content: of([]),
+            show: true,
+            isNote: true,
+            note: keyAction.label
         };
     }
 
@@ -393,6 +404,20 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
             description,
             abbr: this.keymap.abbreviation
         });
+    }
+
+    private getTooltipPosition(event: MouseEvent): { posLeft: number, posTop: number } {
+        const el = event.target as Element;
+        const position: ClientRect = el.getBoundingClientRect();
+        let posLeft: number = this.tooltipData.posLeft;
+        let posTop: number = this.tooltipData.posTop;
+
+        if (el.tagName === 'g') {
+            posLeft = position.left + (position.width / 2);
+            posTop = position.top + position.height;
+        }
+
+        return { posLeft, posTop };
     }
 
     private getKeyActionContent(keyAction: KeyAction): Observable<NameValuePair[]> {

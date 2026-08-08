@@ -49,11 +49,13 @@ export abstract class KeyAction implements RgbColorInterface {
     @assertUInt8 b = DEFAULT_RGB_COLOR.b;
     @assertUInt8 g = DEFAULT_RGB_COLOR.g;
     @assertUInt8 r = DEFAULT_RGB_COLOR.r;
+    label = '';
 
-    protected constructor(keyAction?: RgbColorInterface) {
+    protected constructor(keyAction?: RgbColorInterface & { label?: string }) {
         this.b = keyAction?.b ?? DEFAULT_RGB_COLOR.b;
         this.g = keyAction?.g ?? DEFAULT_RGB_COLOR.g;
         this.r = keyAction?.r ?? DEFAULT_RGB_COLOR.r;
+        this.label = keyAction?.label ?? '';
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

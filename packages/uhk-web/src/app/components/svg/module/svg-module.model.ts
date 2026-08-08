@@ -28,6 +28,7 @@ export class SvgModule {
                     keys[i].width = +keys[i].width;
                     const style = parseStyle(keys[i].style as string);
                     keys[i].fill = style.fill;
+                    keys[i].noteMarkerTransform = keys[i]['data-note-marker-transform'];
                     this.keyboardKeys[index] = keys[i];
                 }
             }
@@ -134,7 +135,12 @@ export class SvgModule {
                             key.height = +rect.$.height;
                             key.width = +rect.$.width;
                             key.textTransform = rect.$.transform;
+                            key.noteMarkerTransform = rect.$['data-note-marker-transform'] || g.$['data-note-marker-transform'];
                         }
+                    }
+
+                    if (!key.noteMarkerTransform) {
+                        key.noteMarkerTransform = g.$['data-note-marker-transform'];
                     }
                     this.keyboardKeys[index] = key;
                 }

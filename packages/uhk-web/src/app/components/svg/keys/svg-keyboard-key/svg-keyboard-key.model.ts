@@ -14,6 +14,7 @@ export interface SvgKeyboardKey {
     transform?: string;
     type: 'circle' | 'path' | 'rec' | 'g';
     textTransform?: string;
+    noteMarkerTransform?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     elements?: { paths?: Array<any>, circles?: Array<any> };
 }
