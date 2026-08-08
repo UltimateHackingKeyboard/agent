@@ -15,6 +15,11 @@ body {
     --tooltip-max-width: 200px;
 }
 
+/* Above key-action popover (1051) so dropdowns like scancode-select are visible. */
+.cdk-overlay-container {
+    z-index: 1100;
+}
+
 .full-screen-component {
     display: block;
     height: 100%;

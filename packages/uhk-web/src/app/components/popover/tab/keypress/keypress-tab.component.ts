@@ -7,11 +7,9 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
-    ViewChild,
     inject,
 } from '@angular/core';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { NgSelectComponent } from '@ng-select/ng-select';
 import { copyRgbColor, KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -20,14 +18,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
-
-interface FlatOptions {
-    id: string;
-    text: string;
-    group?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    additional?: any;
-}
+import { ScancodeSelectOption } from './scancode-select';
 
 interface SearchResult {
     isMatch: boolean;
@@ -49,15 +40,14 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() secondaryRoleOptions: SelectOptionData[];
 
     @Output() keyActionChange = new EventEmitter<KeystrokeAction>();
-    @ViewChild('scancodeSelect',  { static: true }) scancodeSelect: NgSelectComponent;
 
     leftModifiers: KeyModifierModel[];
     rightModifiers: KeyModifierModel[];
 
-    scanCodeGroups: Array<FlatOptions>;
-    secondaryRoleGroups: Array<FlatOptions> = [];
+    scanCodeGroups: Array<ScancodeSelectOption>;
+    secondaryRoleGroups: Array<ScancodeSelectOption> = [];
 
-    selectedScancodeOption: FlatOptions;
+    selectedScancodeOption: ScancodeSelectOption;
     selectedSecondaryRoleIndex: number;
     warningVisible: boolean;
     faInfoCircle = faInfoCircle;
@@ -123,7 +113,6 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.leftModifiers = event.left;
         this.rightModifiers = event.right;
         this.keyActionChanged();
-        this.scancodeSelect.writeValue(this.selectedScancodeOption.text || '');
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -189,7 +178,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.keyActionChanged();
     }
 
-    addTagFn (name: string): FlatOptions | boolean {
+    addTag = (name: string): ScancodeSelectOption | boolean => this.addTagFn(name);
+
+    getAddTagText = (term: string): string => this.addTagText(term);
+
+    addTagFn (name: string): ScancodeSelectOption | boolean {
         const mediaSearchResult = isMediaSearch(name);
         if (mediaSearchResult.isMatch) {
             const option = {
@@ -242,33 +235,39 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     addTagText(term: string): string {
-        const mediaSearchResult = isMediaSearch(term);
+        const normalizedTerm = term.trim();
+        if (!normalizedTerm) {
+            return '';
+        }
 
-        if (mediaSearchResult.isMatch &&
-            !this.scanCodeGroups
-                .some(x => x.additional?.type === 'media' && x.additional?.scancode === mediaSearchResult.scancode)) {
+        // Allow M/B/S tags whenever that exact id is new. A named key may already
+        // use the same scancode (e.g. letter "B" is basic scancode 5), but users
+        // still need to be able to add "B5" as an explicit custom entry.
+        const idExists = this.scanCodeGroups
+            .some(option => option.id.toLowerCase() === normalizedTerm.toLowerCase());
+        if (idExists) {
+            return '';
+        }
+
+        const mediaSearchResult = isMediaSearch(normalizedTerm);
+        if (mediaSearchResult.isMatch) {
             return `Media scancode: ${mediaSearchResult.scancode}`;
         }
 
-        const basicSearchResult = isBasicSearch(term);
-
-        if (basicSearchResult.isMatch &&
-            !this.scanCodeGroups
-                .some(x => x.additional?.type === 'basic' && x.additional?.scancode === basicSearchResult.scancode)) {
+        const basicSearchResult = isBasicSearch(normalizedTerm);
+        if (basicSearchResult.isMatch) {
             return `Basic scancode: ${basicSearchResult.scancode}`;
         }
 
-        const systemSearchResult = isSystemSearch(term);
-        if (systemSearchResult.isMatch &&
-            !this.scanCodeGroups
-                .some(x => x.additional?.type === 'system' && x.additional?.scancode === systemSearchResult.scancode)) {
+        const systemSearchResult = isSystemSearch(normalizedTerm);
+        if (systemSearchResult.isMatch) {
             return `System scancode: ${systemSearchResult.scancode}`;
         }
 
         return '';
     }
 
-    searchFn(term: string, item: FlatOptions) {
+    searchFn = (term: string, item: ScancodeSelectOption): boolean => {
         term = term.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
         if (new RegExp(term, 'i').test(item.text)) {
             return true;
@@ -293,7 +292,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         }
 
         return false;
-    }
+    };
 
     modifiersTrackBy(index: number, modifier: KeyModifierModel): string {
         return `${modifier.value}${modifier.checked}`;
@@ -306,12 +305,12 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.cdRef.markForCheck();
     }
 
-    private findScancodeOptionById(id: string): FlatOptions {
+    private findScancodeOptionById(id: string): ScancodeSelectOption {
         return this.scanCodeGroups.find(scancode => scancode.id === id) ||
-            this.addTagFn(id) as FlatOptions;
+            this.addTagFn(id) as ScancodeSelectOption;
     }
 
-    private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): FlatOptions {
+    private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): ScancodeSelectOption {
         const typeToFind: string =
             (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) ? 'media' : KeystrokeType[type];
         const option = this.scanCodeGroups.find(x => x.additional.scancode === scancode && x.additional.type === typeToFind);
@@ -322,20 +321,20 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         switch (typeToFind) {
             case 'media':
-                return this.addTagFn(`M${scancode}`) as FlatOptions;
+                return this.addTagFn(`M${scancode}`) as ScancodeSelectOption;
 
             case 'basic':
-                return this.addTagFn(`B${scancode}`) as FlatOptions;
+                return this.addTagFn(`B${scancode}`) as ScancodeSelectOption;
 
             case 'system':
-                return this.addTagFn(`S${scancode}`) as FlatOptions;
+                return this.addTagFn(`S${scancode}`) as ScancodeSelectOption;
 
             default:
                 break;
         }
     }
 
-    private toScancodeTypePair(option: FlatOptions): [number, string] {
+    private toScancodeTypePair(option: ScancodeSelectOption): [number, string] {
         if (!option) {
             return [0, 'basic'];
         }

@@ -1,8 +1,9 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotifierModule } from 'gramli-angular-notifier';
@@ -71,6 +72,7 @@ import {
     MouseTabComponent,
     NoneTabComponent,
 } from './components/popover/tab';
+import { ScancodeSelectComponent } from './components/popover/tab/keypress/scancode-select';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
 import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
@@ -227,6 +229,7 @@ import appInitFactory from './services/app-init-factory';
         DeviceTabComponent,
         KeypressTabComponent,
         KeymapTabComponent,
+        ScancodeSelectComponent,
         LayerTabComponent,
         MacroTabComponent,
         MouseTabComponent,
@@ -305,6 +308,7 @@ import appInitFactory from './services/app-init-factory';
         MonacoEditorModule,
         NgSelectModule,
         NouisliderModule,
+        OverlayModule,
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({
             confirmButtonType: 'danger' // set defaults here
