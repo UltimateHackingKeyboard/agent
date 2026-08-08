@@ -381,6 +381,19 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         }
     }
 
+    get hasNote(): boolean {
+        return !!this.keyAction?.label;
+    }
+
+    get noteMarkerPath(): string {
+        const size = 14;
+        const width = this.svgKey.width || 0;
+        const radius = Math.min(Number(this.svgKey.rx) || 3.78, size);
+
+        // Rounded top-right corner matching the key radius, hypotenuse toward the key center.
+        return `M ${width - size},0 L ${width - radius},0 A ${radius},${radius} 0 0 1 ${width},${radius} L ${width},${size} Z`;
+    }
+
     calcTransform(): string {
         let transform;
 

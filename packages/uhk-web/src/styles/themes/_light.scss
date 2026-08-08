@@ -64,6 +64,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-keyboard-key-bg: #{$color-bg-light};
     --color-keyboard-key-hover: #737373;
     --color-keyboard-key-active: #{$primary};
+    --color-keyboard-key-note-marker: #b0b0b0;
     --color-module-puzzle-path-fill: #{$white};
 
     --color-input-bg: #{$input-bg};

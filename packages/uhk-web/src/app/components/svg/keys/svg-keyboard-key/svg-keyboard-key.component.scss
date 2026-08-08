@@ -8,3 +8,8 @@
     outline: none;
     box-shadow: none;
 }
+
+.note-marker {
+    fill: var(--color-keyboard-key-note-marker);
+    pointer-events: none;
+}
