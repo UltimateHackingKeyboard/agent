@@ -23,6 +23,7 @@ export * from './is-same-firmware.js';
 export * from './is-user-config-version-higher-than-firmware.js';
 export * from './map-i2c-address-to-module-name.js';
 export * from './map-i2c-address-to-slot-id.js';
+export * from './read-user-configuration-version.js';
 export * from './should-upgrade-agent.js';
 export * from './should-upgrade-firmware.js';
 export * from './simulate-invalid-user-config-error.js';

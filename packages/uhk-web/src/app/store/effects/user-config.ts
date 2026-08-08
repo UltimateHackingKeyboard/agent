@@ -17,6 +17,8 @@ import {
     ConfigurationReply,
     LogService,
     NotificationType,
+    readUserConfigurationVersionFromBinary,
+    readUserConfigurationVersionFromJsonObject,
     RightModuleInfo,
     shouldUpgradeAgent,
     UHK_60_DEVICE,
@@ -335,27 +337,33 @@ export class UserConfigEffects {
             map(([action, currentUserConfiguration, disableUpdateAgentProtection]) => {
                 const payload = action.payload;
                 const deviceName = currentUserConfiguration.deviceName;
+                const userConfigTooHighForAgentNotification = (importedVersion: string) => new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: `The imported user configuration version (${importedVersion}) is too high for this Agent (supports up to ${VERSIONS.userConfigVersion}). Please update Agent.`
+                });
 
                 try {
                     let userConfig = new UserConfiguration();
 
                     if (payload.uploadFileData.filename.endsWith('.bin')) {
-                        userConfig.fromBinary(UhkBuffer.fromArray(payload.uploadFileData.data));
+                        const uhkBuffer = UhkBuffer.fromArray(payload.uploadFileData.data);
+                        const userConfigVersion = readUserConfigurationVersionFromBinary(uhkBuffer);
+                        if (shouldUpgradeAgent(userConfigVersion, disableUpdateAgentProtection)) {
+                            return userConfigTooHighForAgentNotification(userConfigVersion);
+                        }
+                        userConfig.fromBinary(uhkBuffer);
                     } else {
                         const buffer = Buffer.from(payload.uploadFileData.data);
-                        const json = buffer.toString();
-                        userConfig.fromJsonObject(JSON.parse(json));
+                        const json = JSON.parse(buffer.toString());
+                        const userConfigVersion = readUserConfigurationVersionFromJsonObject(json);
+                        if (userConfigVersion
+                            && shouldUpgradeAgent(userConfigVersion, disableUpdateAgentProtection)) {
+                            return userConfigTooHighForAgentNotification(userConfigVersion);
+                        }
+                        userConfig.fromJsonObject(json);
                     }
 
                     if (userConfig.userConfigMajorVersion) {
-                        const userConfigVersion = userConfig.getSemanticVersion();
-                        if (shouldUpgradeAgent(userConfigVersion, disableUpdateAgentProtection)) {
-                            return new ShowNotificationAction({
-                                type: NotificationType.Error,
-                                message: `This configuration (user config ${userConfigVersion}) is newer than what this Agent supports (${VERSIONS.userConfigVersion}). Please update Agent.`
-                            });
-                        }
-
                         userConfig = this.uhk80MigratorService.migrate(userConfig);
 
                         // Keep the connected keyboard's name when importing a config, so a single config
