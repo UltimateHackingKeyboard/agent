@@ -1,14 +1,15 @@
 import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     Input,
     OnDestroy,
     Output,
-    ChangeDetectionStrategy,
     inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BacklightingMode, HostConnection, KeyAction, Macro, UhkThemeColors } from 'uhk-common';
+import { BacklightingMode, HostConnection, KeyAction, Macro, UhkThemeColors, UserConfiguration } from 'uhk-common';
 import { Subscription } from 'rxjs';
 
 import { LastEditedKey } from '../../../models/last-edited-key';
@@ -19,7 +20,7 @@ import {
     SvgModuleCaptureEvent,
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
-import { AppState, getHostConnections, getMacroMap } from '../../../store';
+import { AppState, getDefaultUserConfiguration, getHostConnections, getMacroMap } from '../../../store';
 
 @Component({
     selector: 'g[svg-module]',
@@ -42,6 +43,7 @@ export class SvgModuleComponent implements OnDestroy {
     @Input() capturingEnabled: boolean;
     @Input() lastEdited: boolean;
     @Input() lastEditedKey: LastEditedKey;
+    @Input() moduleId = 0;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Input() moduleNavCircle: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,27 +53,37 @@ export class SvgModuleComponent implements OnDestroy {
     @Output() capture = new EventEmitter<SvgModuleCaptureEvent>();
     @Output() navigateToModuleSettings = new EventEmitter<void>();
 
-    hostConnections: HostConnection[] = []
-    macroMap: Map<number, Macro>;
-    private macroMapSubscription: Subscription;
-    private hostConnectionsSubscription: Subscription;
+    defaultUserConfiguration = new UserConfiguration();
+    hostConnections: HostConnection[] = [];
+    macroMap = new Map<number, Macro>();
+    private readonly subscriptions = new Subscription();
     private readonly store = inject<Store<AppState>>(Store);
+    private readonly cdRef = inject(ChangeDetectorRef);
 
     constructor() {
-        const store = this.store;
-
         this.keyboardKeys = [];
-        this.macroMapSubscription = store.select(getMacroMap)
-            .subscribe(map => this.macroMap = map);
-        this.hostConnectionsSubscription = this.store.select(getHostConnections)
-            .subscribe((connections: HostConnection[]) => {
+        this.subscriptions.add(
+            this.store.select(getMacroMap).subscribe(macroMap => {
+                this.macroMap = macroMap;
+                this.cdRef.markForCheck();
+            })
+        );
+        this.subscriptions.add(
+            this.store.select(getHostConnections).subscribe((connections: HostConnection[]) => {
                 this.hostConnections = connections;
-            });
+                this.cdRef.markForCheck();
+            })
+        );
+        this.subscriptions.add(
+            this.store.select(getDefaultUserConfiguration).subscribe(defaultUserConfiguration => {
+                this.defaultUserConfiguration = defaultUserConfiguration;
+                this.cdRef.markForCheck();
+            })
+        );
     }
 
     ngOnDestroy(): void {
-        this.macroMapSubscription.unsubscribe();
-        this.hostConnectionsSubscription?.unsubscribe();
+        this.subscriptions.unsubscribe();
     }
 
     onKeyClick(keyId: number, event: SvgKeyClickEvent): void {

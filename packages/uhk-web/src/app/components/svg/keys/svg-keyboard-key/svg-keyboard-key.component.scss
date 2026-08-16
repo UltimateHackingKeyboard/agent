@@ -13,3 +13,11 @@
     fill: var(--color-keyboard-key-note-marker);
     pointer-events: none;
 }
+
+.svg-keyboard-key__accessible-name {
+    fill: currentColor;
+    font-size: 1px;
+    opacity: 0.01;
+    pointer-events: none;
+    stroke: none;
+}

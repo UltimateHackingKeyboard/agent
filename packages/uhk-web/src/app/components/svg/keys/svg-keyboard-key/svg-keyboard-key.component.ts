@@ -38,7 +38,8 @@ import {
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
-    SwitchLayerMode
+    SwitchLayerMode,
+    UserConfiguration,
 } from 'uhk-common';
 
 import { CaptureService } from '../../../../services/capture.service';
@@ -53,8 +54,10 @@ import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { LastEditedKey } from '../../../../models/last-edited-key';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
+import { buildKeyAccessibleLabel } from '../../../../util/build-key-accessible-label';
 import { getColorsOf } from '../../../../util/get-colors-of';
 import { defaultUhkThemeColors } from '../../../../util/default-uhk-theme-colors';
+import { getDefaultQwertyKeyLabel } from '../../../../util/get-default-key-label';
 import { keyboardGreyRgbColor } from '../../../../util/rgb-color-contants';
 import { SvgKeyboardKey } from './svg-keyboard-key.model';
 
@@ -108,9 +111,12 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() isActive = false;
     @Input() hostConnections: HostConnection[] = [];
     @Input() keyAction: KeyAction;
+    @Input() keyId = 0;
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
+    @Input() defaultUserConfiguration = new UserConfiguration();
     @Input() macroMap = new Map<number, Macro>();
+    @Input() moduleId = 0;
     @Input() lastEdited: boolean;
     @Input() lastEditedKey: LastEditedKey;
 
@@ -364,7 +370,11 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['keyAction']) {
+        if (changes['keyAction']
+            || changes['defaultUserConfiguration']
+            || changes['keyId']
+            || changes['macroMap']
+            || changes['moduleId']) {
             this.setLabels();
         }
 
@@ -472,9 +482,9 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         this.labelType = LabelTypes.OneLineText;
         this.labelSource = undefined;
         this.secondaryText = undefined;
-        this.accessibleLabel = 'Unassigned key';
 
         if (!this.keyAction) {
+            this.updateAccessibleLabel();
             return;
         }
 
@@ -630,7 +640,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             this.labelSource = undefined;
         }
 
-        this.accessibleLabel = this.buildAccessibleLabel();
+        this.updateAccessibleLabel();
     }
 
     private blinkSvgRec(): void {
@@ -685,59 +695,20 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         }
     }
 
-    private buildAccessibleLabel(): string {
-        if (!this.keyAction) {
-            return 'Unassigned key';
-        }
+    private updateAccessibleLabel(): void {
+        const physicalKeyLabel = getDefaultQwertyKeyLabel({
+            defaultUserConfiguration: this.defaultUserConfiguration,
+            keyId: this.keyId,
+            mapper: this.mapper,
+            moduleId: this.moduleId,
+        });
 
-        if (this.keyAction instanceof KeystrokeAction) {
-            const parts: string[] = [];
-
-            if (this.keyAction.hasActiveModifier()) {
-                parts.push(this.keyAction.getModifierList().join(' + '));
-            }
-
-            if (this.keyAction.hasScancode()) {
-                parts.push(this.mapper.scanCodeToText(this.keyAction.scancode, this.keyAction.type).join(' '));
-            }
-
-            if (parts.length === 0) {
-                parts.push('Keystroke');
-            }
-
-            if (this.keyAction.hasSecondaryRoleAction()) {
-                parts.push(`secondary role ${this.mapper.getSecondaryRoleText(this.keyAction.secondaryRoleAction)}`);
-            }
-
-            return parts.join(', ');
-        }
-
-        if (this.keyAction instanceof SwitchLayerAction) {
-            const layerName = this.layerOptionMap.get(this.keyAction.layer)?.name || 'unknown';
-            return `Switch to ${layerName} layer`;
-        }
-
-        if (this.keyAction instanceof SwitchKeymapAction) {
-            return `Switch to keymap ${this.keyAction.keymapAbbreviation}`;
-        }
-
-        if (this.keyAction instanceof PlayMacroAction) {
-            const macroName = this.macroMap.get(this.keyAction.macroId)?.name;
-            return macroName ? `Play macro ${macroName}` : 'Play macro';
-        }
-
-        if (this.keyAction instanceof MouseAction) {
-            return 'Mouse action';
-        }
-
-        if (this.keyAction instanceof ConnectionsAction) {
-            return 'Host connection action';
-        }
-
-        if (this.keyAction instanceof OtherAction) {
-            return 'Other action';
-        }
-
-        return 'Assigned key action';
+        this.accessibleLabel = buildKeyAccessibleLabel({
+            keyAction: this.keyAction,
+            layerOptionMap: this.layerOptionMap,
+            macroMap: this.macroMap,
+            mapper: this.mapper,
+            physicalKeyLabel,
+        });
     }
 }
