@@ -18,6 +18,7 @@ import { MapperService } from '../../../services/mapper.service';
 import {
     AppState,
     getDefaultUserConfiguration,
+    getKeyLanguage,
     getKeymaps,
     getSelectedMacro,
     getSelectedMacroAction,
@@ -82,6 +83,7 @@ export class MacroEditComponent implements OnDestroy {
                 this.store.select(getSelectedMacro),
                 this.store.select(getKeymaps),
                 this.store.select(getDefaultUserConfiguration),
+                this.store.select(getKeyLanguage),
             ]).subscribe(([macro, keymaps, defaultUserConfiguration]) => {
                 this.macro = macro;
                 this.assignments = macro

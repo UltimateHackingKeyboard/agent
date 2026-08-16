@@ -5,12 +5,23 @@ import {
     EventEmitter,
     Input,
     OnChanges,
+    OnDestroy,
     Output,
     SimpleChanges,
     inject,
 } from '@angular/core';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { copyRgbColor, KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import {
+    copyRgbColor,
+    getScancodesForKeyLanguage,
+    KeyAction,
+    KeyLanguage,
+    KeystrokeAction,
+    KeystrokeType,
+    SecondaryRoleAction,
+} from 'uhk-common';
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
@@ -18,6 +29,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
+import { AppState, getKeyLanguage } from '../../../../store';
 import { ScancodeSelectOption } from './scancode-select';
 
 interface SearchResult {
@@ -32,7 +44,7 @@ interface SearchResult {
     templateUrl: './keypress-tab.component.html',
     styleUrls: ['./keypress-tab.component.scss']
 })
-export class KeypressTabComponent extends Tab implements OnChanges {
+export class KeypressTabComponent extends Tab implements OnChanges, OnDestroy {
     @Input() defaultKeyAction: KeyAction;
     @Input() secondaryRoleEnabled: boolean;
     @Input() allowRemapOnAllKeymapWarning: boolean;
@@ -54,37 +66,30 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     private readonly mapper = inject(MapperService);
     private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly subscriptions = new Subscription();
 
     constructor() {
         super();
         this.leftModifiers = this.mapper.getLeftKeyModifiers();
         this.rightModifiers = this.mapper.getRightKeyModifiers();
-
-        this.scanCodeGroups = [{
-            id: '0',
-            text: 'None',
-            additional: {
-                type: 'basic',
-                scancode: 0
-            }
-        }];
-        SCANCODES.forEach(group => {
-            group.children.forEach(child => {
-                this.scanCodeGroups.push({
-                    id: child.id,
-                    text: child.text,
-                    group: group.text,
-                    additional: {
-                        type: 'basic',
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                        scancode: Number.parseInt(child.id, 10),
-                        ...child.additional
-                    }
-                });
-            });
-        });
-        this.selectedScancodeOption = this.scanCodeGroups[0];
         this.selectedSecondaryRoleIndex = -1;
+        this.buildScanCodeGroups(KeyLanguage.Us);
+        this.selectedScancodeOption = this.scanCodeGroups[0];
+
+        this.subscriptions.add(
+            this.store.select(getKeyLanguage).subscribe(keyLanguage => {
+                const selectedId = this.selectedScancodeOption?.id;
+                this.buildScanCodeGroups(keyLanguage);
+                this.selectedScancodeOption = this.scanCodeGroups.find(option => option.id === selectedId)
+                    || this.scanCodeGroups[0];
+                this.cdRef.markForCheck();
+            })
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -404,6 +409,33 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             id: `${action}`,
             text: this.mapper.getSecondaryRoleText(action)
         };
+    }
+
+    private buildScanCodeGroups(keyLanguage: KeyLanguage): void {
+        this.scanCodeGroups = [{
+            id: '0',
+            text: 'None',
+            additional: {
+                type: 'basic',
+                scancode: 0
+            }
+        }];
+
+        getScancodesForKeyLanguage(keyLanguage).forEach(group => {
+            group.children.forEach(child => {
+                this.scanCodeGroups.push({
+                    id: child.id,
+                    text: child.text,
+                    group: group.text,
+                    additional: {
+                        type: 'basic',
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        scancode: Number.parseInt(child.id, 10),
+                        ...child.additional
+                    }
+                });
+            });
+        });
     }
 }
 

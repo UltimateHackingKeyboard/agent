@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, MacroGroupingSettings, Notification } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, KeyLanguage, MacroGroupingSettings, Notification } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 import { NavigationPayload } from '../../models';
 
@@ -32,6 +32,7 @@ export enum ActionTypes {
     SetMacroGroupingSettings = '[app] Set macro grouping settings',
     ToggleMinimizeToTray = '[app] Toggle minimize to tray',
     SetAppTheme = '[app] Set application theme',
+    SetKeyLanguage = '[app] Set key language',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
     StopKeypressCapturing = '[app] Stop keypress capturing',
@@ -196,6 +197,13 @@ export class SetAppThemeAction implements Action {
     }
 }
 
+export class SetKeyLanguageAction implements Action {
+    type = ActionTypes.SetKeyLanguage;
+
+    constructor(public payload: KeyLanguage) {
+    }
+}
+
 export class LoadAppStartInfoAction implements Action {
     type = ActionTypes.LoadAppStartInfo;
 }
@@ -254,6 +262,7 @@ export type Actions
     | SetMacroGroupingSettingsAction
     | ToggleMinimizeToTrayAction
     | SetAppThemeAction
+    | SetKeyLanguageAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction
     | StopKeypressCapturingAction
