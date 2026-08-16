@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { KeyModifiers, KeystrokeType, SecondaryRoleAction } from 'uhk-common';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
+import { getBasicScancodeTexts, KeyLanguage, KeyModifiers, KeystrokeType, SecondaryRoleAction, US_BASIC_SCANCODE_TEXTS } from 'uhk-common';
 
-import { AppState, getOperatingSystem } from '../store';
+import { AppState, getKeyLanguage, getOperatingSystem } from '../store';
 import { OperatingSystem } from '../models/operating-system';
 import { KeyModifierModel } from '../models/key-modifier-model';
 
@@ -28,25 +28,32 @@ export class MapperService implements OnDestroy {
     private secondaryRoleTexts: Map<number, string>;
 
     private operatingSystem: OperatingSystem;
+    private keyLanguage: KeyLanguage = KeyLanguage.Us;
     private osSubscription: Subscription;
 
     private readonly store = inject<Store<AppState>>(Store);
 
     constructor() {
-        this.osSubscription = this.store
-            .select(getOperatingSystem)
-            .subscribe(os => {
-                this.operatingSystem = os;
-                this.initOsSpecificText();
-                this.initScanCodeTextMap();
-                this.initScancodeIcons();
-                this.initNameToFileNames();
-                this.initSecondaryRoleTexts();
-            });
+        this.osSubscription = combineLatest([
+            this.store.select(getOperatingSystem),
+            this.store.select(getKeyLanguage),
+        ]).subscribe(([os, keyLanguage]) => {
+            this.operatingSystem = os;
+            this.keyLanguage = keyLanguage;
+            this.initOsSpecificText();
+            this.initScanCodeTextMap();
+            this.initScancodeIcons();
+            this.initNameToFileNames();
+            this.initSecondaryRoleTexts();
+        });
     }
 
     ngOnDestroy(): void {
         this.osSubscription.unsubscribe();
+    }
+
+    public getKeyLanguage(): KeyLanguage {
+        return this.keyLanguage;
     }
 
     public scanCodeToText(scanCode: number, type: KeystrokeType = KeystrokeType.basic): string[] {
@@ -210,128 +217,20 @@ export class MapperService implements OnDestroy {
         }
     }
 
-    // TODO: read the mapping from JSON
+    // Label map is built from uhk-common scancode-labels + OS-specific Enter naming.
     private initScanCodeTextMap(): void {
         this.basicScanCodeTextMap = new Map<number, string[]>();
-        this.basicScanCodeTextMap.set(4, ['A']);
-        this.basicScanCodeTextMap.set(5, ['B']);
-        this.basicScanCodeTextMap.set(6, ['C']);
-        this.basicScanCodeTextMap.set(7, ['D']);
-        this.basicScanCodeTextMap.set(8, ['E']);
-        this.basicScanCodeTextMap.set(9, ['F']);
-        this.basicScanCodeTextMap.set(10, ['G']);
-        this.basicScanCodeTextMap.set(11, ['H']);
-        this.basicScanCodeTextMap.set(12, ['I']);
-        this.basicScanCodeTextMap.set(13, ['J']);
-        this.basicScanCodeTextMap.set(14, ['K']);
-        this.basicScanCodeTextMap.set(15, ['L']);
-        this.basicScanCodeTextMap.set(16, ['M']);
-        this.basicScanCodeTextMap.set(17, ['N']);
-        this.basicScanCodeTextMap.set(18, ['O']);
-        this.basicScanCodeTextMap.set(19, ['P']);
-        this.basicScanCodeTextMap.set(20, ['Q']);
-        this.basicScanCodeTextMap.set(21, ['R']);
-        this.basicScanCodeTextMap.set(22, ['S']);
-        this.basicScanCodeTextMap.set(23, ['T']);
-        this.basicScanCodeTextMap.set(24, ['U']);
-        this.basicScanCodeTextMap.set(25, ['V']);
-        this.basicScanCodeTextMap.set(26, ['W']);
-        this.basicScanCodeTextMap.set(27, ['X']);
-        this.basicScanCodeTextMap.set(28, ['Y']);
-        this.basicScanCodeTextMap.set(29, ['Z']);
-        this.basicScanCodeTextMap.set(30, ['1', '!']);
-        this.basicScanCodeTextMap.set(31, ['2', '@']);
-        this.basicScanCodeTextMap.set(32, ['3', '#']);
-        this.basicScanCodeTextMap.set(33, ['4', '$']);
-        this.basicScanCodeTextMap.set(34, ['5', '%']);
-        this.basicScanCodeTextMap.set(35, ['6', '^']);
-        this.basicScanCodeTextMap.set(36, ['7', '&']);
-        this.basicScanCodeTextMap.set(37, ['8', '*']);
-        this.basicScanCodeTextMap.set(38, ['9', '(']);
-        this.basicScanCodeTextMap.set(39, ['0', ')']);
+
+        for (const scancodeText of Object.keys(US_BASIC_SCANCODE_TEXTS)) {
+            const scancode = Number(scancodeText);
+            const texts = getBasicScancodeTexts(scancode, this.keyLanguage);
+            if (texts) {
+                this.basicScanCodeTextMap.set(scancode, [...texts]);
+            }
+        }
+
         this.basicScanCodeTextMap.set(40, [this.getOsSpecificText(OsSpecificKeys.Enter)]);
-        this.basicScanCodeTextMap.set(41, ['Esc']);
-        this.basicScanCodeTextMap.set(42, ['Backspace']);
-        this.basicScanCodeTextMap.set(43, ['Tab']);
-        this.basicScanCodeTextMap.set(44, ['Space']);
-        this.basicScanCodeTextMap.set(45, ['-', '_']);
-        this.basicScanCodeTextMap.set(46, ['=', '+']);
-        this.basicScanCodeTextMap.set(47, ['[', '{']);
-        this.basicScanCodeTextMap.set(48, [']', '}']);
-        this.basicScanCodeTextMap.set(49, ['\\', '|']);
-        this.basicScanCodeTextMap.set(50, ['ISO key', '#']);
-        this.basicScanCodeTextMap.set(51, [';', ':']);
-        this.basicScanCodeTextMap.set(52, ['\'', '"']);
-        this.basicScanCodeTextMap.set(53, ['`', '~']);
-        this.basicScanCodeTextMap.set(54, [',', '<']);
-        this.basicScanCodeTextMap.set(55, ['.', '>']);
-        this.basicScanCodeTextMap.set(56, ['/', '?']);
-        this.basicScanCodeTextMap.set(57, ['Caps Lock']);
-        this.basicScanCodeTextMap.set(58, ['F1']);
-        this.basicScanCodeTextMap.set(59, ['F2']);
-        this.basicScanCodeTextMap.set(60, ['F3']);
-        this.basicScanCodeTextMap.set(61, ['F4']);
-        this.basicScanCodeTextMap.set(62, ['F5']);
-        this.basicScanCodeTextMap.set(63, ['F6']);
-        this.basicScanCodeTextMap.set(64, ['F7']);
-        this.basicScanCodeTextMap.set(65, ['F8']);
-        this.basicScanCodeTextMap.set(66, ['F9']);
-        this.basicScanCodeTextMap.set(67, ['F10']);
-        this.basicScanCodeTextMap.set(68, ['F11']);
-        this.basicScanCodeTextMap.set(69, ['F12']);
-        this.basicScanCodeTextMap.set(70, ['PrtScn', 'SysRq']);
-        this.basicScanCodeTextMap.set(71, ['ScrLk']);
-        this.basicScanCodeTextMap.set(72, ['Pause']);
-        this.basicScanCodeTextMap.set(73, ['Insert']);
-        this.basicScanCodeTextMap.set(74, ['Home']);
-        this.basicScanCodeTextMap.set(75, ['PgUp']);
-        this.basicScanCodeTextMap.set(76, ['Del']);
-        this.basicScanCodeTextMap.set(77, ['End']);
-        this.basicScanCodeTextMap.set(78, ['PgDn']);
-        this.basicScanCodeTextMap.set(79, ['Right Arrow']);
-        this.basicScanCodeTextMap.set(80, ['Left Arrow']);
-        this.basicScanCodeTextMap.set(81, ['Down Arrow']);
-        this.basicScanCodeTextMap.set(82, ['Up Arrow']);
-        this.basicScanCodeTextMap.set(83, ['NumLk']);
-        this.basicScanCodeTextMap.set(84, ['Np /']);
-        this.basicScanCodeTextMap.set(85, ['Np *']);
-        this.basicScanCodeTextMap.set(86, ['Np -']);
-        this.basicScanCodeTextMap.set(87, ['Np +']);
         this.basicScanCodeTextMap.set(88, [`Np ${this.getOsSpecificText(OsSpecificKeys.Enter)}`]);
-        this.basicScanCodeTextMap.set(89, ['Np 1', 'End']);
-        this.basicScanCodeTextMap.set(90, ['Np 2', 'icon-kbd__mod--arrow-down']);
-        this.basicScanCodeTextMap.set(91, ['Np 3', 'PgDn']);
-        this.basicScanCodeTextMap.set(92, ['Np 4', 'icon-kbd__mod--arrow-left']);
-        this.basicScanCodeTextMap.set(93, ['Np 5']);
-        this.basicScanCodeTextMap.set(94, ['Np 6', 'icon-kbd__mod--arrow-right']);
-        this.basicScanCodeTextMap.set(95, ['Np 7', 'Home']);
-        this.basicScanCodeTextMap.set(96, ['Np 8', 'icon-kbd__mod--arrow-up']);
-        this.basicScanCodeTextMap.set(97, ['Np 9', 'PgUp']);
-        this.basicScanCodeTextMap.set(98, ['Np 0', 'Insert']);
-        this.basicScanCodeTextMap.set(99, ['Np .', 'Del']);
-        this.basicScanCodeTextMap.set(100, ['ISO key', '|']);
-        this.basicScanCodeTextMap.set(101, ['Menu']);
-        this.basicScanCodeTextMap.set(104, ['F13']);
-        this.basicScanCodeTextMap.set(105, ['F14']);
-        this.basicScanCodeTextMap.set(106, ['F15']);
-        this.basicScanCodeTextMap.set(107, ['F16']);
-        this.basicScanCodeTextMap.set(108, ['F17']);
-        this.basicScanCodeTextMap.set(109, ['F18']);
-        this.basicScanCodeTextMap.set(110, ['F19']);
-        this.basicScanCodeTextMap.set(111, ['F20']);
-        this.basicScanCodeTextMap.set(112, ['F21']);
-        this.basicScanCodeTextMap.set(113, ['F22']);
-        this.basicScanCodeTextMap.set(114, ['F23']);
-        this.basicScanCodeTextMap.set(115, ['F24']);
-        this.basicScanCodeTextMap.set(135, ['Int1']);
-        this.basicScanCodeTextMap.set(136, ['Int2']);
-        this.basicScanCodeTextMap.set(137, ['Int3']);
-        this.basicScanCodeTextMap.set(138, ['Int4']);
-        this.basicScanCodeTextMap.set(139, ['Int5']);
-        this.basicScanCodeTextMap.set(144, ['Lang1']);
-        this.basicScanCodeTextMap.set(145, ['Lang2']);
-        this.basicScanCodeTextMap.set(176, ['00']);
-        this.basicScanCodeTextMap.set(177, ['000']);
 
         this.mediaScanCodeTextMap = new Map<number, string[]>();
         this.mediaScanCodeTextMap.set(176, ['Play']);

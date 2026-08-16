@@ -62,7 +62,33 @@
 
 <div class="col-12 mb-0 mt-2">
     <div class="d-flex align-items-center">
-        <label class="mb-0 me-2">Theme</label>
+        <label class="mb-0 me-2">Key language:</label>
+        <div class="btn-group"
+             role="group"
+             aria-label="Key language"
+             *ngIf="keyLanguage$ | async as keyLanguage">
+            <button *ngFor="let language of keyLanguages"
+                    type="button"
+                    class="btn"
+                    [class.btn-primary]="keyLanguage === language.id"
+                    [class.btn-default]="keyLanguage !== language.id"
+                    [attr.aria-pressed]="keyLanguage === language.id"
+                    (click)="selectKeyLanguage(language.id)"
+            >
+                {{ language.text }}
+            </button>
+        </div>
+        <circle-tooltip
+            class="ms-2"
+            [tooltip]="keyLanguageTooltip"
+            width="330"
+        />
+    </div>
+</div>
+
+<div class="col-12 mb-0 mt-2">
+    <div class="d-flex align-items-center">
+        <label class="mb-0 me-2">Theme:</label>
         <div class="btn-group"
              role="group"
              aria-label="Theme"
@@ -151,10 +177,14 @@
     </div>
 </div>
 
+<ng-template #keyLanguageTooltip>
+    <p class="text-center mb-0">Controls scancode labels on the keymap and in scancode dropdowns. This is an Agent setting and is not saved to the keyboard. Choose the layout that matches your keycaps (US, UK, German, or Nordic).</p>
+</ng-template>
+
 <ng-template #systemThemeTooltip>
-    <p class="text-start mb-0">The <strong>Follow operating system theme</strong> option may not be supported on all Linux distributions.</p>
+    <p class="text-center mb-0">The <strong>Follow operating system theme</strong> option may not be supported on all Linux distributions.</p>
 </ng-template>
 
 <ng-template #minimizeToTrayTooltip>
-    <p class="text-start mb-0">On Linux, disabling this option stops minimize-to-tray behaviour immediately, but the tray icon may remain visible until Agent is restarted.</p>
+    <p class="text-center mb-0">On Linux, disabling this option stops minimize-to-tray behaviour immediately, but the tray icon may remain visible until Agent is restarted.</p>
 </ng-template>

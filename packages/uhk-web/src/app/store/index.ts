@@ -208,6 +208,7 @@ export const getAnimationEnabled = createSelector(appState, fromApp.getAnimation
 export const getMacroGroupingSettings = createSelector(appState, fromApp.getMacroGroupingSettings);
 export const getMinimizeToTray = createSelector(appState, fromApp.getMinimizeToTray);
 export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
+export const getKeyLanguage = createSelector(appState, fromApp.getKeyLanguage);
 export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeColors => {
     return  defaultUhkThemeColors(theme);
 });
@@ -906,6 +907,7 @@ export const getApplicationSettings = createSelector(
             everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
             animationEnabled: app.animationEnabled,
             appTheme: app.appTheme,
+            keyLanguage: app.keyLanguage,
             backlightingColorPalette,
             keyboardHalvesAlwaysJoined,
             minimizeToTray: app.minimizeToTray,

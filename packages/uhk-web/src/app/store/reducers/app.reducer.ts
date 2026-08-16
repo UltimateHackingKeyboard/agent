@@ -2,10 +2,12 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
     AppTheme,
     CommandLineArgs,
+    DEFAULT_KEY_LANGUAGE,
     DEFAULT_MACRO_GROUPING_SETTINGS,
     disableAgentUpgradeProtection,
     HardwareConfiguration,
     KeyboardLayout,
+    KeyLanguage,
     MacroGroupingSettings,
     Notification,
     NotificationType,
@@ -23,6 +25,7 @@ const DEFAULT_ERROR_PANEL_HEIGHT = 10;
 
 export interface State {
     appTheme: AppTheme;
+    keyLanguage: KeyLanguage;
     animationEnabled: boolean;
     minimizeToTray: boolean;
     errorPanelHeight: number;
@@ -48,6 +51,7 @@ export interface State {
 
 export const initialState: State = {
     appTheme: AppTheme.System,
+    keyLanguage: DEFAULT_KEY_LANGUAGE,
     animationEnabled: true,
     minimizeToTray: false,
     errorPanelHeight: DEFAULT_ERROR_PANEL_HEIGHT,
@@ -216,6 +220,7 @@ export function reducer(
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
                 animationEnabled: settings.animationEnabled,
                 appTheme: settings.appTheme || AppTheme.System,
+                keyLanguage: settings.keyLanguage || DEFAULT_KEY_LANGUAGE,
                 macroGrouping: normalizeMacroGroupingSettings(settings.macroGrouping),
                 minimizeToTray: settings.minimizeToTray ?? false,
             };
@@ -252,6 +257,12 @@ export function reducer(
             return {
                 ...state,
                 appTheme: (action as App.SetAppThemeAction).payload
+            };
+
+        case App.ActionTypes.SetKeyLanguage:
+            return {
+                ...state,
+                keyLanguage: (action as App.SetKeyLanguageAction).payload
             };
 
         default:
@@ -294,6 +305,7 @@ export const getAnimationEnabled = (state: State): boolean => state.animationEna
 export const getMacroGroupingSettings = (state: State): MacroGroupingSettings => state.macroGrouping;
 export const getMinimizeToTray = (state: State): boolean => state.minimizeToTray;
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
+export const getKeyLanguage = (state: State): KeyLanguage => state.keyLanguage;
 export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;
 export const getPlatform = (state: State): string => state.platform;
 export const isColorPickerEyeDropperEnabled = (state: State): boolean => !state.isRunningOnWayland;

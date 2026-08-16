@@ -1,3 +1,4 @@
+import { KeyLanguage } from './key-language.js';
 import { MacroGroupingSettings } from './macro-grouping-settings.js';
 import { RgbColorInterface } from './rgb-color-interface.js';
 
@@ -16,6 +17,11 @@ export interface ApplicationSettings {
     everAttemptedSavingToKeyboard: boolean;
     animationEnabled?: boolean;
     appTheme?: AppTheme;
+    /**
+     * Scancode-to-symbol mapping used for keymap labels and scancode dropdowns.
+     * Agent-only setting; not part of the UHK user configuration.
+     */
+    keyLanguage?: KeyLanguage;
     backlightingColorPalette?: Array<RgbColorInterface>
     /**
      * If true, the keyboard halves are joined together in the UI independently of the actual keyboard state.

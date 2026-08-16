@@ -45,7 +45,7 @@ import { CaptureService } from '../../../../services/capture.service';
 import { KeyActionColoringService } from '../../../../services/key-action-coloring.service';
 import { MapperService } from '../../../../services/mapper.service';
 
-import { AppState } from '../../../../store';
+import { AppState, getKeyLanguage } from '../../../../store';
 import { initLayerOptions } from '../../../../store/reducers/layer-options';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
@@ -150,6 +150,16 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private isFocused = false;
     private readonly sanitizer = inject(DomSanitizer);
     private readonly store = inject<Store<AppState>>(Store);
+    private readonly cdRef = inject(ChangeDetectorRef);
+
+    constructor() {
+        this.subscriptions.add(
+            this.store.select(getKeyLanguage).subscribe(() => {
+                this.setLabels();
+                this.cdRef.markForCheck();
+            })
+        );
+    }
 
     @HostBinding('@blink')
     get blinkAnimationBinding() {

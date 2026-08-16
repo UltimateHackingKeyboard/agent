@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AppTheme, MacroGroupingSettings } from 'uhk-common';
+import { AppTheme, KEY_LANGUAGE_OPTIONS, KeyLanguage, MacroGroupingSettings } from 'uhk-common';
 import {
     AppState,
     appUpdateSettingsState,
@@ -13,6 +13,7 @@ import {
     getAnimationEnabled,
     getAppTheme,
     getIsAdvancedSettingsMenuVisible,
+    getKeyLanguage,
     getMacroGroupingSettings,
     getMinimizeToTray,
     getOperatingSystem,
@@ -27,6 +28,7 @@ import {
 import {
     OpenConfigFolderAction,
     SetAppThemeAction,
+    SetKeyLanguageAction,
     SetMacroGroupingSettingsAction,
     ToggleAnimationEnabledAction,
     ToggleKeyboardHalvesAlwaysJoinedAction,
@@ -55,6 +57,7 @@ export class SettingsComponent {
     animationEnabled$: Observable<boolean>;
     minimizeToTray$: Observable<boolean>;
     appTheme$: Observable<AppTheme>;
+    keyLanguage$: Observable<KeyLanguage>;
     isLinux$: Observable<boolean>;
     faCog = faCog;
     keyboardHalvesAlwaysJoined$: Observable<boolean>;
@@ -62,6 +65,7 @@ export class SettingsComponent {
     alwaysEnableAdvancedModeSettingVisible$: Observable<boolean>;
     macroGroupingSettings$: Observable<MacroGroupingSettings>;
     macroGroupingMaxDepth = MACRO_GROUPING_MAX_DEPTH;
+    keyLanguages = KEY_LANGUAGE_OPTIONS;
     themes: ThemeOption[] = [
         { id: AppTheme.System, text: 'Follow operating system theme', icon: faDesktop },
         { id: AppTheme.Light, text: 'Light', icon: faSun },
@@ -75,6 +79,7 @@ export class SettingsComponent {
         this.animationEnabled$ = this.store.select(getAnimationEnabled);
         this.minimizeToTray$ = this.store.select(getMinimizeToTray);
         this.appTheme$ = this.store.select(getAppTheme);
+        this.keyLanguage$ = this.store.select(getKeyLanguage);
         this.isLinux$ = this.store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
         this.keyboardHalvesAlwaysJoined$ = this.store.select(keyboardHalvesAlwaysJoined);
         this.alwaysEnableAdvancedMode$ = this.store.select(getAlwaysEnableAdvancedMode);
@@ -100,6 +105,10 @@ export class SettingsComponent {
 
     selectTheme(value: AppTheme) {
         this.store.dispatch(new SetAppThemeAction(value));
+    }
+
+    selectKeyLanguage(value: KeyLanguage) {
+        this.store.dispatch(new SetKeyLanguageAction(value));
     }
 
     toggleKeyboardHalvesAlwaysJoined(enabled: boolean): void {

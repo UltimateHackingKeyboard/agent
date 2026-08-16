@@ -19,6 +19,7 @@ export * from './notification.js';
 export * from './protocol-versions.js';
 export * from './init-backlighting-color-palette.js';
 export * from './ipc-response.js';
+export * from './key-language.js';
 export * from './keyboard-layout.enum.js';
 export * from './left-slot-modules.js';
 export * from './app-start-info.js';
