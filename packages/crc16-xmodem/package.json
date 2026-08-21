@@ -1,0 +1,21 @@
+{
+  "name": "crc16-xmodem",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Some filesystem helper function",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "author": "Ultimate Gadget Laboratories",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:UltimateHackingKeyboard/agent.git"
+  },
+  "scripts": {
+    "build:user-config": "tsx ./scripts/generate-user-configs.ts",
+    "clean": "rimraf ./node_modules",
+    "test": "node --test",
+    "lint": "eslint"
+  },
+  "license": "GPL-3.0"
+}

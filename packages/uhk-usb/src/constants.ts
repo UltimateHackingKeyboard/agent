@@ -36,6 +36,10 @@ export enum UsbCommand {
     EraseBleSettings         = 0x1d,
     ExecShellCommand         = 0x1e,
     ReadOled                 = 0x1f,
+    WriteModuleFirmware      = 0x20,
+    FlashModule              = 0x21,
+    GetModuleFlashState      = 0x22,
+    ValidateBufferCrc        = 0x23,
 }
 
 export enum EepromOperation {
@@ -46,7 +50,8 @@ export enum EepromOperation {
 export enum ConfigBufferId {
     hardwareConfig = 0,
     stagingUserConfig = 1,
-    validatedUserConfig = 2
+    validatedUserConfig = 2,
+    moduleFirmware = 3,
 }
 
 export enum DevicePropertyIds {
