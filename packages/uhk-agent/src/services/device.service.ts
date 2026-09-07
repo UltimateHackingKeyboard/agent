@@ -825,8 +825,12 @@ export class DeviceService {
 
         this.savedState = undefined;
         this.startPollUhkDevice();
-        await this.dongleZephyrLogService.enable();
-        await this.leftHalfZephyrLogService.enable();
+        if (await getCurrentUhkDongleHID()) {
+            await this.dongleZephyrLogService.enable();
+        }
+        if (await getCurrenUhk80LeftHID()) {
+            await this.leftHalfZephyrLogService.enable();
+        }
 
         event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, undefined);
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
