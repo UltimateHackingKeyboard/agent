@@ -1,5 +1,7 @@
 <ng-template [ngIf]="layers">
     <layers [class.disabled]="animationState === 'opened'"
+            [attr.aria-hidden]="animationState === 'opened' ? true : null"
+            [attr.inert]="animationState === 'opened' ? '' : null"
             [allowLayerCopy]="allowLayerCopy"
             [allowNewLayers]="allowNewLayers"
             [canPasteLayer]="canPasteLayer"
@@ -20,6 +22,8 @@
             (toggleColorFromPalette)="toggleColorFromPalette.emit($event)"
     ></layers>
     <keyboard-slider id="keyboard-slider"
+                     [attr.aria-hidden]="animationState === 'opened' ? true : null"
+                     [attr.inert]="animationState === 'opened' ? '' : null"
                      [animationEnabled]="animationEnabled"
                      [backlightingMode]="backlightingMode"
                      [layers]="layers"
@@ -39,6 +43,9 @@
 
     <popover tabindex="0"
              autofocus
+             role="dialog"
+             aria-modal="true"
+             aria-label="Remap key"
              [@popover]="{ value:'', params: { animationTime: animationTime } }"
              *ngIf="animationState === 'opened'"
              [visible]="true"
@@ -70,5 +77,8 @@
             </p>
         </div>
     </div>
-    <div class="popover-overlay" [class.display]="animationState === 'opened'" (click)="cancelPopover()"></div>
+    <div class="popover-overlay"
+         aria-hidden="true"
+         [class.display]="animationState === 'opened'"
+         (click)="cancelPopover()"></div>
 </ng-template>

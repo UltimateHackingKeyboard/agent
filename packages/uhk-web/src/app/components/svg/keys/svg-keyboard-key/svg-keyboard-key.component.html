@@ -1,3 +1,4 @@
+<svg:title>{{ accessibleLabel }}</svg:title>
 <svg:rect #svgRec
           *ngIf="svgKey.type === 'rec'"
           class="svg-rec"
@@ -39,6 +40,9 @@
 </svg:g>
 
 <svg:g [attr.transform]="calcTransform()">
+<svg:text class="svg-keyboard-key__accessible-name"
+          [attr.x]="(svgKey?.width || 0) / 2"
+          [attr.y]="(svgKey?.height || 0) / 2">{{ accessibleLabel }}</svg:text>
 <svg:path *ngIf="hasNote && svgKey.width"
           class="note-marker"
           [attr.d]="noteMarkerPath"
