@@ -207,8 +207,16 @@ export class UhkOperations {
             enumerationMode: EnumerationModes.Bootloader,
         });
         await this.device.close();
-        // Give 1 sec to windows to install driver when first time appearing the mcu bootloader
-        await snooze(1000);
+
+        if (process.platform === 'linux') {
+            // On linux the 1 second timeout is too much because it matches with the bootloader wait timeout.
+            await snooze(500);
+        }
+        else {
+            // Give 1 sec to windows to install driver when first time appearing the mcu bootloader
+            await snooze(1000);
+        }
+
         this.logService.misc(`[UhkOperations] Init SerialPeripheral: ${reenumerateResult.serialPath}`);
         const peripheral = new SerialPeripheral(reenumerateResult.serialPath);
         const mcuManager = new McuManager(peripheral);
