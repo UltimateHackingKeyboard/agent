@@ -16,8 +16,13 @@ const UsbVariable_ShellBuffer = 0x08;
 const CHUNK_SIZE = 62;
 
 // UsbCommand_ExecShellCommand null-terminates at index USB_COMMAND_BUFFER_LENGTH - 1 (62), so
-// the command itself occupies bytes 1..61.
-const MAX_COMMAND_LENGTH = 61;
+// the command plus its newline occupies bytes 1..61.
+const MAX_COMMAND_LENGTH = 60;
+
+// ShellUartTransport_InjectInput only appends the submitting newline when the device's
+// StripVt100 flag happens to be set, so the command is typed but never executed otherwise.
+// Sending our own is harmless either way - a second one just redraws the prompt.
+const SUBMIT = '\n';
 
 const argv = yargs
     .scriptName('./shell.ts')
@@ -45,10 +50,42 @@ const argv = yargs
         description: 'Turn the USB log sink on first. The setting is persistent, so '
             + '--no-enable-sink leaves it alone (and prints nothing if the sink is off).',
     })
+    .option('color', {
+        type: 'boolean',
+        default: undefined,
+        description: 'Keep the log\'s VT100 colouring. Defaults to on when stdout is a '
+            + 'terminal and off when it is a pipe or a file.',
+    })
     .argv;
 
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// A complete CSI sequence, and the longest prefix of one that could still be completed by
+// bytes that have not arrived yet. Reads are 62 bytes wide, so a sequence can straddle two of
+// them; an incomplete tail is carried over rather than printed as garbage.
+const VT100_SEQUENCE = /\x1b\[[0-9;?]*[ -\/]*[@-~]/g;
+const VT100_PARTIAL_TAIL = /\x1b(\[[0-9;?]*[ -\/]*)?$/;
+
+// Longest sequence we are willing to hold back before deciding it is not an escape after all.
+const VT100_MAX_CARRY = 16;
+
+function makeVt100Stripper(): (chunk: Buffer) => Buffer {
+    let carry = '';
+
+    return chunk => {
+        // latin1 round-trips bytes exactly, so anything that is not a CSI sequence - UTF-8
+        // included - comes back out unchanged.
+        const text = carry + chunk.toString('latin1');
+        const partial = text.match(VT100_PARTIAL_TAIL);
+        const holdBack = partial !== null && partial[0].length <= VT100_MAX_CARRY;
+
+        carry = holdBack ? partial[0] : '';
+        const body = holdBack ? text.slice(0, text.length - carry.length) : text;
+
+        return Buffer.from(body.replace(VT100_SEQUENCE, ''), 'latin1');
+    };
 }
 
 // UsbLogBuffer_Consume only writes a terminating zero when it had fewer than CHUNK_SIZE bytes
@@ -90,15 +127,17 @@ try {
     }
 
     const readCommand = Buffer.from([UsbCommandId_GetVariable, UsbVariable_ShellBuffer]);
+    const keepColor = argv.color === undefined ? process.stdout.isTTY === true : argv.color;
+    const stripVt100 = makeVt100Stripper();
     let running = true;
 
     while (running) {
         while (pending.length > 0) {
             const command = pending.shift() as string;
-            const encoded = Buffer.from(command, 'utf8');
+            const encoded = Buffer.from(command + SUBMIT, 'utf8');
 
             if (encoded.length > MAX_COMMAND_LENGTH) {
-                process.stderr.write(`skipped: command is ${encoded.length} bytes, the device `
+                process.stderr.write(`skipped: command is ${command.length} bytes, the device `
                     + `accepts at most ${MAX_COMMAND_LENGTH}\n`);
             } else {
                 await device.write(
@@ -110,9 +149,11 @@ try {
         const length = payloadLength(response);
 
         if (length > 0) {
-            // Raw bytes rather than a decoded string, so the log's VT100 colouring survives.
-            // `uhk log stripVt100 1` strips it on the device instead.
-            process.stdout.write(response.subarray(1, 1 + length));
+            // Bytes rather than a decoded string, so the log passes through untouched when
+            // colour is kept. (`uhk log stripVt100 1` strips on the device instead, for
+            // consumers that cannot.)
+            const payload = response.subarray(1, 1 + length);
+            process.stdout.write(keepColor ? payload : stripVt100(payload));
             idleMs = 0;
         } else {
             await sleep(argv.idlePoll);
