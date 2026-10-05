@@ -155,6 +155,8 @@ export class ApplicationEffects {
                 ActionTypes.ErrorPanelSizeChanged,
                 ActionTypes.SetAppTheme,
                 ActionTypes.SetKeyLanguage,
+                ActionTypes.SetSharedConfigurationFilePath,
+                ActionTypes.SetDetectSharedConfigurationChanges,
                 ActionTypes.SetMacroGroupingSettings,
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,

@@ -116,7 +116,41 @@
 </div>
 
 <div class="col-12 mt-2">
-   <button type="button" class="btn btn-link px-0" (click)="openConfigFolder()">Open configuration folder</button>
+    <button type="button" class="btn btn-link px-0 pt-0 mb-2" (click)="openConfigFolder()">Open Agent data folder</button>
+    <h2 class="h5">Configuration file</h2>
+    <ng-container *ngIf="sharedConfigurationFile$ | async as sharedConfigurationFile">
+        <div>
+            <span>Path:</span>
+            <span class="text-break ms-1">{{ sharedConfigurationFile.filePath }}</span>
+            <span class="text-muted ms-1">{{ sharedConfigurationFile.isDefault ? '(default path)' : '(custom path)' }}</span>
+            <button type="button"
+                    class="btn btn-link px-0 py-0 ms-2"
+                    (click)="chooseSharedConfigurationFile()">Change path</button>
+            <button *ngIf="!sharedConfigurationFile.isDefault"
+                    type="button"
+                    class="btn btn-link px-0 py-0 ms-2"
+                    (click)="useDefaultSharedConfigurationFilePath()">Reset to default</button>
+            <circle-tooltip
+                class="ms-2"
+                tooltip="Choose a configuration file in a folder synced between your computers, such as Dropbox, Google Drive, or a network share. Agent exports your configuration there when you save it to the keyboard."
+                [width]="420"
+            />
+        </div>
+    </ng-container>
+    <div class="checkbox d-inline-block mb-0 mt-2"
+         [class.text-muted]="(hasSharedConfigurationFilePath$ | async) === false">
+        <label>
+            <input type="checkbox"
+                   [checked]="detectSharedConfigurationChanges$ | async"
+                   [disabled]="(hasSharedConfigurationFilePath$ | async) === false"
+                   (change)="toggleDetectSharedConfigurationChanges($event.target.checked)"
+            > Detect configuration changes made on the other computer and prompt to apply them
+            <circle-tooltip
+                tooltip="Requires a custom shared configuration file. When enabled, Agent watches the file and asks whether to apply the configuration when it changes on your other computer."
+                [width]="420"
+            />
+        </label>
+    </div>
 </div>
 
 <div class="col-12 mt-3" *ngIf="macroGroupingSettings$ | async as macroGroupingSettings">

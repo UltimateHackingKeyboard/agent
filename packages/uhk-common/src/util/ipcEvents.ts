@@ -100,6 +100,15 @@ export class SmartMacroDoc {
 export class FileDialog {
     public static readonly openUserConfig = 'file-dialog-open-user-config';
     public static readonly saveUserConfig = 'file-dialog-save-user-config';
+    public static readonly selectSharedConfig = 'file-dialog-select-shared-config';
+    public static readonly getDefaultSharedConfig = 'file-dialog-get-default-shared-config';
+}
+
+export class SharedConfig {
+    public static readonly configure = 'shared-config-configure';
+    public static readonly write = 'shared-config-write';
+    public static readonly acknowledge = 'shared-config-acknowledge';
+    public static readonly changeDetected = 'shared-config-change-detected';
 }
 
 export class IpcEvents {
@@ -107,5 +116,6 @@ export class IpcEvents {
     public static readonly autoUpdater = AutoUpdate;
     public static readonly device = Device;
     public static readonly fileDialog = FileDialog;
+    public static readonly sharedConfig = SharedConfig;
     public static readonly smartMacroDoc = SmartMacroDoc;
 }
