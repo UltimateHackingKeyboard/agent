@@ -120,6 +120,7 @@ import { KeymapEditGuard } from './components/keymap/edit';
 import { MacroNotFoundGuard } from './components/macro/not-found';
 import { DataStorageRepositoryService } from './services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from './services/default-user-configuration.service';
+import { FileDialogService } from './services/file-dialog.service';
 import { LogService } from 'uhk-common';
 import { AutoUpdateSettings } from './components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './models/angular-notifier-config';
@@ -337,6 +338,7 @@ import appInitFactory from './services/app-init-factory';
         CaptureService,
         DataStorageRepositoryService,
         DefaultUserConfigurationService,
+        FileDialogService,
         LogService,
         AppUpdateRendererService,
         AppRendererService,

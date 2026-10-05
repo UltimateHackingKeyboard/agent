@@ -9,6 +9,7 @@ export * from './currently-updating-module-info.js';
 export * from './device-module.js';
 export * from './device-version-information.js';
 export * from './dongle.js';
+export * from './file-dialog.js';
 export * from './firmware-json.js';
 export * from './firmware-repo-info.js';
 export * from './firmware-upgrade-connect-prompt.js';

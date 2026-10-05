@@ -19,6 +19,7 @@ import { DeviceService } from './services/device.service';
 import { ElectronLogService } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
+import { FileDialogService } from './services/file-dialog.service';
 import { SudoService } from './services/sudo.service';
 import { SmartMacroDocService } from './services/smart-macro-doc.service';
 import { TrayService } from './services/tray.service';
@@ -56,6 +57,7 @@ let uhkHidDeviceService: UhkHidDevice;
 let uhkOperations: UhkOperations;
 let appUpdateService: AppUpdateService;
 let appService: AppService;
+let fileDialogService: FileDialogService;
 let sudoService: SudoService;
 let packagesDir: string;
 let smartMacroDocService: SmartMacroDocService;
@@ -133,6 +135,7 @@ async function createWindow() {
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, options, packagesDir);
     appUpdateService = new AppUpdateService(logger, win, options);
     appService = new AppService(logger, win, deviceService, options, packagesDir);
+    fileDialogService = new FileDialogService(logger, win);
     sudoService = new SudoService(logger, options, deviceService, packagesDir);
     // and load the index.html of the app.
 
@@ -223,6 +226,7 @@ async function windowClosed() {
     deviceService = null;
     appUpdateService = null;
     appService = null;
+    fileDialogService = null;
     await uhkHidDeviceService.close();
     uhkHidDeviceService = null;
     sudoService = null;

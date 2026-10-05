@@ -97,9 +97,15 @@ export class SmartMacroDoc {
     public static readonly serviceListening = 'smart-macro-doc-service-listening';
 }
 
+export class FileDialog {
+    public static readonly openUserConfig = 'file-dialog-open-user-config';
+    public static readonly saveUserConfig = 'file-dialog-save-user-config';
+}
+
 export class IpcEvents {
     public static readonly app = App;
     public static readonly autoUpdater = AutoUpdate;
     public static readonly device = Device;
+    public static readonly fileDialog = FileDialog;
     public static readonly smartMacroDoc = SmartMacroDoc;
 }
