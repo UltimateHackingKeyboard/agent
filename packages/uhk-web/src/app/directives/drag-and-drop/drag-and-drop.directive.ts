@@ -1,7 +1,8 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, inject, Input, OnDestroy, Output } from '@angular/core';
 
 const DATA_INDEX_ATTRIBUTE = 'data-index';
 const DRAG_THRESHOLD = 3;
+const REORDER_ANIMATION_DURATION = 160;
 const MIRROR_CLASS = 'gu-mirror';
 const TRANSIT_CLASS = 'gu-transit';
 const UNSELECTABLE_CLASS = 'gu-unselectable';
@@ -37,8 +38,7 @@ export class DragAndDropDirective implements OnDestroy {
     private startY = 0;
     private initialRect: DOMRect;
 
-    constructor(private readonly elementRef: ElementRef<HTMLElement>) {
-    }
+    private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
     @HostListener('pointerdown', ['$event'])
     onPointerDown(event: PointerEvent): void {
@@ -99,8 +99,8 @@ export class DragAndDropDirective implements OnDestroy {
         }
 
         const reference = this.getReference(event.clientY);
-        if (reference !== this.item) {
-            this.elementRef.nativeElement.insertBefore(this.item, reference);
+        if (reference !== this.item.nextElementSibling) {
+            this.moveItem(reference);
         }
     };
 
@@ -142,6 +142,62 @@ export class DragAndDropDirective implements OnDestroy {
         this.mirror.style.top = `${event.clientY - this.offsetY}px`;
     }
 
+    /**
+     * Moves the dragged item to its new position and animates the displaced siblings with a
+     * FLIP animation so the list does not jump.
+     */
+    private moveItem(reference: Node | null): void {
+        const container = this.elementRef.nativeElement;
+        const children = Array.from(container.children) as HTMLElement[];
+        const animate = !this.prefersReducedMotion();
+        const first = new Map<HTMLElement, { left: number; top: number }>();
+
+        if (animate) {
+            for (const child of children) {
+                first.set(child, { left: child.offsetLeft, top: child.offsetTop });
+            }
+        }
+
+        container.insertBefore(this.item, reference);
+
+        if (!animate) {
+            return;
+        }
+
+        for (const child of children) {
+            if (child === this.item) {
+                continue;
+            }
+
+            const before = first.get(child);
+            if (!before) {
+                continue;
+            }
+
+            const dx = before.left - child.offsetLeft;
+            const dy = before.top - child.offsetTop;
+            if (dx === 0 && dy === 0) {
+                continue;
+            }
+
+            child.animate(
+                [
+                    { transform: `translate(${dx}px, ${dy}px)` },
+                    { transform: 'none' },
+                ],
+                {
+                    duration: REORDER_ANIMATION_DURATION,
+                    easing: 'ease-out',
+                }
+            );
+        }
+    }
+
+    private prefersReducedMotion(): boolean {
+        return typeof window.matchMedia === 'function'
+            && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
     private isOverContainer(event: PointerEvent): boolean {
         const target = document.elementFromPoint(event.clientX, event.clientY);
 
@@ -149,7 +205,13 @@ export class DragAndDropDirective implements OnDestroy {
     }
 
     private getReference(clientY: number): Node | null {
-        const children = Array.from(this.elementRef.nativeElement.children) as HTMLElement[];
+        const container = this.elementRef.nativeElement;
+        // Use the shared offset parent so `offsetTop` values are comparable and unaffected by
+        // the running reorder animations (which only change the visual transform).
+        const offsetParent = container.offsetParent as HTMLElement ?? container;
+        const parentRect = offsetParent.getBoundingClientRect();
+        const pointerY = clientY - parentRect.top - offsetParent.clientTop + offsetParent.scrollTop;
+        const children = Array.from(container.children) as HTMLElement[];
         let foreign: HTMLElement;
 
         for (const child of children) {
@@ -162,8 +224,7 @@ export class DragAndDropDirective implements OnDestroy {
                 continue;
             }
 
-            const rect = child.getBoundingClientRect();
-            if (clientY < rect.top + rect.height / 2) {
+            if (pointerY < child.offsetTop + child.offsetHeight / 2) {
                 return child;
             }
         }
