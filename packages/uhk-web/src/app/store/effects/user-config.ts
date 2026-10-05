@@ -3,10 +3,9 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { routerNavigatedAction, RouterNavigatedAction } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { saveAs } from 'file-saver';
 
 import {
     BackupUserConfigurationInfo,
@@ -46,6 +45,7 @@ import {
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
+import { FileDialogService } from '../../services/file-dialog.service';
 import { Uhk80MigratorService } from '../../services/uhk80-migrator.service';
 import {
     AppState,
@@ -84,6 +84,7 @@ export class UserConfigEffects {
     private readonly dataStorageRepository = inject(DataStorageRepositoryService);
     private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
     private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly fileDialogService = inject(FileDialogService);
     private readonly logService = inject(LogService);
     private readonly router = inject(Router);
     private readonly store = inject<Store<AppState>>(Store);
@@ -303,29 +304,37 @@ export class UserConfigEffects {
         .pipe(
             ofType(ActionTypes.SaveUserConfigInJsonFile),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getHardwareModules)),
-            tap(([action, userConfiguration, hardwareModules]) => {
+            mergeMap(([action, userConfiguration, hardwareModules]) => {
                 const newUserConfiguration= updateUserConfigurationWithLastSaveInfo(userConfiguration, hardwareModules.rightModuleInfo);
                 const asString = JSON.stringify(newUserConfiguration.toJsonObject(), null, 2);
-                const asBlob = new Blob([asString], { type: 'text/plain' });
-                saveAs(asBlob, 'UserConfiguration.json');
+                const data = new TextEncoder().encode(asString);
+
+                return this.fileDialogService.saveUserConfigurationFile('UserConfiguration.json', data, 'text/plain')
+                    .pipe(
+                        map(() => new EmptyAction()),
+                        catchError(error => this.showFileSaveErrorNotification(error))
+                    );
             })
-        ),
-    { dispatch: false }
+        )
     );
 
     saveUserConfigInBinFile$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SaveUserConfigInBinFile),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getHardwareModules)),
-            tap(([action, userConfiguration, hardwareModules]) => {
+            mergeMap(([action, userConfiguration, hardwareModules]) => {
                 const newUserConfiguration= updateUserConfigurationWithLastSaveInfo(userConfiguration, hardwareModules.rightModuleInfo);
                 const uhkBuffer = new UhkBuffer();
                 newUserConfiguration.toBinary(uhkBuffer);
-                const blob = new Blob([uhkBuffer.getBufferContent()]);
-                saveAs(blob, 'UserConfiguration.bin');
+                const data = uhkBuffer.getBufferContent();
+
+                return this.fileDialogService.saveUserConfigurationFile('UserConfiguration.bin', data, 'application/octet-stream')
+                    .pipe(
+                        map(() => new EmptyAction()),
+                        catchError(error => this.showFileSaveErrorNotification(error))
+                    );
             })
-        ),
-    { dispatch: false }
+        )
     );
 
     loadUserConfigurationFromFile$ = createEffect(() => this.actions$
@@ -496,6 +505,15 @@ export class UserConfigEffects {
         ),
     { dispatch: false }
     );
+
+    private showFileSaveErrorNotification(error: unknown): Observable<Action> {
+        this.logService.error('[UserConfigEffects] Failed to save the user configuration file', error);
+
+        return of(new ShowNotificationAction({
+            type: NotificationType.Error,
+            message: 'Failed to save the user configuration file.'
+        }));
+    }
 
     private getUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): Observable<UserConfiguration> {
         return this.dataStorageRepository.getConfig(uhkDeviceProduct)

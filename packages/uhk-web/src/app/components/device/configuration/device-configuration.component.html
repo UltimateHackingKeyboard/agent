@@ -20,10 +20,10 @@
         </button>
     </li>
     <li>
-        <file-upload (fileChanged)="changeFile($event)"
-                     [disabled]="savingUserConfig"
-                     label="Import device configuration">
-        </file-upload>
+        <button class="btn btn-primary"
+                [disabled]="savingUserConfig"
+                (click)="importUserConfiguration()">Import device configuration
+        </button>
     </li>
     <li *ngIf="(hasRecoverableLEDSpace$ | async)">
         <span class="d-inline-block"

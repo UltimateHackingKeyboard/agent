@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { UploadFileData } from 'uhk-common';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
 import { AppState,
@@ -25,6 +24,7 @@ import {
     GetUserConfigurationFromHistoryAction,
     LoadUserConfigurationHistoryAction
 } from '../../../store/actions/user-configuration-history.actions';
+import { FileDialogService } from '../../../services/file-dialog.service';
 
 @Component({
     selector: 'device-settings',
@@ -44,6 +44,7 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     faSlidersH = faSlidersH;
 
     private readonly store = inject<Store<AppState>>(Store);
+    private readonly fileDialogService = inject(FileDialogService);
     private subscription = new Subscription();
 
     constructor() {
@@ -87,14 +88,21 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
         this.store.dispatch(new ChangeUserConfigurationHistoryTabAction(index));
     }
 
-    changeFile(data: UploadFileData): void {
-        this.store.dispatch(new LoadUserConfigurationFromFileAction({
-            uploadFileData: {
-                ...data,
-                saveInHistory: true
-            },
-            autoSave: false
-        }));
+    importUserConfiguration(): void {
+        this.fileDialogService.openUserConfigurationFile()
+            .subscribe(data => {
+                if (!data) {
+                    return;
+                }
+
+                this.store.dispatch(new LoadUserConfigurationFromFileAction({
+                    uploadFileData: {
+                        ...data,
+                        saveInHistory: true
+                    },
+                    autoSave: false
+                }));
+            });
     }
 
     deleteUserConfigHistory(deviceUniqueId: number): void {
