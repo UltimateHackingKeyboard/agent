@@ -19,7 +19,8 @@
           "options": {
             "baseHref": "",
             "outputPath": {
-              "base": "dist"
+              "base": "dist",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
@@ -56,6 +57,9 @@
               "uhk-common"
             ],
             "browser": "src/main-web.ts",
+            "loader": {
+              ".svg": "text"
+            },
             "stylePreprocessorOptions": {
               "includePaths": [
                 "."
@@ -133,7 +137,8 @@
             "optimization": false,
             "sourceMap": true,
             "outputPath": {
-              "base": "../uhk-agent/dist/renderer"
+              "base": "../uhk-agent/dist/renderer",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
@@ -167,6 +172,9 @@
               "uhk-common"
             ],
             "browser": "src/main-renderer.ts",
+            "loader": {
+              ".svg": "text"
+            },
             "stylePreprocessorOptions": {
               "includePaths": [
                 "."

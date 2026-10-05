@@ -48,11 +48,9 @@
     "angular-split": "20.0.0",
     "bootstrap": "5.3.8",
     "colord": "2.9.3",
-    "dragula": "3.7.3",
     "gramli-angular-notifier": "21.1.0",
     "monaco-editor": "0.55.1",
     "naive-autocompletion-parser": "1.1.9",
-    "ng2-dragula": "7.0.0",
     "ng2-nouislider": "2.0.0",
     "ngrx-store-freeze": "0.2.4",
     "ngx-clipboard": "16.0.0",
@@ -61,7 +59,6 @@
     "rxjs": "7.8.2",
     "ts-keycode-enum": "1.0.6",
     "uhk-common": "file:../uhk-common",
-    "xml-loader": "1.2.1",
     "zone.js": "0.16.2"
   },
   "dependencies": {

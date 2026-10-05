@@ -1,6 +1,5 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DragulaService } from 'ng2-dragula';
 import { faCircleExclamation, faCircleNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -34,35 +33,16 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     hostConnectionPairState: Record<string, boolean> = {};
     eraseBleSettingsButtonState: EraseBleSettingsButtonState;
     hostConnections: HostConnection[] = [] as HostConnection[];
-    dragAndDropGroup = 'HOST_CONNECTION';
+    readonly dragAndDropHandle = '.movable';
 
     private hostConnectionPairStateSubscription: Subscription;
     private eraseBleSettingsSubscription: Subscription;
     private hostConnectionsSubscription: Subscription;
 
-    constructor(private dragulaService: DragulaService,
-                private cdRef: ChangeDetectorRef,
+    constructor(private cdRef: ChangeDetectorRef,
                 private store: Store<AppState>) {
 
         this.store.dispatch(new CheckAreHostConnectionsPairedAction());
-
-        dragulaService.createGroup(this.dragAndDropGroup, {
-            moves: (el, container, handle) => {
-                if (!handle) {
-                    return false;
-                }
-
-                let element = handle;
-                while (element) {
-                    if (element.classList.contains('movable')) {
-                        return true;
-                    }
-                    element = element.parentElement;
-                }
-
-                return false;
-            }
-        });
     }
 
     ngOnInit(): void {
@@ -84,7 +64,6 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.dragulaService.destroy(this.dragAndDropGroup);
         this.eraseBleSettingsSubscription?.unsubscribe();
         this.hostConnectionPairStateSubscription?.unsubscribe();
         this.hostConnectionsSubscription?.unsubscribe();

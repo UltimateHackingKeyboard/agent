@@ -25,9 +25,11 @@
         </th>
     </tr>
     </thead>
-    <tbody [dragula]="dragAndDropGroup" [dragulaModel]="hostConnections" (dragulaModelChange)="hostConnectionsReordered($event)">
+    <tbody [dragAndDrop]="hostConnections"
+           [dragAndDropHandle]="dragAndDropHandle"
+           (dragAndDropChange)="hostConnectionsReordered($event)">
     <ng-container *ngFor="let hostConnection of hostConnections; let index = index">
-    <tr *ngIf="hostConnection.type !== 0">
+    <tr *ngIf="hostConnection.type !== 0" [attr.data-index]="index">
         <td>
             <i
                class="uhk-icon uhk-icon-vertical-grip-icon movable"

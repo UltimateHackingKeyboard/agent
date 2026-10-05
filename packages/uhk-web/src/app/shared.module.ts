@@ -8,7 +8,6 @@ import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { NotifierModule } from 'gramli-angular-notifier';
 
 import { AngularSplitModule } from 'angular-split';
-import { DragulaModule } from 'ng2-dragula';
 import { ColorPickerDirective } from 'ngx-color-picker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
@@ -98,7 +97,7 @@ import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 import { UhkAgentIconComponent } from './components/uhk-icon/uhk-agent-icon.component';
 
-import { CancelableDirective, ExternalUrlDirective } from './directives';
+import { CancelableDirective, DragAndDropDirective, ExternalUrlDirective } from './directives';
 import { NgxColorPickerEyeDropper } from './directives/ngx-color-picker-eye-dropper';
 import {
     AsHexColorPipe,
@@ -251,6 +250,7 @@ import appInitFactory from './services/app-init-factory';
         SvgSpriteImage,
         KeyboardSliderComponent,
         CancelableDirective,
+        DragAndDropDirective,
         SafeStylePipe,
         SafeUrlPipe,
         AutoUpdateSettings,
@@ -298,7 +298,6 @@ import appInitFactory from './services/app-init-factory';
         BrowserAnimationsModule,
         FontAwesomeModule,
         FormsModule,
-        DragulaModule.forRoot(),
         routing,
         MonacoEditorModule,
         NgSelectModule,
