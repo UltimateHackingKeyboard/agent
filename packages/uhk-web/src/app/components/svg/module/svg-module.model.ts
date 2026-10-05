@@ -20,14 +20,15 @@ export class SvgModule {
             const keys = obj.rect.map(rect => rect.$);
             for (let i = 0; i < keys.length; ++i) {
                 const key = keys[i];
-                const idSplit = key.id.split('-');
+                const idSplit: string[] = key.id.split('-');
                 if (idSplit.length === 2) {
                     const index = Number.parseInt(idSplit[1], 10);
                     keys[i].type = 'rec';
                     keys[i].height = +keys[i].height;
                     keys[i].width = +keys[i].width;
-                    const style = parseStyle(keys[i].style);
+                    const style = parseStyle(keys[i].style as string);
                     keys[i].fill = style.fill;
+                    keys[i].noteMarkerTransform = keys[i]['data-note-marker-transform'];
                     this.keyboardKeys[index] = keys[i];
                 }
             }
@@ -58,11 +59,11 @@ export class SvgModule {
                 }
 
                 if (path.id) {
-                    const idSplit = path.id.split('-'); // split the 'key-6{-print}'
+                    const idSplit: string[] = path.id.split('-'); // split the 'key-6{-print}'
 
                     if (idSplit.length === 2) {
                         const index = Number.parseInt(idSplit[1], 10);
-                        const style = parseStyle(path.style);
+                        const style = parseStyle(path.style as string);
 
                         this.keyboardKeys[index] = {
                             ...this.keyboardKeys[index],
@@ -85,7 +86,7 @@ export class SvgModule {
         if (obj.g) {
             obj.g.forEach(g => {
                 if (g.$.id) {
-                    const idSplit = g.$.id.split('-');
+                    const idSplit: string[] = g.$.id.split('-');
                     const index = Number.parseInt(idSplit[1], 10);
 
                     const key: SvgKeyboardKey = {
@@ -101,7 +102,7 @@ export class SvgModule {
                     if (g.path) {
                         key.elements.paths = g.path.map(path => {
                             path = path.$;
-                            const style = parseStyle(path.style);
+                            const style = parseStyle(path.style as string);
 
                             return {
                                 id: path.id,
@@ -114,7 +115,7 @@ export class SvgModule {
                     if (g.circle) {
                         key.elements.circles = g.circle.map(circle => {
                             circle = circle.$;
-                            const style = parseStyle(circle.style);
+                            const style = parseStyle(circle.style as string);
 
                             return {
                                 id: circle.id,
@@ -134,7 +135,12 @@ export class SvgModule {
                             key.height = +rect.$.height;
                             key.width = +rect.$.width;
                             key.textTransform = rect.$.transform;
+                            key.noteMarkerTransform = rect.$['data-note-marker-transform'] || g.$['data-note-marker-transform'];
                         }
+                    }
+
+                    if (!key.noteMarkerTransform) {
+                        key.noteMarkerTransform = g.$['data-note-marker-transform'];
                     }
                     this.keyboardKeys[index] = key;
                 }
@@ -142,7 +148,7 @@ export class SvgModule {
         }
 
         this.attributes = obj.$;
-        this.id = parseInt(obj.$['data-module-id'], 10);
+        this.id = parseInt(obj.$['data-module-id'] as string, 10);
     }
 }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -26,9 +26,11 @@ import {
     SaveApplicationSettingsSuccessAction,
     SetAppThemeAction,
     ShowNotificationAction,
+    ToggleMinimizeToTrayAction,
     UndoLastAction
 } from '../actions/app';
 import { ActionTypes as UpdateActionTypes } from '../actions/auto-update-settings';
+import { ActionTypes as AdvanceSettingsActionTypes } from '../actions/advance-settings.action';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 import { ActionTypes as DeviceActionTypes, StartConnectionPollerAction } from '../actions/device';
@@ -39,6 +41,14 @@ import { DataStorageRepositoryService } from '../../services/datastorage-reposit
 
 @Injectable()
 export class ApplicationEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly appRendererService = inject(AppRendererService);
+    private readonly appUpdateRendererService = inject(AppUpdateRendererService);
+    private readonly dataStorageRepository = inject(DataStorageRepositoryService);
+    private readonly logService = inject(LogService);
+    private readonly notifierService = inject(NotifierService);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     appStart$ = createEffect(() => this.actions$
         .pipe(
@@ -59,6 +69,7 @@ export class ApplicationEffects {
                             everAttemptedSavingToKeyboard: false,
                             animationEnabled: true,
                             keyboardHalvesAlwaysJoined: false,
+                            minimizeToTray: false,
                             ...appSettings
                         };
 
@@ -143,8 +154,14 @@ export class ApplicationEffects {
             ofType(
                 ActionTypes.ErrorPanelSizeChanged,
                 ActionTypes.SetAppTheme,
+                ActionTypes.SetKeyLanguage,
+                ActionTypes.SetSharedConfigurationFilePath,
+                ActionTypes.SetDetectSharedConfigurationChanges,
+                ActionTypes.SetMacroGroupingSettings,
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,
+                ActionTypes.ToggleMinimizeToTray,
+                AdvanceSettingsActionTypes.toggleAlwaysEnableAdvancedMode,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration,
                 SmartMacroDocActionTypes.PanelSizeChanged,
@@ -174,6 +191,17 @@ export class ApplicationEffects {
     { dispatch: false }
     );
 
+    minimizeToTrayChanged$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<ToggleMinimizeToTrayAction>(ActionTypes.ToggleMinimizeToTray),
+            map(action => action.payload),
+            tap((enabled) => {
+                this.appRendererService.setMinimizeToTray(enabled);
+            })
+        ),
+    { dispatch: false }
+    );
+
     navigateTo$ = createEffect(() => this.actions$
         .pipe(
             ofType<NavigateTo>(ActionTypes.NavigateTo),
@@ -187,14 +215,4 @@ export class ApplicationEffects {
         ),
     { dispatch: false }
     );
-
-    constructor(private actions$: Actions,
-                private notifierService: NotifierService,
-                private appUpdateRendererService: AppUpdateRendererService,
-                private appRendererService: AppRendererService,
-                private logService: LogService,
-                private store: Store<AppState>,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private router: Router) {
-    }
 }

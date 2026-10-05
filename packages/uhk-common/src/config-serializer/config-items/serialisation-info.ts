@@ -1,4 +1,4 @@
-import { gte, lt } from 'semver'
+import { isVersionGte, isVersionLt } from '../../util/version-helpers.js'
 
 /**
  * It is a proxy interface to prevent circular references
@@ -21,11 +21,11 @@ export const DEFAULT_SERIALISATION_INFO: SerialisationInfo = {
 export function isSerialisationInfoGte(serialisationInfo: SerialisationInfo, expected: string): boolean {
     const actual = `${serialisationInfo.userConfigMajorVersion}.${serialisationInfo.userConfigMinorVersion}.${serialisationInfo.userConfigPatchVersion}`;
 
-    return gte(actual, expected);
+    return isVersionGte(actual, expected);
 }
 
 export function isSerialisationInfoLt(serialisationInfo: SerialisationInfo, expected: string): boolean {
     const actual = `${serialisationInfo.userConfigMajorVersion}.${serialisationInfo.userConfigMinorVersion}.${serialisationInfo.userConfigPatchVersion}`;
 
-    return lt(actual, expected);
+    return isVersionLt(actual, expected);
 }

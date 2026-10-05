@@ -1,5 +1,5 @@
 import { CanActivate, Router } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -9,8 +9,8 @@ import { AppState, deviceConnected } from '../store/index';
 
 @Injectable()
 export class UhkDeviceConnectedGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     canActivate(): Observable<boolean> {
         return this.store.select(deviceConnected)

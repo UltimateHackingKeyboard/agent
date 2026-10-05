@@ -52,7 +52,7 @@ export abstract class MacroAction {
         const macroActionClassname = this.getName();
         const macroActionTypeString = macroActionType[macroActionClassname];
         if (jsObject.macroActionType !== macroActionTypeString) {
-            throw `Invalid ${macroActionClassname}.macroActionType: ${jsObject.macroActionType}`;
+            throw new Error(`Invalid ${macroActionClassname}.macroActionType: ${jsObject.macroActionType}`);
         }
     }
 
@@ -62,15 +62,15 @@ export abstract class MacroAction {
         const macroActionId: MacroActionId = MacroActionId[classname];
         if (macroActionId === MacroActionId.KeyMacroAction) {
             if (readMacroActionId < MacroActionId.KeyMacroAction || readMacroActionId > MacroActionId.LastKeyMacroAction) {
-                throw `Invalid ${classname} first byte: ${readMacroActionId}`;
+                throw new Error(`Invalid ${classname} first byte: ${readMacroActionId}`);
             }
         } else if (macroActionId === MacroActionId.MouseButtonMacroAction) {
             if (readMacroActionId < MacroActionId.MouseButtonMacroAction ||
                 readMacroActionId > MacroActionId.LastMouseButtonMacroAction) {
-                throw `Invalid ${classname} first byte: ${readMacroActionId}`;
+                throw new Error(`Invalid ${classname} first byte: ${readMacroActionId}`);
             }
         } else if (readMacroActionId !== macroActionId) {
-            throw `Invalid ${classname} first byte: ${readMacroActionId}`;
+            throw new Error(`Invalid ${classname} first byte: ${readMacroActionId}`);
         }
         return readMacroActionId;
     }

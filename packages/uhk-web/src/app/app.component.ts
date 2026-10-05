@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { faPuzzlePiece, faArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -7,9 +7,10 @@ import { SplitGutterInteractionEvent } from 'angular-split';
 import { NotifierService } from 'gramli-angular-notifier';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
-import { ERR_UPDATER_INVALID_SIGNATURE } from 'uhk-common';
+import { ERR_UPDATER_INVALID_SIGNATURE, SharedConfigApplyData } from 'uhk-common';
 
 import { KeyboardSvgExportService } from './services/keyboard-svg-export.service';
+import { SharedConfigService } from './services/shared-config.service';
 import { ActionTypes as AppUpdateActionTypes } from './store/actions/app-update.action';
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
 import { EnableUsbStackTestAction, UpdateFirmwareAction } from './store/actions/device';
@@ -19,27 +20,30 @@ import {
     getNewPairedDevicesState,
     getErrorPanelHeight,
     getShowAppUpdateAvailable,
+    getAppUpdateNotificationViewModel,
     getParsedStatusBuffer,
     deviceConfigurationLoaded,
     runningInElectron,
     saveToKeyboardState,
     keypressCapturing,
-    getUpdateInfo,
     firstAttemptOfSaveToKeyboard,
     isStatusBufferErrorHidden,
     getOutOfSpaceWaringData,
-    getShowFirmwareUpgradePanel
+    getShowFirmwareUpgradePanel,
+    getSharedConfigChange
 } from './store';
 import { StartDonglePairingAction } from './store/actions/dongle-pairing.action';
 import { AddNewPairedDevicesToHostConnectionsAction } from './store/actions/user-config';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
-import { UpdateInfo } from './models/update-info';
+import { AppUpdateNotificationViewModel } from './models/app-update-notification-view-model';
 import {
     CloseErrorPanelAction,
     ShowErrorPanelAction,
     ErrorPanelSizeChangedAction,
     KeyUpAction,
     KeyDownAction,
+    ApplySharedConfigChangeAction,
+    DismissSharedConfigChangeAction,
 } from './store/actions/app';
 import { BleAddingState, DonglePairingState, OutOfSpaceWarningData } from './models';
 import { filter } from 'rxjs/operators';
@@ -113,46 +117,49 @@ export class MainAppComponent implements OnDestroy {
     newPairedDevicesState: BleAddingState;
     showFirmwareUpgradePanel: boolean;
     showUpdateAvailable: boolean;
-    updateInfo$: Observable<UpdateInfo>;
+    appUpdateNotification$: Observable<AppUpdateNotificationViewModel>;
     deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
     firstAttemptOfSaveToKeyboard$: Observable<boolean>;
     isStatusBufferErrorHidden$: Observable<boolean>;
     outOfSpaceWarning: OutOfSpaceWarningData;
+    sharedConfigChange: SharedConfigApplyData;
     secondSideMenuVisible = false;
     splitSizes = {
         top: 100,
         bottom: 0
     };
     statusBuffer: string;
+    private readonly actions$ = inject(Actions);
     private actionsSubscription: Subscription;
+    private readonly cdRef = inject(ChangeDetectorRef);
     private donglePairingStateSubscription: Subscription;
     private newPairedDevicesStateSubscription: Subscription;
     private errorPanelHeightSubscription: Subscription;
+    private readonly keyboardSvgExportService = inject(KeyboardSvgExportService);
+    private readonly sharedConfigService = inject(SharedConfigService);
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
     private keypressCapturingSubscription: Subscription;
+    private readonly notificationService = inject(NotifierService);
     private showFirmwareUpgradePanelSubscription: Subscription;
+    private sharedConfigChangeSubscription: Subscription;
     private showUpdateAvailableSubscription: Subscription;
     private outOfSpaceWarningSubscription: Subscription;
     private routeDataSubscription: Subscription;
     private statusBufferSubscription: Subscription;
     private secondSideMenuComponent: unknown;
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
 
-    constructor(private store: Store<AppState>,
-                private route: ActivatedRoute,
-                private router: Router,
-                private cdRef: ChangeDetectorRef,
-                private actions$: Actions,
-                private keyboardSvgExportService: KeyboardSvgExportService,
-                private notificationService: NotifierService,
-        ) {
-        this.actionsSubscription = actions$.pipe(
+    constructor() {
+        this.actionsSubscription = this.actions$.pipe(
             ofType(AppUpdateActionTypes.InvalidCodesignSignature)
         )
         .subscribe(() => {
-            notificationService.show({
+            this.notificationService.show({
                 message: '',
                 type: 'info',
                 template: this.manuallyUpdateNotificationTmpl,
@@ -160,17 +167,17 @@ export class MainAppComponent implements OnDestroy {
             })
         })
 
-        this.donglePairingStateSubscription = store.select(getDonglePairingState)
+        this.donglePairingStateSubscription = this.store.select(getDonglePairingState)
             .subscribe(data => {
                 this.donglePairingState = data;
                 this.cdRef.markForCheck();
             });
-        this.newPairedDevicesStateSubscription = store.select(getNewPairedDevicesState)
+        this.newPairedDevicesStateSubscription = this.store.select(getNewPairedDevicesState)
             .subscribe(data => {
                 this.newPairedDevicesState = data;
                 this.cdRef.markForCheck();
             });
-        this.errorPanelHeightSubscription = store.select(getErrorPanelHeight)
+        this.errorPanelHeightSubscription = this.store.select(getErrorPanelHeight)
             .subscribe(height => {
                 this.splitSizes = {
                     top: 100 - height,
@@ -178,26 +185,31 @@ export class MainAppComponent implements OnDestroy {
                 };
                 this.cdRef.markForCheck();
             });
-        this.showFirmwareUpgradePanelSubscription = store.select(getShowFirmwareUpgradePanel)
+        this.showFirmwareUpgradePanelSubscription = this.store.select(getShowFirmwareUpgradePanel)
             .subscribe(data => {
                 this.showFirmwareUpgradePanel = data;
                 this.cdRef.markForCheck();
             });
-        this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
+        this.sharedConfigChangeSubscription = this.store.select(getSharedConfigChange)
+            .subscribe(data => {
+                this.sharedConfigChange = data;
+                this.cdRef.markForCheck();
+            });
+        this.showUpdateAvailableSubscription = this.store.select(getShowAppUpdateAvailable)
             .subscribe(data => {
                 this.showUpdateAvailable = data;
                 this.cdRef.markForCheck();
             });
-        this.updateInfo$ = store.select(getUpdateInfo);
-        this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
-        this.runningInElectron$ = store.select(runningInElectron);
-        this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)
+        this.appUpdateNotification$ = this.store.select(getAppUpdateNotificationViewModel);
+        this.deviceConfigurationLoaded$ = this.store.select(deviceConfigurationLoaded);
+        this.runningInElectron$ = this.store.select(runningInElectron);
+        this.saveToKeyboardStateSubscription = this.store.select(saveToKeyboardState)
             .subscribe(data => this.saveToKeyboardState = data);
-        this.keypressCapturingSubscription = store.select(keypressCapturing)
+        this.keypressCapturingSubscription = this.store.select(keypressCapturing)
             .subscribe(data => this.keypressCapturing = data);
-        this.firstAttemptOfSaveToKeyboard$ = store.select(firstAttemptOfSaveToKeyboard);
-        this.isStatusBufferErrorHidden$ = store.select(isStatusBufferErrorHidden);
-        this.outOfSpaceWarningSubscription = store.select(getOutOfSpaceWaringData)
+        this.firstAttemptOfSaveToKeyboard$ = this.store.select(firstAttemptOfSaveToKeyboard);
+        this.isStatusBufferErrorHidden$ = this.store.select(isStatusBufferErrorHidden);
+        this.outOfSpaceWarningSubscription = this.store.select(getOutOfSpaceWaringData)
             .subscribe(data => this.outOfSpaceWarning = data);
         this.routeDataSubscription = this.router.events.pipe(
             filter((event: Event) => event instanceof NavigationEnd)
@@ -226,7 +238,7 @@ export class MainAppComponent implements OnDestroy {
                 this.cdRef.detectChanges();
             }
         });
-        this.statusBufferSubscription = store.select(getParsedStatusBuffer)
+        this.statusBufferSubscription = this.store.select(getParsedStatusBuffer)
             .subscribe(data => {
                 this.statusBuffer = data;
                 this.cdRef.markForCheck();
@@ -241,6 +253,7 @@ export class MainAppComponent implements OnDestroy {
         this.saveToKeyboardStateSubscription.unsubscribe();
         this.keypressCapturingSubscription.unsubscribe();
         this.showFirmwareUpgradePanelSubscription.unsubscribe();
+        this.sharedConfigChangeSubscription.unsubscribe();
         this.showUpdateAvailableSubscription.unsubscribe();
         this.outOfSpaceWarningSubscription.unsubscribe();
         this.routeDataSubscription.unsubscribe();
@@ -325,7 +338,18 @@ export class MainAppComponent implements OnDestroy {
         return this.showFirmwareUpgradePanel
             || this.showUpdateAvailable
             || this.donglePairingState?.showDonglePairingPanel
-            || this.newPairedDevicesState?.showNewPairedDevicesPanel;
+            || this.newPairedDevicesState?.showNewPairedDevicesPanel
+            || !!this.sharedConfigChange;
+    }
+
+    applySharedConfigChange(): void {
+        this.sharedConfigService.acknowledge(this.sharedConfigChange?.content);
+        this.store.dispatch(new ApplySharedConfigChangeAction());
+    }
+
+    dismissSharedConfigChange(): void {
+        this.sharedConfigService.acknowledge(this.sharedConfigChange?.content);
+        this.store.dispatch(new DismissSharedConfigChangeAction());
     }
 
     updateFirmware(): void {

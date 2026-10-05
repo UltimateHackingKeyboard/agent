@@ -5,14 +5,8 @@ import { KeyAction } from './key-action.js';
 
 export class KeyLabelAction extends KeyAction {
 
-    label: string;
-
     constructor(other?: KeyLabelAction) {
         super(other);
-
-        if (other) {
-            this.label = other.label;
-        }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

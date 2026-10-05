@@ -35,11 +35,11 @@ import Uhk, { getI2cAddressArgs, getI2cAddressFromArg, errorHandler, yargs } fro
         const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
         const { operations } = Uhk(argv);
         console.log(`Updating ${uhkModule.name} module from ${firmwarePath} ...`);
-        await operations.updateModuleWithKboot(
+        await operations.updateModuleWithKboot({
             firmwarePath,
-            uhkDeviceProduct,
-            uhkModule
-        );
+            device: uhkDeviceProduct,
+            module: uhkModule
+        });
         console.log('Firmware updated.');
 
     } catch (error) {

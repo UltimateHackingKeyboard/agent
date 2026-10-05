@@ -77,6 +77,7 @@ export class HostConnection {
             case 12:
             case 13:
             case 14:
+            case 15:
                 return this.fromJsonObjectV9(jsonObject, serialisationInfo);
 
             default:
@@ -94,6 +95,7 @@ export class HostConnection {
             case 12:
             case 13:
             case 14:
+            case 15:
                 return this.fromJsonBinaryV9(buffer, serialisationInfo);
 
             default:
@@ -145,7 +147,7 @@ export class HostConnection {
         this.type = buffer.readUInt8();
 
         if (this.hasAddress()) {
-            const address = [];
+            const address: number[] = [];
 
             for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                 address.push(buffer.readUInt8());
@@ -170,7 +172,7 @@ export class HostConnection {
         this.type = buffer.readUInt8();
 
         if (this.hasAddress()) {
-            const address = [];
+            const address: number[] = [];
 
             for (let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                 address.push(buffer.readUInt8());

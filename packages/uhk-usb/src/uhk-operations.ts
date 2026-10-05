@@ -14,12 +14,13 @@ import {
     HardwareConfiguration,
     isDeviceProtocolSupportFirmwareChecksum,
     isDeviceProtocolSupportGitInfo,
+    isVersionLt,
     LEFT_HALF_MODULE,
     LogService,
     ModuleSlotToId,
     ModuleVersionInfo,
-    OLED_DISPLAY_HEIGHT,
-    OLED_DISPLAY_WIDTH,
+    ProgressCallback,
+    PromptCallback,
     UhkBuffer,
     UhkDeviceProduct,
     UHK_EEPROM_SIZE,
@@ -28,10 +29,10 @@ import {
     UHK_MODULE_IDS,
     UNKNOWN_DEVICE,
     UserConfiguration,
+    SHELL_COMMAND_TOO_LONG_ERROR,
     VERSIONS,
 } from 'uhk-common';
 import { promisify } from 'util';
-import semver from 'semver';
 import {
     ConfigBufferId,
     DevicePropertyIds,
@@ -52,6 +53,8 @@ import {
     I2cBaudRate,
     I2cErrorBuffer,
     LoadConfigurationsResult,
+    UpdateLeftModuleWithKbootOptions,
+    UpdateModuleWithKbootOptions,
 } from './models/index.js';
 
 import { UhkHidDevice } from './uhk-hid-device.js';
@@ -124,22 +127,22 @@ export class UhkOperations {
         await this.device.write(transfer);
     }
 
-    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing device firmware with ${device.firmwareUpgradeMethod}`);
 
         switch (device.firmwareUpgradeMethod) {
             case FIRMWARE_UPGRADE_METHODS.KBOOT:
-                return this.updateRightFirmwareWithKboot(firmwarePath, device);
+                return this.updateRightFirmwareWithKboot(firmwarePath, device, onProgress);
 
             case FIRMWARE_UPGRADE_METHODS.MCUBOOT:
-                return this.updateFirmwareWithMcuManager(firmwarePath, device);
+                return this.updateFirmwareWithMcuManager(firmwarePath, device, onProgress);
 
             default:
                 throw new Error(`Firmware upgrade method not implemented: ${device.firmwareUpgradeMethod}`);
         }
     }
 
-    public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+    public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback): Promise<void> {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
@@ -163,14 +166,26 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Read RIGHT firmware from file');
         const bootloaderMemoryMap = await readBootloaderFirmwareFromHexFileAsync(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory');
+
+        const totalBytes = [...bootloaderMemoryMap.values()].reduce((sum, data) => sum + data.length, 0);
+        let writtenBytes = 0;
+
+        onProgress?.(0);
+
         for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
             const dataOption: DataOption = {
                 startAddress,
-                data
+                data,
+                onProgress: entryPercent => {
+                    onProgress?.(Math.min(100, Math.round((writtenBytes + data.length * entryPercent / 100) / totalBytes * 100)));
+                },
             };
 
             await kboot.writeMemory(dataOption);
+            writtenBytes += data.length;
         }
+
+        onProgress?.(100);
 
         this.logService.misc('[UhkOperations] Reset bootloader');
         await kboot.reset();
@@ -179,7 +194,7 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct) {
+    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback) {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
@@ -192,15 +207,23 @@ export class UhkOperations {
             enumerationMode: EnumerationModes.Bootloader,
         });
         await this.device.close();
-        // Give 1 sec to windows to install driver when first time appearing the mcu bootloader
-        await snooze(1000);
+
+        if (process.platform === 'linux') {
+            // On linux the 1 second timeout is too much because it matches with the bootloader wait timeout.
+            await snooze(500);
+        }
+        else {
+            // Give 1 sec to windows to install driver when first time appearing the mcu bootloader
+            await snooze(1000);
+        }
+
         this.logService.misc(`[UhkOperations] Init SerialPeripheral: ${reenumerateResult.serialPath}`);
         const peripheral = new SerialPeripheral(reenumerateResult.serialPath);
         const mcuManager = new McuManager(peripheral);
         this.logService.misc(`[UhkOperations] Read ${device.logName} firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
         this.logService.misc('[UhkOperations] Write memory with mcumgr');
-        await mcuManager.imageUpload(configData);
+        await mcuManager.imageUpload(configData, onProgress);
         this.logService.misc('[UhkOperations] Reset mcu bootloader');
         await mcuManager.reset();
         this.logService.misc('[UhkOperations] Close mcu communication channels');
@@ -208,15 +231,20 @@ export class UhkOperations {
         this.logService.misc(`[UhkOperations] ${device.logName} firmware successfully flashed`);
     }
 
-    public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
-        return this.updateModuleWithKboot(firmwarePath, device, LEFT_HALF_MODULE);
+    public async updateLeftModuleWithKboot(options: UpdateLeftModuleWithKbootOptions): Promise<void> {
+        return this.updateModuleWithKboot({
+            ...options,
+            module: LEFT_HALF_MODULE
+        });
     }
 
-    public async updateModuleWithKboot(
-        firmwarePath: string,
-        device: UhkDeviceProduct,
-        module: UhkModule
-    ): Promise<void> {
+    public async updateModuleWithKboot({
+        firmwarePath,
+        device,
+        module,
+        onProgress,
+        prompt,
+    }: UpdateModuleWithKbootOptions): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
             device,
@@ -229,7 +257,7 @@ export class UhkOperations {
         await this.jumpToBootloaderModule(module.slotId);
         await this.device.close();
 
-        const moduleBricked = await this.waitForKbootIdle(module.name);
+        const moduleBricked = await this.waitForKbootIdle(module.name, prompt);
         if (!moduleBricked) {
             const msg = `[UhkOperations] Couldn't connect to the "${module.name}".`;
             this.logService.error(msg);
@@ -280,7 +308,7 @@ export class UhkOperations {
 
         this.logService.misc('[UhkOperations] Write memory');
         await kboot.configureI2c(module.i2cAddress);
-        await kboot.writeMemory({ startAddress: 0, data: configData });
+        await kboot.writeMemory({ startAddress: 0, data: configData, onProgress });
 
         this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
         await kboot.reset();
@@ -309,11 +337,35 @@ export class UhkOperations {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(): Promise<LoadConfigurationsResult> {
+    public async loadConfigurations(onProgress?: ProgressCallback): Promise<LoadConfigurationsResult> {
         try {
             await this.waitUntilKeyboardBusy();
-            const userConfiguration = await this.loadConfiguration(ConfigBufferId.validatedUserConfig);
-            const hardwareConfiguration = await this.loadConfiguration(ConfigBufferId.hardwareConfig);
+            onProgress?.(0);
+
+            const configSizes = await this.getConfigSizesFromKeyboard();
+            let userConfigSize = configSizes.userConfig;
+            const hardwareConfigSize = configSizes.hardwareConfig;
+
+            const reportTransferProgress = (userOffset: number, hardwareOffset: number) => {
+                const totalBytes = Math.max(userConfigSize + hardwareConfigSize, 1);
+                const transferredBytes = userOffset + hardwareOffset;
+
+                onProgress?.(Math.round(transferredBytes / totalBytes * 100));
+            };
+
+            const userConfiguration = await this.loadConfiguration(
+                ConfigBufferId.validatedUserConfig,
+                (offset, configSize) => {
+                    userConfigSize = configSize;
+                    reportTransferProgress(offset, 0);
+                }
+            );
+            const hardwareConfiguration = await this.loadConfiguration(
+                ConfigBufferId.hardwareConfig,
+                (offset) => {
+                    reportTransferProgress(userConfigSize, offset);
+                }
+            );
 
             return {
                 userConfiguration: JSON.stringify(convertBufferToIntArray(userConfiguration)),
@@ -328,7 +380,10 @@ export class UhkOperations {
      * Return with the actual user / hardware fonfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfiguration(configBufferId: ConfigBufferId): Promise<Buffer> {
+    public async loadConfiguration(
+        configBufferId: ConfigBufferId,
+        onProgress?: (offset: number, configSize: number) => void
+    ): Promise<Buffer> {
         const configBufferIdToName = ['HardwareConfig', 'StagingUserConfig', 'ValidatedUserConfig'];
         const configName = configBufferIdToName[configBufferId];
 
@@ -361,6 +416,8 @@ export class UhkOperations {
                         configSize = originalConfigSize;
                     }
                 }
+
+                onProgress?.(offset, configSize);
             }
 
             return configBuffer;
@@ -394,11 +451,17 @@ export class UhkOperations {
         };
     }
 
-    public async saveUserConfiguration(buffer: Buffer): Promise<void> {
+    public async saveUserConfiguration(buffer: Buffer, onProgress?: ProgressCallback): Promise<void> {
+        const reportProgress = (percent: number) => {
+            onProgress?.(percent);
+        };
+
         try {
+            reportProgress(0);
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to keyboard');
             let shouldRecalculateLength = false;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
             const uhkBuffer = UhkBuffer.fromArray(buffer as any)
             const userConfiguration = new UserConfiguration()
             userConfiguration.fromBinary(uhkBuffer)
@@ -424,11 +487,23 @@ export class UhkOperations {
 
             const resultBuffer = new UhkBuffer(UHK_EEPROM_SIZE)
             userConfiguration.toBinary(resultBuffer)
-            await this.sendConfigToKeyboard(resultBuffer.getBufferContent(), true);
+            const configBuffer = resultBuffer.getBufferContent();
+
+            const preTransferPercent = 2;
+            const transferPercentRange = 0.83;
+
+            reportProgress(preTransferPercent);
+            await this.sendConfigToKeyboard(configBuffer, true, (percent) => {
+                reportProgress(preTransferPercent + Math.round(percent * transferPercentRange));
+            });
+            reportProgress(86);
             await this.applyConfiguration();
+            reportProgress(90);
             this.logService.usbOps('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
+            reportProgress(94);
             await this.waitUntilKeyboardBusy();
+            reportProgress(96);
         } catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
@@ -484,16 +559,24 @@ export class UhkOperations {
         }
     }
 
-    public async waitForKbootIdle(moduleName: string): Promise<boolean> {
+    public async waitForKbootIdle(moduleName: string, prompt?: PromptCallback): Promise<boolean> {
+        let promptSent = false;
         while (true) {
             const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
             await this.device.close();
 
             if (buffer[1] === 0) {
+                prompt?.(undefined);
                 return true;
             }
 
-            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
+            const message = `[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`
+            if (!promptSent) {
+                prompt?.(message);
+                promptSent = true;
+            }
+
+            this.logService.misc(message);
 
             await snooze(1000);
         }
@@ -610,7 +693,7 @@ export class UhkOperations {
             };
 
         if (isDeviceProtocolSupportFirmwareChecksum(deviceVersionInformation.deviceProtocolVersion)) {
-            if (semver.lt(deviceVersionInformation.deviceProtocolVersion, '4.14.1')) {
+            if (isVersionLt(deviceVersionInformation.deviceProtocolVersion, '4.14.1')) {
                 moduleId = UHK_MODULE_IDS.RIGHT_HALF;
             }
 
@@ -737,26 +820,53 @@ export class UhkOperations {
         return convertSlaveI2cErrorBuffer(responseBuffer, slaveId);
     }
 
-    public async getVariable(variableId: UsbVariables, iteration: number = 0): Promise<number | string> {
-        this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
+    public async getVariable(variableId: UsbVariables): Promise<number | string> {
+        if (variableId === UsbVariables.statusBuffer || variableId === UsbVariables.ShellBuffer) {
+            return this.getVariableWithIteration(variableId);
+        }
+
+        this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}`);
         const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
         const responseBuffer = await this.device.write(buffer);
 
-        if (variableId === UsbVariables.statusBuffer || variableId === UsbVariables.ShellBuffer) {
-            let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
-            this.logService.misc(`[DeviceOperation] status buffer segment: ${message}`);
-            if (message.length === responseBuffer.length - 1 && iteration < 20) {
-                message += await this.getVariable(variableId, iteration + 1);
+        return responseBuffer[1];
+    }
+
+    private async getVariableWithIteration(variableId: UsbVariables): Promise<string> {
+        // Firmware status buffer is STATUS_BUFFER_MAX_LENGTH (3000); shell buffer is 2048.
+        // Each USB transfer returns at most (report length - 1) payload bytes (~62).
+        // The buffers are NUL terminated strings.
+        // The maxIterations is a safeguard against infinite loops.
+        const maxIterations = 100;
+        let message = '';
+
+        for (let iteration = 0; iteration < maxIterations; iteration++) {
+            this.logService.usbOps(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
+            const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
+            const responseBuffer = await this.device.write(buffer);
+            const segment = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
+            this.logService.misc(`[DeviceOperation] status buffer segment: ${segment}`);
+            message += segment;
+
+            // The content of the variable is a NUL terminated string.
+            // When the segment length is not equal to the buffer length - 1, the buffer is complete.
+            if (segment.length !== responseBuffer.length - 1) {
+                break;
             }
 
-            if (iteration === 0) {
-                message = normalizeStatusBuffer(message);
+            if (iteration === maxIterations) {
+                this.logService.error(`[DeviceOperation] ${UsbVariables[variableId]} truncated after ${maxIterations} USB transfers`);
             }
-
-            return message;
         }
 
-        return responseBuffer[1];
+        // The shell buffer carries a raw VT100 stream (colors, cursor control) that must be
+        // forwarded verbatim to the terminal emulator. Only the macro status buffer gets the
+        // dedup/reorder normalization.
+        if (variableId === UsbVariables.statusBuffer) {
+            message = normalizeStatusBuffer(message);
+        }
+
+        return message;
     }
 
     public async pairToDongle(dongle: UhkHidDevice) : Promise<BleAddressPair> {
@@ -893,7 +1003,7 @@ export class UhkOperations {
         };
     }
 
-    public async setVariable(variable: UsbVariables, value: number): Promise<void> {
+    public async setVariable(variable: UsbVariables, value: boolean | number): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Set Variable');
         await this.device.write(Buffer.from([UsbCommand.SetVariable, variable, value]));
         await this.waitUntilKeyboardBusy();
@@ -914,14 +1024,19 @@ export class UhkOperations {
      * @returns {Promise<void>}
      * @private
      */
-    private async sendConfigToKeyboard(buffer: Buffer, isUserConfiguration): Promise<void> {
+    private async sendConfigToKeyboard(
+        buffer: Buffer,
+        isUserConfiguration,
+        onProgress?: ProgressCallback
+    ): Promise<void> {
         const command = isUserConfiguration
             ? UsbCommand.WriteStagingUserConfig
             : UsbCommand.WriteHardwareConfig;
 
         const fragments = getTransferBuffers(command, buffer);
-        for (const fragment of fragments) {
-            await this.device.write(fragment);
+        for (let i = 0; i < fragments.length; i++) {
+            await this.device.write(fragments[i]);
+            onProgress?.(Math.round((i + 1) / fragments.length * 100));
         }
     }
 
@@ -934,6 +1049,20 @@ export class UhkOperations {
 
         if (buffer.length > MAX_USB_PAYLOAD_SIZE) {
             throw new Error('Macro command is too long. At most 61 characters are supported. Feel free to execute native uhk macro using `exec <uhk macro name>`.')
+        }
+
+        await this.device.write(buffer);
+    }
+
+    public async execShellCommand(cmd: string): Promise<void> {
+        this.logService.usbOps('[DeviceOperation] USB[T]: Execute Shell Command');
+        const b1 = Buffer.from([UsbCommand.ExecShellCommand]);
+        const b2 = Buffer.from(cmd);
+        const b0 = Buffer.from([0x00]);
+        const buffer = Buffer.concat([b1, b2, b0]);
+
+        if (buffer.length > MAX_USB_PAYLOAD_SIZE) {
+            throw new Error(SHELL_COMMAND_TOO_LONG_ERROR)
         }
 
         await this.device.write(buffer);

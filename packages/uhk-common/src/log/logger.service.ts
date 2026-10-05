@@ -17,7 +17,7 @@ export class LogService {
         this._usbReportId = reportId;
     }
 
-    config(message: string, config: UserConfiguration | string): void {
+    config(message: string, config: UserConfiguration | string | Object): void {
         if (!this._options.config) {
             return;
         }
@@ -26,6 +26,7 @@ export class LogService {
     }
 
     error(...args: any[]): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         console.error(...args);
     }
 
@@ -34,6 +35,7 @@ export class LogService {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.log(...args);
     }
 
@@ -42,6 +44,7 @@ export class LogService {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.log(...args);
     }
 
@@ -50,10 +53,12 @@ export class LogService {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.log(...args);
     }
 
     protected log(...args: any[]): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         console.log(...args);
     }
 }

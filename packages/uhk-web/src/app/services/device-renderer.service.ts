@@ -1,13 +1,16 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
 import {
     AreBleAddressesPairedIpcResponse,
     ChangeKeyboardLayoutIpcResponse,
+    ConfigSizesInfo,
+    ConfigurationReply,
     CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
     DeviceVersionInformation,
     FirmwareJson,
+    FirmwareUpgradeConnectPrompt,
     FirmwareUpgradeIpcResponse,
     HardwareConfiguration,
     HardwareModules,
@@ -15,6 +18,7 @@ import {
     IpcResponse,
     KeyboardLayout,
     LogService,
+    ModuleFirmwareUpgradeProgress,
     ModuleFirmwareUpgradeSkipInfo,
     SaveUserConfigurationData,
     UHK_DEVICE_IDS_TYPE,
@@ -22,7 +26,6 @@ import {
     UploadFileData,
     UserConfiguration,
     UserConfigHistory,
-    VersionInformation,
     ZephyrLogEntry,
 } from 'uhk-common';
 
@@ -49,11 +52,14 @@ import {
     EraseBleSettingReplyAction,
     CurrentlyUpdateSkipModuleAction,
     CurrentlyUpdatingModuleAction,
+    FirmwareUpgradeConnectPromptAction,
     HardwareModulesLoadedAction,
+    ModuleFirmwareUpgradeProgressAction,
     ReadConfigSizesReplyAction,
     RecoveryDeviceReplyAction,
     RecoveryModuleReplyAction,
     SaveConfigurationReplyAction,
+    SaveConfigurationProgressChangedAction,
     SetPrivilegeOnLinuxReplyAction,
     StatusBufferChangedAction,
     UpdateFirmwareJsonAction,
@@ -65,6 +71,7 @@ import {
     I2cWatchdogCounterChangedAction,
 } from '../store/actions/advance-settings.action';
 import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
+import { ConfigurationLoadingProgressChangedAction } from '../store/actions/app';
 import {
     DeleteUserConfigHistoryReplyAction,
     LoadUserConfigurationHistorySuccessAction,
@@ -72,10 +79,12 @@ import {
 
 @Injectable()
 export class DeviceRendererService {
-    constructor(private store: Store<AppState>,
-                private zone: NgZone,
-                private ipcRenderer: IpcCommonRenderer,
-                private logService: LogService) {
+    private readonly ipcRenderer = inject(IpcCommonRenderer);
+    private readonly logService = inject(LogService);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly zone = inject(NgZone);
+
+    constructor() {
         this.registerEvents();
         this.logService.misc('[DeviceRendererService] init success ');
     }
@@ -102,6 +111,18 @@ export class DeviceRendererService {
 
     eraseBleSettings(): void {
         this.ipcRenderer.send(IpcEvents.device.eraseBleSettings);
+    }
+
+    execShellCommandOnDongle(command: string): void {
+        this.ipcRenderer.send(IpcEvents.device.execShellCommandOnDongle, command);
+    }
+
+    execShellCommandOnLeftHalf(command: string): void {
+        this.ipcRenderer.send(IpcEvents.device.execShellCommandOnLeftHalf, command);
+    }
+
+    execShellCommandOnRightHalf(command: string): void {
+        this.ipcRenderer.send(IpcEvents.device.execShellCommandOnRightHalf, command);
     }
 
     isDongleZephyrLoggingEnabled(): void {
@@ -252,6 +273,10 @@ export class DeviceRendererService {
             this.dispachStoreAction(new SetPrivilegeOnLinuxReplyAction(response));
         });
 
+        this.ipcRenderer.on(IpcEvents.device.saveUserConfigurationProgress, (event: string, progress: number) => {
+            this.dispachStoreAction(new SaveConfigurationProgressChangedAction(progress));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.saveUserConfigurationReply, (event: string, response: IpcResponse) => {
             this.dispachStoreAction(new SaveConfigurationReplyAction(response));
         });
@@ -260,8 +285,12 @@ export class DeviceRendererService {
             this.dispachStoreAction(new StatusBufferChangedAction(response));
         });
 
+        this.ipcRenderer.on(IpcEvents.device.loadConfigurationProgress, (event: string, progress: number) => {
+            this.dispachStoreAction(new ConfigurationLoadingProgressChangedAction(progress));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.loadConfigurationReply, (event: string, response: string) => {
-            this.dispachStoreAction(new LoadConfigFromDeviceReplyAction(JSON.parse(response)));
+            this.dispachStoreAction(new LoadConfigFromDeviceReplyAction(JSON.parse(response) as ConfigurationReply));
         });
 
         this.ipcRenderer.on(IpcEvents.device.updateFirmwareJson, (event: string, data: FirmwareJson) => {
@@ -276,12 +305,20 @@ export class DeviceRendererService {
             this.dispachStoreAction(new CurrentlyUpdatingModuleAction(response));
         });
 
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeProgress, (event: string, response: ModuleFirmwareUpgradeProgress) => {
+            this.dispachStoreAction(new ModuleFirmwareUpgradeProgressAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.firmwareUpgradeConnectPrompt, (event: string, response: FirmwareUpgradeConnectPrompt | null) => {
+            this.dispachStoreAction(new FirmwareUpgradeConnectPromptAction(response));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.updateFirmwareReply, (event: string, response: FirmwareUpgradeIpcResponse) => {
             this.dispachStoreAction(new UpdateFirmwareReplyAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.readConfigSizesReply, (event: string, response: string) => {
-            this.dispachStoreAction(new ReadConfigSizesReplyAction(JSON.parse(response)));
+            this.dispachStoreAction(new ReadConfigSizesReplyAction(JSON.parse(response) as ConfigSizesInfo));
         });
 
         this.ipcRenderer.on(IpcEvents.device.loadUserConfigHistoryReply, (event: string, response: UserConfigHistory) => {

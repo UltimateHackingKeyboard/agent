@@ -22,6 +22,7 @@ export interface ModuleFirmwareUpgradeState {
     newFirmwareChecksum?: string;
     newGitRepo?: string;
     newGitTag?: string;
+    progressPercent?: number;
     state: ModuleFirmwareUpgradeStates;
     skipReason?: ModuleFirmwareUpgradeSkipReason;
     tooltip?: string;
@@ -29,6 +30,7 @@ export interface ModuleFirmwareUpgradeState {
 }
 
 export interface FirmwareUpgradeState {
+    connectPrompt?: string;
     failReason?: FirmwareUpgradeFailReason;
     modules: Array<ModuleFirmwareUpgradeState>;
     recoveryModules: Array<UhkModule>;

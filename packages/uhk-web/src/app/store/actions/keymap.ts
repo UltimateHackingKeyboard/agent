@@ -9,6 +9,8 @@ import { ExchangeKeysActionModel, OpenPopoverModel } from '../../models';
 export enum ActionTypes {
     Add = '[Keymap] Add keymap',
     AddLayer = '[Keymap] Add keymap layer',
+    CopyLayer = '[Keymap] Copy layer',
+    PasteLayer = '[Keymap] Paste layer',
     Duplicate = '[Keymap] Duplicate keymap',
     EditAbbr = '[Keymap] Edit keymap abbreviation',
     EditName = '[Keymap] Edit keymap title',
@@ -36,6 +38,20 @@ export class AddKeymapAction implements Action {
 
 export class AddLayerAction implements Action {
     type = ActionTypes.AddLayer;
+
+    constructor(public payload: number) {
+    }
+}
+
+export class CopyLayerAction implements Action {
+    type = ActionTypes.CopyLayer;
+
+    constructor(public payload: number) {
+    }
+}
+
+export class PasteLayerAction implements Action {
+    type = ActionTypes.PasteLayer;
 
     constructor(public payload: number) {
     }
@@ -170,6 +186,8 @@ export class SelectLayerAction implements Action {
 export type Actions
     = AddKeymapAction
     | AddLayerAction
+    | CopyLayerAction
+    | PasteLayerAction
     | DuplicateKeymapAction
     | EditKeymapAbbreviationAction
     | EditKeymapNameAction

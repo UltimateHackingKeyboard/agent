@@ -2,17 +2,20 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ElementRef,
     EventEmitter,
     HostListener,
     Input,
     OnChanges,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faBan, faClone, faKeyboard, faMousePointer, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faClone, faKeyboard, faMousePointer, faNoteSticky, faPlay } from '@fortawesome/free-solid-svg-icons';
 
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -91,6 +94,7 @@ export class PopoverComponent implements OnChanges {
     @Output() remap = new EventEmitter<KeyActionRemap>();
 
     @ViewChild('tab', { static: false }) selectedTab: Tab;
+    @ViewChild('noteTextarea') noteTextarea?: ElementRef<HTMLTextAreaElement>;
 
     tabName = TabName;
     keyActionValid: boolean;
@@ -142,16 +146,22 @@ export class PopoverComponent implements OnChanges {
     macroPlaybackSupported$: Observable<boolean>;
     layerOptions$: Observable<LayerOption[]>;
     userConfiguration$: Observable<UserConfiguration>;
+    faNoteSticky = faNoteSticky;
+    showNote = false;
+    note = '';
+    noteTooltip = 'Add a note to this key.';
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-        this.uhkThemeColors$ = store.select(getUhkThemeColors);
-        this.keymap$ = store.select(getSelectedKeymap);
-        this.keymaps$ = store.select(getKeymaps);
-        this.keymapOptions$ = store.select(getKeymapOptions);
-        this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
-        this.layerOptions$ = store.select(getLayerOptions);
-        this.userConfiguration$ = store.select(getUserConfiguration);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly cdRef = inject(ChangeDetectorRef);
+
+    constructor() {
+        this.uhkThemeColors$ = this.store.select(getUhkThemeColors);
+        this.keymap$ = this.store.select(getSelectedKeymap);
+        this.keymaps$ = this.store.select(getKeymaps);
+        this.keymapOptions$ = this.store.select(getKeymapOptions);
+        this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
+        this.layerOptions$ = this.store.select(getLayerOptions);
+        this.userConfiguration$ =this.store.select(getUserConfiguration);
     }
 
     ngOnChanges(change: SimpleChanges) {
@@ -165,6 +175,9 @@ export class PopoverComponent implements OnChanges {
 
         if (change['defaultKeyAction']) {
             this.disableRemapOnAllLayer = false;
+            this.note = this.defaultKeyAction?.label || '';
+            this.showNote = this.note.length > 0;
+            this.updateNoteTooltip();
 
             if (this.defaultKeyAction instanceof KeystrokeAction) {
                 this.keystrokeActionChange(this.defaultKeyAction);
@@ -206,10 +219,12 @@ export class PopoverComponent implements OnChanges {
     onRemapKey(assignNewMacro?: boolean, navigateToMacro?: boolean): void {
         if (this.keyActionValid) {
             try {
+                const action = this.selectedTab.toKeyAction();
+                action.label = this.showNote ? this.note : '';
                 this.remap.emit({
                     remapOnAllKeymap: this.internalRemapInfo.remapOnAllKeymap,
                     remapOnAllLayer: this.internalRemapInfo.remapOnAllLayer,
-                    action: this.selectedTab.toKeyAction(),
+                    action,
                     assignNewMacro: assignNewMacro,
                     navigateToMacro: navigateToMacro,
                 });
@@ -218,6 +233,33 @@ export class PopoverComponent implements OnChanges {
                 console.error(e);
             }
         }
+    }
+
+    toggleNote(tooltip?: NgbTooltip): void {
+        tooltip?.close();
+        this.showNote = !this.showNote;
+        if (!this.showNote) {
+            this.note = '';
+        }
+        this.updateNoteTooltip();
+        this.cdRef.detectChanges();
+
+        if (this.showNote) {
+            this.noteTextarea?.nativeElement.focus();
+        }
+    }
+
+    onNoteChange(note: string): void {
+        this.note = note;
+        this.cdRef.markForCheck();
+    }
+
+    get noteRows(): number {
+        return Math.max(2, this.note.split('\n').length);
+    }
+
+    private updateNoteTooltip(): void {
+        this.noteTooltip = this.showNote ? 'Remove note.' : 'Add a note to this key.';
     }
 
     @HostListener('keydown.escape')

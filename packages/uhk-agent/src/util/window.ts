@@ -29,7 +29,7 @@ export const loadWindowState = (logger: LogService): Partial<WindowState> => {
     logger.misc('[WindowState] load settings');
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const loadedState = settings.getSync(WINDOWS_SETTINGS_KEY) as any;
+        const loadedState: WindowState = settings.getSync(WINDOWS_SETTINGS_KEY) as any;
         logger.misc('[WindowState] loaded settings', loadedState);
 
         if (!loadedState) {
@@ -70,7 +70,7 @@ export const saveWindowState = (win: electron.BrowserWindow, logger: LogService)
     };
 
     logger.misc('[WindowState] save settings:', state);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-argument
     settings.setSync(WINDOWS_SETTINGS_KEY, state as any);
     logger.misc('[WindowState] save settings success');
 };

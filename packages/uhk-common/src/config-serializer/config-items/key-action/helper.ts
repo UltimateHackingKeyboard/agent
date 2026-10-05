@@ -5,7 +5,7 @@ import { Macro } from '../macro.js';
 import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { KeyLabelAction } from './key-label-action.js';
-import { KeystrokeAction } from './keystroke-action.js';
+import { JsonObjectKeystrokeAction, KeystrokeAction } from './keystroke-action.js';
 import { NoneBlockAction } from './none-block-action.js';
 import { OtherAction } from './other-action.js';
 import { SwitchLayerAction } from './switch-layer-action.js';
@@ -17,8 +17,7 @@ import { isAllowedScancode } from '../scancode-checker.js';
 
 export class Helper {
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    static createKeyAction(source: KeyAction | UhkBuffer | any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
+    static createKeyAction(source: KeyAction | UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
         } else if (source instanceof UhkBuffer) {
@@ -43,6 +42,7 @@ export class Helper {
             case 12:
             case 13:
             case 14:
+            case 15:
                 return this.fromUhkBufferV1(buffer, macros, serialisationInfo);
 
             default:
@@ -85,7 +85,7 @@ export class Helper {
             case KeyActionId.PlayMacroAction:
                 return new PlayMacroAction().fromBinary(buffer, serialisationInfo, macros);
             default:
-                throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
+                throw new Error(`Invalid KeyAction first byte: ${keyActionFirstByte}`);
         }
     }
 
@@ -134,6 +134,7 @@ export class Helper {
             case 12:
             case 13:
             case 14:
+            case 15:
                 return this.fromJSONObjectV1(keyAction, macros, serialisationInfo);
 
             default:
@@ -153,7 +154,7 @@ export class Helper {
             case keyActionType.KeyLabelAction:
                 return new KeyLabelAction().fromJsonObject(keyAction)
             case keyActionType.KeystrokeAction: {
-                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction, serialisationInfo);
+                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction as JsonObjectKeystrokeAction, serialisationInfo);
                 if (isValidKeystrokeAction(keystrokeAction)) {
                     return keystrokeAction;
                 }
@@ -177,7 +178,7 @@ export class Helper {
             case keyActionType.NoneBlockAction:
                 return new NoneBlockAction().fromJsonObject(keyAction, serialisationInfo);
             default:
-                throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
+                throw new Error(`Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`);
         }
     }
 }

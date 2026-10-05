@@ -11,7 +11,8 @@ import {
     Output,
     ChangeDetectionStrategy,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -37,14 +38,15 @@ import {
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
-    SwitchLayerMode
+    SwitchLayerMode,
+    UserConfiguration,
 } from 'uhk-common';
 
 import { CaptureService } from '../../../../services/capture.service';
 import { KeyActionColoringService } from '../../../../services/key-action-coloring.service';
 import { MapperService } from '../../../../services/mapper.service';
 
-import { AppState } from '../../../../store';
+import { AppState, getKeyLanguage } from '../../../../store';
 import { initLayerOptions } from '../../../../store/reducers/layer-options';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
@@ -52,8 +54,10 @@ import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { LastEditedKey } from '../../../../models/last-edited-key';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
+import { buildKeyAccessibleLabel } from '../../../../util/build-key-accessible-label';
 import { getColorsOf } from '../../../../util/get-colors-of';
 import { defaultUhkThemeColors } from '../../../../util/default-uhk-theme-colors';
+import { getDefaultQwertyKeyLabel } from '../../../../util/get-default-key-label';
 import { keyboardGreyRgbColor } from '../../../../util/rgb-color-contants';
 import { SvgKeyboardKey } from './svg-keyboard-key.model';
 
@@ -107,9 +111,12 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() isActive = false;
     @Input() hostConnections: HostConnection[] = [];
     @Input() keyAction: KeyAction;
+    @Input() keyId = 0;
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
+    @Input() defaultUserConfiguration = new UserConfiguration();
     @Input() macroMap = new Map<number, Macro>();
+    @Input() moduleId = 0;
     @Input() lastEdited: boolean;
     @Input() lastEditedKey: LastEditedKey;
 
@@ -125,12 +132,18 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     recordAnimation: string;
     recording: boolean;
     labelType: LabelTypes;
+    accessibleLabel = 'Unassigned key';
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     labelSource: any;
     secondaryText: string;
     textColor: string;
     viewBox: string;
+    private readonly captureService = inject(CaptureService);
+    private readonly dragAndDropService = inject(KeyActionDragAndDropService);
+    private readonly element = inject(ElementRef);
+    private readonly mapper = inject(MapperService);
+    private readonly mouseMoveService = inject(KeyActionColoringService);
     private scanCodePressed = false;
     private pressedShiftLocation = -1;
     private pressedAltLocation = -1;
@@ -140,19 +153,19 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private layerOptionMap = initLayerOptions();
     private isMouseMoveDispatched = false;
     private isMouseHover = false;
+    private isFocused = false;
+    private readonly sanitizer = inject(DomSanitizer);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly cdRef = inject(ChangeDetectorRef);
 
-    constructor(
-        private sanitizer: DomSanitizer,
-        private mapper: MapperService,
-        private store: Store<AppState>,
-        private element: ElementRef,
-        private cdRef: ChangeDetectorRef,
-        private captureService: CaptureService,
-        private dragAndDropService: KeyActionDragAndDropService,
-        private mouseMoveService: KeyActionColoringService
-    ) {
+    constructor() {
+        this.subscriptions.add(
+            this.store.select(getKeyLanguage).subscribe(() => {
+                this.setLabels();
+                this.cdRef.markForCheck();
+            })
+        );
     }
-
 
     @HostBinding('@blink')
     get blinkAnimationBinding() {
@@ -170,6 +183,17 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         return this.fillColor;
     }
 
+    @HostBinding('attr.role')
+    readonly role = 'button';
+
+    @HostBinding('attr.tabindex')
+    readonly tabIndex = 0;
+
+    @HostBinding('attr.aria-label')
+    get ariaLabel(): string {
+        return this.accessibleLabel;
+    }
+
     @HostBinding('attr.fill')
     get fill(): SafeStyle {
         return this.fillColor;
@@ -182,7 +206,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @HostBinding('attr.stroke-width')
     get strokeWidth(): SafeStyle {
-        return this.isActive ? '3' : '1';
+        return this.isActive || this.isFocused ? '3' : '1';
     }
 
     @HostBinding('style')
@@ -199,20 +223,51 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @HostListener('click', ['$event'])
     onClick(e: MouseEvent) {
+        this.activateKey(e.shiftKey, e.altKey, false);
+    }
+
+    @HostListener('keydown', ['$event'])
+    onHostKeyDown(e: KeyboardEvent) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.stopPropagation();
+            this.activateKey(e.shiftKey, e.altKey, true);
+        }
+    }
+
+    @HostListener('focus')
+    onFocus() {
+        this.isFocused = true;
+        this.setColors();
+    }
+
+    @HostListener('blur')
+    onBlur() {
+        this.isFocused = false;
+        this.setColors();
+    }
+
+    private activateKey(shiftPressed: boolean, altPressed: boolean, keyboardTriggered: boolean) {
         this.reset();
         this.keyClick.emit({
             keyTarget: this.element.nativeElement,
-            shiftPressed: e.shiftKey,
-            altPressed: e.altKey
+            keyboardTriggered,
+            shiftPressed,
+            altPressed
         });
         this.pressedShiftLocation = -1;
         this.pressedAltLocation = -1;
+
+        if (!keyboardTriggered) {
+            setTimeout(() => this.element.nativeElement.blur());
+        }
     }
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(e: MouseEvent) {
 
         if ((e.which === 0 || e.button === 0)) {
+            e.preventDefault();
             this.mouseMoveService.leftButtonDown();
             this.dragAndDropService.leftButtonDown({
                 keyId: this.svgKey.id,
@@ -315,7 +370,11 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['keyAction']) {
+        if (changes['keyAction']
+            || changes['defaultUserConfiguration']
+            || changes['keyId']
+            || changes['macroMap']
+            || changes['moduleId']) {
             this.setLabels();
         }
 
@@ -340,6 +399,19 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         } else if (this.blinkAnimation === 'end') {
             this.blinkAnimation = 'ended';
         }
+    }
+
+    get hasNote(): boolean {
+        return !!this.keyAction?.label;
+    }
+
+    get noteMarkerPath(): string {
+        const size = 14;
+        const width = this.svgKey.width || 0;
+        const radius = Math.min(Number(this.svgKey.rx) || 3.78, size);
+
+        // Rounded top-right corner matching the key radius, hypotenuse toward the key center.
+        return `M ${width - size},0 L ${width - radius},0 A ${radius},${radius} 0 0 1 ${width},${radius} L ${width},${size} Z`;
     }
 
     calcTransform(): string {
@@ -412,6 +484,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         this.secondaryText = undefined;
 
         if (!this.keyAction) {
+            this.updateAccessibleLabel();
             return;
         }
 
@@ -566,6 +639,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         } else {
             this.labelSource = undefined;
         }
+
+        this.updateAccessibleLabel();
     }
 
     private blinkSvgRec(): void {
@@ -600,13 +675,40 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                     : themeColors.selectedKeyColor2;
             } else if (this.isMouseHover && !this.mouseMoveService.isColoring) {
                 this.fillColor = colors.hoverColorAsHex;
+                if (this.isFocused) {
+                    this.strokeColor = themeColors.selectedKeyColor;
+                }
+            } else if (this.isFocused) {
+                this.strokeColor = themeColors.selectedKeyColor;
             }
         } else {
             if (this.isActive) {
                 this.fillColor = 'var(--color-keyboard-key-active)';
             } else if (this.isMouseHover) {
                 this.fillColor = 'var(--color-keyboard-key-hover)';
+                if (this.isFocused) {
+                    this.strokeColor = themeColors.selectedKeyColor;
+                }
+            } else if (this.isFocused) {
+                this.strokeColor = themeColors.selectedKeyColor;
             }
         }
+    }
+
+    private updateAccessibleLabel(): void {
+        const physicalKeyLabel = getDefaultQwertyKeyLabel({
+            defaultUserConfiguration: this.defaultUserConfiguration,
+            keyId: this.keyId,
+            mapper: this.mapper,
+            moduleId: this.moduleId,
+        });
+
+        this.accessibleLabel = buildKeyAccessibleLabel({
+            keyAction: this.keyAction,
+            layerOptionMap: this.layerOptionMap,
+            macroMap: this.macroMap,
+            mapper: this.mapper,
+            physicalKeyLabel,
+        });
     }
 }

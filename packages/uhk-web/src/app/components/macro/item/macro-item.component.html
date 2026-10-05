@@ -3,16 +3,33 @@
         <i *ngIf="movable"
            class="uhk-icon uhk-icon-vertical-grip-icon action--movable"
            aria-hidden="true"></i>
-        <div class="action--item--wrap" [class.pointer]="editable" (click)="editAction()">
+        <button type="button"
+                class="action--item--wrap"
+                [class.pointer]="editable"
+                [disabled]="!editable"
+                aria-label="Edit macro action"
+                (click)="editAction()">
             <icon [name]="iconName" class="align-items-top"></icon>
             <div class="action--title">
                 {{ title }}
                 <svg-sprite-image *ngIf="titleIcon" [icon]="titleIcon"></svg-sprite-image>
             </div>
             <icon *ngIf="editable && macroAction && !editing" name="pencil" class="align-items-top"></icon>
-        </div>
-        <icon *ngIf="editable" name="copy" (click)="duplicateAction()" class="align-items-top"></icon>
-        <icon *ngIf="deletable" name="trash" (click)="deleteAction()" class="align-items-top"></icon>
+        </button>
+        <button *ngIf="editable"
+                type="button"
+                class="action--item--icon-button"
+                aria-label="Duplicate macro action"
+                (click)="duplicateAction()">
+            <icon name="copy" class="align-items-top"></icon>
+        </button>
+        <button *ngIf="deletable"
+                type="button"
+                class="action--item--icon-button"
+                aria-label="Delete macro action"
+                (click)="deleteAction()">
+            <icon name="trash" class="align-items-top"></icon>
+        </button>
     </ng-container>
 
     <div *ngIf="isCommand && !editing" class="macro-command-item">
@@ -25,9 +42,27 @@
 
             <span class="pe-1 me-auto">Command:</span>
 
-            <icon *ngIf="editable" name="pencil" (click)="editAction()"></icon>
-            <icon *ngIf="editable" name="copy" (click)="duplicateAction()"></icon>
-            <icon *ngIf="deletable" name="trash" (click)="deleteAction()"></icon>
+            <button *ngIf="editable"
+                    type="button"
+                    class="action--item--icon-button"
+                    aria-label="Edit macro action"
+                    (click)="editAction()">
+                <icon name="pencil"></icon>
+            </button>
+            <button *ngIf="editable"
+                    type="button"
+                    class="action--item--icon-button"
+                    aria-label="Duplicate macro action"
+                    (click)="duplicateAction()">
+                <icon name="copy"></icon>
+            </button>
+            <button *ngIf="deletable"
+                    type="button"
+                    class="action--item--icon-button"
+                    aria-label="Delete macro action"
+                    (click)="deleteAction()">
+                <icon name="trash"></icon>
+            </button>
         </div>
         <div class="macro-command-editor-container">
             <macro-command-editor [ngModel]="macroAction.command"

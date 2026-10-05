@@ -6,6 +6,8 @@ export class App {
     public static readonly openConfigFolder = 'open-config-folder';
     public static readonly openUrl = 'open-url';
     public static readonly getConfig = 'app-get-config';
+    public static readonly minimizeToTrayChanged = 'app-minimize-to-tray-changed';
+    public static readonly minimizeToTrayDisabledOnLinux = 'app-minimize-to-tray-disabled-on-linux';
     public static readonly setConfig = 'app-set-config';
 }
 
@@ -17,6 +19,7 @@ export class AutoUpdate {
     public static readonly autoUpdateDownloaded = 'update-downloaded';
     public static readonly autoUpdateDownloadProgress = 'auto-update-download-progress';
     public static readonly updateAndRestart = 'update-and-restart';
+    public static readonly downloadUpdate = 'download-update';
     public static readonly checkForUpdate = 'check-for-update';
     public static readonly checkForUpdateNotAvailable = 'check-for-update-not-available';
 }
@@ -31,6 +34,9 @@ export class Device {
     public static readonly dongleVersionInfoLoaded = 'device-dongle-version-info-loaded';
     public static readonly eraseBleSettings = 'device-erase-ble-settings';
     public static readonly eraseBleSettingsReply = 'device-erase-ble-settings-reply';
+    public static readonly execShellCommandOnDongle = 'device-exec-shell-command-on-dongle';
+    public static readonly execShellCommandOnLeftHalf = 'device-exec-shell-command-on-left-half';
+    public static readonly execShellCommandOnRightHalf = 'device-exec-shell-command-on-right-half';
     public static readonly hardwareModulesLoaded = 'device-hardware-modules-loaded';
     public static readonly isDongleZephyrLoggingEnabled = 'device-is-dongle-zephyr-logging-enabled';
     public static readonly isDongleZephyrLoggingEnabledReply = 'device-is-dongle-zephyr-logging-enabled-reply';
@@ -42,12 +48,16 @@ export class Device {
     public static readonly setPrivilegeOnLinuxReply = 'set-privilege-on-linux-reply';
     public static readonly deviceConnectionStateChanged = 'device-connection-state-changed';
     public static readonly saveUserConfiguration = 'device-save-user-configuration';
+    public static readonly saveUserConfigurationProgress = 'device-save-user-configuration-progress';
     public static readonly saveUserConfigurationReply = 'device-save-user-configuration-reply';
     public static readonly loadConfigurations = 'device-load-configuration';
+    public static readonly loadConfigurationProgress = 'device-load-configuration-progress';
     public static readonly loadConfigurationReply = 'device-load-configuration-reply';
     public static readonly updateFirmware = 'device-update-firmware';
     public static readonly updateFirmwareJson = 'device-update-firmware-json';
     public static readonly updateFirmwareReply = 'device-update-firmware-reply';
+    public static readonly firmwareUpgradeConnectPrompt = 'device-firmware-upgrade-connect-prompt';
+    public static readonly moduleFirmwareUpgradeProgress = 'device-module-firmware-upgrade-progress';
     public static readonly moduleFirmwareUpgradeSkip = 'device-module-firmware-upgrade-skip';
     public static readonly moduleFirmwareUpgrading = 'device-module-firmware-upgrading';
     public static readonly startConnectionPoller = 'device-start-connection-poller';
@@ -87,9 +97,25 @@ export class SmartMacroDoc {
     public static readonly serviceListening = 'smart-macro-doc-service-listening';
 }
 
+export class FileDialog {
+    public static readonly openUserConfig = 'file-dialog-open-user-config';
+    public static readonly saveUserConfig = 'file-dialog-save-user-config';
+    public static readonly selectSharedConfig = 'file-dialog-select-shared-config';
+    public static readonly getDefaultSharedConfig = 'file-dialog-get-default-shared-config';
+}
+
+export class SharedConfig {
+    public static readonly configure = 'shared-config-configure';
+    public static readonly write = 'shared-config-write';
+    public static readonly acknowledge = 'shared-config-acknowledge';
+    public static readonly changeDetected = 'shared-config-change-detected';
+}
+
 export class IpcEvents {
     public static readonly app = App;
     public static readonly autoUpdater = AutoUpdate;
     public static readonly device = Device;
+    public static readonly fileDialog = FileDialog;
+    public static readonly sharedConfig = SharedConfig;
     public static readonly smartMacroDoc = SmartMacroDoc;
 }

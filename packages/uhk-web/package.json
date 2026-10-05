@@ -2,7 +2,7 @@
   "name": "uhk-web",
   "version": "1.0.0",
   "scripts": {
-    "clean": "rimraf ./node_modules ./.angular",
+    "clean": "rimraf ./node_modules ./.angular ./dist",
     "ng": "ng",
     "start": "ng serve",
     "build": "run-s -sn build:renderer",
@@ -11,9 +11,11 @@
     "server:renderer": "ng build --project=uhk-renderer --watch",
     "lint": "run-p -snc lint:*",
     "lint:ng": "ng lint",
-    "lint:style": "stylelint \"src/**/*.scss\""
+    "lint:style": "stylelint \"src/**/*.scss\"",
+    "test": "node --loader=ts-node/esm --test \"**/*.test.ts\""
   },
   "private": true,
+  "type": "module",
   "license": "See in LICENSE",
   "devDependencies": {
     "@angular/animations": "21.2.14",
@@ -43,14 +45,17 @@
     "@ngrx/store": "21.1.0",
     "@ngrx/store-devtools": "21.1.0",
     "@perfectmemory/ngx-contextmenu": "21.0.1",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0",
     "angular-confirmation-popover": "7.0.0",
     "angular-eslint": "21.4.0",
     "angular-split": "20.0.0",
     "bootstrap": "5.3.8",
     "colord": "2.9.3",
+    "file-saver": "2.0.5",
     "gramli-angular-notifier": "21.1.0",
-    "monaco-editor": "0.55.1",
-    "naive-autocompletion-parser": "1.1.9",
+    "monaco-editor": "0.56.0",
+    "naive-autocompletion-parser": "1.1.11",
     "ng2-nouislider": "2.0.0",
     "ngrx-store-freeze": "0.2.4",
     "ngx-clipboard": "16.0.0",
@@ -60,8 +65,5 @@
     "ts-keycode-enum": "1.0.6",
     "uhk-common": "file:../uhk-common",
     "zone.js": "0.16.2"
-  },
-  "dependencies": {
-    "file-saver": "2.0.5"
   }
 }

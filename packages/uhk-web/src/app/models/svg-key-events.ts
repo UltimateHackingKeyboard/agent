@@ -4,6 +4,7 @@ import { KeyModifierModel } from './key-modifier-model';
 
 export interface SvgKeyClickEvent {
     keyTarget: HTMLElement;
+    keyboardTriggered?: boolean;
     shiftPressed?: boolean;
     altPressed?: boolean;
 }

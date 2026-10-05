@@ -8,11 +8,13 @@ import {
     DeviceConnectionState,
     DeviceVersionInformation,
     FirmwareJson,
+    FirmwareUpgradeConnectPrompt,
     FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     HardwareModules,
     IpcResponse,
     KeyboardLayout,
+    ModuleFirmwareUpgradeProgress,
     ModuleFirmwareUpgradeSkipInfo,
     UHK_DEVICE_IDS_TYPE,
     UhkDeviceProduct,
@@ -30,10 +32,14 @@ export enum ActionTypes {
     DongleVersionInfoLoaded = '[device] dongle version info loaded',
     EraseBleSettings = '[device] erase ble settings',
     EraseBleSettingsReply = '[device] erase ble settings reply',
+    ExecShellCommandOnDongle = '[device] exec shell command on dongle',
+    ExecShellCommandOnLeftHalf = '[device] exec shell command on left half',
+    ExecShellCommandOnRightHalf = '[device] exec shell command on right half',
     SetPrivilegeOnLinux = '[device] set privilege on linux',
     SetPrivilegeOnLinuxReply = '[device] set privilege on linux reply',
     ConnectionStateChanged = '[device] connection state changed',
     SaveConfiguration = '[device] save configuration',
+    SaveConfigurationProgressChanged = '[device] save configuration progress changed',
     SaveConfigurationReply = '[device] save configuration reply',
     SavingConfiguration = '[device] saving configuration', // TODO: Delete looks like not used
     ShowSaveToKeyboardButton = '[device] show save to keyboard button',
@@ -45,6 +51,8 @@ export enum ActionTypes {
     ResetMacMouseSpeedSettings = '[device] reset Mac mouse speed settings',
     CurrentlyUpdateSkipModule = '[device] currently update skip module',
     CurrentlyUpdatingModule = '[device] currently updating module',
+    ModuleFirmwareUpgradeProgress = '[device] module firmware upgrade progress',
+    FirmwareUpgradeConnectPrompt = '[device] firmware upgrade connect prompt',
     UpdateFirmware = '[device] update firmware',
     UpdateFirmwareJson = '[device] update firmware JSON',
     UpdateFirmwareWith = '[device] update firmware with',
@@ -112,6 +120,24 @@ export class EraseBleSettingReplyAction implements Action {
     constructor(public payload: IpcResponse) {}
 }
 
+export class ExecShellCommandOnDongleAction implements Action {
+    type = ActionTypes.ExecShellCommandOnDongle;
+
+    constructor(public payload: string) {}
+}
+
+export class ExecShellCommandOnLeftHalfAction implements Action {
+    type = ActionTypes.ExecShellCommandOnLeftHalf;
+
+    constructor(public payload: string) {}
+}
+
+export class ExecShellCommandOnRightHalfAction implements Action {
+    type = ActionTypes.ExecShellCommandOnRightHalf;
+
+    constructor(public payload: string) {}
+}
+
 export class SetPrivilegeOnLinuxAction implements Action {
     type = ActionTypes.SetPrivilegeOnLinux;
 }
@@ -137,6 +163,13 @@ export class SaveConfigurationAction implements Action {
      * @param payload - if true then save user configuration in the history
      */
     constructor(public payload: boolean) {
+    }
+}
+
+export class SaveConfigurationProgressChangedAction implements Action {
+    type = ActionTypes.SaveConfigurationProgressChanged;
+
+    constructor(public payload: number) {
     }
 }
 
@@ -178,6 +211,20 @@ export class CurrentlyUpdateSkipModuleAction implements Action {
     type = ActionTypes.CurrentlyUpdateSkipModule;
 
     constructor(public payload: ModuleFirmwareUpgradeSkipInfo) {
+    }
+}
+
+export class ModuleFirmwareUpgradeProgressAction implements Action {
+    type = ActionTypes.ModuleFirmwareUpgradeProgress;
+
+    constructor(public payload: ModuleFirmwareUpgradeProgress) {
+    }
+}
+
+export class FirmwareUpgradeConnectPromptAction implements Action {
+    type = ActionTypes.FirmwareUpgradeConnectPrompt;
+
+    constructor(public payload: FirmwareUpgradeConnectPrompt | undefined) {
     }
 }
 
@@ -328,11 +375,15 @@ export type Actions
     | DongleVersionInfoLoadedAction
     | EraseBleSettingAction
     | EraseBleSettingReplyAction
+    | ExecShellCommandOnDongleAction
+    | ExecShellCommandOnLeftHalfAction
+    | ExecShellCommandOnRightHalfAction
     | SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction
     | ShowSaveToKeyboardButtonAction
     | SaveConfigurationAction
+    | SaveConfigurationProgressChangedAction
     | SaveConfigurationReplyAction
     | SaveToKeyboardSuccessAction
     | SaveToKeyboardSuccessFailed
@@ -342,6 +393,8 @@ export type Actions
     | ResetUserConfigurationAction
     | CurrentlyUpdateSkipModuleAction
     | CurrentlyUpdatingModuleAction
+    | ModuleFirmwareUpgradeProgressAction
+    | FirmwareUpgradeConnectPromptAction
     | UpdateFirmwareAction
     | UpdateFirmwareJsonAction
     | UpdateFirmwareWithAction

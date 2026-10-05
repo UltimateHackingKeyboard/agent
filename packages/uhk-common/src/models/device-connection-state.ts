@@ -1,6 +1,7 @@
 import { Dongle } from './dongle.js';
 import { HalvesInfo } from './halves-info.js';
 import { HardwareModules } from './hardware-modules.js';
+import { NewPairedDevice } from './new-paired-device.js';
 import { UdevRulesInfo } from './udev-rules-info.js';
 import { UhkDeviceProduct } from './uhk-products.js';
 
@@ -9,6 +10,10 @@ export interface DeviceConnectionState {
     // UHK80 connected via bluetooth
     bleDeviceConnected: boolean;
     isPairedWithDongle?: boolean;
+    /**
+     * Index of the keymap currently active on the keyboard (GetDeviceState byte 8).
+     */
+    activeKeymapIndex?: number;
     connectedDevice?: UhkDeviceProduct;
     dongle: Dongle;
     leftHalfBootloaderActive: boolean;
@@ -25,8 +30,8 @@ export interface DeviceConnectionState {
     halvesInfo: HalvesInfo;
     hardwareModules?: HardwareModules;
     /**
-     * The BLE addresses of the devices that paired with the keyboard but not is the hostConnections of the user configuration.
+     * The devices that paired with the keyboard but not is the hostConnections of the user configuration.
      */
-    newPairedDevices: string[];
+    newPairedDevices: NewPairedDevice[];
     udevRulesInfo: UdevRulesInfo;
 }

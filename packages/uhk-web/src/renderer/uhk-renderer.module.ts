@@ -2,12 +2,16 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LogService } from 'uhk-common';
 import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
+import { ElectronFileDialogService } from './services/electron-file-dialog.service';
+import { ElectronSharedConfigService } from './services/electron-shared-config.service';
 import { ElectronLogService } from './services/electron-log.service';
 import { ElectronErrorHandlerService } from './services/electron-error-handler.service';
 import { MainAppComponent, routing } from '../../';
 import { IpcUhkRenderer } from './services/ipc-uhk-renderer';
 import { IpcCommonRenderer } from '../app/services/ipc-common-renderer';
 import { DataStorageRepositoryService } from '../app/services/datastorage-repository.service';
+import { FileDialogService } from '../app/services/file-dialog.service';
+import { SharedConfigService } from '../app/services/shared-config.service';
 import { SharedModule } from '../app/shared.module';
 import { reducers } from '../app/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -33,6 +37,8 @@ import { CustomRouterStateSerializer } from '../app/store/router-util';
     ],
     providers: [
         {provide: DataStorageRepositoryService, useClass: ElectronDataStorageRepositoryService},
+        {provide: FileDialogService, useClass: ElectronFileDialogService},
+        {provide: SharedConfigService, useClass: ElectronSharedConfigService},
         {provide: IpcCommonRenderer, useClass: IpcUhkRenderer},
         {provide: LogService, useClass: ElectronLogService},
         {provide: ErrorHandler, useClass: ElectronErrorHandlerService}

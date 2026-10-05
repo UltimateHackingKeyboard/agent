@@ -1,5 +1,6 @@
 import globals from 'globals';
 import eslint from '@eslint/js';
+import {defineConfig} from 'eslint/config'
 import tsEslint from 'typescript-eslint';
 
 const globalIgnores = [
@@ -10,10 +11,7 @@ const globalIgnores = [
 ];
 
 export const typescriptRules = {
-    '@typescript-eslint/no-misused-promises': 'off',
-    '@typescript-eslint/no-redundant-type-constituents': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',
-    '@typescript-eslint/no-unsafe-argument': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/no-unsafe-enum-comparison': 'off',
@@ -23,17 +21,14 @@ export const typescriptRules = {
     '@typescript-eslint/no-unsafe-return': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-wrapper-object-types': 'off',
-    '@typescript-eslint/only-throw-error': 'off',
     '@typescript-eslint/require-await': 'off',
-    '@typescript-eslint/prefer-promise-reject-errors': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/unbound-method': 'off',
-    'no-async-promise-executor': 'off',
-    'no-case-declarations': 'off',
     'no-prototype-builtins': 'off',
+    'preserve-caught-error': 'off',
 }
 
-export default [
+export default defineConfig([
     { ignores: globalIgnores },
     {
         ...eslint.configs.recommended,
@@ -69,4 +64,4 @@ export default [
             rules: typescriptRules
         },
     ),
-]
+])

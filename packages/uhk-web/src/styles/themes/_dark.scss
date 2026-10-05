@@ -88,6 +88,7 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --color-keyboard-key-bg: #f7f7f7;
     --color-keyboard-key-hover: #737373;
     --color-keyboard-key-active: #{$primary};
+    --color-keyboard-key-note-marker: #b0b0b0;
     --color-module-puzzle-path-fill: white;
 
     --color-input-bg: #{$input-bg};
@@ -118,11 +119,16 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --color-progress-bar-progress-rgb-colors: #{tint-color($success, 10%)};
     --color-progress-bar-text: #{$color-text};
 
+    --color-loading-progress-bar-bg: #555;
+    --color-loading-progress-bar-fill: #fff;
+
     --color-macro-bg: #333;
     --color-macro-border: #444;
 
     --color-select-active-bg: #{$color-select-active-bg};
     --color-select-active-text: #{$color-select-active-text};
+    --color-select-hover-bg: #{$color-select-hover-bg};
+    --color-select-hover-text: #{$color-select-hover-text};
 
     --color-configuration-history-text: #{$color-text};
 

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faPaste, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { colord, RgbColor } from 'colord';
 import { LayerName, RgbColorInterface } from 'uhk-common';
 
-import { LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../models';
+import { LayerOption, CopiedLayerOrigin, ModifyColorOfBacklightingColorPalettePayload } from '../../models';
 
 @Component({
     selector: 'layers',
@@ -14,7 +14,10 @@ import { LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../..
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayersComponent {
+    @Input() allowLayerCopy = false;
     @Input() allowNewLayers: boolean;
+    @Input() canPasteLayer = false;
+    @Input() copiedLayerOrigin: CopiedLayerOrigin;
     @Input() current: LayerOption;
     @Input() layerOptions: LayerOption[];
     @Input() paletteColors: Array<RgbColor> = [];
@@ -27,14 +30,27 @@ export class LayersComponent {
     @Output() selectLayer = new EventEmitter<LayerOption>();
     @Output() toggleColorFromPalette = new EventEmitter<number>();
     @Output() addLayer = new EventEmitter<number>();
+    @Output() copyLayer = new EventEmitter<void>();
+    @Output() pasteLayer = new EventEmitter<void>();
     @Output() removeLayer = new EventEmitter<number>();
 
     @ViewChild('deleteTooltip') deleteTooltip: NgbTooltip;
 
+    faCopy = faCopy;
+    faPaste = faPaste;
     faPlus = faPlus;
     faTrash = faTrash;
     LayerName = LayerName;
     newColorPaletteColor = '#000000';
+
+    get pasteLayerTooltip(): string {
+        const origin = this.copiedLayerOrigin;
+        if (!origin) {
+            return `Overwrite the current layer with the layer stored in Agent's virtual clipboard.`;
+        }
+
+        return `Overwrite the current layer with the ${origin.deviceName}: ${origin.keymapName}: ${origin.layerName} layer stored in Agent's virtual clipboard.`;
+    }
 
     onSelectLayer(option: LayerOption) {
         if (this.current?.id === option.id) {
@@ -56,7 +72,15 @@ export class LayersComponent {
         this.addLayer.emit(layerOption.id);
     }
 
-    onColorSelected(index): void {
+    onCopyLayer(): void {
+        this.copyLayer.emit();
+    }
+
+    onPasteLayer(): void {
+        this.pasteLayer.emit();
+    }
+
+    onColorSelected(index: number): void {
         this.toggleColorFromPalette.emit(index);
     }
 

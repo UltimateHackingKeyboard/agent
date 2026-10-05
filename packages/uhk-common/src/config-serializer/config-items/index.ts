@@ -1,4 +1,5 @@
 export { default as SCANCODES }  from './scancodes.js';
+export * from './scancode-labels.js';
 
 export * from './advanced-secondary-role-configuration.js';
 export * from './backlighting-mode.js';

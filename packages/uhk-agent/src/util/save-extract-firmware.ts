@@ -1,29 +1,30 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { dirSync } from 'tmp';
+import { writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import decompress from 'decompress';
 import decompressTarbz from 'decompress-tarbz2';
 import decompressTargz from 'decompress-targz';
 import decompressUnzip from 'decompress-unzip';
 import { UploadFileData } from 'uhk-common';
+import { makeTmpDir } from 'uhk-fs';
 import { TmpFirmware } from 'uhk-usb';
 
 export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirmware> {
-    const tmpDirectory = dirSync();
+    const tmpDirectory = await makeTmpDir();
     const extension = path.extname(fileData.filename);
-    const zipFilePath = path.join(tmpDirectory.name, `firmware${extension}`);
+    const zipFilePath = path.join(tmpDirectory, `firmware${extension}`);
 
-    await writeDataToFile(fileData.data, zipFilePath);
+    const buffer = Buffer.from(fileData.data);
+    await writeFile(zipFilePath, buffer);
 
     switch (extension) {
 
         case '.bz2': {
-            await decompress(zipFilePath, tmpDirectory.name, { plugins: [decompressTarbz()] });
+            await decompress(zipFilePath, tmpDirectory, { plugins: [decompressTarbz()] });
             break;
         }
 
         case '.gz': {
-            await decompress(zipFilePath, tmpDirectory.name, { plugins: [decompressTargz()] });
+            await decompress(zipFilePath, tmpDirectory, { plugins: [decompressTargz()] });
             break;
         }
 
@@ -37,7 +38,7 @@ export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirm
                 plugins: [decompressUnzip()]
             }
 
-            const unzippedFiles = await decompress(zipFilePath, tmpDirectory.name, unzipOptions);
+            const unzippedFiles = await decompress(zipFilePath, tmpDirectory, unzipOptions);
             if (unzippedFiles.length === 0) {
                 throw new Error('Zip file does not contain uhk-firmware-*.tar.gz file.');
             }
@@ -55,21 +56,7 @@ export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirm
     }
 
     return {
-        tmpDirectory: tmpDirectory.name,
-        packageJsonPath: path.join(tmpDirectory.name, 'package.json')
+        tmpDirectory,
+        packageJsonPath: path.join(tmpDirectory, 'package.json')
     };
-}
-
-function writeDataToFile(data: Array<number>, filePath: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-        const buffer = Buffer.from(data);
-
-        fs.writeFile(filePath, buffer, err => {
-            if (err) {
-                return reject();
-            }
-
-            resolve();
-        });
-    });
 }

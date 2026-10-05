@@ -1,0 +1,130 @@
+<div class="scancode-select"
+     [class.scancode-select--open]="isOpen"
+     cdkOverlayOrigin
+     #origin="cdkOverlayOrigin"
+>
+    <div class="scancode-select__control"
+         tabindex="0"
+         (mousedown)="onControlMouseDown($event)"
+         (keydown)="onKeyDown($event)"
+    >
+        <div class="scancode-select__value-container">
+            <div class="scancode-select__value"
+                 *ngIf="displayText"
+            >
+                {{ displayText }}
+            </div>
+        </div>
+        <span class="scancode-select__arrow-wrapper" aria-hidden="true">
+            <span class="scancode-select__arrow"></span>
+        </span>
+    </div>
+</div>
+
+<ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="origin"
+    [cdkConnectedOverlayOpen]="isOpen"
+    [cdkConnectedOverlayPositions]="overlayPositions"
+    [cdkConnectedOverlayPush]="false"
+    [cdkConnectedOverlayViewportMargin]="20"
+    [cdkConnectedOverlayPanelClass]="'scancode-select-overlay-pane'"
+    (overlayOutsideClick)="close()"
+    (detach)="close()"
+>
+    <div class="scancode-select__panel"
+         (mousedown)="$event.preventDefault()"
+         (keydown)="onKeyDown($event)"
+    >
+        <div class="scancode-select__search">
+            <input #searchInput
+                   class="scancode-select__input"
+                   type="text"
+                   autocomplete="off"
+                   [ngModel]="inputValue"
+                   (ngModelChange)="onSearchInput($event)"
+            />
+        </div>
+
+        <div class="scancode-select__panel-scroll"
+             [style.max-height.px]="panelMaxHeight"
+        >
+            <div class="scancode-select__ungrouped"
+                 *ngIf="ungroupedOptions.length"
+            >
+                <button type="button"
+                        class="scancode-select__option"
+                        *ngFor="let option of ungroupedOptions"
+                        [class.scancode-select__option--selected]="option.id === selectedId"
+                        [class.scancode-select__option--marked]="isMarked(option)"
+                        (mouseenter)="onOptionMouseEnter(option)"
+                        (click)="selectOption(option)"
+                >
+                    <span>{{ option.text }}</span>
+                </button>
+            </div>
+
+            <div class="scancode-select__group"
+                 *ngFor="let group of groups"
+                 [class.scancode-select__group--tiled]="group.tiled"
+            >
+                <div class="scancode-select__group-header">{{ group.name }}</div>
+                <div class="scancode-select__tile-rows"
+                     *ngIf="group.tileRows.length"
+                >
+                    <div class="scancode-select__tile-row"
+                         *ngFor="let row of group.tileRows"
+                         [style.grid-template-columns]="'repeat(' + row.length + ', 1fr)'"
+                    >
+                        <button type="button"
+                                class="scancode-select__option"
+                                *ngFor="let option of row"
+                                [class.scancode-select__option--selected]="option.id === selectedId"
+                                [class.scancode-select__option--marked]="isMarked(option)"
+                                (mouseenter)="onOptionMouseEnter(option)"
+                                (click)="selectOption(option)"
+                        >
+                            <span>{{ option.text }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="scancode-select__group-items"
+                     *ngIf="!group.tileRows.length"
+                     [class.scancode-select__tiles]="group.tiled"
+                >
+                    <button type="button"
+                            class="scancode-select__option"
+                            *ngFor="let option of group.options"
+                            [class.scancode-select__option--selected]="option.id === selectedId"
+                            [class.scancode-select__option--marked]="isMarked(option)"
+                            (mouseenter)="onOptionMouseEnter(option)"
+                            (click)="selectOption(option)"
+                    >
+                        <span>{{ option.text }}</span>
+                        <span class="float-end"
+                              *ngIf="!group.tiled && option.additional?.explanation"
+                        >
+                            {{ option.additional.explanation }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <button type="button"
+                    class="scancode-select__option scancode-select__tag"
+                    *ngIf="showTag"
+                    [class.scancode-select__option--marked]="isTagMarked()"
+                    (mouseenter)="onTagMouseEnter()"
+                    (click)="selectTag()"
+            >
+                {{ tagLabel }}
+            </button>
+
+            <div class="scancode-select__empty"
+                 *ngIf="!ungroupedOptions.length && !groups.length && !showTag"
+            >
+                No items found
+            </div>
+        </div>
+    </div>
+</ng-template>

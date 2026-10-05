@@ -4,7 +4,8 @@ import {
     Input,
     OnChanges,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faCopy, faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +13,7 @@ import { Macro, MAX_ALLOWED_MACROS_TOOLTIP } from 'uhk-common';
 
 import { DuplicateMacroAction, EditMacroNameAction, RemoveMacroAction } from '../../../store/actions/macro';
 import { AppState } from '../../../store';
+import { MacroKeyAssignmentViewModel } from '../../../models';
 import * as util from '../../../util';
 import { AutoGrowInputComponent } from '../../auto-grow-input';
 
@@ -26,6 +28,7 @@ export class MacroHeaderComponent implements OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
     @Input() maxMacroCountReached: boolean;
+    @Input() assignments: MacroKeyAssignmentViewModel[] = [];
 
     @ViewChild(AutoGrowInputComponent, { static: true }) macroName: AutoGrowInputComponent;
 
@@ -34,12 +37,11 @@ export class MacroHeaderComponent implements OnChanges {
     faTrash = faTrash;
     maxAllowedMacrosTooltip = MAX_ALLOWED_MACROS_TOOLTIP;
 
-    constructor(private store: Store<AppState>) {
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.macro) {
-            this.macroName.writeValue(changes.macro.currentValue.name);
+            this.macroName.writeValue(changes.macro.currentValue.name as string);
         }
     }
 

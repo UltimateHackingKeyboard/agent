@@ -27,7 +27,6 @@ export default tsEslint.config(
             '@angular-eslint/no-output-native': 'off',
             '@angular-eslint/no-output-on-prefix': 'off',
             '@angular-eslint/prefer-standalone': 'off',
-            '@angular-eslint/prefer-inject': 'off',
         },
     },
     {
@@ -37,7 +36,6 @@ export default tsEslint.config(
             ...angular.configs.templateAccessibility,
         ],
         rules: {
-            '@angular-eslint/template/alt-text': 'off',
             '@angular-eslint/template/click-events-have-key-events': 'off',
             '@angular-eslint/template/elements-content': 'off',
             '@angular-eslint/template/interactive-supports-focus': 'off',

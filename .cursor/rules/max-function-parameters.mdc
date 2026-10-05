@@ -1,0 +1,18 @@
+---
+description: Prefer options objects when a function needs more than three parameters
+alwaysApply: true
+---
+
+# Function parameters
+
+Functions and methods with more than three parameters are hard to maintain. Prefer an options/payload object once the call needs four or more values.
+
+```typescript
+// ❌ BAD
+createKeymapWithMacroAssignment(abbr, name, layerId, moduleId, keyId, macroId)
+
+// ✅ GOOD
+createKeymapWithMacroAssignment({ abbreviation, name, layerId, moduleId, keyId, macroId })
+```
+
+Three-or-fewer scalar params are fine when the meaning stays obvious at the call site.

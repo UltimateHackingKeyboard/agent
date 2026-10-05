@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { ProgressButtonState, initProgressButtonState } from '../../store/reducers/progress-button-state';
 
@@ -14,8 +13,6 @@ import { ProgressButtonState, initProgressButtonState } from '../../store/reduce
 export class ProgressButtonComponent {
     @Input() state: ProgressButtonState = initProgressButtonState;
     @Output() clicked: EventEmitter<Action> = new EventEmitter<Action>();
-
-    faSpinner = faSpinner;
 
     onClicked() {
         this.clicked.emit(this.state.action);

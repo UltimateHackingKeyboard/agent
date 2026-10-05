@@ -1,8 +1,9 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotifierModule } from 'gramli-angular-notifier';
@@ -22,6 +23,7 @@ import CircleTooltipComponent from './components/circle-tooltip/circle-tooltip.c
 import { BlePairingPanelComponent } from './components/device/ble-pairing-panel/ble-pairing-panel.component';
 import { FadeTimeoutSliderComponent } from './components/device/led-settings/fade-timeout-slider.component';
 import { DonglePairingPanelComponent } from './components/device/dongle-pairing-panel/dongle-pairing-panel.component';
+import { SharedConfigChangePanelComponent } from './components/shared-config-change-panel/shared-config-change-panel.component';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
     AdvancedSettingsPageComponent,
@@ -70,6 +72,7 @@ import {
     MouseTabComponent,
     NoneTabComponent,
 } from './components/popover/tab';
+import { ScancodeSelectComponent } from './components/popover/tab/keypress/scancode-select';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
 import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
@@ -117,6 +120,8 @@ import { KeymapEditGuard } from './components/keymap/edit';
 import { MacroNotFoundGuard } from './components/macro/not-found';
 import { DataStorageRepositoryService } from './services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from './services/default-user-configuration.service';
+import { FileDialogService } from './services/file-dialog.service';
+import { SharedConfigService } from './services/shared-config.service';
 import { LogService } from 'uhk-common';
 import { AutoUpdateSettings } from './components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './models/angular-notifier-config';
@@ -146,6 +151,7 @@ import { UpdateAgentPageComponent } from './pages/update-agent.page';
 import { UpdateFirmwarePageComponent } from './pages/update-firmware.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
+import { ZephyrTerminalComponent } from './components/zephyr-terminal/zephyr-terminal.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { Autofocus } from './directives/autofocus/autofocus.directive';
@@ -198,6 +204,7 @@ import appInitFactory from './services/app-init-factory';
         KeymapHeaderComponent,
         NotificationComponent,
         DonglePairingPanelComponent,
+        SharedConfigChangePanelComponent,
         SvgIconTextKeyComponent,
         SvgKeyboardKeyComponent,
         SvgKeystrokeKeyComponent,
@@ -225,6 +232,7 @@ import appInitFactory from './services/app-init-factory';
         DeviceTabComponent,
         KeypressTabComponent,
         KeymapTabComponent,
+        ScancodeSelectComponent,
         LayerTabComponent,
         MacroTabComponent,
         MouseTabComponent,
@@ -271,6 +279,7 @@ import appInitFactory from './services/app-init-factory';
         UpdateAgentPageComponent,
         UpdateFirmwarePageComponent,
         XtermComponent,
+        ZephyrTerminalComponent,
         SliderWrapperComponent,
         EditableTextComponent,
         Autofocus,
@@ -302,6 +311,7 @@ import appInitFactory from './services/app-init-factory';
         MonacoEditorModule,
         NgSelectModule,
         NouisliderModule,
+        OverlayModule,
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({
             confirmButtonType: 'danger' // set defaults here
@@ -330,6 +340,8 @@ import appInitFactory from './services/app-init-factory';
         CaptureService,
         DataStorageRepositoryService,
         DefaultUserConfigurationService,
+        FileDialogService,
+        SharedConfigService,
         LogService,
         AppUpdateRendererService,
         AppRendererService,

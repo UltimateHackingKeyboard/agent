@@ -23,6 +23,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'serial-number', type: String },
     { name: 'simulate-invalid-codesign-signature', type: Boolean },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
+    { name: 'start-minimized-to-tray', type: Boolean },
     { name: 'usb-interface', type: Number },
     { name: 'usb-non-blocking', type: Boolean },
     { name: 'vid', type: Number },
@@ -129,6 +130,11 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'spe',
                 description: 'Simulate privilege escalation error',
+                type: Boolean
+            },
+            {
+                name: 'start-minimized-to-tray',
+                description: 'Start the Agent window hidden in the system tray',
                 type: Boolean
             },
             {

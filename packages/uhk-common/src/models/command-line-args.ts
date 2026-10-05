@@ -93,6 +93,10 @@ export interface CommandLineArgs extends DeviceIdentifier {
      */
     spe?: boolean;
     /**
+     * Start the Agent window hidden in the system tray.
+     */
+    'start-minimized-to-tray'?: boolean;
+    /**
      * Use USB non-blocking communication
      */
     'usb-non-blocking'?: boolean;

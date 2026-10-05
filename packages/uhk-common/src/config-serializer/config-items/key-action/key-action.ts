@@ -49,11 +49,13 @@ export abstract class KeyAction implements RgbColorInterface {
     @assertUInt8 b = DEFAULT_RGB_COLOR.b;
     @assertUInt8 g = DEFAULT_RGB_COLOR.g;
     @assertUInt8 r = DEFAULT_RGB_COLOR.r;
+    label = '';
 
-    protected constructor(keyAction?: RgbColorInterface) {
+    protected constructor(keyAction?: RgbColorInterface & { label?: string }) {
         this.b = keyAction?.b ?? DEFAULT_RGB_COLOR.b;
         this.g = keyAction?.g ?? DEFAULT_RGB_COLOR.g;
         this.r = keyAction?.r ?? DEFAULT_RGB_COLOR.r;
+        this.label = keyAction?.label ?? '';
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,7 +63,7 @@ export abstract class KeyAction implements RgbColorInterface {
         const keyActionClassname: string = this.getName();
         const keyActionTypeString: string = keyActionType[keyActionClassname];
         if (jsObject.keyActionType !== keyActionTypeString) {
-            throw `Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`;
+            throw new Error(`Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`);
         }
     }
 
@@ -71,10 +73,10 @@ export abstract class KeyAction implements RgbColorInterface {
         const keyActionId: number = KeyActionId[classname];
         if (keyActionId === KeyActionId.KeystrokeAction) {
             if (readKeyActionId < KeyActionId.KeystrokeAction || readKeyActionId > KeyActionId.LastKeystrokeAction) {
-                throw `Invalid ${classname} first byte: ${readKeyActionId}`;
+                throw new Error(`Invalid ${classname} first byte: ${readKeyActionId}`);
             }
         } else if (readKeyActionId !== keyActionId) {
-            throw `Invalid ${classname} first byte: ${readKeyActionId}`;
+            throw new Error(`Invalid ${classname} first byte: ${readKeyActionId}`);
         }
         return readKeyActionId;
     }

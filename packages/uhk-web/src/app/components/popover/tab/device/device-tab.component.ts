@@ -7,6 +7,7 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
+    inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -52,11 +53,9 @@ export class DeviceTabComponent extends Tab implements OnChanges, OnDestroy, OnI
         connectionId: undefined,
     };
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private hostConnectionsSubscription: Subscription;
-
-    constructor(private store: Store<AppState>, private cdRef: ChangeDetectorRef) {
-        super();
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnInit(): void {
         this.hostConnectionsSubscription = this.store.select(getHostConnections)

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { MapperService } from '../../../../services/mapper.service';
 
@@ -21,7 +21,7 @@ export class SvgSwitchKeymapKeyComponent implements OnInit {
     textY: number;
     textX: number;
 
-    constructor(private mapperService: MapperService) { }
+    private readonly mapperService = inject(MapperService);
 
     ngOnInit() {
         this.icon = this.mapperService.getIcon('switch-keymap');

@@ -1,0 +1,7 @@
+<div class="shared-config-change-panel-wrapper" role="alert">
+    <span>
+        A configuration change was detected in <strong>{{ change.filePath }}</strong>.
+        <a (click)="apply.emit()">Load it</a>
+        to review and save it to this keyboard, or <a (click)="dismiss.emit()">ignore</a> it.
+    </span>
+</div>

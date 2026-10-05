@@ -1,21 +1,45 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED, RouterNavigatedAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith, withLatestFrom } from 'rxjs/operators';
 import { UHK_80_DEVICE } from 'uhk-common';
 
+import * as AppActions from '../actions/app';
 import {
     ActionTypes, AddKeymapSelectedAction,
     LoadDefaultUserConfigurationAction,
     LoadDefaultUserConfigurationSuccessAction
 } from '../actions/default-user-configuration.actions';
+import * as Device from '../actions/device';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getConnectedDevice } from '../index';
 import { RouterState } from '../router-util';
 
 @Injectable()
 export class DefaultUserConfigurationEffect {
+    private readonly actions$ = inject(Actions);
+    private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
+    private readonly store = inject<Store<AppState>>(Store);
+
+    loadDefaultUserConfigurationOnAppStart$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(AppActions.ActionTypes.AppBootstrapped),
+            startWith(new AppActions.AppStartedAction()),
+            map(() => new LoadDefaultUserConfigurationAction())
+        )
+    );
+
+    reloadDefaultUserConfigurationOnDeviceChange$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(Device.ActionTypes.ConnectionStateChanged),
+            withLatestFrom(this.store.select(getConnectedDevice)),
+            map(([, connectedDevice]) => connectedDevice?.id ?? null),
+            distinctUntilChanged(),
+            map(() => new LoadDefaultUserConfigurationAction())
+        )
+    );
+
     loadDefaultUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadDefaultUserConfigurationAction>(ActionTypes.LoadDefaultUserConfiguration),
@@ -38,12 +62,7 @@ export class DefaultUserConfigurationEffect {
             filter(routerState => routerState.url.startsWith('/add-keymap')),
             map(routerState => routerState.params.newKeymapAbbr),
             distinctUntilChanged(),
-            map(abbreviation => new AddKeymapSelectedAction(abbreviation))
+            map((abbreviation: string) => new AddKeymapSelectedAction(abbreviation))
         )
     );
-
-    constructor(private actions$: Actions,
-                private defaultUserConfigurationService: DefaultUserConfigurationService,
-                private store: Store<AppState>,
-    ) {}
 }

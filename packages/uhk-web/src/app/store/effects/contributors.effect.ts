@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 
@@ -20,6 +20,10 @@ import {
 
 @Injectable()
 export class ContributorsEffect {
+    private readonly actions$ = inject(Actions);
+    private readonly http = inject(HttpClient);
+    private readonly store = inject<Store<AppState>>(Store);
+
     getContributors$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType<GetAgentContributorsAction>(ActionTypes.GetAgentContributors),
@@ -59,10 +63,7 @@ export class ContributorsEffect {
                     return new AgentContributorsAvailableAction(contributorsWithAvatars);
                 }
             ),
-            catchError(error => of(new AgentContributorsNotAvailableAction(error)))
+            catchError((error: Error) => of(new AgentContributorsNotAvailableAction(error)))
         )
     );
-
-    constructor(private store: Store<AppState>, private actions$: Actions, private http: HttpClient) {
-    }
 }

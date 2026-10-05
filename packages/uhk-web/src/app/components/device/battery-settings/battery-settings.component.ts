@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { BatteryChargingMode } from 'uhk-common';
@@ -21,11 +21,9 @@ export class BatterySettingsComponent implements OnInit, OnDestroy{
     keyBacklightBrightnessChargingDefault = 50;
     extendBatteryLife = false;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly store = inject<Store<AppState>>(Store);
     private userConfigSubscription: Subscription;
-
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-    }
 
     ngOnInit(): void {
         this.userConfigSubscription = this.store.select(getUserConfiguration)

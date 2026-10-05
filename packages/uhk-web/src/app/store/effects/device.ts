@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED, ROUTER_NAVIGATION, RouterNavigatedAction} from '@ngrx/router-store';
@@ -12,6 +12,7 @@ import {
     HardwareConfiguration,
     HOST_CONNECTION_COUNT_MAX,
     IpcResponse,
+    isUserConfigVersionHigherThanFirmware,
     NotificationType,
     shouldUpgradeFirmware,
     UdevRulesInfo,
@@ -31,6 +32,9 @@ import {
     ConnectionStateChangedAction,
     EnableUsbStackTestAction,
     EraseBleSettingReplyAction,
+    ExecShellCommandOnDongleAction,
+    ExecShellCommandOnLeftHalfAction,
+    ExecShellCommandOnRightHalfAction,
     HideSaveToKeyboardButton,
     ReadConfigSizesAction,
     RecoveryDeviceAction,
@@ -85,6 +89,13 @@ import { RouterState } from '../router-util';
 
 @Injectable()
 export class DeviceEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly appRendererService = inject(AppRendererService);
+    private readonly dataStorageRepository = inject(DataStorageRepositoryService);
+    private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
+    private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     changeDevice$ = createEffect(() => this.actions$
         .pipe(
@@ -141,7 +152,7 @@ export class DeviceEffects {
                     return
                 }
 
-                const addresses = [];
+                const addresses: string[] = [];
                 for (const hostConnection of hostConnections) {
                     if (hostConnection.hasAddress()) {
                         addresses.push(hostConnection.address);
@@ -186,19 +197,23 @@ export class DeviceEffects {
                 }
 
                 if (state.multiDevice) {
-                    return this.router.navigate(['/multi-device']);
+                    this.router.navigate(['/multi-device']);
+                    return;
                 }
 
                 if (!state.hasPermission || state.udevRulesInfo === UdevRulesInfo.Different) {
-                    return this.router.navigate(['/privilege']);
+                    this.router.navigate(['/privilege']);
+                    return;
                 }
 
                 if (state.bootloaderActive || state.leftHalfBootloaderActive || state.dongle.bootloaderActive) {
-                    return this.router.navigate(['/recovery-device']);
+                    this.router.navigate(['/recovery-device']);
+                    return;
                 }
 
                 if (shouldUpgradeFirmware(state.hardwareModules?.rightModuleInfo?.userConfigVersion)) {
-                    return this.router.navigate(['/update-firmware']);
+                    this.router.navigate(['/update-firmware']);
+                    return;
                 }
 
                 if (state.connectedDevice && state.communicationInterfaceAvailable) {
@@ -209,13 +224,14 @@ export class DeviceEffects {
                     ].some(start => route.state.url.startsWith(start));
 
                     if (allowDefaultNavigation) {
-                        return this.router.navigate(['/']);
+                        this.router.navigate(['/']);
+                        return;
                     }
 
                     return;
                 }
 
-                return this.router.navigate(['/detection']);
+                this.router.navigate(['/detection']);
             }),
             distinctUntilChanged((
                 [prevAction, prevRoute, prevConnected],
@@ -272,6 +288,36 @@ export class DeviceEffects {
         ),
     );
 
+    execShellCommandOnDongle$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<ExecShellCommandOnDongleAction>(ActionTypes.ExecShellCommandOnDongle),
+            tap((action) => {
+                this.deviceRendererService.execShellCommandOnDongle(action.payload);
+            })
+        ),
+        { dispatch: false }
+    );
+
+    execShellCommandOnLeftHalf$ = createEffect(() => this.actions$
+            .pipe(
+                ofType<ExecShellCommandOnLeftHalfAction>(ActionTypes.ExecShellCommandOnLeftHalf),
+                tap((action) => {
+                    this.deviceRendererService.execShellCommandOnLeftHalf(action.payload);
+                })
+            ),
+        { dispatch: false }
+    );
+
+    execShellCommandOnRightHalf$ = createEffect(() => this.actions$
+            .pipe(
+                ofType<ExecShellCommandOnRightHalfAction>(ActionTypes.ExecShellCommandOnRightHalf),
+                tap((action) => {
+                    this.deviceRendererService.execShellCommandOnRightHalf(action.payload);
+                })
+            ),
+        { dispatch: false }
+    );
+
     setPrivilegeOnLinux$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SetPrivilegeOnLinux),
@@ -301,23 +347,38 @@ export class DeviceEffects {
         .pipe(
             ofType<SaveConfigurationAction>(ActionTypes.SaveConfiguration),
             withLatestFrom(this.store, this.store.select(getShowFirmwareUpgradePanel)),
-            tap(([action, state, shouldUpgradeFirmware]) => {
-                if (shouldUpgradeFirmware)
-                    return this.router.navigate(['/update-firmware']);
+            mergeMap(([action, state, shouldUpgradeFirmware]) => {
+                if (shouldUpgradeFirmware) {
+                    this.router.navigate(['/update-firmware']);
+                    return EMPTY;
+                }
 
                 if (state.userConfiguration.userConfiguration.hostConnections.length > HOST_CONNECTION_COUNT_MAX) {
-                    return this.router.navigate(['/host-connections']);
+                    this.router.navigate(['/host-connections']);
+                    return EMPTY;
+                }
+
+                const userConfig = state.userConfiguration.userConfiguration;
+                const firmwareUserConfigVersion = state.device.modules.rightModuleInfo?.userConfigVersion;
+                if (isUserConfigVersionHigherThanFirmware(userConfig.getSemanticVersion(), firmwareUserConfigVersion)) {
+                    return [
+                        new ShowNotificationAction({
+                            type: NotificationType.Error,
+                            message: `The user configuration version (${userConfig.getSemanticVersion()}) is too high for this firmware (supports up to ${firmwareUserConfigVersion}). Please update the firmware or use a compatible configuration.`
+                        }),
+                        new SaveToKeyboardSuccessFailed()
+                    ];
                 }
 
                 setTimeout(() => this.sendUserConfigToKeyboard(
-                    state.userConfiguration.userConfiguration,
+                    userConfig,
                     state.app.hardwareConfig,
                     action.payload),
                 100);
-            }),
-            switchMap(() => EMPTY)
-        ),
-    { dispatch: false }
+
+                return EMPTY;
+            })
+        )
     );
 
     saveConfigurationReply$ = createEffect(() => this.actions$
@@ -377,9 +438,13 @@ export class DeviceEffects {
     resetUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.ResetUserConfiguration),
-            withLatestFrom(this.store.select(getConnectedDevice)),
-            switchMap(([, uhkDeviceProduct]) => {
+            withLatestFrom(this.store.select(getConnectedDevice), this.store.select(getUserConfiguration)),
+            switchMap(([, uhkDeviceProduct, currentUserConfiguration]) => {
                 const config = this.defaultUserConfigurationService.getResetUserConfiguration(uhkDeviceProduct);
+                // The keyboard name belongs to the keyboard rather than to the configuration,
+                // so a factory reset must not replace it with the default name.
+                config.deviceName = currentUserConfiguration.deviceName || config.deviceName;
+
                 return of(new LoadResetUserConfigurationAction(config));
             })
         )
@@ -545,15 +610,6 @@ export class DeviceEffects {
             })
         )
     );
-
-    constructor(private actions$: Actions,
-                private router: Router,
-                private appRendererService: AppRendererService,
-                private deviceRendererService: DeviceRendererService,
-                private store: Store<AppState>,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private defaultUserConfigurationService: DefaultUserConfigurationService) {
-    }
 
     private sendUserConfigToKeyboard(
         userConfiguration: UserConfiguration,

@@ -1,5 +1,4 @@
-import semver from 'semver';
-
+import { isVersionGt } from './version-helpers.js';
 import { VERSIONS } from './versions.js';
 
 /**
@@ -7,5 +6,5 @@ import { VERSIONS } from './versions.js';
  */
 export function shouldUpgradeFirmware(userConfigVersion: string): boolean {
     return userConfigVersion
-        && semver.gt(VERSIONS.userConfigVersion, userConfigVersion);
+        && isVersionGt(VERSIONS.userConfigVersion, userConfigVersion);
 }

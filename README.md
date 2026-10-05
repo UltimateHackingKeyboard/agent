@@ -12,11 +12,11 @@ Please do not build Agent from source unless you want to develop it. Using an ex
 
 ### Step 1: Build Dependencies
 
-You'll need Node.js 20.x. Use your OS package manager to install it. [Check the NodeJS site for more info.](https://nodejs.org/en/download/package-manager/ "Installing Node.js via package manager") Mac OS users can simply `brew install node` to get both. Should you need multiple Node.js versions on the same computer, use Node Version Manager for [Mac/Linux](https://github.com/creationix/nvm) or for [Windows](https://github.com/coreybutler/nvm-windows)
+You'll need Node.js 20.x. Use your OS package manager to install it. [Check the Node.js site for more info.](https://nodejs.org/en/download/package-manager/ "Installing Node.js via package manager") Mac OS users can simply `brew install node` to get both. Should you need multiple Node.js versions on the same computer, use Node Version Manager for [Mac/Linux](https://github.com/creationix/nvm) or for [Windows](https://github.com/coreybutler/nvm-windows)
 
 You'll also need `libusb`.
 On debian-based linux distros, `apt-get install libusb-dev libudev-dev g++` is sufficient.
-On Mac OS, use `brew install libusb libusb-compat`.
+On macOS, use `brew install libusb libusb-compat`.
 For everyone else, use the appropriate package manager for your OS.
 
 ### Step 2: Build Environment
@@ -24,17 +24,21 @@ For everyone else, use the appropriate package manager for your OS.
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
-npm ci
+npm run install
 npm run build
 npm run electron
 ```
+
+The `npm run install` script wraps `npm ci --ignore-scripts && npm run postinstall`,
+allowing us to skip dependency install scripts. Agent currently has no dependencies
+that require post-install steps, so this serves as a workaround until npm 12 ships with Node.js.
 
 At this point, Agent should be running on your machine.
 
 ## Install dependencies
 
 npm workspace installs dependencies in hoisted mode, it is not really suitable for us.
-If you add or update a dependency of a package then navigate to the directory edit the package.json and run `npm install`
+If you add or update a dependency of a package then navigate to the directory edit the package.json and run `npm install --ignore-scripts`
 
 ## Developing the web application
 

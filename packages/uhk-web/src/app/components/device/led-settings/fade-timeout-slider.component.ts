@@ -74,7 +74,7 @@ export class FadeTimeoutSliderComponent implements ControlValueAccessor{
         },
         tooltips: [
             {
-                to: (value) => {
+                to: (value: number) => {
                     return this.formatToValue(value);
                 }
             }
@@ -95,9 +95,6 @@ export class FadeTimeoutSliderComponent implements ControlValueAccessor{
         }
 
         this._model = value;
-    }
-
-    constructor(private _cdRef: ChangeDetectorRef) {
     }
 
     writeValue(obj: string): void {

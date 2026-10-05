@@ -26,7 +26,8 @@ export const initialState: State = {
     layerOptions: initLayerOptions(),
     loading: false,
     selectedLayerOption: getBaseLayerOption(),
-    theme: ''
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    theme: (window as any).getUhkTheme()
 };
 
 export function reducer(state = initialState, action: Actions | AppActions.Actions) {

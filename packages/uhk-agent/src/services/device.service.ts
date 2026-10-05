@@ -1,8 +1,7 @@
 import { ipcMain } from 'electron';
-import { emptyDir } from 'fs-extra';
 import { cloneDeep, isEqual } from 'lodash';
-import os from 'os';
-import { UhkDeviceProduct } from 'uhk-common';
+import { rm } from 'node:fs/promises';
+import os from 'node:os';
 import {
     ALL_UHK_DEVICES,
     AreBleAddressesPairedIpcResponse,
@@ -14,8 +13,10 @@ import {
     convertBleStringToNumberArray,
     CurrentlyUpdatingModuleInfo,
     DeviceConnectionState,
+    escapeZephyrControlChars,
     findUhkModuleById,
     FIRMWARE_UPGRADE_METHODS,
+    FirmwareUpgradeConnectPrompt,
     FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
@@ -32,6 +33,7 @@ import {
     LeftSlotModules,
     LogService,
     mapObjectToUserConfigBinaryBuffer,
+    ModuleFirmwareUpgradeProgress,
     ModuleFirmwareUpgradeSkipInfo,
     ModuleFirmwareUpgradeSkipReason,
     ModuleInfo,
@@ -40,13 +42,16 @@ import {
     RightSlotModules,
     SaveUserConfigurationData,
     shouldUpgradeFirmware,
+    SHELL_COMMAND_TOO_LONG_ERROR,
     simulateInvalidUserConfigError,
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
     UHK_DEVICE_IDS,
+    UHK_DEVICE_IDS_TYPE,
     UHK_DONGLE,
     UHK_MODULE_IDS,
     UHK_MODULES,
+    UhkDeviceProduct,
     UpdateFirmwareData,
     UploadFileData,
     VERSIONS,
@@ -125,6 +130,7 @@ export class DeviceService {
             currentDeviceFn: getCurrentUhkDongleHID,
             logService: this.logService,
             ipcEvents: {
+                execShellCommand: IpcEvents.device.execShellCommandOnDongle,
                 isZephyrLoggingEnabled: IpcEvents.device.isDongleZephyrLoggingEnabled,
                 isZephyrLoggingEnabledReply: IpcEvents.device.isDongleZephyrLoggingEnabledReply,
                 toggleZephyrLogging: IpcEvents.device.toggleDongleZephyrLogging,
@@ -138,6 +144,7 @@ export class DeviceService {
             currentDeviceFn: getCurrenUhk80LeftHID,
             logService: this.logService,
             ipcEvents: {
+                execShellCommand: IpcEvents.device.execShellCommandOnLeftHalf,
                 isZephyrLoggingEnabled: IpcEvents.device.isLeftHalfZephyrLoggingEnabled,
                 isZephyrLoggingEnabledReply: IpcEvents.device.isLeftHalfZephyrLoggingEnabledReply,
                 toggleZephyrLogging: IpcEvents.device.toggleLeftHalfZephyrLogging,
@@ -195,6 +202,16 @@ export class DeviceService {
             });
         });
 
+        ipcMain.on(IpcEvents.device.execShellCommandOnRightHalf, (...args) => {
+            this.queueManager.add({
+                method: this.execShellCommand,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.toggleI2cDebugging, this.toggleI2cDebugging.bind(this));
 
         ipcMain.on(IpcEvents.device.isRightHalfZephyrLoggingEnabled, (...args) => {
@@ -242,6 +259,7 @@ export class DeviceService {
             });
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.startConnectionPoller, this.startPollUhkDevice.bind(this));
 
         ipcMain.on(IpcEvents.device.startDonglePairing, (...args) => {
@@ -299,8 +317,11 @@ export class DeviceService {
             });
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.getUserConfigFromHistory, this.getUserConfigFromHistory.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.deleteUserConfigHistory, this.deleteUserConfigHistory.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.device.loadUserConfigHistory, this.loadUserConfigFromHistory.bind(this));
 
         logService.misc('[DeviceService] init success');
@@ -349,9 +370,24 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
+            const sendProgress = (progress: number) => {
+                event.sender.send(IpcEvents.device.loadConfigurationProgress, progress);
+            };
+
+            sendProgress(0);
             await this.operations.waitUntilKeyboardBusy();
-            const result = await this.operations.loadConfigurations();
+
+            const preTransferPercent = 3;
+            const transferPercentRange = 0.82;
+            sendProgress(preTransferPercent);
+
+            const result = await this.operations.loadConfigurations((percent) => {
+                sendProgress(preTransferPercent + Math.round(percent * transferPercentRange));
+            });
+
+            sendProgress(88);
             const modules: HardwareModules = await this.getHardwareModules(false);
+            sendProgress(95);
 
             const hardwareConfig = getHardwareConfigFromDeviceResponse(result.hardwareConfiguration);
             const uniqueId = hardwareConfig.uniqueId;
@@ -372,6 +408,7 @@ export class DeviceService {
                         info: BackupUserConfigurationInfo.Unknown
                     }
             };
+            sendProgress(100);
         } catch (error) {
             response = {
                 success: false,
@@ -531,7 +568,7 @@ export class DeviceService {
                             moduleName: UHK_DONGLE.name,
                             newFirmwareChecksum: deviceConfig.md5,
                         } as CurrentlyUpdatingModuleInfo);
-                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE);
+                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE, this.createFirmwareProgressReporter(event.sender, UHK_DONGLE.name));
                         this.logService.misc('[DeviceService] Waiting for keyboard');
                         await waitForDevices(UHK_DONGLE.keyboard);
                         await dongleUhkDevice.close();
@@ -580,7 +617,7 @@ export class DeviceService {
                     newFirmwareChecksum: deviceConfig.md5,
                     moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
                 } as CurrentlyUpdatingModuleInfo);
-                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
+                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, this.createFirmwareProgressReporter(event.sender, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME));
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevices(uhkDeviceProduct.keyboard);
 
@@ -644,28 +681,31 @@ export class DeviceService {
                 } as CurrentlyUpdatingModuleInfo);
 
                 if(uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
-                    if (!(await isUhkDeviceConnected(UHK_80_DEVICE_LEFT))) {
-                        this.logService.misc('[DeviceService] To continue the firmware upgrade, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)');
-                    }
+                    await this.waitForUhkDeviceWithConnectPrompt(
+                        event.sender,
+                        UHK_80_DEVICE_LEFT,
+                        'To continue the firmware upgrade, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)'
+                    );
 
-                    await waitForUhkDeviceConnected(UHK_80_DEVICE_LEFT);
                     await snooze(1000);
                     const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
-                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT);
+                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name));
 
-                    if (!(await isUhkDeviceConnected(uhkDeviceProduct))) {
-                        this.logService.misc('[DeviceService] To finish the firmware upgrade, now connect the right half via USB. (You can disconnect the left half or use a second USB cable.)');
-                    }
-
-                    await waitForUhkDeviceConnected(uhkDeviceProduct);
+                    await this.waitForUhkDeviceWithConnectPrompt(
+                        event.sender,
+                        uhkDeviceProduct,
+                        'To finish the firmware upgrade, now connect the right half via USB. (You can disconnect the left half or use a second USB cable.)'
+                    );
                 }
                 else {
                     await this.operations
-                        .updateModuleWithKboot(
-                            getModuleFirmwarePath(leftModuleInfo.module, packageJson),
-                            uhkDeviceProduct,
-                            leftModuleInfo.module
-                        );
+                        .updateModuleWithKboot({
+                            firmwarePath: getModuleFirmwarePath(leftModuleInfo.module, packageJson),
+                            device: uhkDeviceProduct,
+                            module: leftModuleInfo.module,
+                            onProgress: this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name),
+                            prompt: (message) => this.firmwareUpgradePrompt(event.sender, message),
+                        });
                 }
             } else {
                 const moduleConfig = packageJson.modules.find(firmwareDevice => firmwareDevice.moduleId === leftModuleInfo.module.id);
@@ -723,11 +763,13 @@ export class DeviceService {
                             newFirmwareChecksum: moduleConfig.md5,
                         } as CurrentlyUpdatingModuleInfo);
                         await this.operations
-                            .updateModuleWithKboot(
-                                getModuleFirmwarePath(moduleInfo.module, packageJson),
-                                uhkDeviceProduct,
-                                moduleInfo.module
-                            );
+                            .updateModuleWithKboot({
+                                firmwarePath: getModuleFirmwarePath(moduleInfo.module, packageJson),
+                                device: uhkDeviceProduct,
+                                module: moduleInfo.module,
+                                onProgress: this.createFirmwareProgressReporter(event.sender, moduleInfo.module.name),
+                                prompt: (message) => this.firmwareUpgradePrompt(event.sender, message),
+                            });
                         this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
                     } else {
                         const moduleConfig = packageJson.modules.find(firmwareDevice => firmwareDevice.moduleId === moduleInfo.module.id);
@@ -760,7 +802,7 @@ export class DeviceService {
         }
 
         if (data.uploadFile) {
-            await emptyDir(firmwarePathData.tmpDirectory);
+            await rm(firmwarePathData.tmpDirectory, { recursive: true, force: true });
         }
 
         await snooze(500);
@@ -783,9 +825,14 @@ export class DeviceService {
 
         this.savedState = undefined;
         this.startPollUhkDevice();
-        await this.dongleZephyrLogService.enable();
-        await this.leftHalfZephyrLogService.enable();
+        if (await getCurrentUhkDongleHID()) {
+            await this.dongleZephyrLogService.enable();
+        }
+        if (await getCurrenUhk80LeftHID()) {
+            await this.leftHalfZephyrLogService.enable();
+        }
 
+        event.sender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, undefined);
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
@@ -797,8 +844,8 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
             const arg = args[0];
-            const userConfig = arg.userConfig;
-            const deviceId = arg.deviceId;
+            const userConfig: Object = arg.userConfig;
+            const deviceId: UHK_DEVICE_IDS_TYPE = arg.deviceId;
             const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
 
@@ -868,11 +915,11 @@ export class DeviceService {
             this.logService.misc('[DeviceService] UHK Module: ', JSON.stringify(uhkModule));
 
             await this.operations
-                .updateModuleWithKboot(
-                    getModuleFirmwarePath(uhkModule, packageJson),
-                    uhkDeviceProduct,
-                    uhkModule
-                );
+                .updateModuleWithKboot({
+                    firmwarePath: getModuleFirmwarePath(uhkModule, packageJson),
+                    device: uhkDeviceProduct,
+                    module: uhkModule
+                });
 
             response.success = true;
         } catch (error) {
@@ -907,7 +954,10 @@ export class DeviceService {
         }
     }
 
-    public async deleteHostConnection(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async deleteHostConnection(
+        event: Electron.IpcMainEvent,
+        args: [{ isConnectedDongleAddress: boolean, index: number, address: string }]
+    ): Promise<void> {
         const {isConnectedDongleAddress, index, address} = args[0];
         this.logService.misc('[DeviceService] delete host connection', { isConnectedDongleAddress, index, address });
 
@@ -971,6 +1021,37 @@ export class DeviceService {
         }
 
         event.sender.send(IpcEvents.device.eraseBleSettingsReply, response);
+    }
+
+    public async execShellCommand(_: Electron.IpcMainEvent, [command]: [string]): Promise<void> {
+        this.logService.misc(`[DeviceService] execute shell command (escaped): ${escapeZephyrControlChars(command)}`);
+
+        try {
+            await this.stopPollUhkDevice();
+            await this.operations.execShellCommand(command);
+            this.logService.misc('[DeviceService] execute shell command success');
+            // give some time for the command to complete
+            await snooze(5);
+            await this.readZephyrLog();
+        }
+        catch(error) {
+            this.logService.error('[DeviceService] execute shell command failed', error);
+
+            if (error.message === SHELL_COMMAND_TOO_LONG_ERROR) {
+                const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
+
+                const logEntry: ZephyrLogEntry = {
+                    log: error.message,
+                    level: 'error',
+                    device: uhkDeviceProduct?.logName || UHK_80_DEVICE.logName,
+                }
+                this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
+            }
+
+        }
+        finally {
+            this.startPollUhkDevice();
+        }
     }
 
     public async startDonglePairing(event: Electron.IpcMainEvent): Promise<void> {
@@ -1122,6 +1203,24 @@ export class DeviceService {
         this.win.webContents.send(IpcEvents.device.statusBufferChanged, message);
     }
 
+    private createFirmwareProgressReporter(eventSender: Electron.WebContents, moduleName: string) {
+        let lastProgress = 0;
+
+        return (percent: number) => {
+            const progress = Math.max(0, Math.min(100, Math.round(percent)));
+
+            if (progress === lastProgress) {
+                return;
+            }
+
+            lastProgress = progress;
+            eventSender.send(IpcEvents.device.moduleFirmwareUpgradeProgress, {
+                moduleName,
+                progress,
+            } as ModuleFirmwareUpgradeProgress);
+        };
+    }
+
     /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
@@ -1254,18 +1353,32 @@ export class DeviceService {
 
         try {
             await this.stopPollUhkDevice();
+
+            const sendProgress = (progress: number) => {
+                event.sender.send(IpcEvents.device.saveUserConfigurationProgress, progress);
+            };
+
+            sendProgress(0);
             await backupUserConfiguration(data);
+            const preTransferPercent = 1;
+            const transferPercentRange = 0.94;
+            sendProgress(preTransferPercent);
 
             this.logService.config('[DeviceService] User configuration will be saved', data.configuration);
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
-            await this.operations.saveUserConfiguration(buffer);
+            await this.operations.saveUserConfiguration(buffer, (percent) => {
+                sendProgress(preTransferPercent + Math.round(percent * transferPercentRange));
+            });
+
             this._checkStatusBuffer = true;
 
             if (data.saveInHistory) {
+                sendProgress(97);
                 await saveUserConfigHistoryAsync(buffer, data.deviceId, data.uniqueId);
                 await this.loadUserConfigFromHistory(event);
             }
 
+            sendProgress(100);
             response.success = true;
         } catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
@@ -1281,7 +1394,7 @@ export class DeviceService {
         return Promise.resolve();
     }
 
-    private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]): Promise<void> {
+    private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]: [string]): Promise<void> {
         const response: UploadFileData = {
             filename,
             data: await getUserConfigFromHistoryAsync(filename),
@@ -1291,7 +1404,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.getUserConfigFromHistoryReply, response);
     }
 
-    private async deleteUserConfigHistory(event: Electron.IpcMainEvent, [deviceUniqueId]): Promise<void> {
+    private async deleteUserConfigHistory(event: Electron.IpcMainEvent, [deviceUniqueId]: [number]): Promise<void> {
         const response = await deleteUserConfigHistory(deviceUniqueId);
 
         event.sender.send(IpcEvents.device.deleteUserConfigHistoryReply, response);
@@ -1419,13 +1532,16 @@ export class DeviceService {
     }
 
     private async readZephyrLog(): Promise<void> {
+        let uhkDeviceProduct: UhkDeviceProduct;
+
         try {
+            uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             const log = await this.operations.getVariable(UsbVariables.ShellBuffer)
-            this.logService.misc(`[DeviceService] Right half zephyr log: ${log}`);
+            this.logService.misc(`[DeviceService] Right half zephyr log (escaped): ⟦${escapeZephyrControlChars(log as string)}⟧`);
             const logEntry: ZephyrLogEntry = {
                 log: log as string,
                 level: 'info',
-                device: UHK_80_DEVICE.logName,
+                device: uhkDeviceProduct.logName,
             }
             this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
         }
@@ -1434,9 +1550,31 @@ export class DeviceService {
             const logEntry: ZephyrLogEntry = {
                 log: error.message as string,
                 level: 'error',
-                device: UHK_80_DEVICE.logName,
+                device: uhkDeviceProduct?.logName || UHK_80_DEVICE.logName,
             }
             this.win.webContents.send(IpcEvents.device.zephyrLog, logEntry)
         }
+    }
+
+    private async waitForUhkDeviceWithConnectPrompt(
+        eventSender: Electron.WebContents,
+        device: UhkDeviceProduct,
+        message: string
+    ): Promise<void> {
+        if (!(await isUhkDeviceConnected(device))) {
+            this.firmwareUpgradePrompt(eventSender, message)
+        }
+
+        await waitForUhkDeviceConnected(device);
+
+        this.firmwareUpgradePrompt(eventSender, undefined)
+    }
+
+    private firmwareUpgradePrompt(
+        eventSender: Electron.WebContents,
+        message: string
+    ): void {
+        this.logService.misc(`[DeviceService] firmware upgrade prompt: ${message}`);
+        eventSender.send(IpcEvents.device.firmwareUpgradeConnectPrompt, { message } as FirmwareUpgradeConnectPrompt);
     }
 }

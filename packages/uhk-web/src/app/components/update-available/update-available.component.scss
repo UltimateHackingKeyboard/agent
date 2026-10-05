@@ -1,4 +1,22 @@
+@import '../../../styles/variables';
+
+:host {
+    display: block;
+    height: $main-content-top-margin-on-update;
+}
+
+:host(.two-line) {
+    height: $main-content-top-margin-on-update-two-line;
+}
+
 .app-update-available-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 0.15rem;
+    height: 100%;
     margin: 0;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -9,7 +27,40 @@
     border-radius: 0;
     border-width: 0;
 
-    .btn-link {
+    .update-available-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        column-gap: 0.35rem;
+    }
+
+    a,
+    .update-action {
         color: var(--color-update-available-text);
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    .update-action {
+        padding: 0;
+        font: inherit;
+        line-height: inherit;
+        text-decoration: underline;
+        background: none;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .dismiss {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        text-decoration: none;
+        font-size: 1.25rem;
+        line-height: 1;
     }
 }

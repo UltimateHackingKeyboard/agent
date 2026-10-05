@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
@@ -22,11 +22,9 @@ export class RestoreUserConfigurationComponent implements OnInit, OnDestroy {
     state: RestoreConfigurationState;
     faExclamationCircle = faExclamationCircle;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private stateSubscription: Subscription;
-
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnDestroy(): void {
         if (this.stateSubscription) {

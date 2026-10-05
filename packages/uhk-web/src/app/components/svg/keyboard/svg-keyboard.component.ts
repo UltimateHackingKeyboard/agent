@@ -8,7 +8,8 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     OnInit,
-    OnChanges
+    OnChanges,
+    inject,
 } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -129,11 +130,12 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     fadeSeparatorAnimationTime = '200ms 500ms';
     descriptionAnimationParams: DescriptionAnimationParams;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private isAfterViewInit = false;
+    private readonly sanitizer = inject(DomSanitizer);
+    private readonly svgModuleProvider = inject(SvgModuleProviderService);
 
-    constructor(private svgModuleProvider: SvgModuleProviderService,
-                private sanitizer: DomSanitizer,
-                private cdRef: ChangeDetectorRef) {
+    constructor() {
         this.modules = [];
         this.modulesState = {};
         this.halvesInfo = {

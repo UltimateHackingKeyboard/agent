@@ -1,8 +1,7 @@
-import semver from 'semver';
-import { FirmwareJson, UhkDeviceProduct } from 'uhk-common';
+import { FirmwareJson, isVersionLt, UhkDeviceProduct } from 'uhk-common';
 
 export function checkFirmwareAndDeviceCompatibility(json: FirmwareJson, device: UhkDeviceProduct): void {
-    if (device.id === 2 && semver.lt(json.firmwareVersion, '8.10.5')) {
+    if (device.id === 2 && isVersionLt(json.firmwareVersion, '8.10.5')) {
         throw new Error('Only firmware 8.10.5 or greater is supported for the UHK 60 v2.');
     }
 }

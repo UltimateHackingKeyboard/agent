@@ -5,12 +5,21 @@ import {
     ElementRef,
     OnDestroy,
     OnInit,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { KeyboardLayout, UHK_60_DEVICE, UHK_60_V2_DEVICE, UHK_80_DEVICE } from 'uhk-common';
+import {
+    KeyboardLayout,
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
+    UHK_80_DEVICE,
+    UHK_80_DEVICE_LEFT,
+    UHK_DONGLE,
+    UhkDeviceProduct,
+} from 'uhk-common';
 import {
     advanceSettingsState,
     AppState,
@@ -30,7 +39,9 @@ import {
     ToggleRightHalfZephyrLoggingAction,
     ToggleZephyrLoggingAction,
 } from '../../../store/actions/advance-settings.action';
-import { ChangeKeyboardLayoutAction } from '../../../store/actions/device';
+import {
+    ChangeKeyboardLayoutAction,
+} from '../../../store/actions/device';
 import { ActiveButton, initialState, State } from '../../../store/reducers/advanced-settings.reducer';
 
 @Component({
@@ -48,25 +59,30 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     @ViewChild('audioPlayer', {static: true,}) audioPlayer: ElementRef<HTMLAudioElement>;
 
+    connectedDevice: UhkDeviceProduct;
     isKeyboardLayoutChanging$: Observable<boolean>;
     isHalvesPairingAllowed: boolean;
     isZephyrLoggingAllowed: boolean;
     keyboardLayout: KeyboardLayout;
     keyboardLayoutEnum = KeyboardLayout;
-    showDongleZephyrLogCheckbox: boolean;
+    isDongleConnected: boolean;
     showI2CRecoverButton: boolean;
-    showLeftHalfZephyrLogCheckbox: boolean;
+    isLeftHalfConnected: boolean;
     state: State;
 
+    UHK_DONGLE = UHK_DONGLE;
+    UHK_80_DEVICE_LEFT = UHK_80_DEVICE_LEFT;
+
+    private readonly cdRef = inject(ChangeDetectorRef);
     private i2cErrorsLength = 0;
     private stateSubscription: Subscription;
     private connectedDeviceSubscription: Subscription;
     private dongleSubscription: Subscription;
     private keyboardLayoutSubscription: Subscription;
     private leftHalfDetectedSubscription: Subscription;
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
+    constructor() {
         this.state = initialState();
         this.isKeyboardLayoutChanging$ = this.store.select(isKeyboardLayoutChanging);
     }
@@ -86,14 +102,15 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
             .subscribe(connectedDevice => {
+                this.connectedDevice = connectedDevice;
                 this.isHalvesPairingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
-                this.isZephyrLoggingAllowed = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.isZephyrLoggingAllowed = !!connectedDevice;
                 this.showI2CRecoverButton = connectedDevice?.id === UHK_60_DEVICE.id ||  connectedDevice?.id === UHK_60_V2_DEVICE.id;
                 this.cdRef.detectChanges();
             });
         this.dongleSubscription = this.store.select(getDongle)
             .subscribe(dongle => {
-                this.showDongleZephyrLogCheckbox = !!dongle.serialNumber;
+                this.isDongleConnected = !!dongle?.serialNumber;
                 this.cdRef.detectChanges();
             })
         this.keyboardLayoutSubscription = this.store.select(getKeyboardLayout)
@@ -103,7 +120,7 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
             });
         this.leftHalfDetectedSubscription = this.store.select(getLeftHalfDetected)
             .subscribe(leftHalfDetected => {
-                this.showLeftHalfZephyrLogCheckbox = leftHalfDetected;
+                this.isLeftHalfConnected = leftHalfDetected;
                 this.cdRef.detectChanges();
             });
         this.stateSubscription = this.store.select(advanceSettingsState)

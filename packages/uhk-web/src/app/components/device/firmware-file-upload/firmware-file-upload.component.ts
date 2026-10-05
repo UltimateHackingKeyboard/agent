@@ -46,7 +46,7 @@ export class FirmwareFileUploadComponent {
 
             target.value = null;
         };
-        fileReader.readAsArrayBuffer(files[0]);
+        fileReader.readAsArrayBuffer(files[0] as Blob);
     }
 
     onClick(): void {

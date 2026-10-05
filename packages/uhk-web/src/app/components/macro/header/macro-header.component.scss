@@ -1,9 +1,11 @@
-
 .macro {
     &__remove {
         font-size: 0.75em;
         top: 7px;
         position: relative;
+        color: inherit;
+        text-decoration: none;
+        border: 0;
 
         &:hover {
             cursor: pointer;
@@ -16,6 +18,9 @@
         top: 7px;
         margin-right: 15px;
         position: relative;
+        color: inherit;
+        text-decoration: none;
+        border: 0;
 
         &:hover:not(.disabled) {
             cursor: pointer;

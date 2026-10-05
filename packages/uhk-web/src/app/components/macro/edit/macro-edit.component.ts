@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
@@ -6,18 +6,20 @@ import { SplitGutterInteractionEvent } from 'angular-split';
 import { isEqual } from 'lodash';
 import { Macro, MacroAction } from 'uhk-common';
 
-import { Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 
 import {
-    AddMacroActionAction,
-    DuplicateMacroActionAction,
-    DeleteMacroActionAction,
-    ReorderMacroActionAction,
-    SaveMacroActionAction,
-    SelectMacroActionAction
-} from '../../../store/actions/macro';
+    DuplicateMacroActionPayload,
+    MacroKeyAssignmentViewModel,
+    SelectedMacroAction,
+    SelectedMacroActionIdModel
+} from '../../../models';
+import { MapperService } from '../../../services/mapper.service';
 import {
     AppState,
+    getDefaultUserConfiguration,
+    getKeyLanguage,
+    getKeymaps,
     getSelectedMacro,
     getSelectedMacroAction,
     getSmartMacroPanelVisibility,
@@ -28,9 +30,16 @@ import {
     maxMacroCountReached,
     selectSmartMacroDocUrl
 } from '../../../store';
-
-import { DuplicateMacroActionPayload, SelectedMacroAction, SelectedMacroActionIdModel } from '../../../models';
+import {
+    AddMacroActionAction,
+    DeleteMacroActionAction,
+    DuplicateMacroActionAction,
+    ReorderMacroActionAction,
+    SaveMacroActionAction,
+    SelectMacroActionAction
+} from '../../../store/actions/macro';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
+import { buildMacroKeyAssignmentViewModels } from '../../../util/build-macro-key-assignment-view-models';
 
 @Component({
     selector: 'macro-edit',
@@ -45,6 +54,7 @@ import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../st
 export class MacroEditComponent implements OnDestroy {
     faCaretDown = faCaretDown;
     macro: Macro;
+    assignments: MacroKeyAssignmentViewModel[] = [];
     isNew$: Observable<boolean>;
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
@@ -60,25 +70,39 @@ export class MacroEditComponent implements OnDestroy {
         right: 0
     };
 
-    private backUrl: string;
-    private backUrlText: string;
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly mapper = inject(MapperService);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscriptions = new Subscription();
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef,
-                private route: ActivatedRoute,
-                private router: Router) {
-        this.subscriptions.add(store.select(getSelectedMacro)
-            .subscribe((macro: Macro) => {
+    constructor() {
+        this.subscriptions.add(
+            combineLatest([
+                this.store.select(getSelectedMacro),
+                this.store.select(getKeymaps),
+                this.store.select(getDefaultUserConfiguration),
+                this.store.select(getKeyLanguage),
+            ]).subscribe(([macro, keymaps, defaultUserConfiguration]) => {
                 this.macro = macro;
+                this.assignments = macro
+                    ? buildMacroKeyAssignmentViewModels({
+                        keymaps,
+                        macroId: macro.id,
+                        defaultUserConfiguration,
+                        mapper: this.mapper,
+                    })
+                    : [];
                 this.cdRef.markForCheck();
-            }));
+            })
+        );
 
         this.isNew$ = this.store.select(isSelectedMacroNew);
         this.isMacroCommandSupported$ = this.store.select(isMacroCommandSupported);
         this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
-        this.maxMacroCountReached$ = store.select(maxMacroCountReached);
-        this.subscriptions.add(store.select(getSmartMacroPanelWidth)
+        this.maxMacroCountReached$ = this.store.select(maxMacroCountReached);
+        this.subscriptions.add(this.store.select(getSmartMacroPanelWidth)
             .subscribe((width: number) => {
                 this.smartMacroPanelSizes = {
                     left: 100 - width,
@@ -86,13 +110,10 @@ export class MacroEditComponent implements OnDestroy {
                 };
                 this.cdRef.markForCheck();
             }));
-        this.selectedMacroAction$ = store.select(getSelectedMacroAction);
-        this.smartMacroDocUrl$ = store.select(selectSmartMacroDocUrl);
-        this.smartMacroPanelVisibility$ = store.select(getSmartMacroPanelVisibility);
+        this.selectedMacroAction$ = this.store.select(getSelectedMacroAction);
+        this.smartMacroDocUrl$ = this.store.select(selectSmartMacroDocUrl);
+        this.smartMacroPanelVisibility$ = this.store.select(getSmartMacroPanelVisibility);
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            this.backUrl = params.backUrl;
-            this.backUrlText = params.backText;
-
             if (params.actionIndex) {
                 if (params.actionIndex === 'new') {
                     this.selectedMacroActionIdModel = {
@@ -149,11 +170,10 @@ export class MacroEditComponent implements OnDestroy {
 
         this.router.navigate([], {
             queryParams: {
-                actionIndex: model?.id,
-                backText: this.backUrlText,
-                backUrl: this.backUrl,
-                inlineEdit: model?.inlineEdit
-            }
+                actionIndex: model?.id ?? null,
+                inlineEdit: model?.inlineEdit ?? null
+            },
+            queryParamsHandling: 'merge',
         });
     }
 
@@ -174,9 +194,10 @@ export class MacroEditComponent implements OnDestroy {
         if (!this.selectedMacroActionIdModel?.inlineEdit) {
             this.router.navigate([], {
                 queryParams: {
-                    backText: this.backUrlText,
-                    backUrl: this.backUrl,
+                    actionIndex: null,
+                    inlineEdit: null,
                 },
+                queryParamsHandling: 'merge',
             });
         }
     }

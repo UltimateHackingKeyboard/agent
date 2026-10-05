@@ -2,3 +2,22 @@
     cursor: pointer;
     outline: none;
 }
+
+:host(:focus),
+:host(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+
+.note-marker {
+    fill: var(--color-keyboard-key-note-marker);
+    pointer-events: none;
+}
+
+.svg-keyboard-key__accessible-name {
+    fill: currentcolor;
+    font-size: 1px;
+    opacity: 0.01;
+    pointer-events: none;
+    stroke: none;
+}

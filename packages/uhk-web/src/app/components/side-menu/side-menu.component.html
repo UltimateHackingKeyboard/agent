@@ -10,9 +10,14 @@
                                  [css]="'side-menu-pane-title__name'"
                                  [disabled]="state.restoreUserConfiguration || state.updatingFirmware"
                                  (ngModelChange)="editDeviceName($event)"></auto-grow-input>
-                <fa-icon [icon]="this.sideMenuState.device.icon"
-                         class="chevron float-end"
-                         (click)="toggleMenuItem('device')"></fa-icon>
+                <button type="button"
+                        class="btn btn-link p-0 chevron float-end"
+                        [attr.aria-expanded]="sideMenuState.device.animation === 'active'"
+                        aria-controls="side-menu-device-section"
+                        aria-label="Toggle device section"
+                        (click)="toggleMenuItem('device')">
+                    <fa-icon [icon]="this.sideMenuState.device.icon"></fa-icon>
+                </button>
             </ng-container>
 
             <a *ngSwitchCase="'MultiDevice'"
@@ -63,16 +68,21 @@
                 {{ state?.connectedDevice?.name }}
             </a>
         </div>
-        <ul [@toggler]="this.sideMenuState.device.animation">
+        <ul id="side-menu-device-section" [@toggler]="this.sideMenuState.device.animation">
             <li class="sidebar__level-1--item">
                 <div class="sidebar__level-1">
                     <fa-icon [icon]="faSlidersH"></fa-icon>
                     Device
-                    <fa-icon [icon]="this.sideMenuState.configuration.icon"
-                             class="chevron float-end"
-                             (click)="toggleMenuItem('configuration')"></fa-icon>
+                    <button type="button"
+                            class="btn btn-link p-0 chevron float-end"
+                            [attr.aria-expanded]="sideMenuState.configuration.animation === 'active'"
+                            aria-controls="side-menu-configuration-section"
+                            aria-label="Toggle configuration section"
+                            (click)="toggleMenuItem('configuration')">
+                        <fa-icon [icon]="this.sideMenuState.configuration.icon"></fa-icon>
+                    </button>
                 </div>
-                <ul [@toggler]="this.sideMenuState.configuration.animation">
+                <ul id="side-menu-configuration-section" [@toggler]="this.sideMenuState.configuration.animation">
                     <li class="sidebar__level-2--item"
                         *ngIf="!state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
@@ -142,11 +152,16 @@
                 <div class="sidebar__level-1">
                     <fa-icon [icon]="faPuzzlePiece"></fa-icon>
                     Modules
-                    <fa-icon [icon]="this.sideMenuState.addon.icon"
-                             class="chevron float-end"
-                             (click)="toggleMenuItem('addon')"></fa-icon>
+                    <button type="button"
+                            class="btn btn-link p-0 chevron float-end"
+                            [attr.aria-expanded]="sideMenuState.addon.animation === 'active'"
+                            aria-controls="side-menu-addon-section"
+                            aria-label="Toggle modules section"
+                            (click)="toggleMenuItem('addon')">
+                        <fa-icon [icon]="this.sideMenuState.addon.icon"></fa-icon>
+                    </button>
                 </div>
-                <ul [@toggler]="this.sideMenuState.addon.animation">
+                <ul id="side-menu-addon-section" [@toggler]="this.sideMenuState.addon.animation">
                     <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/add-on', 'key-cluster']"
@@ -184,15 +199,26 @@
                        [class.disabled]="state.updatingFirmware">
                         <fa-icon [icon]="faPlus"></fa-icon>
                     </a>
-                    <fa-icon [icon]="this.sideMenuState.keymap.icon"
-                             class="chevron float-end me-1"
-                             (click)="toggleMenuItem('keymap')"></fa-icon>
+                    <button type="button"
+                            class="btn btn-link p-0 chevron float-end me-1"
+                            [attr.aria-expanded]="sideMenuState.keymap.animation === 'active'"
+                            aria-controls="side-menu-keymap-section"
+                            aria-label="Toggle keymaps section"
+                            (click)="toggleMenuItem('keymap')">
+                        <fa-icon [icon]="this.sideMenuState.keymap.icon"></fa-icon>
+                    </button>
                 </div>
-                <ul [@toggler]="this.sideMenuState.keymap.animation">
-                    <li *ngFor="let keymap of state.keymaps" class="sidebar__level-2--item">
+                <ul id="side-menu-keymap-section" [@toggler]="this.sideMenuState.keymap.animation">
+                    <li *ngFor="let keymap of state.keymaps; let keymapIndex = index" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [class.active]="state.selectedKeymap?.abbreviation === keymap.abbreviation">
                             <a [routerLink]="['/keymap', keymap.abbreviation]" [queryParams]="state.keymapQueryParams"
                                [class.disabled]="state.updatingFirmware">{{keymap.name}}</a>
+                            <fa-icon *ngIf="state.activeKeymapIndex === keymapIndex"
+                                     [icon]="faCircle"
+                                     class="sidebar__active-keymap"
+                                     ngbTooltip="This is the keymap currently active on the keyboard. The star marks the default keymap that activates when powering the keyboard."
+                                     container="body"
+                                     placement="bottom"></fa-icon>
                             <fa-icon *ngIf="keymap.isDefault"
                                      [icon]="faStar"
                                      class="sidebar__fav"
@@ -217,51 +243,79 @@
                                  container="body"
                         ></fa-icon>
                     </button>
-                    <fa-icon [icon]="this.sideMenuState.macro.icon"
-                             class="chevron float-end me-1"
-                             (click)="toggleMenuItem('macro')"></fa-icon>
+                    <button type="button"
+                            class="btn btn-link p-0 chevron float-end me-1"
+                            [attr.aria-expanded]="sideMenuState.macro.animation === 'active'"
+                            aria-controls="side-menu-macro-section"
+                            aria-label="Toggle macros section"
+                            (click)="toggleMenuItem('macro')">
+                        <fa-icon [icon]="this.sideMenuState.macro.icon"></fa-icon>
+                    </button>
                 </div>
-                <ul [@toggler]="this.sideMenuState.macro.animation">
-                    <li *ngFor="let macro of state.macros" class="sidebar__level-2--item">
-                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                            <a [routerLink]="['/macro', macro.id]"
-                               [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
-                            <span class="sidebar__macro_count badge rounded-pill"
-                                  ngbTooltip="This is the number of times the macro is used across all keymaps."
-                                  placement="bottom"
-                                  container="body">{{ macro.usageCount }}</span>
-                        </div>
-                    </li>
+                <ul id="side-menu-macro-section" class="sidebar__macro-tree" [@toggler]="this.sideMenuState.macro.animation">
+                    <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: state.macroTree }"></ng-container>
                 </ul>
             </li>
         </ul>
     </li>
-    <li class="sidebar__level-0--item" [routerLinkActive]="['active']">
-        <div class="sidebar__level-0">
-            <i class="uhk-icon uhk-icon-pure-agent-icon"></i> Agent
-            <fa-icon [icon]="this.sideMenuState.agent.icon"
-                     class="chevron float-end"
-                     (click)="toggleMenuItem('agent')"></fa-icon>
-        </div>
-        <ul [@toggler]="this.sideMenuState.agent.animation">
-            <li class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/settings']"
-                       [class.disabled]="state.updatingFirmware">Settings</a>
-                </div>
-            </li>
-            <li class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/help']"
-                       [class.disabled]="state.updatingFirmware">Help</a>
-                </div>
-            </li>
-            <li class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/about']"
-                       [class.disabled]="state.updatingFirmware">About</a>
-                </div>
-            </li>
-        </ul>
+</ul>
+
+<ng-template #macroTree let-nodes>
+    <ng-container *ngFor="let node of nodes">
+        <li *ngIf="node.type === 'macro'" class="sidebar__macro-tree-item">
+            <div class="sidebar__macro-tree-entry" [routerLinkActive]="['active']">
+                <a [routerLink]="['/macro', node.macro.id]"
+                   [class.disabled]="state.updatingFirmware">{{ node.macro.name }}</a>
+                <span class="sidebar__macro_count badge rounded-pill"
+                      ngbTooltip="This is the number of times the macro is used across all keymaps."
+                      placement="bottom"
+                      container="body">{{ node.macro.usageCount }}</span>
+            </div>
+        </li>
+        <li *ngIf="node.type === 'group'" class="sidebar__macro-tree-item">
+            <button type="button"
+                    class="sidebar__macro-tree-entry sidebar__macro-group"
+                    [attr.aria-expanded]="getMacroGroupState(node.path).animation === 'active'"
+                    [attr.aria-controls]="'macro-group-' + node.path"
+                    [attr.aria-label]="'Toggle macro group ' + node.label"
+                    (click)="toggleMacroGroup(node.path)">
+                <span>{{ node.label }}…</span>
+                <fa-icon [icon]="getMacroGroupArrowIcon(node.path)"
+                         class="sidebar__macro-group-arrow"></fa-icon>
+            </button>
+            <ul [id]="'macro-group-' + node.path" class="sidebar__macro-group-children" [@toggler]="getMacroGroupState(node.path).animation">
+                <ng-container *ngTemplateOutlet="macroTree; context: { $implicit: node.children }"></ng-container>
+            </ul>
+        </li>
+    </ng-container>
+</ng-template>
+
+<ul class="menu--bottom">
+    <li class="menu--bottom__item">
+        <a [routerLink]="['/settings']"
+           [routerLinkActive]="['active']"
+           [class.disabled]="state.updatingFirmware"
+           class="menu--bottom__link">
+            <fa-icon [icon]="faCog"></fa-icon>
+            Settings
+        </a>
+    </li>
+    <li class="menu--bottom__item">
+        <a [routerLink]="['/help']"
+           [routerLinkActive]="['active']"
+           [class.disabled]="state.updatingFirmware"
+           class="menu--bottom__link">
+            <fa-icon [icon]="faQuestionCircle"></fa-icon>
+            Help
+        </a>
+    </li>
+    <li class="menu--bottom__item">
+        <a [routerLink]="['/about']"
+           [routerLinkActive]="['active']"
+           [class.disabled]="state.updatingFirmware"
+           class="menu--bottom__link">
+            <i class="uhk-icon uhk-icon-pure-agent-icon my-uhk-icon"></i>
+            About
+        </a>
     </li>
 </ul>

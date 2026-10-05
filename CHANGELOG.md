@@ -6,6 +6,38 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [11.0.0] - 2026-08-07
+
+Firmware: 18.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v18.0.0)] | Device Protocol: 4.19.0 | User Config: 15.0.0 | Hardware Config: 1.0.0
+
+- Show progress bar when starting Agent.
+- Improve Firmware screen:
+  - Show progress bar when flashing firmwares.
+  - Hide the log by default
+  - Make "connect device" requests more prominent.
+- Add copy/paste layer support.
+- Show macro key assignments on the macro editor page.
+- Require user approval before downloading Agent updates.
+- Add minimize to tray support.
+- Indicate UHK's currently active keymap in Agent.
+- Fix: make doc destination writable.
+- Fix: stop status buffer from splitting and dropping binding lines
+- Accesibility: improve click-only controls behavior.
+- Make host connection management slot-focused instead of host-focused.
+- Group macros in the sidebar
+- Fix: refuse importing a user configuration newer than Agent supports, and refuse saving one newer than the firmware supports.
+- Improve the scancode selector with a tiled category layout.
+
+## [10.1.0] - 2026-06-23
+
+Firmware: 17.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v17.2.0)] | Device Protocol: 4.17.0 | User Config: 14.0.0 | Hardware Config: 1.0.0
+
+- Implement new logging/shell access with vt100 support.
+- Make keyboard names persistent when sharing a single config between multiple uhks.
+- Improve Typing Behavior page wording.
+- Fix: autocompletion grammar fallback.
+- Fix: autocompletion freeze on `tapKeySeq f1 f1 f1 f1...` and other ambiguous expressions.
+
 ## [10.0.0] - 2026-04-28
 
 Firmware: 17.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v17.0.0)] | Device Protocol: 4.17.0 | User Config: 14.0.0 | Hardware Config: 1.0.0

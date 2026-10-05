@@ -46,8 +46,12 @@
 ul {
     li {
         padding-left: 5px;
-        span:before {
-            content: '$ ';
+        pre {
+            white-space: wrap;
+            margin: 0;
+            &:before {
+                content: '$ ';
+            }
         }
     }
 }

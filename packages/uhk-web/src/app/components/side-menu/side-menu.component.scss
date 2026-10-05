@@ -4,12 +4,17 @@
 $level-0-item-spacing: 0.5rem 0.5rem;
 $level-1-item-spacing: 0.25rem 1rem 0.25rem 1.5rem;
 $level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
+$macro-tree-base-indent: 2rem;
+$macro-tree-indent-step: 0.75rem;
+// Keep MACRO_GROUPING_MAX_DEPTH in util/group-macros-by-name.ts in sync with these layout values.
 
 :host {
     background-color: var(--color-sidemenu-bg);
     border-right: 1px solid var(--color-sidemenu-border);
     position: fixed;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     top: 0;
     bottom: 0;
     width: $side-menu-width;
@@ -39,6 +44,11 @@ ul {
     }
 }
 
+.menu--top {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
 .sidebar {
     &__level-0 {
         padding: $level-0-item-spacing;
@@ -64,7 +74,13 @@ ul {
 
         &:hover {
             .chevron {
-                display: inline-block;
+                opacity: 1;
+            }
+        }
+
+        &:focus-within {
+            .chevron {
+                opacity: 1;
             }
         }
 
@@ -79,8 +95,12 @@ ul {
         .chevron {
             line-height: $font-size-lg * 1.7;
             font-size: $font-size-lg * 0.75;
-            display: none;
+            display: inline-block;
+            opacity: 0;
             cursor: pointer;
+            color: inherit;
+            text-decoration: none;
+            border: 0;
         }
 
         .btn + .chevron {
@@ -108,7 +128,8 @@ ul {
                     color: var(--color-sidemenu-active-text);
                 }
 
-                .fa-star {
+                .fa-star,
+                .sidebar__active-keymap {
                     color: var(--color-sidemenu-active-text);
                 }
 
@@ -132,10 +153,80 @@ ul {
         }
     }
 
+    // Indentation is purely structural: it comes from the nested <ul> lists, not
+    // from any per-leaf padding. The root list supplies the base indent and each
+    // nested group list adds one step, so depth accumulates through the DOM.
+    &__macro-tree-entry {
+        padding: 0.125rem 0;
+    }
+
+    &__macro-tree {
+        width: auto;
+        margin-left: $macro-tree-base-indent;
+    }
+
+    &__macro-group-children {
+        width: auto;
+        padding-left: $macro-tree-indent-step;
+        border-left: 1px solid silver;
+    }
+
+    &__macro-tree-item {
+        position: relative;
+
+        &.active,
+        .active {
+            background-color: var(--color-sidemenu-active-bg);
+            color: var(--color-sidemenu-active-text);
+
+            a {
+                color: var(--color-sidemenu-active-text);
+            }
+
+            &:hover {
+                background-color: var(--color-sidemenu-active-bg);
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            width: 100%;
+
+            &.disabled {
+                opacity: 0.65;
+            }
+        }
+    }
+
+    &__macro-group {
+        cursor: pointer;
+        font-weight: 500;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+
+        &-arrow {
+            font-size: 0.65rem;
+            line-height: inherit;
+            margin-right: 0.25rem;
+            opacity: 0.45;
+        }
+    }
+
     // General hover over menu items.
     &__level-0,
     &__level-1,
-    &__level-2 {
+    &__level-2,
+    &__macro-tree-entry {
         &:hover {
             background-color: var(--color-hover-link-color);
 
@@ -154,6 +245,18 @@ ul {
         z-index: 50;
     }
 
+    &__active-keymap {
+        font-size: 0.55rem;
+        position: absolute;
+        right: 19px;
+        top: 6px;
+        z-index: 50;
+    }
+
+    &__level-2:has(.sidebar__active-keymap) .sidebar__fav {
+        right: 34px;
+    }
+
     &__macro_count {
         position: absolute;
         right: 11px;
@@ -163,20 +266,42 @@ ul {
 }
 
 .menu--bottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    flex: 0 0 auto;
+    display: flex;
+    border-top: 1px solid var(--color-sidemenu-border);
     width: 100%;
 
-    .sidebar {
-        &__level-1 {
-            display: block;
-            padding: 1rem;
-            cursor: pointer;
+    &__item {
+        flex: 1 1 auto;
 
-            &:hover {
-                text-decoration: none;
-            }
+        &:not(:last-child) {
+            border-right: 1px solid var(--color-sidemenu-border);
+        }
+    }
+
+    &__link {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        gap: 0.375rem;
+        justify-content: center;
+        padding: 0.875rem 0.5rem;
+        text-decoration: none;
+        white-space: nowrap;
+        width: 100%;
+
+        fa-icon,
+        .uhk-icon {
+            flex-shrink: 0;
+        }
+
+        &.active {
+            background-color: var(--color-sidemenu-active-bg);
+            color: var(--color-sidemenu-active-text);
+        }
+
+        &.disabled {
+            pointer-events: none;
         }
     }
 }

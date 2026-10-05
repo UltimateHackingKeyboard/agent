@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap, withLatestFrom } from 'rxjs/operators';
@@ -21,6 +21,9 @@ import { ActiveButton } from '../reducers/advanced-settings.reducer';
 
 @Injectable()
 export class AdvancedSettingsEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly store = inject<Store<AppState>>(Store);
 
     isDongleZephyrLoggingEnabled$ = createEffect(() => this.actions$
             .pipe(
@@ -127,9 +130,4 @@ export class AdvancedSettingsEffects {
         ),
     {dispatch: false},
     );
-
-    constructor(private actions$: Actions,
-                private store: Store<AppState>,
-                private deviceRendererService: DeviceRendererService,
-    ){}
 }

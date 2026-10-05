@@ -23,3 +23,11 @@ export function initLayerOptions(): Map<number, LayerOption> {
 
     return layerOptions;
 }
+
+// TODO: use LAYER_OPTIONS where don't mutate the initLayerOptions
+/**
+ * Use only for lookup LayerOption. If you need to mutate LayerOptions, use {@link initLayerOptions}.
+ * This map always contains all LayerOptions. If someone tries to load a newer user configuration that Agent
+ * can't parse then no code will run that uses this map.
+ */
+export const LAYER_OPTIONS = Object.freeze(initLayerOptions());

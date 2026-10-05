@@ -3,7 +3,6 @@ import {
     Directive,
     ElementRef,
     EventEmitter,
-    Inject,
     inject,
     InjectionToken,
     Input,
@@ -77,13 +76,10 @@ export class NgxResize implements OnInit, OnDestroy {
     @Input() ngxResizeOptions: Partial<NgxResizeOptions> = {};
     @Output() ngxResize = new EventEmitter<NgxResizeResult>();
 
-    constructor(
-        private readonly host: ElementRef<HTMLElement>,
-        private readonly zone: NgZone,
-        @Inject(DOCUMENT) private readonly document: Document,
-        @Inject(NGX_RESIZE_OPTIONS) private readonly resizeOptions: NgxResizeOptions
-    ) {}
-
+    private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+    private readonly zone = inject(NgZone);
+    private readonly document = inject<Document>(DOCUMENT);
+    private readonly resizeOptions = inject<NgxResizeOptions>(NGX_RESIZE_OPTIONS);
     private sub?: Subscription;
 
     ngOnInit() {

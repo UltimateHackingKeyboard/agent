@@ -4,7 +4,9 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
-    forwardRef, HostListener,
+    forwardRef,
+    HostListener,
+    inject,
     Input,
     OnChanges,
     Renderer2,
@@ -55,15 +57,13 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
         this._model = value;
     }
 
+    private readonly _cdRef = inject(ChangeDetectorRef);
     private _model: string;
     private _originalModel: string;
     private _onChanged = noop;
     private _onTouched = noop;
     private _inEditMode = false;
-
-    constructor(private _cdRef: ChangeDetectorRef,
-                private _renderer: Renderer2) {
-    }
+    private readonly _renderer = inject(Renderer2);
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.selectAfterInit?.currentValue) {

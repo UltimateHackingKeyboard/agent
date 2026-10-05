@@ -11,5 +11,8 @@
   "paths": {
     "@angular/*": ["../node_modules/@angular/*"],
     "rxjs/*": ["../node_modules/rxjs/*"]
-  }
+  },
+  "exclude": [
+    "**/*.test.ts"
+  ]
 }

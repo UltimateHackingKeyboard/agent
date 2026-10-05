@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -25,11 +25,12 @@ export class CaptureKeystrokeButtonComponent {
     record: boolean;
     faCircle = faCircle;
 
+    private readonly captureService = inject(CaptureService);
     private first: boolean; // enable usage of Enter to start capturing
     private scanCodePressed: boolean;
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(private captureService: CaptureService,
-                private store: Store<AppState>) {
+    constructor() {
         this.record = false;
         this.captureService.initModifiers();
         this.captureService.populateMapping();

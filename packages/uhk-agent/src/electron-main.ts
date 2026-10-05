@@ -19,8 +19,11 @@ import { DeviceService } from './services/device.service';
 import { ElectronLogService } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
+import { FileDialogService } from './services/file-dialog.service';
+import { SharedConfigService } from './services/shared-config.service';
 import { SudoService } from './services/sudo.service';
 import { SmartMacroDocService } from './services/smart-macro-doc.service';
+import { TrayService } from './services/tray.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
@@ -55,9 +58,12 @@ let uhkHidDeviceService: UhkHidDevice;
 let uhkOperations: UhkOperations;
 let appUpdateService: AppUpdateService;
 let appService: AppService;
+let fileDialogService: FileDialogService;
+let sharedConfigService: SharedConfigService;
 let sudoService: SudoService;
 let packagesDir: string;
 let smartMacroDocService: SmartMacroDocService;
+let trayService: TrayService;
 
 let areServicesInited = false;
 
@@ -76,6 +82,7 @@ if (!areServicesInited) {
     uhkOperations = new UhkOperations(logger, uhkHidDeviceService);
     smartMacroDocService = new SmartMacroDocService(logger, packagesDir);
 
+    // eslint-disable-next-line no-useless-assignment
     areServicesInited = true;
 }
 
@@ -103,28 +110,40 @@ async function createWindow() {
         webPreferences: {
             contextIsolation: false,
             spellcheck: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(import.meta.dirname, 'preload.js')
         },
-        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png'),
+        icon: path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png'),
         backgroundColor: await getWindowBackgroundColor(),
         show: false
     });
 
-    if (loadedWindowState.isFullScreen) {
-        win.setFullScreen(true);
-    } else if (loadedWindowState.isMaximized) {
-        win.maximize();
+    if (!trayService) {
+        trayService = new TrayService(logger, win);
+    }
+    else {
+        trayService.init(win);
+    }
+
+    const startMinimizedToTray = !!options['start-minimized-to-tray'];
+    if (!startMinimizedToTray) {
+        if (loadedWindowState.isFullScreen) {
+            win.setFullScreen(true);
+        } else if (loadedWindowState.isMaximized) {
+            win.maximize();
+        }
     }
 
     setMenu(win, options.devtools);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, options, packagesDir);
     appUpdateService = new AppUpdateService(logger, win, options);
     appService = new AppService(logger, win, deviceService, options, packagesDir);
+    fileDialogService = new FileDialogService(logger, win);
+    sharedConfigService = new SharedConfigService(logger, win);
     sudoService = new SudoService(logger, options, deviceService, packagesDir);
     // and load the index.html of the app.
 
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'renderer/index.html'),
+        pathname: path.join(import.meta.dirname, 'renderer/index.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -134,30 +153,26 @@ async function createWindow() {
     });
 
     // Emitted when the window is closed.
-    win.on('closed', async () => {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        logger.misc('[Electron Main] win closed');
-        win = null;
-        try {
-            await deviceService.close();
-        } catch (error) {
-            // TODO: Investigate it deeper. It happens on MacOs 15+ sometimes
-            logger.error('[Electron Main] Error while closing DeviceService when electron has been closed', error);
-        }
-        deviceService = null;
-        appUpdateService = null;
-        appService = null;
-        await uhkHidDeviceService.close();
-        uhkHidDeviceService = null;
-        sudoService = null;
-        await smartMacroDocService.stop();
-        smartMacroDocService = null;
+    win.on('closed', () => {
+        windowClosed()
+            .catch((error) => {
+                logger.error('[Electron Main] Error while closing window', error);
+            })
     });
 
     win.once('ready-to-show', () => {
-        win.show();
+        void (async () => {
+            await trayService.initTrayIfEnabled();
+
+            if (startMinimizedToTray) {
+                trayService.startInTray({
+                    isFullScreen: loadedWindowState.isFullScreen,
+                    isMaximized: loadedWindowState.isMaximized,
+                });
+            } else {
+                win.show();
+            }
+        })();
     });
 
     win.webContents.on('did-finish-load', () => {
@@ -197,6 +212,33 @@ async function createWindow() {
     });
 
     win.on('close', () => saveWindowState(win, logger));
+}
+
+async function windowClosed() {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    logger.misc('[Electron Main] win closed');
+    win = null;
+    try {
+        await deviceService.close();
+    } catch (error) {
+        // TODO: Investigate it deeper. It happens on MacOs 15+ sometimes
+        logger.error('[Electron Main] Error while closing DeviceService when electron has been closed', error);
+    }
+    deviceService = null;
+    appUpdateService = null;
+    appService = null;
+    fileDialogService = null;
+    sharedConfigService?.dispose();
+    sharedConfigService = null;
+    await uhkHidDeviceService.close();
+    uhkHidDeviceService = null;
+    sudoService = null;
+    await smartMacroDocService.stop();
+    smartMacroDocService = null;
+    trayService?.destroy();
+    trayService = null;
 }
 
 if (isSecondInstance) {
@@ -253,32 +295,34 @@ if (isSecondInstance) {
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    app.on('ready', createWindow);
+    app.on('ready', () => {
+        createWindow()
+            .catch((error) => {
+                logger.error('[Electron Main] when creating the window: ', error);
+            });
+    });
 
     // Quit when all windows are closed.
     app.on('window-all-closed', () => {
         app.exit();
     });
 
-    app.on('will-quit', () => {
-    });
-
-    app.on('activate', async () => {
+    app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (win === null) {
-            await createWindow();
+            createWindow()
+                .catch((error) => {
+                    logger.error('[Electron Main] when activating the app: ', error);
+                });
+        } else if (!win.isVisible()) {
+            trayService.revealWindow();
         }
     });
 
     app.on('second-instance', () => {
         // Someone tried to run a second instance, we should focus our window.
-        if (win) {
-            if (win.isMinimized()) {
-                win.restore();
-            }
-            win.focus();
-        }
+        trayService.revealWindow();
     });
 }
 // In this file you can include the rest of your app's specific main process

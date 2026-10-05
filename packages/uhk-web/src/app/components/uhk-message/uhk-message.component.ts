@@ -13,5 +13,7 @@ export class UhkMessageComponent {
     @Input() subtitle: string;
     @Input() rotateLogo = false;
     @Input() showLogo = false;
+    @Input() showProgressBar = false;
+    @Input() progressPercent = 0;
     @Input() smallText = false;
 }

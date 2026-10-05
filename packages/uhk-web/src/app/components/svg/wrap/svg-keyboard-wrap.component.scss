@@ -35,17 +35,20 @@ popover {
 
 .tooltip {
     position: fixed;
-    transform: translate(-50%, -6px);
+    transform: translate(-50%, 0);
     display: none;
+    margin-top: 0.45rem;
 
-    &-inner {
+    .tooltip-inner {
+        position: relative;
         background: #fff;
         color: #000;
         box-shadow: 0 1px 5px #000;
         text-align: left;
 
         p {
-            margin-bottom: 2px;
+            margin: 0 0 2px;
+            white-space: pre-wrap;
 
             &:last-of-type {
                 margin-bottom: 0;
@@ -53,10 +56,27 @@ popover {
         }
     }
 
-    &.bottom {
-        .tooltip-arrow {
-            border-bottom-color: #fff;
-            top: 1px;
+    &.note-tooltip .tooltip-inner {
+        text-align: center;
+    }
+
+    .tooltip-arrow {
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        z-index: 1;
+        width: 0;
+        height: 0;
+        margin: 0;
+        transform: translateX(-50%);
+        border-style: solid;
+        border-width: 0 6px 6px;
+        border-color: transparent transparent #fff;
+
+        &::before,
+        &::after {
+            content: none;
+            display: none;
         }
     }
 

@@ -1,21 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { routerNavigatedAction, RouterNavigatedAction } from '@ngrx/router-store';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
+import { Action } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { saveAs } from 'file-saver';
 
 import {
     BackupUserConfigurationInfo,
     Buffer,
+    DEFAULT_DEVICE_NAME,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
     ConfigurationReply,
+    isUserConfigVersionHigherThanFirmware,
     LogService,
     NotificationType,
+    readUserConfigurationVersionFromBinary,
+    readUserConfigurationVersionFromJsonObject,
     RightModuleInfo,
+    shouldUpgradeAgent,
     UHK_60_DEVICE,
     UhkBuffer,
     UhkDeviceProduct,
@@ -40,6 +45,7 @@ import {
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
+import { FileDialogService } from '../../services/file-dialog.service';
 import { Uhk80MigratorService } from '../../services/uhk80-migrator.service';
 import {
     AppState,
@@ -70,11 +76,19 @@ import {
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
-import { LoadUserConfigurationFromFilePayload } from '../../models';
 import { RouterState } from '../router-util.js';
 
 @Injectable()
 export class UserConfigEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly dataStorageRepository = inject(DataStorageRepositoryService);
+    private readonly defaultUserConfigurationService = inject(DefaultUserConfigurationService);
+    private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly fileDialogService = inject(FileDialogService);
+    private readonly logService = inject(LogService);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly uhk80MigratorService = inject(Uhk80MigratorService);
 
     loadUserConfig$ = createEffect(() => this.actions$
         .pipe(
@@ -111,6 +125,7 @@ export class UserConfigEffects {
                 Keymaps.ActionTypes.EditAbbr, Keymaps.ActionTypes.SetDefault, Keymaps.ActionTypes.Remove,
                 Keymaps.ActionTypes.SaveKey, Keymaps.ActionTypes.EditDescription, Keymaps.ActionTypes.ExchangeKeys,
                 Keymaps.ActionTypes.AddLayer, Keymaps.ActionTypes.RemoveLayer, Keymaps.ActionTypes.SetKeyColor,
+                Keymaps.ActionTypes.PasteLayer,
                 Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate, Macros.ActionTypes.EditName, Macros.ActionTypes.Remove,
                 Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
                 Macros.ActionTypes.ReorderAction, Macros.ActionTypes.DuplicateAction,
@@ -119,6 +134,7 @@ export class UserConfigEffects {
                 ActionTypes.ReorderHostConnections, ActionTypes.RenameHostConnection, ActionTypes.SetHostConnectionSwitchover,
                 ActionTypes.LoadTypingBehaviorPreset,
             ),
+            filter(action => !isNavigateToMacroSaveKey(action)),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration), this.store.select(getConnectedDevice)),
             mergeMap(([action, config, prevUserConfiguration, uhkDeviceProduct]) => {
                 config = Object.assign(new UserConfiguration(), config);
@@ -167,7 +183,7 @@ export class UserConfigEffects {
             map(action => action.payload),
             switchMap((payload: UndoUserConfigData) => this.dataStorageRepository.saveConfig(payload.config, payload.uhkDeviceProduct)
                 .pipe(
-                    tap(() => this.router.navigate([payload.path])),
+                    tap(() => { this.router.navigate([payload.path]); }),
                     map(() => new LoadUserConfigSuccessAction(payload.config))
                 )
             )
@@ -288,49 +304,98 @@ export class UserConfigEffects {
         .pipe(
             ofType(ActionTypes.SaveUserConfigInJsonFile),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getHardwareModules)),
-            tap(([action, userConfiguration, hardwareModules]) => {
+            mergeMap(([action, userConfiguration, hardwareModules]) => {
                 const newUserConfiguration= updateUserConfigurationWithLastSaveInfo(userConfiguration, hardwareModules.rightModuleInfo);
                 const asString = JSON.stringify(newUserConfiguration.toJsonObject(), null, 2);
-                const asBlob = new Blob([asString], { type: 'text/plain' });
-                saveAs(asBlob, 'UserConfiguration.json');
+                const data = new TextEncoder().encode(asString);
+
+                return this.fileDialogService.saveUserConfigurationFile('UserConfiguration.json', data, 'text/plain')
+                    .pipe(
+                        map(() => new EmptyAction()),
+                        catchError(error => this.showFileSaveErrorNotification(error))
+                    );
             })
-        ),
-    { dispatch: false }
+        )
     );
 
     saveUserConfigInBinFile$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SaveUserConfigInBinFile),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getHardwareModules)),
-            tap(([action, userConfiguration, hardwareModules]) => {
+            mergeMap(([action, userConfiguration, hardwareModules]) => {
                 const newUserConfiguration= updateUserConfigurationWithLastSaveInfo(userConfiguration, hardwareModules.rightModuleInfo);
                 const uhkBuffer = new UhkBuffer();
                 newUserConfiguration.toBinary(uhkBuffer);
-                const blob = new Blob([uhkBuffer.getBufferContent()]);
-                saveAs(blob, 'UserConfiguration.bin');
+                const data = uhkBuffer.getBufferContent();
+
+                return this.fileDialogService.saveUserConfigurationFile('UserConfiguration.bin', data, 'application/octet-stream')
+                    .pipe(
+                        map(() => new EmptyAction()),
+                        catchError(error => this.showFileSaveErrorNotification(error))
+                    );
             })
-        ),
-    { dispatch: false }
+        )
     );
 
     loadUserConfigurationFromFile$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile),
-            map(action => action.payload),
-            map((payload: LoadUserConfigurationFromFilePayload) => {
+            withLatestFrom(
+                this.store.select(getUserConfiguration),
+                this.store.select(disableUpdateAgentProtection),
+                this.store.select(getHardwareModules),
+            ),
+            map(([action, currentUserConfiguration, disableUpdateAgentProtection, hardwareModules]) => {
+                const payload = action.payload;
+                const deviceName = currentUserConfiguration.deviceName;
+                const firmwareUserConfigVersion = hardwareModules.rightModuleInfo?.userConfigVersion;
+                const userConfigTooHighForAgentNotification = (importedVersion: string) => new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: `The imported user configuration version (${importedVersion}) is too high for this Agent (supports up to ${VERSIONS.userConfigVersion}). Please update Agent.`
+                });
+                const userConfigTooHighForFirmwareNotification = (importedVersion: string) => new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: `The imported user configuration version (${importedVersion}) is too high for this firmware (supports up to ${firmwareUserConfigVersion}). Please update the firmware or use a compatible configuration.`
+                });
+
+                let importedUserConfigVersion: string | undefined;
+
                 try {
                     let userConfig = new UserConfiguration();
 
                     if (payload.uploadFileData.filename.endsWith('.bin')) {
-                        userConfig.fromBinary(UhkBuffer.fromArray(payload.uploadFileData.data));
+                        const uhkBuffer = UhkBuffer.fromArray(payload.uploadFileData.data);
+                        importedUserConfigVersion = readUserConfigurationVersionFromBinary(uhkBuffer);
+                        if (shouldUpgradeAgent(importedUserConfigVersion, disableUpdateAgentProtection)) {
+                            return userConfigTooHighForAgentNotification(importedUserConfigVersion);
+                        }
+                        if (isUserConfigVersionHigherThanFirmware(importedUserConfigVersion, firmwareUserConfigVersion)) {
+                            return userConfigTooHighForFirmwareNotification(importedUserConfigVersion);
+                        }
+                        userConfig.fromBinary(uhkBuffer);
                     } else {
                         const buffer = Buffer.from(payload.uploadFileData.data);
-                        const json = buffer.toString();
-                        userConfig.fromJsonObject(JSON.parse(json));
+                        const json = JSON.parse(buffer.toString());
+                        importedUserConfigVersion = readUserConfigurationVersionFromJsonObject(json);
+                        if (importedUserConfigVersion
+                            && shouldUpgradeAgent(importedUserConfigVersion, disableUpdateAgentProtection)) {
+                            return userConfigTooHighForAgentNotification(importedUserConfigVersion);
+                        }
+                        if (importedUserConfigVersion
+                            && isUserConfigVersionHigherThanFirmware(importedUserConfigVersion, firmwareUserConfigVersion)) {
+                            return userConfigTooHighForFirmwareNotification(importedUserConfigVersion);
+                        }
+                        userConfig.fromJsonObject(json);
                     }
 
                     if (userConfig.userConfigMajorVersion) {
                         userConfig = this.uhk80MigratorService.migrate(userConfig);
+
+                        // Keep the connected keyboard's name when importing a config, so a single config
+                        // can be shared across multiple keyboards while each retains its own name.
+                        if (deviceName !== DEFAULT_DEVICE_NAME) {
+                            userConfig.deviceName = deviceName;
+                        }
 
                         if (payload.autoSave) {
                             return new ApplyUserConfigurationFromFileAction({
@@ -347,6 +412,15 @@ export class UserConfigEffects {
                         message: 'Invalid configuration specified.'
                     });
                 } catch (err) {
+                    if (importedUserConfigVersion
+                        && shouldUpgradeAgent(importedUserConfigVersion, false)) {
+                        return userConfigTooHighForAgentNotification(importedUserConfigVersion);
+                    }
+                    if (importedUserConfigVersion
+                        && isUserConfigVersionHigherThanFirmware(importedUserConfigVersion, firmwareUserConfigVersion)) {
+                        return userConfigTooHighForFirmwareNotification(importedUserConfigVersion);
+                    }
+
                     return new ShowNotificationAction({
                         type: NotificationType.Error,
                         message: 'Invalid configuration specified.'
@@ -366,6 +440,7 @@ export class UserConfigEffects {
                             [module.configPath],
                             {
                                 queryParams: {
+                                    backSuffix: action.payload.backSuffix,
                                     backText: action.payload.backText,
                                     backUrl: action.payload.backUrl,
                                 },
@@ -407,28 +482,37 @@ export class UserConfigEffects {
     resetKeymapQueryParams$ = createEffect(() => this.actions$
         .pipe(
             ofType(Keymaps.ActionTypes.SaveKey, Keymaps.ActionTypes.ClosePopover),
-            tap(() => this.router.navigate([], {
-                queryParams: {
-                    module: null,
-                    key: null,
-                    remapOnAllKeymap: null,
-                    remapOnAllLayer: null,
-                },
-                queryParamsHandling: 'merge'
-            }))
+            filter(action => {
+                if (action.type !== Keymaps.ActionTypes.SaveKey) {
+                    return true;
+                }
+
+                const keyAction = (action as Keymaps.SaveKeyAction).payload.keyAction;
+
+                return !keyAction.navigateToMacro && !keyAction.assignNewMacro;
+            }),
+            tap(() => {
+                this.router.navigate([], {
+                    queryParams: {
+                        module: null,
+                        key: null,
+                        remapOnAllKeymap: null,
+                        remapOnAllLayer: null,
+                    },
+                    queryParamsHandling: 'merge'
+                })
+            })
         ),
     { dispatch: false }
     );
 
-    constructor(private actions$: Actions,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private store: Store<AppState>,
-                private defaultUserConfigurationService: DefaultUserConfigurationService,
-                private deviceRendererService: DeviceRendererService,
-                private logService: LogService,
-                private router: Router,
-                private uhk80MigratorService: Uhk80MigratorService,
-    ) {
+    private showFileSaveErrorNotification(error: unknown): Observable<Action> {
+        this.logService.error('[UserConfigEffects] Failed to save the user configuration file', error);
+
+        return of(new ShowNotificationAction({
+            type: NotificationType.Error,
+            message: 'Failed to save the user configuration file.'
+        }));
     }
 
     private getUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): Observable<UserConfiguration> {
@@ -454,7 +538,16 @@ export class UserConfigEffects {
     }
 }
 
-function updateUserConfigurationWithLastSaveInfo(userConfiguration: UserConfiguration, rightModuleInfo: RightModuleInfo) {
+function isNavigateToMacroSaveKey(action: Action): boolean {
+    if (action.type !== Keymaps.ActionTypes.SaveKey) {
+        return false;
+    }
+
+    const keyAction = (action as Keymaps.SaveKeyAction).payload.keyAction;
+    return keyAction.navigateToMacro && !keyAction.assignNewMacro;
+}
+
+export function updateUserConfigurationWithLastSaveInfo(userConfiguration: UserConfiguration, rightModuleInfo: RightModuleInfo) {
     const newUserConfiguration = userConfiguration.clone()
     newUserConfiguration.lastSaveAgentTag = `${VERSIONS.agentRepo}/${VERSIONS.agentTag}`;
     newUserConfiguration.lastSaveFirmwareTag = `${rightModuleInfo.firmwareGitRepo}/${rightModuleInfo.firmwareGitTag}`

@@ -13,7 +13,8 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
@@ -47,7 +48,7 @@ import {
 import { MapperService } from '../../../services/mapper.service';
 import { AppState, getKeymaps, getMacros, getAnimationEnabled, getOpenPopover } from '../../../store';
 import { ClosePopoverAction } from '../../../store/actions/keymap';
-import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
+import { AddLayerAction, CopyLayerAction, PasteLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
@@ -58,7 +59,7 @@ import {
 } from '../../../models/svg-key-events';
 import { SelectOptionData } from '../../../models/select-option-data';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
-import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload, OpenPopoverModel, SelectedKeyModel } from '../../../models';
+import { CopiedLayerOrigin, LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload, OpenPopoverModel, SelectedKeyModel } from '../../../models';
 
 interface NameValuePair {
     name: string;
@@ -101,8 +102,11 @@ interface NameValuePair {
     ]
 })
 export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
+    @Input() allowLayerCopy = false;
     @Input() allowNewLayers: boolean;
     @Input() backlightingMode: BacklightingMode;
+    @Input() canPasteLayer = false;
+    @Input() copiedLayerOrigin: CopiedLayerOrigin;
     @Input() currentLayer: LayerOption;
     @Input() isBacklightingColoring = false;
     @Input() keymap: Keymap;
@@ -137,7 +141,9 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
         posTop: number,
         posLeft: number,
         content: Observable<NameValuePair[]>,
-        show: boolean
+        show: boolean,
+        isNote: boolean,
+        note: string
     };
     layers: Layer[];
     keyPosition: ClientRect;
@@ -147,18 +153,18 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     topPosition: number = 0;
     leftPosition: number = 0;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly element = inject(ElementRef);
+    private readonly mapper = inject(MapperService);
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
+    private restoreFocusAfterPopoverClose = false;
     private animationSubscription = new Subscription();
     private openPopoverSubscription = new Subscription();
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(
-        private store: Store<AppState>,
-        private mapper: MapperService,
-        private element: ElementRef,
-        private cdRef: ChangeDetectorRef,
-        private router: Router
-    ) {
+    constructor() {
         this.animationState = 'closed';
         this.keyEditConfig = {
             moduleId: undefined,
@@ -171,7 +177,9 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
             posTop: 0,
             posLeft: 0,
             content: of([]),
-            show: false
+            show: false,
+            isNote: false,
+            note: ''
         };
 
         this.animationSubscription =
@@ -238,6 +246,8 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {
+        this.restoreFocusAfterPopoverClose = !!event.keyboardTriggered;
+
         if (this.isBacklightingColoring) {
             this.store.dispatch(new SetKeyColorAction({
                 keymap: this.keymap,
@@ -259,18 +269,20 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     onKeyHover(event: SvgKeyHoverEvent): void {
-        if (this.tooltipEnabled) {
-            const keyActionToEdit: KeyAction = this.layers
-                .find(layer => layer.id === this.currentLayer.id)
-                .modules
-                .find(findModuleById(event.moduleId))
-                .keyActions[event.keyId];
+        const keyActionToEdit: KeyAction = this.layers
+            .find(layer => layer.id === this.currentLayer.id)
+            .modules
+            .find(findModuleById(event.moduleId))
+            .keyActions[event.keyId];
 
-            if (event.over) {
+        if (event.over) {
+            if (keyActionToEdit?.label) {
+                this.showNoteTooltip(keyActionToEdit, event.event);
+            } else if (this.tooltipEnabled) {
                 this.showTooltip(keyActionToEdit, event.event);
-            } else {
-                this.hideTooltip();
             }
+        } else {
+            this.hideTooltip();
         }
     }
 
@@ -319,6 +331,14 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
         this.store.dispatch(new RemoveLayerAction(id));
     }
 
+    onCopyLayer(): void {
+        this.store.dispatch(new CopyLayerAction(this.currentLayer.id));
+    }
+
+    onPasteLayer(): void {
+        this.store.dispatch(new PasteLayerAction(this.currentLayer.id));
+    }
+
     showPopover(keyAction: KeyAction): void {
         setTimeout(() => {
             this.keyPosition = this.keyElement.getBoundingClientRect();
@@ -334,21 +354,26 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
             return;
         }
 
-        const el = event.target as Element;
-        const position: ClientRect = el.getBoundingClientRect();
-        let posLeft: number = this.tooltipData.posLeft;
-        let posTop: number = this.tooltipData.posTop;
+        this.tooltipData = {
+            ...this.getTooltipPosition(event),
+            content: this.getKeyActionContent(keyAction),
+            show: true,
+            isNote: false,
+            note: ''
+        };
+    }
 
-        if (el.tagName === 'g') {
-            posLeft = position.left + (position.width / 2);
-            posTop = position.top + position.height;
+    showNoteTooltip(keyAction: KeyAction, event: MouseEvent): void {
+        if (!keyAction?.label) {
+            return;
         }
 
         this.tooltipData = {
-            posLeft: posLeft,
-            posTop: posTop,
-            content: this.getKeyActionContent(keyAction),
-            show: true
+            ...this.getTooltipPosition(event),
+            content: of([]),
+            show: true,
+            isNote: true,
+            note: keyAction.label
         };
     }
 
@@ -361,9 +386,17 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     hidePopover(): void {
+        const keyElementToRefocus = this.animationState === 'opened' && this.restoreFocusAfterPopoverClose
+            ? this.keyElement
+            : undefined;
         this.animationState = 'closed';
         this.selectedKey = undefined;
         this.popoverInitKeyAction = null;
+        this.restoreFocusAfterPopoverClose = false;
+
+        if (keyElementToRefocus) {
+            setTimeout(() => keyElementToRefocus.focus());
+        }
     }
 
     onDescriptionChanged(description: string): void {
@@ -371,6 +404,20 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
             description,
             abbr: this.keymap.abbreviation
         });
+    }
+
+    private getTooltipPosition(event: MouseEvent): { posLeft: number, posTop: number } {
+        const el = event.target as Element;
+        const position: ClientRect = el.getBoundingClientRect();
+        let posLeft: number = this.tooltipData.posLeft;
+        let posTop: number = this.tooltipData.posTop;
+
+        if (el.tagName === 'g') {
+            posLeft = position.left + (position.width / 2);
+            posTop = position.top + position.height;
+        }
+
+        return { posLeft, posTop };
     }
 
     private getKeyActionContent(keyAction: KeyAction): Observable<NameValuePair[]> {

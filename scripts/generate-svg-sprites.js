@@ -1,6 +1,6 @@
 const SVGSpriter = require('svg-sprite');
-const path = require('path');
-const fs = require('fs-extra');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const transform = [
     {
@@ -128,7 +128,7 @@ function writeResultFiles (error, result) {
 
         // Run through all created resources and write them to disk
         for (const type in result[mode]) {
-            fs.ensureDirSync(path.dirname(result[mode][type].path));
+            fs.mkdirSync(path.dirname(result[mode][type].path), { recursive: true });
             fs.writeFileSync(result[mode][type].path, result[mode][type].contents);
         }
     }

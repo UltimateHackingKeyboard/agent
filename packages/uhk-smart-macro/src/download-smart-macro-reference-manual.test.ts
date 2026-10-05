@@ -1,5 +1,4 @@
-import * as fs from 'fs-extra';
-import { readdir, stat as statPromise } from 'fs/promises';
+import { readdir, rm, stat as statPromise } from 'fs/promises';
 import * as path from 'path';
 import { describe, it } from 'node:test';
 
@@ -8,7 +7,7 @@ import { downloadSmartMacroReferenceManual } from './download-smart-macro-refere
 describe('downloadSmartMacroReferenceManual', () => {
     it('should download the reference manual', { timeout: 30000 }, async ({ assert }) => {
         const directory = path.join(import.meta.dirname, '..', 'tmp', 'doc', 'doc-dev');
-        await fs.remove(directory);
+        await rm(directory, { recursive: true, force: true });
 
         await downloadSmartMacroReferenceManual({
             owner: 'UltimateHackingKeyboard',

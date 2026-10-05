@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MonacoEditorLoaderService } from '@materia-ui/ngx-monaco-editor';
 import { filter, take } from 'rxjs/operators';
 
@@ -9,10 +9,10 @@ export const MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID = 'uhk-macro';
 
 @Injectable({ providedIn: 'root' })
 export class MonacoEditorUhkSetupService {
-    constructor(
-        private monacoLoaderService: MonacoEditorLoaderService,
-        private completionItemProvider: MonacoEditorCompletionItemProvider
-    ) {
+    private readonly monacoLoaderService = inject(MonacoEditorLoaderService);
+    private readonly completionItemProvider = inject(MonacoEditorCompletionItemProvider);
+
+    constructor() {
         this.monacoLoaderService.isMonacoLoaded$.pipe(
             filter(isLoaded => isLoaded),
             take(1),

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -27,8 +27,7 @@ export class AboutComponent implements OnInit {
     state$: Observable<State>;
     faSpinner = faSpinner;
 
-    constructor(private store: Store<AppState>) {
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnInit() {
         this.state$ = this.store.select(contributors);

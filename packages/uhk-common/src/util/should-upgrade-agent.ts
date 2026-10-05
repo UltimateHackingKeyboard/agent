@@ -1,4 +1,4 @@
-import { isVersionGtMinor } from './is-version-gt-minor.js';
+import { isVersionGtMinor } from './version-helpers.js';
 import { VERSIONS } from './versions.js';
 
 export function shouldUpgradeAgent(newUserConfigVersion: string, disableUpdateAgentProtection: boolean): boolean {

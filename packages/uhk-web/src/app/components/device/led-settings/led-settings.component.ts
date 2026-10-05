@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BacklightingOption } from '../../../models/index';
 import { AppState, getBacklightingOptions, getConnectedDevice, getUserConfiguration } from '../../../store';
@@ -45,13 +45,12 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     faSlidersH = faSlidersH;
     showBatteryPoweredColumn = false;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
     private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;
     private backlightingOptionsSubscription: Subscription;
     private connectedDeviceSubscription: Subscription;
-
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {}
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnInit() {
         this.userConfig$ = this.store.select(getUserConfiguration);

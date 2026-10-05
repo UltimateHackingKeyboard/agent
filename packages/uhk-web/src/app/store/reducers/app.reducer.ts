@@ -2,14 +2,21 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
     AppTheme,
     CommandLineArgs,
+    DEFAULT_KEY_LANGUAGE,
+    DEFAULT_MACRO_GROUPING_SETTINGS,
     disableAgentUpgradeProtection,
     HardwareConfiguration,
     KeyboardLayout,
+    KeyLanguage,
+    MacroGroupingSettings,
     Notification,
     NotificationType,
     runInElectron,
+    SharedConfigApplyData,
     UserConfiguration,
 } from 'uhk-common';
+
+import { normalizeMacroGroupingSettings } from '../../util/group-macros-by-name';
 
 import * as App from '../actions/app';
 import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } from '../actions/user-config';
@@ -19,7 +26,9 @@ const DEFAULT_ERROR_PANEL_HEIGHT = 10;
 
 export interface State {
     appTheme: AppTheme;
+    keyLanguage: KeyLanguage;
     animationEnabled: boolean;
+    minimizeToTray: boolean;
     errorPanelHeight: number;
     isRunningOnWayland: boolean;
     started: boolean;
@@ -29,6 +38,7 @@ export interface State {
     prevUserConfig?: UserConfiguration;
     runningInElectron: boolean;
     configLoading: boolean;
+    configurationLoadingProgress: number;
     hardwareConfig?: HardwareConfiguration;
     privilegeWhatWillThisDoClicked: boolean;
     permissionError?: unknown;
@@ -36,12 +46,18 @@ export interface State {
     osVersion?: string;
     keypressCapturing: boolean;
     everAttemptedSavingToKeyboard: boolean;
+    macroGrouping: MacroGroupingSettings;
     udevFileContent: string;
+    sharedConfigurationFilePath?: string;
+    detectSharedConfigurationChanges: boolean;
+    sharedConfigChange?: SharedConfigApplyData;
 }
 
 export const initialState: State = {
     appTheme: AppTheme.System,
+    keyLanguage: DEFAULT_KEY_LANGUAGE,
     animationEnabled: true,
+    minimizeToTray: false,
     errorPanelHeight: DEFAULT_ERROR_PANEL_HEIGHT,
     isRunningOnWayland: false,
     started: false,
@@ -49,10 +65,13 @@ export const initialState: State = {
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
     configLoading: true,
+    configurationLoadingProgress: 0,
     privilegeWhatWillThisDoClicked: false,
     keypressCapturing: false,
     everAttemptedSavingToKeyboard: false,
-    udevFileContent: ''
+    macroGrouping: DEFAULT_MACRO_GROUPING_SETTINGS,
+    udevFileContent: '',
+    detectSharedConfigurationChanges: false
 };
 
 export function reducer(
@@ -133,7 +152,17 @@ export function reducer(
         case UserConfigActionTypes.LoadUserConfig: {
             return {
                 ...state,
-                configLoading: true
+                configLoading: true,
+                configurationLoadingProgress: 0
+            };
+        }
+
+        case App.ActionTypes.ConfigurationLoadingProgressChanged: {
+            const progress = (action as App.ConfigurationLoadingProgressChangedAction).payload;
+
+            return {
+                ...state,
+                configurationLoadingProgress: progress
             };
         }
 
@@ -152,7 +181,8 @@ export function reducer(
 
             return {
                 ...state,
-                hardwareConfig: null
+                hardwareConfig: null,
+                configurationLoadingProgress: 0
             };
         }
 
@@ -194,7 +224,13 @@ export function reducer(
                 errorPanelHeight: settings.errorPanelHeight || DEFAULT_ERROR_PANEL_HEIGHT,
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
                 animationEnabled: settings.animationEnabled,
-                appTheme: settings.appTheme || AppTheme.System
+                appTheme: settings.appTheme || AppTheme.System,
+                keyLanguage: settings.keyLanguage || DEFAULT_KEY_LANGUAGE,
+                macroGrouping: normalizeMacroGroupingSettings(settings.macroGrouping),
+                minimizeToTray: settings.minimizeToTray ?? false,
+                sharedConfigurationFilePath: settings.sharedConfigurationFilePath,
+                detectSharedConfigurationChanges: !!settings.sharedConfigurationFilePath
+                    && !!settings.detectSharedConfigurationChanges,
             };
         }
 
@@ -210,10 +246,60 @@ export function reducer(
                 animationEnabled: (action as App.ToggleAnimationEnabledAction).payload
             };
 
+        case App.ActionTypes.SetMacroGroupingSettings:
+            return {
+                ...state,
+                macroGrouping: normalizeMacroGroupingSettings({
+                    ...state.macroGrouping,
+                    ...(action as App.SetMacroGroupingSettingsAction).payload
+                })
+            };
+
+        case App.ActionTypes.ToggleMinimizeToTray:
+            return {
+                ...state,
+                minimizeToTray: (action as App.ToggleMinimizeToTrayAction).payload
+            };
+
         case App.ActionTypes.SetAppTheme:
             return {
                 ...state,
                 appTheme: (action as App.SetAppThemeAction).payload
+            };
+
+        case App.ActionTypes.SetKeyLanguage:
+            return {
+                ...state,
+                keyLanguage: (action as App.SetKeyLanguageAction).payload
+            };
+
+        case App.ActionTypes.SetSharedConfigurationFilePath: {
+            const filePath = (action as App.SetSharedConfigurationFilePathAction).payload;
+
+            return {
+                ...state,
+                sharedConfigurationFilePath: filePath,
+                detectSharedConfigurationChanges: filePath ? state.detectSharedConfigurationChanges : false
+            };
+        }
+
+        case App.ActionTypes.SetDetectSharedConfigurationChanges:
+            return {
+                ...state,
+                detectSharedConfigurationChanges: !!state.sharedConfigurationFilePath
+                    && (action as App.SetDetectSharedConfigurationChangesAction).payload
+            };
+
+        case App.ActionTypes.SharedConfigChangeDetected:
+            return {
+                ...state,
+                sharedConfigChange: (action as App.SharedConfigChangeDetectedAction).payload
+            };
+
+        case App.ActionTypes.DismissSharedConfigChange:
+            return {
+                ...state,
+                sharedConfigChange: undefined
             };
 
         default:
@@ -235,6 +321,7 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
     return KeyboardLayout.ANSI;
 };
 export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
+export const getConfigurationLoadingProgress = (state: State): number => state.configurationLoadingProgress;
 
 export const runningOnNotSupportedWindows = (state: State): boolean => {
     if (!state.osVersion || state.platform !== 'win32') {
@@ -252,7 +339,13 @@ export const keypressCapturing = (state: State): boolean => state.keypressCaptur
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
 export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;
+export const getMacroGroupingSettings = (state: State): MacroGroupingSettings => state.macroGrouping;
+export const getMinimizeToTray = (state: State): boolean => state.minimizeToTray;
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
+export const getKeyLanguage = (state: State): KeyLanguage => state.keyLanguage;
+export const getSharedConfigurationFilePath = (state: State): string | undefined => state.sharedConfigurationFilePath;
+export const getDetectSharedConfigurationChanges = (state: State): boolean => state.detectSharedConfigurationChanges;
+export const getSharedConfigChange = (state: State): SharedConfigApplyData | undefined => state.sharedConfigChange;
 export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;
 export const getPlatform = (state: State): string => state.platform;
 export const isColorPickerEyeDropperEnabled = (state: State): boolean => !state.isRunningOnWayland;

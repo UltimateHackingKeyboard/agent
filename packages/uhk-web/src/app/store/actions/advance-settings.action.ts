@@ -19,6 +19,7 @@ export enum ActionTypes {
     toggleRightHalfZephyrLogging = '[advanceSettings] toggle right half zephyr logging',
     toggleZephyrLogging = '[advanceSettings] toggle zephyr logging',
     showAdvancedSettingsMenu = '[advanceSettings] show menu',
+    toggleAlwaysEnableAdvancedMode = '[advanceSettings] toggle always enable advanced mode',
     zephyrLog = '[advanceSettings] zephyr log',
 }
 
@@ -103,6 +104,12 @@ export class ShowAdvancedSettingsMenuAction implements Action {
     type = ActionTypes.showAdvancedSettingsMenu;
 }
 
+export class ToggleAlwaysEnableAdvancedModeAction implements Action {
+    type = ActionTypes.toggleAlwaysEnableAdvancedMode;
+
+    constructor(public payload: boolean) {}
+}
+
 export class ZephyrLogAction implements Action {
     type = ActionTypes.zephyrLog;
 
@@ -124,6 +131,7 @@ export type Actions =
     | ToggleRightHalfZephyrLoggingAction
     | ToggleZephyrLoggingAction
     | ShowAdvancedSettingsMenuAction
+    | ToggleAlwaysEnableAdvancedModeAction
     | StartLeftHalfPairingAction
     | LeftHalfPairingSuccessAction
     | LeftHalfPairingFailedAction

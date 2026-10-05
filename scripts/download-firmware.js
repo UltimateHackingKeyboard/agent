@@ -2,9 +2,10 @@ const { Readable } = require('stream');
 const { pipeline } = require('stream/promises');
 const decompress = require('decompress');
 const decompressTargz = require('decompress-targz');
-const path = require('path');
-const fs = require('fs');
-const fse = require('fs-extra');
+const path = require('node:path');
+const fs = require('node:fs');
+
+const {emptyDir} = require("../packages/uhk-fs/lib/empty-dir.js");
 
 async function downloadFirmware(version) {
     const url = `https://github.com/UltimateHackingKeyboard/firmware/releases/download/v${version}/uhk-firmware-${version}.tar.gz`;
@@ -32,11 +33,11 @@ async function downloadFile(url, output) {
     const agentJson = require('../package.json');
 
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages/firmware');
-    await fse.emptyDir(extractedFirmwareDir);
+    await emptyDir(extractedFirmwareDir);
 
     // Download the firmware and add as extra resources
     const firmwarePath = await downloadFirmware(agentJson.firmwareVersion);
     await decompress(firmwarePath, extractedFirmwareDir, {plugins: [decompressTargz()]});
 
-    await fse.remove(firmwarePath);
+    fs.rmSync(firmwarePath);
 })();

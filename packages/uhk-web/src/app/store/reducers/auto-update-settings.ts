@@ -37,6 +37,8 @@ export function reducer(state = initialState, action: AutoUpdate.Actions | AppUp
             };
         }
 
+        case AppUpdate.ActionTypes.UpdateAvailable:
+        case AppUpdate.ActionTypes.UpdateDownloaded:
         case AppUpdate.ActionTypes.UpdateError:
         case AutoUpdate.ActionTypes.CheckForUpdateSuccess:
         case AutoUpdate.ActionTypes.CheckForUpdateFailed: {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Key } from 'ts-keycode-enum';
 
@@ -8,11 +8,12 @@ import { KeyModifierModel } from '../models/key-modifier-model';
 
 @Injectable()
 export class CaptureService {
+    private readonly mapper = inject(MapperService);
     private mapping: Map<number, number>;
     private readonly leftModifiers: Map<number, KeyModifierModel>;
     private readonly rightModifiers: Map<number, KeyModifierModel>;
 
-    constructor(private mapper: MapperService) {
+    constructor() {
         this.leftModifiers = new Map<number, KeyModifierModel>();
         this.rightModifiers = new Map<number, KeyModifierModel>();
         this.mapping = new Map<number, number>();

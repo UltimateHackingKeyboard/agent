@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, Notification } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, KeyLanguage, MacroGroupingSettings, Notification, SharedConfigApplyData } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 import { NavigationPayload } from '../../models';
 
@@ -17,6 +17,7 @@ export enum ActionTypes {
     UndoLastSuccess = '[app] undo last action success',
     DismissUndoNotification = '[app] dismiss notification action',
     LoadHardwareConfigurationSuccess = '[app] load hardware configuration success',
+    ConfigurationLoadingProgressChanged = '[app] configuration loading progress changed',
     LoadApplicationSettings = '[app] Load application settings',
     LoadApplicationSettingsSuccess = '[app] Load application settings success',
     SaveApplicationSettingsSuccess = '[app] Save application settings success',
@@ -28,7 +29,15 @@ export enum ActionTypes {
     SetupPermissionError = '[app] Setup permission error',
     ToggleAnimationEnabled = '[app] Toggle animation enabled',
     ToggleKeyboardHalvesAlwaysJoined = '[app] Toggle keyboard halves always joined',
+    SetMacroGroupingSettings = '[app] Set macro grouping settings',
+    ToggleMinimizeToTray = '[app] Toggle minimize to tray',
     SetAppTheme = '[app] Set application theme',
+    SetKeyLanguage = '[app] Set key language',
+    SetSharedConfigurationFilePath = '[app] Set shared configuration file path',
+    SetDetectSharedConfigurationChanges = '[app] Set detect shared configuration changes',
+    SharedConfigChangeDetected = '[app] shared configuration change detected',
+    ApplySharedConfigChange = '[app] apply shared configuration change',
+    DismissSharedConfigChange = '[app] dismiss shared configuration change',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
     StopKeypressCapturing = '[app] Stop keypress capturing',
@@ -103,6 +112,13 @@ export class LoadHardwareConfigurationSuccessAction implements Action {
     }
 }
 
+export class ConfigurationLoadingProgressChangedAction implements Action {
+    type = ActionTypes.ConfigurationLoadingProgressChanged;
+
+    constructor(public payload: number) {
+    }
+}
+
 export class LoadApplicationSettingsAction implements Action {
     type = ActionTypes.LoadApplicationSettings;
 }
@@ -165,11 +181,61 @@ export class ToggleKeyboardHalvesAlwaysJoinedAction implements Action {
     }
 }
 
+export class SetMacroGroupingSettingsAction implements Action {
+    type = ActionTypes.SetMacroGroupingSettings;
+
+    constructor(public payload: Partial<MacroGroupingSettings>) {
+    }
+}
+
+export class ToggleMinimizeToTrayAction implements Action {
+    type = ActionTypes.ToggleMinimizeToTray;
+
+    constructor(public payload: boolean) {
+    }
+}
+
 export class SetAppThemeAction implements Action {
     type = ActionTypes.SetAppTheme;
 
     constructor(public payload: AppTheme) {
     }
+}
+
+export class SetKeyLanguageAction implements Action {
+    type = ActionTypes.SetKeyLanguage;
+
+    constructor(public payload: KeyLanguage) {
+    }
+}
+
+export class SetSharedConfigurationFilePathAction implements Action {
+    type = ActionTypes.SetSharedConfigurationFilePath;
+
+    constructor(public payload?: string) {
+    }
+}
+
+export class SetDetectSharedConfigurationChangesAction implements Action {
+    type = ActionTypes.SetDetectSharedConfigurationChanges;
+
+    constructor(public payload: boolean) {
+    }
+}
+
+export class SharedConfigChangeDetectedAction implements Action {
+    type = ActionTypes.SharedConfigChangeDetected;
+
+    constructor(public payload: SharedConfigApplyData) {
+    }
+}
+
+export class ApplySharedConfigChangeAction implements Action {
+    type = ActionTypes.ApplySharedConfigChange;
+}
+
+export class DismissSharedConfigChangeAction implements Action {
+    type = ActionTypes.DismissSharedConfigChange;
 }
 
 export class LoadAppStartInfoAction implements Action {
@@ -215,6 +281,7 @@ export type Actions
     | UndoLastSuccessAction
     | DismissUndoNotificationAction
     | LoadHardwareConfigurationSuccessAction
+    | ConfigurationLoadingProgressChangedAction
     | LoadApplicationSettingsAction
     | LoadApplicationSettingsSuccessAction
     | SaveApplicationSettingsSuccessAction
@@ -226,7 +293,15 @@ export type Actions
     | SetupPermissionErrorAction
     | ToggleAnimationEnabledAction
     | ToggleKeyboardHalvesAlwaysJoinedAction
+    | SetMacroGroupingSettingsAction
+    | ToggleMinimizeToTrayAction
     | SetAppThemeAction
+    | SetKeyLanguageAction
+    | SetSharedConfigurationFilePathAction
+    | SetDetectSharedConfigurationChangesAction
+    | SharedConfigChangeDetectedAction
+    | ApplySharedConfigChangeAction
+    | DismissSharedConfigChangeAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction
     | StopKeypressCapturingAction

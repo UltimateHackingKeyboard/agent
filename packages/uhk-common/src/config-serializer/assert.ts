@@ -1,31 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+export const INT8_MIN = -0x80;
+export const INT8_MAX = 0x7F;
+export const INT16_MIN = -0x8000;
+export const INT16_MAX = 0x7FFF;
+export const INT32_MIN = -0x80000000;
+export const INT32_MAX = 0x7FFFFFFF;
+export const UINT8_MAX = 0xFF;
+export const UINT16_MAX = 0xFFFF;
+export const UINT32_MAX = 0xFFFFFFFF;
+
 export function assertUInt8(target: any, key: string) {
-    return assertInteger(target, key, 0, 0xFF);
+    return assertInteger(target, key, 0, UINT8_MAX);
 }
 
 export function assertInt8(target: any, key: string) {
-    return assertInteger(target, key, -0x80, 0x7F);
+    return assertInteger(target, key, INT8_MIN, INT8_MAX);
 }
 
 export function assertUInt16(target: any, key: string) {
-    return assertInteger(target, key, 0, 0xFFFF);
+    return assertInteger(target, key, 0, UINT16_MAX);
 }
 
 export function assertInt16(target: any, key: string) {
-    return assertInteger(target, key, -0x8000, 0x7FFF);
+    return assertInteger(target, key, INT16_MIN, INT16_MAX);
 }
 
 export function assertUInt32(target: any, key: string) {
-    return assertInteger(target, key, 0, 0xFFFFFFFF);
+    return assertInteger(target, key, 0, UINT32_MAX);
 }
 
 export function assertInt32(target: any, key: string) {
-    return assertInteger(target, key, -0x80000000, 0x7FFFFFFF);
+    return assertInteger(target, key, INT32_MIN, INT32_MAX);
 }
 
 export function assertFloat(target: any, key: string) {
-    return assertInteger(target, key, -0x80000000, 0x7FFFFFFF);
+    return assertInteger(target, key, INT32_MIN, INT32_MAX);
 }
 
 export function assertCompactLength(target: any, key: string) {
@@ -42,8 +52,8 @@ function assertInteger(target: any, key: string, min: number, max: number) {
     function setter(newVal: any) {
         if (this[priv] !== newVal) {
             if (newVal < min || newVal > max) {
-                throw `${target.constructor.name}.${key}: ` +
-                    `Integer ${newVal} is outside the valid [${min}, ${max}] interval`;
+                throw new Error(`${target.constructor.name}.${key}: ` +
+                    `Integer ${newVal} is outside the valid [${min}, ${max}] interval`);
             }
             this[priv] = newVal;
         }
@@ -72,7 +82,7 @@ export function assertEnum<E>(enumerated: E) {
 
             if (this[priv] !== newVal) {
                 if (enumerated[newVal] === undefined) {
-                    throw `${target.constructor.name}.${key}: ${newVal} is not enum`;
+                    throw new Error(`${target.constructor.name}.${key}: ${newVal} is not enum`);
                 }
                 this[priv] = newVal;
             }

@@ -1,6 +1,6 @@
 import { app } from 'electron';
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import {
     BackupUserConfiguration,
     BackupUserConfigurationInfo,
@@ -10,6 +10,7 @@ import {
     shouldUpgradeAgent,
     UserConfiguration,
 } from 'uhk-common';
+import { pathExists } from 'uhk-fs';
 
 import { loadUserConfigFromBinaryFile } from './load-user-config-from-binary-file';
 import { loadUserConfigHistoryAsync } from './load-user-config-history-async';
@@ -22,16 +23,18 @@ export const getBackupUserConfigurationPath = (uniqueId: number): string => {
 
 export const backupUserConfiguration = (data: SaveUserConfigurationData): Promise<void> => {
     const backupFilePath = getBackupUserConfigurationPath(data.uniqueId);
-    return fs.writeJSON(backupFilePath, data.configuration, {spaces: 2});
+    const fileContent = JSON.stringify(data.configuration, null, 2);
+    return fs.writeFile(backupFilePath, fileContent, { encoding: 'utf-8' });
 };
 
 export async function getBackupUserConfigurationContent(logService: LogService, uniqueId: number): Promise<BackupUserConfiguration> {
     try {
         const backupFilePath = getBackupUserConfigurationPath(uniqueId);
 
-        if (await fs.pathExists(backupFilePath)) {
+        if (await pathExists(backupFilePath)) {
             try {
-                const json = await fs.readJSON(backupFilePath);
+                const fileContent = await fs.readFile(backupFilePath, { encoding: 'utf-8' });
+                const json = JSON.parse(fileContent);
                 const config = new UserConfiguration().fromJsonObject(json);
 
                 if (!shouldUpgradeAgent(config.getSemanticVersion(), false)) {

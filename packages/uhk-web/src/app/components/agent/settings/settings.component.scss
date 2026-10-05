@@ -1,3 +1,17 @@
-.theme-selector {
-    min-width: 230px;
+h1 {
+    margin-bottom: 1rem;
+}
+
+.macro-grouping-number-input {
+    width: 4rem;
+}
+
+.macro-grouping-inline-option {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.macro-grouping-dependent-options--disabled {
+    opacity: 0.55;
 }

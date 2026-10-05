@@ -15,11 +15,15 @@ export class AppService extends MainServiceBase {
                 private rootDir: string) {
         super(logService, win);
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.app.exit, this.exit.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.app.openConfigFolder, this.openConfigFolder.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.on(IpcEvents.app.openUrl, this.openUrl.bind(this));
-        ipcMain.handle(IpcEvents.app.getConfig, async (event, key) => {
+        ipcMain.handle(IpcEvents.app.getConfig, async (event, key: string) => {
             logService.misc(`[AppService] get-config: ${key}`);
 
             const config = await settings.get(key);
@@ -28,7 +32,7 @@ export class AppService extends MainServiceBase {
 
             return config;
         });
-        ipcMain.handle(IpcEvents.app.setConfig, async (event, key, value) => {
+        ipcMain.handle(IpcEvents.app.setConfig, async (event, key: string, value: never) => {
             logService.misc(`[AppService] set-config of "${key}": ${value}`);
             await settings.set(key, value);
         });

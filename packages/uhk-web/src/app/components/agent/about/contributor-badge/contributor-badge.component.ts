@@ -1,7 +1,4 @@
 import { Component, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-
-import { AppState } from '../../../../store';
 
 import { UHKContributor } from '../../../../models/uhk-contributor';
 
@@ -25,9 +22,6 @@ export class ContributorBadgeComponent implements AfterViewInit {
 
     get profileUrl(): string {
         return this.contributor.html_url;
-    }
-
-    constructor(private store: Store<AppState>) {
     }
 
     ngAfterViewInit(): void {

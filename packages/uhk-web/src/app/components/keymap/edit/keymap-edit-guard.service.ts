@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Keymap, LayerName } from 'uhk-common';
 
@@ -11,8 +11,8 @@ import { AppState, getDefaultKeymap } from '../../../store';
 
 @Injectable()
 export class KeymapEditGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly router = inject(Router);
 
     canActivate(): Observable<boolean> {
         return this.store

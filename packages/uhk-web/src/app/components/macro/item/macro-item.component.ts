@@ -1,15 +1,20 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     Input,
     OnChanges,
+    OnDestroy,
     OnInit,
     Output,
-    SimpleChanges
+    SimpleChanges,
+    inject,
 } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { faCode, faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import {
     CommandMacroAction,
     DelayMacroAction,
@@ -23,8 +28,9 @@ import {
     TextMacroAction
 } from 'uhk-common';
 
-import { MapperService } from '../../../services/mapper.service';
 import { SelectedMacroActionId, SelectedMacroItem, TabName } from '../../../models';
+import { MapperService } from '../../../services/mapper.service';
+import { AppState, getKeyLanguage } from '../../../store';
 
 @Component({
     animations: [
@@ -64,7 +70,7 @@ import { SelectedMacroActionId, SelectedMacroItem, TabName } from '../../../mode
     styleUrls: ['./macro-item.component.scss'],
     host: { 'class': 'macro-item' }
 })
-export class MacroItemComponent implements OnInit, OnChanges {
+export class MacroItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() macroAction: MacroAction;
     @Input() editable: boolean;
     @Input() editing: boolean;
@@ -89,7 +95,19 @@ export class MacroItemComponent implements OnInit, OnChanges {
     faGripLinesVertical = faGripLinesVertical;
     isCommand = false;
 
-    constructor(private mapper: MapperService) { }
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly mapper = inject(MapperService);
+    private readonly store = inject<Store<AppState>>(Store);
+    private readonly subscriptions = new Subscription();
+
+    constructor() {
+        this.subscriptions.add(
+            this.store.select(getKeyLanguage).subscribe(() => {
+                this.updateView();
+                this.cdRef.markForCheck();
+            })
+        );
+    }
 
     ngOnInit() {
         this.updateView();
@@ -102,6 +120,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
         if (changes['macroAction']) {
             this.updateView();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     saveEditedAction(editedAction: MacroAction): void {
@@ -234,8 +256,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     private setMouseMoveScrollActionContent(action: MacroAction): void {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let typedAction: any;
+        let typedAction: MoveMouseMacroAction | ScrollMouseMacroAction;
         if (action instanceof MoveMouseMacroAction) {
             // Move mouse pointer
             this.iconName = 'mouse-pointer';

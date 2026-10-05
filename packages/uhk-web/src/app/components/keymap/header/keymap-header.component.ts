@@ -7,7 +7,8 @@ import {
     OnDestroy,
     Renderer2,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    inject,
 } from '@angular/core';
 import { Keymap } from 'uhk-common';
 import { Subscription } from 'rxjs';
@@ -41,6 +42,7 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
 
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
+    @Input() inactiveKeymapTooltip = '';
 
     @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef<HTMLInputElement>;
     @ViewChild(AutoGrowInputComponent, { static: true }) keymapName: AutoGrowInputComponent;
@@ -54,8 +56,10 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
 
     private subscriptions = new Subscription();
     private extraLEDCharactersSupported = false;
+    private readonly renderer = inject(Renderer2);
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(private store: Store<AppState>, private renderer: Renderer2) {
+    constructor() {
         this.subscriptions.add(
             this.store
                 .select(extraLEDCharactersSupported)
@@ -67,7 +71,7 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
         if (changes['keymap']) {
             this.setKeymapTitle();
             this.setAbbreviation();
-            this.keymapName.writeValue(changes.keymap.currentValue.name);
+            this.keymapName.writeValue(changes.keymap.currentValue.name as string);
         }
         if (changes['deletable']) {
             this.setTrashTitle();

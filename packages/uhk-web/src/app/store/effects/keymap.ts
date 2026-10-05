@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -12,6 +12,9 @@ import { AppState, getKeymaps } from '../index';
 
 @Injectable()
 export class KeymapEffects {
+    private readonly actions$ = inject(Actions);
+    private readonly router = inject(Router);
+    private readonly store = inject<Store<AppState>>(Store);
 
     addOrDuplicate$ = createEffect(() => this.actions$
         .pipe(
@@ -62,7 +65,4 @@ export class KeymapEffects {
         ),
     { dispatch: false }
     );
-
-    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {
-    }
 }

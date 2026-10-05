@@ -1,10 +1,7 @@
-import semver from 'semver';
+import { isVersionGteV1CanUndefined } from './version-helpers.js';
 
 const DEVICE_PROTOCOL_VERSION_THAT_SUPPORT_STATUS_ERROR = '4.10.0';
 
 export function isDeviceProtocolSupportStatusError (deviceProtocolVersion: string): boolean {
-    if (!deviceProtocolVersion)
-        return false;
-
-    return semver.gte(deviceProtocolVersion, DEVICE_PROTOCOL_VERSION_THAT_SUPPORT_STATUS_ERROR);
+    return isVersionGteV1CanUndefined(deviceProtocolVersion, DEVICE_PROTOCOL_VERSION_THAT_SUPPORT_STATUS_ERROR);
 }

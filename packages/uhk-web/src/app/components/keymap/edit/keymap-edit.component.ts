@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RgbColor } from 'colord';
@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BacklightingMode, HalvesInfo, KeyboardLayout, Keymap, LayerName } from 'uhk-common';
 
-import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
+import { CopiedLayerOrigin, LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { SelectOptionData } from '../../../models/select-option-data';
 
@@ -16,11 +16,14 @@ import {
     backlightingColorPalette,
     backlightingMode,
     getHalvesInfo,
+    getCopiedLayerOrigin,
+    getHasCopiedLayer,
     getKeyboardLayout,
     getLayerOptions,
     getSecondaryRoleOptions,
     getSelectedKeymap,
     getSelectedLayerOption,
+    inactiveKeymapTooltip,
     isBacklightingColoring,
     isKeymapDeletable,
     lastEditedKey,
@@ -55,8 +58,10 @@ import {
 export class KeymapEditComponent implements OnDestroy {
 
     backlightingMode$: Observable<BacklightingMode>;
+    copiedLayerOrigin$: Observable<CopiedLayerOrigin>;
     currentLayer$: Observable<LayerOption>;
     deletable$: Observable<boolean>;
+    hasCopiedLayer$: Observable<boolean>;
     isBacklightingColoring$: Observable<boolean>;
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
@@ -69,30 +74,32 @@ export class KeymapEditComponent implements OnDestroy {
     secondaryRoleOptions$: Observable<SelectOptionData[]>;
     selectedPaletteColorIndex$: Observable<number>;
     showColorPalette$: Observable<boolean>;
+    inactiveKeymapTooltip$: Observable<string>;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
     private queryParamsSubscription: Subscription;
     private selectedLayer: LayerName;
+    private readonly store = inject<Store<AppState>>(Store);
 
-    constructor(protected store: Store<AppState>,
-                private route: ActivatedRoute,
-                private router: Router,
-                private cdRef: ChangeDetectorRef) {
-        this.routeSubscription = route
+    constructor() {
+        this.routeSubscription = this.route
             .params
             .pipe(
                 map(params => params.abbr)
             )
-            .subscribe(abbr => {
+            .subscribe((abbr: string | undefined) => {
                 if (abbr) {
                     abbr = decodeURIComponent(abbr)
                 }
 
-                store.dispatch(new SelectKeymapAction(abbr));
+                this.store.dispatch(new SelectKeymapAction(abbr));
             });
 
-        this.queryParamsSubscription = route.queryParams.subscribe(params => {
+        this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
             this.selectedLayer = params.layer ? +params.layer : LayerName.base;
             this.store.dispatch(new SelectLayerAction(this.selectedLayer));
 
@@ -107,27 +114,30 @@ export class KeymapEditComponent implements OnDestroy {
             }));
         });
 
-        this.backlightingMode$ = store.select(backlightingMode);
-        this.currentLayer$ = store.select(getSelectedLayerOption);
-        this.keymap$ = store.select(getSelectedKeymap);
+        this.backlightingMode$ = this.store.select(backlightingMode);
+        this.currentLayer$ = this.store.select(getSelectedLayerOption);
+        this.copiedLayerOrigin$ = this.store.select(getCopiedLayerOrigin);
+        this.keymap$ = this.store.select(getSelectedKeymap);
         this.keymapSubscription = this.keymap$
             .subscribe(keymap => {
                 this.keymap = keymap;
                 this.cdRef.markForCheck();
             });
 
-        this.deletable$ = store.select(isKeymapDeletable);
+        this.deletable$ = this.store.select(isKeymapDeletable);
+        this.hasCopiedLayer$ = this.store.select(getHasCopiedLayer);
 
-        this.keyboardLayout$ = store.select(getKeyboardLayout);
-        this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
-        this.lastEditedKey$ = store.select(lastEditedKey);
-        this.halvesInfo$ = store.select(getHalvesInfo);
-        this.isBacklightingColoring$ = store.select(isBacklightingColoring);
+        this.keyboardLayout$ = this.store.select(getKeyboardLayout);
+        this.allowLayerDoubleTap$ = this.store.select(layerDoubleTapSupported);
+        this.lastEditedKey$ = this.store.select(lastEditedKey);
+        this.halvesInfo$ = this.store.select(getHalvesInfo);
+        this.isBacklightingColoring$ = this.store.select(isBacklightingColoring);
         this.layerOptions$ = this.store.select(getLayerOptions);
         this.secondaryRoleOptions$ = this.store.select(getSecondaryRoleOptions);
         this.showColorPalette$ = this.store.select(showColorPalette);
         this.paletteColors$ = this.store.select(backlightingColorPalette);
         this.selectedPaletteColorIndex$ = this.store.select(selectedBacklightingColorIndex);
+        this.inactiveKeymapTooltip$ = this.store.select(inactiveKeymapTooltip);
     }
 
     ngOnDestroy(): void {
@@ -155,7 +165,8 @@ export class KeymapEditComponent implements OnDestroy {
     navigateToModuleSettings(moduleId: number): void {
         this.store.dispatch(new NavigateToModuleSettings({
             backUrl: `/keymap/${encodeURIComponent(this.keymap.abbreviation)}?layer=${this.selectedLayer}`,
-            backText: `"${this.keymap.name}" keymap`,
+            backText: this.keymap.name,
+            backSuffix: ' keymap',
             moduleId,
         }));
     }

@@ -1,13 +1,17 @@
 <ng-template [ngIf]="keymap">
     <keymap-header [keymap]="keymap"
                    [deletable]="deletable$ | async"
+                   [inactiveKeymapTooltip]="(inactiveKeymapTooltip$ | async) || ''"
     ></keymap-header>
     <svg-keyboard-wrap [keymap]="keymap"
                        [halvesInfo]="halvesInfo$ | async"
                        [keyboardLayout]="keyboardLayout$ | async"
                        [allowNewLayers]="true"
+                       [allowLayerCopy]="true"
                        [allowLayerDoubleTap]="allowLayerDoubleTap$ | async"
                        [backlightingMode]="backlightingMode$ | async"
+                       [canPasteLayer]="hasCopiedLayer$ | async"
+                       [copiedLayerOrigin]="copiedLayerOrigin$ | async"
                        [currentLayer]="currentLayer$ | async"
                        [isBacklightingColoring]="isBacklightingColoring$ | async"
                        [lastEditedKey]="lastEditedKey$ | async"

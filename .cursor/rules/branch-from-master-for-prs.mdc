@@ -1,0 +1,23 @@
+---
+description: Start PR work from a new branch off master
+alwaysApply: true
+---
+
+# Branch from master for PRs
+
+When implementing a pull request, always create a new branch from `master` first. Do not start PR work on `master` or reuse an unrelated feature branch.
+
+## Workflow
+
+1. Check out and update `master`:
+   ```bash
+   git checkout master
+   git pull --ff-only origin master
+   ```
+2. Create a new branch for the PR:
+   ```bash
+   git checkout -b <branch-name>
+   ```
+3. Implement changes, commit, push, and open the PR from that branch.
+
+If you are already on a branch that is not based on current `master`, create a fresh branch from updated `master` instead of continuing on the stale branch.

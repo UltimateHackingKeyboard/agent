@@ -29,9 +29,6 @@
         </ng-select>
     </div>
     <div class="keymap-container">
-        <div class="empty" *ngIf="!selectedKeymap?.abbreviation">
-            <img src="assets/images/base-layer--blank.svg">
-        </div>
         <svg-keyboard *ngIf="selectedKeymap?.abbreviation"
                       [moduleConfig]="selectedKeymap.layers[0].modules"
                       [embedded]="true"

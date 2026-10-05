@@ -56,5 +56,6 @@ export function createPNG(width: number, height: number, pixelData: Buffer<Array
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function crc32(data: any): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return zlib.crc32(data) >>> 0; // Convert to unsigned 32-bit
 }

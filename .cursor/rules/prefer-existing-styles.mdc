@@ -1,0 +1,29 @@
+---
+description: Prefer Bootstrap and existing styles over new custom CSS
+alwaysApply: true
+---
+
+# Prefer existing styles
+
+Do not add custom CSS when Bootstrap utilities or existing shared styles already cover spacing, typography, and layout.
+
+## Prefer
+
+- Bootstrap utilities: `my-2`, `mb-3`, `me-1`, `small`, `text-nowrap`, `float-end`, …
+- Patterns already used nearby (e.g. `back-to` uses `class="my-2"`)
+
+## Avoid
+
+- New BEM blocks for one-off spacing/font-size/weight that utilities already express
+- Growing component SCSS with unexplained overrides that later confuse deletions
+
+```html
+<!-- ❌ BAD -->
+<div class="macro__assignments">…</div>
+<!-- plus .macro__assignments { font-size: 0.875rem; padding-top: 1.25em; } -->
+
+<!-- ✅ GOOD -->
+<div class="my-2 small">…</div>
+```
+
+Only add custom CSS when no existing utility/shared rule fits, and keep it minimal.

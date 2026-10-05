@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
@@ -18,8 +18,7 @@ export class KeymapAddSecondaryMenuComponent implements OnInit {
     faKeyboard = faKeyboard;
     keymaps$: Observable<Array<Keymap>>;
 
-    constructor(private store: Store<AppState>) {
-    }
+    private readonly store = inject<Store<AppState>>(Store);
 
     ngOnInit(): void {
         this.store.dispatch(new LoadDefaultUserConfigurationAction());

@@ -1,5 +1,4 @@
-import { ensureDir } from 'fs-extra';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createMd5Hash, getUserConfigHistoryFilename, Buffer } from 'uhk-common';
 
@@ -9,7 +8,7 @@ import { getUserConfigHistoryDirAsync } from './get-user-config-history-dir-asyn
 export async function saveUserConfigHistoryAsync(buffer: Buffer, deviceId: number, uniqueId: number): Promise<void> {
     const deviceDir = `${uniqueId}-${deviceId}`;
     const deviceDirPath = join(await getUserConfigHistoryDirAsync(), deviceDir);
-    await ensureDir(deviceDirPath);
+    await mkdir(deviceDirPath, { recursive: true });
     const md5Hash = createMd5Hash(buffer);
     const filename = getUserConfigHistoryFilename(md5Hash);
     const filePath = join(deviceDirPath, filename);

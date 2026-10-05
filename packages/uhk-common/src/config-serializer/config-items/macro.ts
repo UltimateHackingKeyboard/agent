@@ -43,6 +43,7 @@ export class Macro {
             case 12:
             case 13:
             case 14:
+            case 15:
                 this.fromJsonObjectV1(jsonObject, serialisationInfo);
                 break;
 
@@ -68,6 +69,7 @@ export class Macro {
             case 12:
             case 13:
             case 14:
+            case 15:
                 this.fromBinaryV1(buffer, serialisationInfo);
                 break;
 
@@ -105,6 +107,7 @@ export class Macro {
         this.isPrivate = jsonObject.isPrivate;
         this.name = jsonObject.name;
         this.macroActions = jsonObject.macroActions.map((macroAction) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             return MacroActionHelper.createMacroAction(macroAction, serialisationInfo);
         });
     }

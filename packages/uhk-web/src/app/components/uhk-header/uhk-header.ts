@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -15,7 +15,9 @@ import { DismissUndoNotificationAction, UndoLastAction } from '../../store/actio
 export class UhkHeader {
     undoableNotification$: Observable<Notification>;
 
-    constructor(private store: Store<AppState>) {
+    private readonly store = inject<Store<AppState>>(Store);
+
+    constructor() {
         this.undoableNotification$ = this.store.select(getUndoableNotification);
     }
 

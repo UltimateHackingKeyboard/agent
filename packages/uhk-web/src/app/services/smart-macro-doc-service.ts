@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { CommandMacroAction, LogService } from 'uhk-common';
 import { Subject, Subscription } from 'rxjs';
@@ -25,17 +25,20 @@ export class SmartMacroDocService implements OnDestroy {
     selectedMacroAction: SelectedMacroAction;
     smartMacroDocModuleIds: Array<number> = [];
 
-    private subscriptions = new Subscription();
     private iframe: HTMLIFrameElement;
+    private readonly logService = inject(LogService);
+    private readonly store = inject<Store<AppState>>(Store);
+    private subscriptions = new Subscription();
+    private readonly zone = inject(NgZone);
 
-    constructor(private store: Store<AppState>,
-                private logService: LogService,
-                private zone: NgZone) {
+    constructor() {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.addEventListener('message', this.onMessage.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.addEventListener('messageerror', this.onMessageError.bind(this));
 
         this.subscriptions.add(
-            store.select(getSelectedMacroAction)
+            this.store.select(getSelectedMacroAction)
                 .subscribe(action => {
                     this.selectedMacroAction = action;
                     this.dispatchMacroEditorFocusEvent();
@@ -43,7 +46,7 @@ export class SmartMacroDocService implements OnDestroy {
         );
 
         this.subscriptions.add(
-            store.select(getSmartMacroDocModuleIds)
+            this.store.select(getSmartMacroDocModuleIds)
                 .subscribe(moduleIds => {
                     this.smartMacroDocModuleIds = moduleIds;
                     this.dispatchMacroEditorFocusEvent();
@@ -52,7 +55,9 @@ export class SmartMacroDocService implements OnDestroy {
     }
 
     ngOnDestroy(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.removeEventListener('message', this.onMessage.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         window.removeEventListener('messageerror', this.onMessageError.bind(this));
         this.subscriptions.unsubscribe();
     }
@@ -103,7 +108,7 @@ export class SmartMacroDocService implements OnDestroy {
                 return this.dispatchSmartMacroDocCommand(SmartMacroDocCommandAction.set, event.data.command);
 
             case 'doc-message-open-link': {
-                return this.dispatchStoreAction(new OpenUrlInNewWindowAction(event.data.url));
+                return this.dispatchStoreAction(new OpenUrlInNewWindowAction(event.data.url as string));
             }
 
             default: {

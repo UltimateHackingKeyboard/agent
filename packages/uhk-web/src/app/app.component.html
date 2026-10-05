@@ -1,7 +1,7 @@
 <div class="main-div" [class.top-notification-panel-visible]="isTopNotificationPanelVisible()">
-    <app-update-available *ngIf="showUpdateAvailable"
+    <app-update-available *ngIf="showUpdateAvailable && (appUpdateNotification$ | async) as appUpdateNotification"
                           [@topNotificationPanelVisible]
-                          [updateInfo]="updateInfo$ | async"
+                          [notification]="appUpdateNotification"
                           (updateApp)="updateApp()"
                           (doNotUpdateApp)="doNotUpdateApp()">
     </app-update-available>
@@ -20,6 +20,13 @@
                             (updateFirmware)="updateFirmware()"
     >
     </firmware-upgrade-panel>
+
+    <shared-config-change-panel *ngIf="sharedConfigChange"
+                                [@topNotificationPanelVisible]
+                                [change]="sharedConfigChange"
+                                (apply)="applySharedConfigChange()"
+                                (dismiss)="dismissSharedConfigChange()">
+    </shared-config-change-panel>
 
 
     <side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"

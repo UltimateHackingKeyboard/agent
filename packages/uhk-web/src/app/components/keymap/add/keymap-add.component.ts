@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import { Observable, Subscription } from 'rxjs';
@@ -35,11 +35,9 @@ export class KeymapAddComponent implements OnDestroy, OnInit {
     keymap: Keymap;
     layerOptions$: Observable<LayerOption[]>;
 
+    private readonly cdRef = inject(ChangeDetectorRef);
+    private readonly store = inject<Store<AppState>>(Store);
     private subscription = new Subscription();
-
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-    }
 
     ngOnInit(): void {
         this.currentLayer$ = this.store.select(getSelectedLayerOptionAddKeymap);
@@ -68,7 +66,8 @@ export class KeymapAddComponent implements OnDestroy, OnInit {
     navigateToModuleSettings(moduleId: number): void {
         this.store.dispatch(new NavigateToModuleSettings({
             backUrl: `/add-keymap/${encodeURIComponent(this.keymap.abbreviation)}`,
-            backText: `new "${this.keymap.name}" keymap`,
+            backText: `new ${this.keymap.name}`,
+            backSuffix: ' keymap',
             moduleId
         }));
     }
