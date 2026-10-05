@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, KeyLanguage, MacroGroupingSettings, Notification } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, KeyLanguage, MacroGroupingSettings, Notification, SharedConfigApplyData } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 import { NavigationPayload } from '../../models';
 
@@ -33,6 +33,11 @@ export enum ActionTypes {
     ToggleMinimizeToTray = '[app] Toggle minimize to tray',
     SetAppTheme = '[app] Set application theme',
     SetKeyLanguage = '[app] Set key language',
+    SetSharedConfigurationFilePath = '[app] Set shared configuration file path',
+    SetDetectSharedConfigurationChanges = '[app] Set detect shared configuration changes',
+    SharedConfigChangeDetected = '[app] shared configuration change detected',
+    ApplySharedConfigChange = '[app] apply shared configuration change',
+    DismissSharedConfigChange = '[app] dismiss shared configuration change',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
     StopKeypressCapturing = '[app] Stop keypress capturing',
@@ -204,6 +209,35 @@ export class SetKeyLanguageAction implements Action {
     }
 }
 
+export class SetSharedConfigurationFilePathAction implements Action {
+    type = ActionTypes.SetSharedConfigurationFilePath;
+
+    constructor(public payload?: string) {
+    }
+}
+
+export class SetDetectSharedConfigurationChangesAction implements Action {
+    type = ActionTypes.SetDetectSharedConfigurationChanges;
+
+    constructor(public payload: boolean) {
+    }
+}
+
+export class SharedConfigChangeDetectedAction implements Action {
+    type = ActionTypes.SharedConfigChangeDetected;
+
+    constructor(public payload: SharedConfigApplyData) {
+    }
+}
+
+export class ApplySharedConfigChangeAction implements Action {
+    type = ActionTypes.ApplySharedConfigChange;
+}
+
+export class DismissSharedConfigChangeAction implements Action {
+    type = ActionTypes.DismissSharedConfigChange;
+}
+
 export class LoadAppStartInfoAction implements Action {
     type = ActionTypes.LoadAppStartInfo;
 }
@@ -263,6 +297,11 @@ export type Actions
     | ToggleMinimizeToTrayAction
     | SetAppThemeAction
     | SetKeyLanguageAction
+    | SetSharedConfigurationFilePathAction
+    | SetDetectSharedConfigurationChangesAction
+    | SharedConfigChangeDetectedAction
+    | ApplySharedConfigChangeAction
+    | DismissSharedConfigChangeAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction
     | StopKeypressCapturingAction

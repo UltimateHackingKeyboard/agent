@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faCog, faDesktop, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 import { AppTheme, KEY_LANGUAGE_OPTIONS, KeyLanguage, MacroGroupingSettings } from 'uhk-common';
 import {
@@ -12,11 +12,13 @@ import {
     getAlwaysEnableAdvancedMode,
     getAnimationEnabled,
     getAppTheme,
+    getDetectSharedConfigurationChanges,
     getIsAdvancedSettingsMenuVisible,
     getKeyLanguage,
     getMacroGroupingSettings,
     getMinimizeToTray,
     getOperatingSystem,
+    getSharedConfigurationFilePath,
     keyboardHalvesAlwaysJoined,
 } from '../../../store';
 import { MACRO_GROUPING_MAX_DEPTH } from '../../../util/group-macros-by-name';
@@ -28,14 +30,17 @@ import {
 import {
     OpenConfigFolderAction,
     SetAppThemeAction,
+    SetDetectSharedConfigurationChangesAction,
     SetKeyLanguageAction,
     SetMacroGroupingSettingsAction,
+    SetSharedConfigurationFilePathAction,
     ToggleAnimationEnabledAction,
     ToggleKeyboardHalvesAlwaysJoinedAction,
     ToggleMinimizeToTrayAction,
 } from '../../../store/actions/app';
 import { ToggleAlwaysEnableAdvancedModeAction } from '../../../store/actions/advance-settings.action';
 import { OperatingSystem } from '../../../models/operating-system';
+import { FileDialogService } from '../../../services/file-dialog.service';
 
 type ThemeOption = {
     id: AppTheme;
@@ -64,6 +69,10 @@ export class SettingsComponent {
     alwaysEnableAdvancedMode$: Observable<boolean>;
     alwaysEnableAdvancedModeSettingVisible$: Observable<boolean>;
     macroGroupingSettings$: Observable<MacroGroupingSettings>;
+    sharedConfigurationFilePath$: Observable<string | undefined>;
+    hasSharedConfigurationFilePath$: Observable<boolean>;
+    sharedConfigurationFile$: Observable<{ filePath: string; isDefault: boolean }>;
+    detectSharedConfigurationChanges$: Observable<boolean>;
     macroGroupingMaxDepth = MACRO_GROUPING_MAX_DEPTH;
     keyLanguages = KEY_LANGUAGE_OPTIONS;
     themes: ThemeOption[] = [
@@ -73,6 +82,7 @@ export class SettingsComponent {
     ];
 
     private readonly store = inject<Store<AppState>>(Store);
+    private readonly fileDialogService = inject(FileDialogService);
 
     constructor() {
         this.updateSettingsState$ = this.store.select(appUpdateSettingsState);
@@ -85,6 +95,18 @@ export class SettingsComponent {
         this.alwaysEnableAdvancedMode$ = this.store.select(getAlwaysEnableAdvancedMode);
         this.alwaysEnableAdvancedModeSettingVisible$ = this.store.select(getIsAdvancedSettingsMenuVisible);
         this.macroGroupingSettings$ = this.store.select(getMacroGroupingSettings);
+        this.sharedConfigurationFilePath$ = this.store.select(getSharedConfigurationFilePath);
+        this.hasSharedConfigurationFilePath$ = this.sharedConfigurationFilePath$.pipe(map(filePath => !!filePath));
+        this.sharedConfigurationFile$ = combineLatest([
+            this.sharedConfigurationFilePath$,
+            this.fileDialogService.getDefaultSharedConfigurationFilePath(),
+        ]).pipe(
+            map(([filePath, defaultFilePath]) => ({
+                filePath: filePath || defaultFilePath,
+                isDefault: !filePath,
+            }))
+        );
+        this.detectSharedConfigurationChanges$ = this.store.select(getDetectSharedConfigurationChanges);
     }
 
     openConfigFolder(): void {
@@ -125,6 +147,26 @@ export class SettingsComponent {
 
     updateMacroGroupingSettings(settings: Partial<MacroGroupingSettings>): void {
         this.store.dispatch(new SetMacroGroupingSettingsAction(settings));
+    }
+
+    chooseSharedConfigurationFile(): void {
+        this.sharedConfigurationFilePath$.pipe(take(1))
+            .subscribe(currentPath => {
+                this.fileDialogService.selectSharedConfigurationFile(currentPath)
+                    .subscribe(filePath => {
+                        if (filePath) {
+                            this.store.dispatch(new SetSharedConfigurationFilePathAction(filePath));
+                        }
+                    });
+            });
+    }
+
+    useDefaultSharedConfigurationFilePath(): void {
+        this.store.dispatch(new SetSharedConfigurationFilePathAction(undefined));
+    }
+
+    toggleDetectSharedConfigurationChanges(enabled: boolean): void {
+        this.store.dispatch(new SetDetectSharedConfigurationChangesAction(enabled));
     }
 
 }

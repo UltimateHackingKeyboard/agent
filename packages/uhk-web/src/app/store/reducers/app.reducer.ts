@@ -12,6 +12,7 @@ import {
     Notification,
     NotificationType,
     runInElectron,
+    SharedConfigApplyData,
     UserConfiguration,
 } from 'uhk-common';
 
@@ -47,6 +48,9 @@ export interface State {
     everAttemptedSavingToKeyboard: boolean;
     macroGrouping: MacroGroupingSettings;
     udevFileContent: string;
+    sharedConfigurationFilePath?: string;
+    detectSharedConfigurationChanges: boolean;
+    sharedConfigChange?: SharedConfigApplyData;
 }
 
 export const initialState: State = {
@@ -66,7 +70,8 @@ export const initialState: State = {
     keypressCapturing: false,
     everAttemptedSavingToKeyboard: false,
     macroGrouping: DEFAULT_MACRO_GROUPING_SETTINGS,
-    udevFileContent: ''
+    udevFileContent: '',
+    detectSharedConfigurationChanges: false
 };
 
 export function reducer(
@@ -223,6 +228,9 @@ export function reducer(
                 keyLanguage: settings.keyLanguage || DEFAULT_KEY_LANGUAGE,
                 macroGrouping: normalizeMacroGroupingSettings(settings.macroGrouping),
                 minimizeToTray: settings.minimizeToTray ?? false,
+                sharedConfigurationFilePath: settings.sharedConfigurationFilePath,
+                detectSharedConfigurationChanges: !!settings.sharedConfigurationFilePath
+                    && !!settings.detectSharedConfigurationChanges,
             };
         }
 
@@ -263,6 +271,35 @@ export function reducer(
             return {
                 ...state,
                 keyLanguage: (action as App.SetKeyLanguageAction).payload
+            };
+
+        case App.ActionTypes.SetSharedConfigurationFilePath: {
+            const filePath = (action as App.SetSharedConfigurationFilePathAction).payload;
+
+            return {
+                ...state,
+                sharedConfigurationFilePath: filePath,
+                detectSharedConfigurationChanges: filePath ? state.detectSharedConfigurationChanges : false
+            };
+        }
+
+        case App.ActionTypes.SetDetectSharedConfigurationChanges:
+            return {
+                ...state,
+                detectSharedConfigurationChanges: !!state.sharedConfigurationFilePath
+                    && (action as App.SetDetectSharedConfigurationChangesAction).payload
+            };
+
+        case App.ActionTypes.SharedConfigChangeDetected:
+            return {
+                ...state,
+                sharedConfigChange: (action as App.SharedConfigChangeDetectedAction).payload
+            };
+
+        case App.ActionTypes.DismissSharedConfigChange:
+            return {
+                ...state,
+                sharedConfigChange: undefined
             };
 
         default:
@@ -306,6 +343,9 @@ export const getMacroGroupingSettings = (state: State): MacroGroupingSettings =>
 export const getMinimizeToTray = (state: State): boolean => state.minimizeToTray;
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
 export const getKeyLanguage = (state: State): KeyLanguage => state.keyLanguage;
+export const getSharedConfigurationFilePath = (state: State): string | undefined => state.sharedConfigurationFilePath;
+export const getDetectSharedConfigurationChanges = (state: State): boolean => state.detectSharedConfigurationChanges;
+export const getSharedConfigChange = (state: State): SharedConfigApplyData | undefined => state.sharedConfigChange;
 export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;
 export const getPlatform = (state: State): string => state.platform;
 export const isColorPickerEyeDropperEnabled = (state: State): boolean => !state.isRunningOnWayland;

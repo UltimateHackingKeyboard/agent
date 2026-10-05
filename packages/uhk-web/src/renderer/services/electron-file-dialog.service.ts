@@ -6,6 +6,7 @@ import {
     IpcEvents,
     OpenUserConfigDialogResult,
     SaveUserConfigDialogResult,
+    SelectSharedConfigDialogResult,
     UploadFileData,
 } from 'uhk-common';
 
@@ -36,6 +37,23 @@ export class ElectronFileDialogService extends FileDialogService {
                 fileName,
                 content: toBase64(data),
             }) as Promise<SaveUserConfigDialogResult>
+        );
+    }
+
+    selectSharedConfigurationFile(currentPath?: string): Observable<string | null> {
+        return from(
+            (window as any).electron.ipcRenderer.invoke(
+                IpcEvents.fileDialog.selectSharedConfig,
+                { currentPath }
+            ) as Promise<SelectSharedConfigDialogResult>
+        ).pipe(
+            map(result => result && !result.canceled && result.filePath ? result.filePath : null)
+        );
+    }
+
+    getDefaultSharedConfigurationFilePath(): Observable<string> {
+        return from(
+            (window as any).electron.ipcRenderer.invoke(IpcEvents.fileDialog.getDefaultSharedConfig) as Promise<string>
         );
     }
 }

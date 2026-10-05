@@ -547,7 +547,7 @@ function isNavigateToMacroSaveKey(action: Action): boolean {
     return keyAction.navigateToMacro && !keyAction.assignNewMacro;
 }
 
-function updateUserConfigurationWithLastSaveInfo(userConfiguration: UserConfiguration, rightModuleInfo: RightModuleInfo) {
+export function updateUserConfigurationWithLastSaveInfo(userConfiguration: UserConfiguration, rightModuleInfo: RightModuleInfo) {
     const newUserConfiguration = userConfiguration.clone()
     newUserConfiguration.lastSaveAgentTag = `${VERSIONS.agentRepo}/${VERSIONS.agentTag}`;
     newUserConfiguration.lastSaveFirmwareTag = `${rightModuleInfo.firmwareGitRepo}/${rightModuleInfo.firmwareGitTag}`

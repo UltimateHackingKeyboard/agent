@@ -54,7 +54,8 @@
 ble-pairing-panel,
 dongle-pairing-panel,
 firmware-upgrade-panel,
-app-update-available {
+app-update-available,
+shared-config-change-panel {
     height: $main-content-top-margin-on-update;
     position: fixed;
     top: 0;

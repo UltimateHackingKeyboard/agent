@@ -18,6 +18,7 @@ export * from './firmware-version.js';
 export * from './firmware-version-info.js';
 export * from './notification.js';
 export * from './protocol-versions.js';
+export * from './shared-config.js';
 export * from './init-backlighting-color-palette.js';
 export * from './ipc-response.js';
 export * from './key-language.js';

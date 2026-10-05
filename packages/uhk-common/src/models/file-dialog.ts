@@ -16,3 +16,8 @@ export interface SaveUserConfigDialogResult {
     canceled: boolean;
     filePath?: string;
 }
+
+export interface SelectSharedConfigDialogResult {
+    canceled: boolean;
+    filePath?: string;
+}

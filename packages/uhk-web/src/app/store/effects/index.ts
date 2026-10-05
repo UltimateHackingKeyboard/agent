@@ -11,6 +11,7 @@ import { AppUpdateEffect } from './app-update';
 import { ContributorsEffect } from './contributors.effect';
 import { UserConfigurationHistoryEffects } from './user-configuration-history.effects';
 import { SmartMacroDocEffect } from './smart-macro-doc.effect';
+import { SharedConfigEffects } from './shared-config.effect';
 
 export * from './keymap';
 export * from './macro';
@@ -31,5 +32,6 @@ export const effects = [
     DeviceEffects,
     ContributorsEffect,
     UserConfigurationHistoryEffects,
-    SmartMacroDocEffect
+    SmartMacroDocEffect,
+    SharedConfigEffects
 ];

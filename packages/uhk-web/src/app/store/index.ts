@@ -209,6 +209,9 @@ export const getMacroGroupingSettings = createSelector(appState, fromApp.getMacr
 export const getMinimizeToTray = createSelector(appState, fromApp.getMinimizeToTray);
 export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
 export const getKeyLanguage = createSelector(appState, fromApp.getKeyLanguage);
+export const getSharedConfigurationFilePath = createSelector(appState, fromApp.getSharedConfigurationFilePath);
+export const getDetectSharedConfigurationChanges = createSelector(appState, fromApp.getDetectSharedConfigurationChanges);
+export const getSharedConfigChange = createSelector(appState, fromApp.getSharedConfigChange);
 export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeColors => {
     return  defaultUhkThemeColors(theme);
 });
@@ -893,6 +896,8 @@ export const getApplicationSettings = createSelector(
     keyboardHalvesAlwaysJoined,
     getAlwaysEnableAdvancedMode,
     getMacroGroupingSettings,
+    getSharedConfigurationFilePath,
+    getDetectSharedConfigurationChanges,
     (updateSettingsState,
         app,
         smartMacroPanelWidth,
@@ -900,6 +905,8 @@ export const getApplicationSettings = createSelector(
         keyboardHalvesAlwaysJoined,
         alwaysEnableAdvancedMode,
         macroGrouping,
+        sharedConfigurationFilePath,
+        detectSharedConfigurationChanges,
     ): ApplicationSettings => {
         return {
             errorPanelHeight: app.errorPanelHeight,
@@ -913,6 +920,8 @@ export const getApplicationSettings = createSelector(
             minimizeToTray: app.minimizeToTray,
             alwaysEnableAdvancedMode,
             macroGrouping,
-            smartMacroPanelWidth
+            smartMacroPanelWidth,
+            sharedConfigurationFilePath,
+            detectSharedConfigurationChanges
         };
     });

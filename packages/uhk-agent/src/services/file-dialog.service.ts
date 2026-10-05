@@ -1,4 +1,4 @@
-import { dialog, ipcMain } from 'electron';
+import { app, dialog, ipcMain } from 'electron';
 import settings from 'electron-settings';
 import { promises as fs } from 'fs';
 import { dirname, join } from 'path';
@@ -9,6 +9,8 @@ import {
     OpenUserConfigDialogResult,
     SaveUserConfigDialogData,
     SaveUserConfigDialogResult,
+    SelectSharedConfigDialogResult,
+    SHARED_CONFIG_DEFAULT_FILE_NAME,
 } from 'uhk-common';
 
 import { MainServiceBase } from './main-service-base';
@@ -24,6 +26,10 @@ export class FileDialogService extends MainServiceBase {
         ipcMain.handle(IpcEvents.fileDialog.openUserConfig, this.openUserConfig.bind(this));
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.handle(IpcEvents.fileDialog.saveUserConfig, this.saveUserConfig.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ipcMain.handle(IpcEvents.fileDialog.selectSharedConfig, this.selectSharedConfig.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ipcMain.handle(IpcEvents.fileDialog.getDefaultSharedConfig, this.getDefaultSharedConfig.bind(this));
 
         logService.misc('[FileDialogService] init success');
     }
@@ -84,6 +90,40 @@ export class FileDialogService extends MainServiceBase {
             canceled: false,
             filePath: result.filePath,
         };
+    }
+
+    private async selectSharedConfig(_event: Electron.IpcMainInvokeEvent,
+                                     data?: { currentPath?: string }): Promise<SelectSharedConfigDialogResult> {
+        const defaultPath = data?.currentPath || this.getDefaultSharedConfigPath();
+        this.logService.misc(`[FileDialogService] select shared configuration dialog, defaultPath: ${defaultPath}`);
+
+        const result = await dialog.showSaveDialog(this.win, {
+            title: 'Select shared configuration file',
+            defaultPath,
+            filters: [
+                { name: 'User configuration', extensions: ['json'] },
+                { name: 'All files', extensions: ['*'] },
+            ],
+        });
+
+        if (result.canceled || !result.filePath) {
+            return { canceled: true };
+        }
+
+        this.logService.misc(`[FileDialogService] selected shared configuration: ${result.filePath}`);
+
+        return {
+            canceled: false,
+            filePath: result.filePath,
+        };
+    }
+
+    private getDefaultSharedConfig(): string {
+        return this.getDefaultSharedConfigPath();
+    }
+
+    private getDefaultSharedConfigPath(): string {
+        return join(app.getPath('userData'), SHARED_CONFIG_DEFAULT_FILE_NAME);
     }
 
     private async getUserConfigFolder(): Promise<string | undefined> {

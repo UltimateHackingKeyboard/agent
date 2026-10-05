@@ -21,6 +21,13 @@
     >
     </firmware-upgrade-panel>
 
+    <shared-config-change-panel *ngIf="sharedConfigChange"
+                                [@topNotificationPanelVisible]
+                                [change]="sharedConfigChange"
+                                (apply)="applySharedConfigChange()"
+                                (dismiss)="dismissSharedConfigChange()">
+    </shared-config-change-panel>
+
 
     <side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"
     ></side-menu>

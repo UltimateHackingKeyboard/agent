@@ -44,4 +44,15 @@ export interface ApplicationSettings {
      * Sidebar macro grouping preferences.
      */
     macroGrouping?: Partial<MacroGroupingSettings>;
+    /**
+     * Absolute path of a configuration file in a folder that is synced between computers
+     * (for example Dropbox, Google Drive, or a network share). When set, Agent exports the
+     * current configuration there and can offer to apply changes made on the other computer.
+     */
+    sharedConfigurationFilePath?: string;
+    /**
+     * If true, Agent watches the shared configuration file and prompts to apply it when it
+     * changes on the other computer. Requires sharedConfigurationFilePath to be set.
+     */
+    detectSharedConfigurationChanges?: boolean;
 }
