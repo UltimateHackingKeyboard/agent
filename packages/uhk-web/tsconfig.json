@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../uhk-agent/dist/out-tsc",
+    "esModuleInterop": true,
     "declaration": false,
     "moduleResolution": "bundler",
     "useDefineForClassFields": false,

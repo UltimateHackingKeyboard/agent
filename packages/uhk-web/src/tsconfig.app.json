@@ -13,7 +13,8 @@
   },
   "files": [
     "main-web.ts",
-    "polyfills.ts"
+    "polyfills.ts",
+    "svg.d.ts"
   ],
   "exclude": [
     "**/*.test.ts",

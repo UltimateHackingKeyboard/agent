@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, inject } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DragulaService } from 'ng2-dragula';
 import {
     faChevronDown,
     faChevronUp,
@@ -50,7 +49,7 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     hostConnectionPairState: Record<string, boolean> = {};
     eraseBleSettingsButtonState: EraseBleSettingsButtonState;
     hostConnections: HostConnection[] = [] as HostConnection[];
-    dragAndDropGroup = 'HOST_CONNECTION';
+    readonly dragAndDropHandle = '.movable';
 
     bluetoothAlwaysAdvertise = false;
     bluetoothKeepConnectionsAlive = false;
@@ -63,7 +62,6 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     foldedSlotCount = 0;
 
     private readonly cdRef = inject(ChangeDetectorRef);
-    private readonly dragulaService = inject(DragulaService);
     private hostConnectionPairStateSubscription: Subscription;
     private eraseBleSettingsSubscription: Subscription;
     private hostConnectionsSubscription: Subscription;
@@ -72,24 +70,6 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.store.dispatch(new CheckAreHostConnectionsPairedAction());
-
-        this.dragulaService.createGroup(this.dragAndDropGroup, {
-            moves: (el, container, handle) => {
-                if (!handle) {
-                    return false;
-                }
-
-                let element = handle;
-                while (element) {
-                    if (element.classList.contains('movable')) {
-                        return true;
-                    }
-                    element = element.parentElement;
-                }
-
-                return false;
-            }
-        });
     }
 
     ngOnInit(): void {
@@ -118,7 +98,6 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.dragulaService.destroy(this.dragAndDropGroup);
         this.eraseBleSettingsSubscription?.unsubscribe();
         this.hostConnectionPairStateSubscription?.unsubscribe();
         this.hostConnectionsSubscription?.unsubscribe();

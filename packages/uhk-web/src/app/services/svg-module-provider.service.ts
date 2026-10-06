@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -12,8 +11,22 @@ import {
 } from 'uhk-common';
 
 import { SvgModule } from '../components/svg/module';
+import { parseSvg } from '../components/svg/parse-svg';
 import { convertXmlToSvgSeparator, SvgSeparator } from '../components/svg/separator';
 import { AppState, getConnectedDevice } from '../store/index';
+
+import keyClusterLeftSvg from '../../modules/keyclusterleft/module.svg';
+import touchPadRightSvg from '../../modules/touchpadright/module.svg';
+import trackBallRightSvg from '../../modules/trackballright/module.svg';
+import trackPointRightSvg from '../../modules/trackpointright/module.svg';
+import uhk80LeftAnsiSvg from '../../modules/uhk80-left/layout-ansi.svg';
+import uhk80LeftIsoSvg from '../../modules/uhk80-left/layout-iso.svg';
+import uhk80SeparatorSvg from '../../devices/uhk80-right/separator.svg';
+import uhk80RightSvg from '../../devices/uhk80-right/layout.svg';
+import uhk60LeftAnsiSvg from '../../modules/uhk60-left/layout-ansi.svg';
+import uhk60LeftIsoSvg from '../../modules/uhk60-left/layout-iso.svg';
+import uhk60SeparatorSvg from '../../devices/uhk60-right/separator.svg';
+import uhk60RightSvg from '../../devices/uhk60-right/layout.svg';
 
 export interface DescriptionAnimationParams {
     down: string;
@@ -140,8 +153,7 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getKeyClusterLeft(): SvgModule {
         if (!this.keyClusterLeft) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this.keyClusterLeft = new SvgModule(require('!xml-loader!../../modules/keyclusterleft/module.svg').svg);
+            this.keyClusterLeft = new SvgModule(parseSvg(keyClusterLeftSvg));
         }
 
         return this.keyClusterLeft;
@@ -154,14 +166,10 @@ export class SvgModuleProviderService implements OnDestroy {
     private setModules() {
         switch (this.connectedDeviceId) {
             case UHK_80_DEVICE.id: {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk80-right/separator.svg').svg);
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                this.right = new SvgModule(require('!xml-loader!../../devices/uhk80-right/layout.svg').svg);
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-iso.svg').svg);
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                this.ansiLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-ansi.svg').svg);
+                this.separator = convertXmlToSvgSeparator(parseSvg(uhk80SeparatorSvg));
+                this.right = new SvgModule(parseSvg(uhk80RightSvg));
+                this.isoLeft = new SvgModule(parseSvg(uhk80LeftIsoSvg));
+                this.ansiLeft = new SvgModule(parseSvg(uhk80LeftAnsiSvg));
                 break;
             }
 
@@ -174,8 +182,7 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getTouchPadRight(): SvgModule {
         if (!this.touchPadRight) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this.touchPadRight = new SvgModule(require('!xml-loader!../../modules/touchpadright/module.svg').svg);
+            this.touchPadRight = new SvgModule(parseSvg(touchPadRightSvg));
         }
 
         return this.touchPadRight;
@@ -183,8 +190,7 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getTrackBallRight(): SvgModule {
         if (!this.trackBallRight) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this.trackBallRight = new SvgModule(require('!xml-loader!../../modules/trackballright/module.svg').svg);
+            this.trackBallRight = new SvgModule(parseSvg(trackBallRightSvg));
         }
 
         return this.trackBallRight;
@@ -192,21 +198,16 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getTrackPointRight(): SvgModule {
         if (!this.trackPointRight) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this.trackPointRight = new SvgModule(require('!xml-loader!../../modules/trackpointright/module.svg').svg);
+            this.trackPointRight = new SvgModule(parseSvg(trackPointRightSvg));
         }
 
         return this.trackPointRight;
     }
 
     private setUHK60Modules() {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk60-right/separator.svg').svg);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        this.right = new SvgModule(require('!xml-loader!../../devices/uhk60-right/layout.svg').svg);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk60-left/layout-iso.svg').svg);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        this.ansiLeft = new SvgModule(require('!xml-loader!../../modules/uhk60-left/layout-ansi.svg').svg);
+        this.separator = convertXmlToSvgSeparator(parseSvg(uhk60SeparatorSvg));
+        this.right = new SvgModule(parseSvg(uhk60RightSvg));
+        this.isoLeft = new SvgModule(parseSvg(uhk60LeftIsoSvg));
+        this.ansiLeft = new SvgModule(parseSvg(uhk60LeftAnsiSvg));
     }
 }
