@@ -41,6 +41,9 @@ export default tsEslint.config(
             '@angular-eslint/template/interactive-supports-focus': 'off',
             '@angular-eslint/template/label-has-associated-control': 'off',
             '@angular-eslint/template/no-autofocus': 'off',
+            // The code base still uses the structural directives and is not migrated to the
+            // built-in control flow syntax yet.
+            '@angular-eslint/template/prefer-control-flow': 'off',
         },
     }
 );
