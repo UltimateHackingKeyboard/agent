@@ -6,27 +6,42 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [11.0.0] - 2026-08-07
+## [11.0.0] - 2026-10-06
 
-Firmware: 18.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v18.0.0)] | Device Protocol: 4.19.0 | User Config: 15.0.0 | Hardware Config: 1.0.0
+Firmware: 18.0.3 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v18.0.3)] | Device Protocol: 4.19.0 | User Config: 15.0.0 | Hardware Config: 1.0.0
 
-- Show progress bar when starting Agent.
+- Show progress bar when starting Agent and when saving configurations.
 - Improve Firmware screen:
   - Show progress bar when flashing firmwares.
   - Hide the log by default
   - Make "connect device" requests more prominent.
 - Add copy/paste layer support.
 - Show macro key assignments on the macro editor page.
+- Group macros in the sidebar.
 - Require user approval before downloading Agent updates.
 - Add minimize to tray support.
 - Indicate UHK's currently active keymap in Agent.
-- Fix: make doc destination writable.
-- Fix: stop status buffer from splitting and dropping binding lines
-- Accesibility: improve click-only controls behavior.
-- Make host connection management slot-focused instead of host-focused.
-- Group macros in the sidebar
-- Fix: refuse importing a user configuration newer than Agent supports, and refuse saving one newer than the firmware supports.
+- Add per-key notes with keyboard tooltips.
+- Add a Key language setting for non-US scancode labels.
+- Replace the theme select with an icon button group.
+- Keep the Settings and About menu items reachable via a sticky footer in the side menu.
 - Improve the scancode selector with a tiled category layout.
+- Keep user configurations in sync via a shared configuration file.
+- Remember the user configuration import/export folder.
+- Replace the drag-and-drop library and animate list reordering.
+- Show the copied layer origin in the paste tooltip.
+- Allow direct entry of slider values.
+- Add a back link when jumping from the key action popover to a macro.
+- Expand macro field limits according to user configuration data types.
+- Make host connection management slot-focused instead of host-focused.
+- Accesibility: improve click-only controls behavior and make keymap SVG keys findable with VoiceOver.
+- Fix: make doc destination writable.
+- Fix: stop status buffer from splitting and dropping binding lines.
+- Fix: refuse importing a user configuration newer than Agent supports, and refuse saving one newer than the firmware supports.
+- Fix: keep keyboard names persistent when resetting the configuration.
+- Fix: allow adding B/M/S scancode tags when a named key already uses that code.
+- Fix: skip enabling the Zephyr log after a UHK 60 firmware update.
+- Fix: wait only 500 ms on Linux for the OS to initialize the serial peripheral during firmware upgrades.
 
 ## [10.1.0] - 2026-06-23
 
