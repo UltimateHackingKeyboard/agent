@@ -69,6 +69,14 @@ export class TrayService extends MainServiceBase {
             void this.handleMinimize();
         });
 
+        win.on('show', () => {
+            this.refreshContextMenu();
+        });
+
+        win.on('restore', () => {
+            this.refreshContextMenu();
+        });
+
         this.subscribeToIpcEvents();
     }
 
@@ -134,6 +142,8 @@ export class TrayService extends MainServiceBase {
                 restoreMaximized,
                 restoreFullScreen,
             });
+
+            this.refreshContextMenu();
         });
     }
 
@@ -230,15 +240,11 @@ export class TrayService extends MainServiceBase {
             wasMaximized: this.wasMaximizedBeforeTray,
             wasFullScreen: this.wasFullScreenBeforeTray,
         });
+        this.refreshContextMenu();
     }
 
     private toggleWindow(): void {
         if (!this.trayActive) {
-            return;
-        }
-
-        if (this.hiddenToTray) {
-            this.revealWindow();
             return;
         }
 
@@ -285,11 +291,17 @@ export class TrayService extends MainServiceBase {
             path.join(trayAssetsDir, 'trayIcon.png'));
     }
 
+    private isWindowShown(): boolean {
+        const win = this.getWindow();
+        return !!win && !this.hiddenToTray && win.isVisible() && !win.isMinimized();
+    }
+
     private buildContextMenu(): Menu {
+        const isShown = this.isWindowShown();
         return Menu.buildFromTemplate([
             {
-                label: 'Show UHK Agent',
-                click: () => this.revealWindow(),
+                label: isShown ? 'Minimize Agent to Tray' : 'Show Agent',
+                click: () => this.toggleWindow(),
             },
             { type: 'separator' },
             {
@@ -299,6 +311,22 @@ export class TrayService extends MainServiceBase {
                 },
             },
         ]);
+    }
+
+    private refreshContextMenu(): void {
+        if (!this.tray || this.tray.isDestroyed()) {
+            return;
+        }
+
+        this.contextMenu = this.buildContextMenu();
+
+        if (process.platform === 'darwin') {
+            // macOS reads the menu lazily via tray.popUpContextMenu()/Menu.popup().
+            return;
+        }
+
+        // Linux only picks up MenuItem changes when setContextMenu is called again.
+        this.tray.setContextMenu(this.contextMenu);
     }
 
     private createTrayInstance(): void {
@@ -313,20 +341,23 @@ export class TrayService extends MainServiceBase {
 
         this.tray.setImage(this.buildTrayIcon());
         this.tray.setToolTip('UHK Agent');
-        this.contextMenu = this.buildContextMenu();
 
-        // setContextMenu shows the menu on right-click on Linux/Windows and on left-click on macOS.
-        // popUpContextMenu is not supported on Linux, so setContextMenu must be used there.
-        this.tray.setContextMenu(this.contextMenu);
+        this.tray.removeAllListeners('click');
+        this.tray.removeAllListeners('right-click');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        this.tray.on('click', this.toggleWindow.bind(this));
 
-        if (process.platform !== 'darwin') {
-            this.tray.removeAllListeners('click');
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this.tray.on('click', this.toggleWindow.bind(this));
+        if (process.platform === 'darwin') {
+            // macOS: show the context menu on right-click so left-click can [un]minimize.
+            this.tray.on('right-click', () => {
+                this.contextMenu?.popup();
+            });
+        } else {
             nativeTheme.on('updated', this.themeChangedHandler);
         }
 
         this.trayActive = true;
+        this.refreshContextMenu();
         this.logService.misc('[TrayService] Tray icon activated');
     }
 
