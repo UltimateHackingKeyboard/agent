@@ -51,7 +51,7 @@ export class AppRendererService {
         this.ipcRenderer.on(IpcEvents.app.minimizeToTrayDisabledOnLinux, () => {
             this.dispatchStoreAction(new ShowNotificationAction({
                 type: NotificationType.Info,
-                message: 'The tray icon will disappear after you restart Agent.'
+                message: 'The tray icon may only disappear after you restart Agent.'
             }));
         });
 
