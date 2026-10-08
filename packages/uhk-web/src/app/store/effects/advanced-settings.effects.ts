@@ -1,11 +1,14 @@
 import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { mergeMap, tap, withLatestFrom } from 'rxjs/operators';
+import { timer } from 'rxjs';
+import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import {
     ActionTypes,
+    HalvesBondCheckTimeoutAction,
     IsDongleZephyrLoggingEnabledAction,
     IsLeftHalfZephyrLoggingEnabledAction,
     IsRightHalfZephyrLoggingEnabledAction,
@@ -19,10 +22,13 @@ import {
 } from '../index';
 import { ActiveButton } from '../reducers/advanced-settings.reducer';
 
+const HALVES_BOND_CHECK_TIMEOUT_MS = 5000;
+
 @Injectable()
 export class AdvancedSettingsEffects {
     private readonly actions$ = inject(Actions);
     private readonly deviceRendererService = inject(DeviceRendererService);
+    private readonly router = inject(Router);
     private readonly store = inject<Store<AppState>>(Store);
 
     isDongleZephyrLoggingEnabled$ = createEffect(() => this.actions$
@@ -126,6 +132,25 @@ export class AdvancedSettingsEffects {
             ofType(ActionTypes.startLeftHalfPairing),
             tap(()=> {
                 this.deviceRendererService.startLeftHalfPairing();
+            })
+        ),
+    {dispatch: false},
+    );
+
+    halvesBondCheckTimeout$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.leftHalfPairingSuccess),
+            switchMap(() => timer(HALVES_BOND_CHECK_TIMEOUT_MS)),
+            map(() => new HalvesBondCheckTimeoutAction()),
+        )
+    );
+
+    // the pairing log is visible only on the advanced settings page
+    leftHalfPairingFailed$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.leftHalfPairingFailed),
+            tap(()=> {
+                this.router.navigate(['/device/advanced-settings']);
             })
         ),
     {dispatch: false},

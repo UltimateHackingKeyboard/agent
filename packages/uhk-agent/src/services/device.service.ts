@@ -100,6 +100,9 @@ import {
 import { QueueManager } from './queue-manager';
 import { ZephyrLogService } from './zephyr-log.service';
 
+// the poller iterates at most every 250ms, so it is at least 10 seconds
+const DONGLE_BOND_POLL_ITERATIONS = 40;
+
 /**
  * IpcMain pair of the UHK Communication
  * Functionality:
@@ -1231,6 +1234,8 @@ export class DeviceService {
     private async uhkDevicePoller(): Promise<void> {
         let deviceProtocolVersion: string;
         let iterationCount = 0;
+        // set only while a dongle that can be queried is connected
+        let dongleBond: { deviceBleAddress: number[], isBondBroken: boolean };
 
         while (true) {
             if (this._pollerAllowed) {
@@ -1241,6 +1246,7 @@ export class DeviceService {
                     const state = await this.device.getDeviceConnectionStateAsync();
                     if (!isEqual(state, this.savedState)) {
                         const newState = cloneDeep(state);
+                        dongleBond = undefined;
 
                         if (state.hasPermission && state.communicationInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
@@ -1264,7 +1270,10 @@ export class DeviceService {
                                     dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongle);
                                     const dongleBleAddress = await dongleUhkDevice.getBleAddress();
                                     state.dongle.bleAddress = convertBleAddressArrayToString(dongleBleAddress);
-                                    state.dongle.isPairedWithKeyboard = await dongleUhkDevice.isPairedWith(deviceBleAddress);
+                                    const dongleBondState = await dongleUhkDevice.getBondState(deviceBleAddress);
+                                    state.dongle.isPairedWithKeyboard = dongleBondState.isPaired;
+                                    state.dongle.isBondBroken = dongleBondState.isBondBroken;
+                                    dongleBond = { deviceBleAddress, isBondBroken: dongleBondState.isBondBroken };
                                     state.isPairedWithDongle = await this.device.isPairedWith(dongleBleAddress);
                                     const dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
                                     state.dongle.versionInfo = await dongleOperations.getDeviceVersionInfo();
@@ -1299,6 +1308,13 @@ export class DeviceService {
 
                         this.logService.misc('[DeviceService] Device connection state changed to:', JSON.stringify(state, null, 2));
                     }
+                    else if (dongleBond && iterationCount % DONGLE_BOND_POLL_ITERATIONS === 0) {
+                        // The dongle is queried only when the connection state changes, but its bond can break at any time.
+                        const isBondBroken = await this.isDongleBondBroken(dongleBond.deviceBleAddress);
+                        if (isBondBroken !== dongleBond.isBondBroken) {
+                            this.savedState = undefined;
+                        }
+                    }
 
                     if (state.isMacroStatusDirty) {
                         this._checkStatusBuffer = true;
@@ -1324,6 +1340,24 @@ export class DeviceService {
 
             this._uhkDevicePolling = false;
             await snooze(250);
+        }
+    }
+
+    private async isDongleBondBroken(deviceBleAddress: number[]): Promise<boolean> {
+        await this.dongleZephyrLogService.disable();
+        let dongleUhkDevice: UhkHidDevice;
+        try {
+            const dongle = await getCurrentUhkDongleHID();
+            dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongle);
+            const bondState = await dongleUhkDevice.getBondState(deviceBleAddress);
+
+            return bondState.isBondBroken;
+        }
+        finally {
+            if (dongleUhkDevice) {
+                await dongleUhkDevice.close();
+            }
+            await this.dongleZephyrLogService.enable();
         }
     }
 

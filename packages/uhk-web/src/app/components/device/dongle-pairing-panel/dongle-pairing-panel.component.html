@@ -1,5 +1,9 @@
 <div class="dongle-pairing-panel-wrapper" role="alert">
-    <span *ngIf="state === DonglePairingStates.Idle">
+    <span *ngIf="state === DonglePairingStates.Idle && isBondBroken">
+        The pairing of the dongle is broken. <a routerLink="/device/host-connections" (click)="pairDongle.emit()">Re-pair it</a> with this keyboard.
+    </span>
+
+    <span *ngIf="state === DonglePairingStates.Idle && !isBondBroken">
         A dongle is detected. <a routerLink="/device/host-connections" (click)="pairDongle.emit()">Pair it</a> with this keyboard.
     </span>
 

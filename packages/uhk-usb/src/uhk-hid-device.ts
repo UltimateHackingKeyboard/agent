@@ -43,6 +43,7 @@ import {
     UsbCommand
 } from './constants.js';
 import {
+    BondState,
     DeviceState,
     PairingInfo,
     ReenumerateOption,
@@ -229,6 +230,12 @@ export class UhkHidDevice {
     }
 
     public async isPairedWith(address: number[]): Promise<boolean> {
+        const bondState = await this.getBondState(address);
+
+        return bondState.isPaired;
+    }
+
+    public async getBondState(address: number[]): Promise<BondState> {
         await this.assertDeviceSupportWirelessUSBCommands();
 
         this.logService.usbOps('[UhkHidDevice] USB[T]: is paired with');
@@ -237,10 +244,13 @@ export class UhkHidDevice {
             ...address,
         ]);
         const responseBuffer = await this.write(buffer);
-        // 1st byte is the status code we skip it
-        const response = responseBuffer.readUInt8(1);
 
-        return response === 1;
+        // 1st byte is the status code we skip it
+        return {
+            isPaired: responseBuffer.readUInt8(1) === 1,
+            // older firmwares always send 0
+            isBondBroken: responseBuffer.readUInt8(2) === 1,
+        };
     }
 
     public async pairCentral(): Promise<void> {
@@ -328,6 +338,7 @@ export class UhkHidDevice {
                 rightModuleSlot: RightSlotModules.NoModule
             },
             hardwareModules: {},
+            isHalvesBondBroken: false,
             isMacroStatusDirty: false,
             isZephyrLogAvailable: false,
             leftHalfDetected: false,
@@ -410,6 +421,7 @@ export class UhkHidDevice {
             const deviceState = await this.getDeviceState();
             result.activeKeymapIndex = deviceState.activeKeymapIndex;
             result.halvesInfo = calculateHalvesState(deviceState);
+            result.isHalvesBondBroken = deviceState.isPeerBondBroken;
             result.isMacroStatusDirty = deviceState.isMacroStatusDirty;
             result.isZephyrLogAvailable = deviceState.isZephyrLogAvailable;
 
@@ -635,6 +647,7 @@ export class UhkHidDevice {
             leftModuleSlot: MODULE_ID_TO_STRING[buffer[4]],
             newPairedDevice: isBitSet(buffer[2], 2),
             isZephyrLogAvailable: isBitSet(buffer[2], 3),
+            isPeerBondBroken: isBitSet(buffer[2], 4),
             rightModuleSlot: MODULE_ID_TO_STRING[buffer[5]]
         };
     }

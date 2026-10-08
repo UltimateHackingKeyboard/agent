@@ -44,6 +44,7 @@ import {
     DonglePairingStates,
     EraseBleSettingsButtonState,
     FirmwareUpgradeState,
+    HalvesPairingState,
     HistoryFileInfo,
     MacroMenuItem,
     MacroMenuTreeNode,
@@ -121,6 +122,7 @@ export const advanceSettingsState = (state: AppState) => state.advanceSettings;
 export const getIsAdvancedSettingsMenuVisible = createSelector(advanceSettingsState, fromAdvancedSettings.isAdvancedSettingsMenuVisible);
 export const getAlwaysEnableAdvancedMode = createSelector(advanceSettingsState, fromAdvancedSettings.isAlwaysEnableAdvancedMode);
 export const isLeftHalfPairing = createSelector(advanceSettingsState, fromAdvancedSettings.isLeftHalfPairing);
+export const isCheckingHalvesBond = createSelector(advanceSettingsState, fromAdvancedSettings.isCheckingHalvesBond);
 export const getIsI2cDebuggingEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingEnabled);
 export const isI2cDebuggingRingBellEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingRingBellEnabled);
 
@@ -586,6 +588,7 @@ export const getDonglePairingState = createSelector(
                 operation: dongleState.operation,
                 state: DonglePairingStates.Idle,
                 showDonglePairingPanel: false,
+                isBondBroken: false,
             };
         }
 
@@ -595,13 +598,33 @@ export const getDonglePairingState = createSelector(
             });
 
         const isBleAddressMismatches = dongleState.dongle?.bleAddress && (!devicePairedWithDongle || !dongleState.dongle.isPairedWithKeyboard);
+        // a bond that only one of the devices knows about is broken too
+        const isBondOneSided = !!dongleState.dongle?.bleAddress && !!devicePairedWithDongle !== !!dongleState.dongle.isPairedWithKeyboard;
+        const isBondBroken = !!dongleState.dongle?.isBondBroken || isBondOneSided;
 
         return {
             operation: dongleState.operation,
             state: dongleState.state === DonglePairingStates.DeletingSuccess
                 ? DonglePairingStates.Idle
                 : dongleState.state,
-            showDonglePairingPanel: deviceConfigLoaded && (isDongleBleMissingFromHostConnections || isBleAddressMismatches || dongleState.operation === DongleOperations.Pairing),
+            showDonglePairingPanel: deviceConfigLoaded
+                && (isDongleBleMissingFromHostConnections || isBleAddressMismatches || isBondBroken || dongleState.operation === DongleOperations.Pairing),
+            isBondBroken,
+        };
+    }
+);
+
+export const isHalvesBondBroken = createSelector(deviceState, fromDevice.isHalvesBondBroken);
+export const getHalvesPairingState = createSelector(
+    runningInElectron,
+    getConnectedDevice,
+    isHalvesBondBroken,
+    isLeftHalfPairing,
+    isCheckingHalvesBond,
+    (isRunningInElectron, connectedDevice, halvesBondBroken, leftHalfPairing, checkingHalvesBond): HalvesPairingState => {
+        return {
+            showHalvesPairingPanel: isRunningInElectron && connectedDevice?.id === UHK_80_DEVICE.id && halvesBondBroken,
+            isPairing: leftHalfPairing || checkingHalvesBond,
         };
     }
 );

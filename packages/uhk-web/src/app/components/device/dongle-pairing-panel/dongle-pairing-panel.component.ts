@@ -12,6 +12,7 @@ import { DonglePairingStates } from '../../../models';
 })
 export class DonglePairingPanelComponent {
     @Input() state: DonglePairingStates;
+    @Input() isBondBroken: boolean;
 
     @Output() pairDongle = new EventEmitter<void>();
 

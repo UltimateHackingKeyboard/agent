@@ -23,6 +23,7 @@ import CircleTooltipComponent from './components/circle-tooltip/circle-tooltip.c
 import { BlePairingPanelComponent } from './components/device/ble-pairing-panel/ble-pairing-panel.component';
 import { FadeTimeoutSliderComponent } from './components/device/led-settings/fade-timeout-slider.component';
 import { DonglePairingPanelComponent } from './components/device/dongle-pairing-panel/dongle-pairing-panel.component';
+import { HalvesPairingPanelComponent } from './components/device/halves-pairing-panel/halves-pairing-panel.component';
 import { SharedConfigChangePanelComponent } from './components/shared-config-change-panel/shared-config-change-panel.component';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
@@ -204,6 +205,7 @@ import appInitFactory from './services/app-init-factory';
         KeymapHeaderComponent,
         NotificationComponent,
         DonglePairingPanelComponent,
+        HalvesPairingPanelComponent,
         SharedConfigChangePanelComponent,
         SvgIconTextKeyComponent,
         SvgKeyboardKeyComponent,

@@ -7,6 +7,7 @@ export * from './copied-layer-origin';
 export * from './delete-host-connection-payload';
 export * from './device-ui-states';
 export * from './dongle-pairing-state';
+export * from './halves-pairing-state';
 export * from './duplicate-macro-action-payload';
 export * from './erase-ble-settings-button-state';
 export * from './exchange-keys-action.model';
