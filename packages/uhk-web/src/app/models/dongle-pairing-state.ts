@@ -17,6 +17,7 @@ export enum DongleOperations {
 
 export interface DonglePairingState {
     showDonglePairingPanel: boolean;
+    isBondBroken: boolean;
     operation: DongleOperations;
     state: DonglePairingStates;
 }

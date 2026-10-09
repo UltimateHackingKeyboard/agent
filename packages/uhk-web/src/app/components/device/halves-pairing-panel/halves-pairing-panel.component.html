@@ -1,0 +1,9 @@
+<div class="halves-pairing-panel-wrapper" role="alert">
+    <span *ngIf="!isPairing">
+        The pairing of the keyboard halves is broken. Connect both halves via USB and <a href="#" (click)="$event.preventDefault(); pairHalves.emit()">re-pair them</a>.
+    </span>
+
+    <span *ngIf="isPairing">
+        Pairing keyboard halves... <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+    </span>
+</div>

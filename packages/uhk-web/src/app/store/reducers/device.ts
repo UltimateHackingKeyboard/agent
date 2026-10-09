@@ -40,6 +40,7 @@ export interface State {
     deviceConnectionStateLoaded: boolean;
     hostConnectionPairState: Record<string, boolean>;
     isErasingBleSettings: boolean;
+    isHalvesBondBroken: boolean;
     keyboardHalvesAlwaysJoined: boolean;
     leftHalfBootloaderActive: boolean;
     leftHalfDetected: boolean;
@@ -70,6 +71,7 @@ export const initialState: State = {
     hideStatusBufferError: false,
     hostConnectionPairState: {},
     isErasingBleSettings: false,
+    isHalvesBondBroken: false,
     keyboardHalvesAlwaysJoined: false,
     leftHalfBootloaderActive: false,
     leftHalfDetected: false,
@@ -155,6 +157,7 @@ export function reducer(state = initialState, action: Action): State {
                 bleDeviceConnected: data.bleDeviceConnected,
                 dongle: data.dongle,
                 isPairedWithDongle: data.isPairedWithDongle,
+                isHalvesBondBroken: data.isHalvesBondBroken,
                 activeKeymapIndex: data.activeKeymapIndex,
                 connectedDevice: data.connectedDevice,
                 deviceConnectionStateLoaded: true,
@@ -373,6 +376,7 @@ export function reducer(state = initialState, action: Action): State {
 export const hasDevicePermission = (state: State) => state.hasPermission && state.udevRuleInfo === UdevRulesInfo.Ok;
 export const getDeviceBleAddress = (state: State): string => state.bleAddress;
 export const getDevicePairedWithDongle = (state: State): boolean => state.isPairedWithDongle;
+export const isHalvesBondBroken = (state: State): boolean => state.isHalvesBondBroken;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (!state.deviceConnectionStateLoaded) {
         return {

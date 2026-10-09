@@ -28,6 +28,8 @@ export interface State {
     i2cDebuggingRingBellEnabled: boolean,
     i2cLogs: Array<XtermLog>;
     isLeftHalfPairing: boolean;
+    // After a successful pairing, until the device reports a healthy bond or the check times out.
+    isCheckingHalvesBond: boolean;
     isDongleZephyrLoggingEnabled: boolean;
     isLeftHalfZephyrLoggingEnabled: boolean;
     isRightHalfZephyrLoggingEnabled: boolean;
@@ -45,6 +47,7 @@ export const initialState = (): State => ({
     isLeftHalfZephyrLoggingEnabled: false,
     isRightHalfZephyrLoggingEnabled: false,
     isLeftHalfPairing: false,
+    isCheckingHalvesBond: false,
     menuVisible: false,
     zephyrLogs: [],
 });
@@ -96,16 +99,21 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
 
         case Device.ActionTypes.ConnectionStateChanged: {
             const payload = (action as Device.ConnectionStateChangedAction).payload;
+            const newState = {
+                ...state,
+                isCheckingHalvesBond: state.isCheckingHalvesBond && payload.isHalvesBondBroken,
+            };
+
             if (!payload.connectedDevice) {
-                return state;
+                return newState;
             }
 
             if (payload.connectedDevice?.id === state.lastConnectedDevice?.id) {
-                return state;
+                return newState;
             }
 
             return {
-                ...state,
+                ...newState,
                 activeButton: ActiveButton.None,
                 i2cLogs: [],
                 lastConnectedDevice: payload.connectedDevice,
@@ -157,11 +165,25 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             };
         }
 
-        case ActionTypes.leftHalfPairingSuccess:
+        case ActionTypes.leftHalfPairingSuccess: {
+            return {
+                ...state,
+                isLeftHalfPairing: false,
+                isCheckingHalvesBond: true,
+            };
+        }
+
         case ActionTypes.leftHalfPairingFailed: {
             return {
                 ...state,
                 isLeftHalfPairing: false,
+            };
+        }
+
+        case ActionTypes.halvesBondCheckTimeout: {
+            return {
+                ...state,
+                isCheckingHalvesBond: false,
             };
         }
 
@@ -266,5 +288,6 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
 export const isAdvancedSettingsMenuVisible = (state: State): boolean => state.menuVisible;
 export const isAlwaysEnableAdvancedMode = (state: State): boolean => state.alwaysEnableAdvancedMode;
 export const isLeftHalfPairing = (state: State): boolean => state.isLeftHalfPairing;
+export const isCheckingHalvesBond = (state: State): boolean => state.isCheckingHalvesBond;
 export const isI2cDebuggingEnabled = (state: State): boolean => state.activeButton === ActiveButton.I2CRecoveryDebugging;
 export const isI2cDebuggingRingBellEnabled = (state: State): boolean => state.i2cDebuggingRingBellEnabled;

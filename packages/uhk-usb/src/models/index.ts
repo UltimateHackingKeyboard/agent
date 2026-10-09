@@ -1,3 +1,4 @@
+export * from './bond-state.js';
 export * from './debug-info.js';
 export * from './device-state.js';
 export * from './duration.js';

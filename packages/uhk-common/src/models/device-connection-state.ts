@@ -18,6 +18,10 @@ export interface DeviceConnectionState {
     dongle: Dongle;
     leftHalfBootloaderActive: boolean;
     hasPermission: boolean;
+    /**
+     * The left half rejected the bond of the right half (GetDeviceState byte 2 bit 4).
+     */
+    isHalvesBondBroken: boolean;
     bootloaderActive: boolean;
     isMacroStatusDirty: boolean;
     isZephyrLogAvailable: boolean;

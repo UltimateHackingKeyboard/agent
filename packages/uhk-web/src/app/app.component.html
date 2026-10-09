@@ -13,7 +13,13 @@
     <dongle-pairing-panel *ngIf="donglePairingState?.showDonglePairingPanel"
                           [@topNotificationPanelVisible]
                           [state]="donglePairingState.state"
+                          [isBondBroken]="donglePairingState.isBondBroken"
                           (pairDongle)="startDonglePairing()"
+    />
+    <halves-pairing-panel *ngIf="halvesPairingState?.showHalvesPairingPanel"
+                          [@topNotificationPanelVisible]
+                          [isPairing]="halvesPairingState.isPairing"
+                          (pairHalves)="startHalvesPairing()"
     />
     <firmware-upgrade-panel *ngIf="showFirmwareUpgradePanel"
                             [@topNotificationPanelVisible]

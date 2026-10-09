@@ -17,6 +17,7 @@ import { EnableUsbStackTestAction, UpdateFirmwareAction } from './store/actions/
 import {
     AppState,
     getDonglePairingState,
+    getHalvesPairingState,
     getNewPairedDevicesState,
     getErrorPanelHeight,
     getShowAppUpdateAvailable,
@@ -32,6 +33,7 @@ import {
     getShowFirmwareUpgradePanel,
     getSharedConfigChange
 } from './store';
+import { StartLeftHalfPairingAction } from './store/actions/advance-settings.action';
 import { StartDonglePairingAction } from './store/actions/dongle-pairing.action';
 import { AddNewPairedDevicesToHostConnectionsAction } from './store/actions/user-config';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
@@ -45,7 +47,7 @@ import {
     ApplySharedConfigChangeAction,
     DismissSharedConfigChangeAction,
 } from './store/actions/app';
-import { BleAddingState, DonglePairingState, OutOfSpaceWarningData } from './models';
+import { BleAddingState, DonglePairingState, HalvesPairingState, OutOfSpaceWarningData } from './models';
 import { filter } from 'rxjs/operators';
 import { SecondSideMenuContainerComponent } from './components/side-menu';
 
@@ -114,6 +116,7 @@ export class MainAppComponent implements OnDestroy {
     @ViewChild('manuallyUpdateNotification', { static: true }) manuallyUpdateNotificationTmpl;
 
     donglePairingState: DonglePairingState;
+    halvesPairingState: HalvesPairingState;
     newPairedDevicesState: BleAddingState;
     showFirmwareUpgradePanel: boolean;
     showUpdateAvailable: boolean;
@@ -135,6 +138,7 @@ export class MainAppComponent implements OnDestroy {
     private actionsSubscription: Subscription;
     private readonly cdRef = inject(ChangeDetectorRef);
     private donglePairingStateSubscription: Subscription;
+    private halvesPairingStateSubscription: Subscription;
     private newPairedDevicesStateSubscription: Subscription;
     private errorPanelHeightSubscription: Subscription;
     private readonly keyboardSvgExportService = inject(KeyboardSvgExportService);
@@ -170,6 +174,11 @@ export class MainAppComponent implements OnDestroy {
         this.donglePairingStateSubscription = this.store.select(getDonglePairingState)
             .subscribe(data => {
                 this.donglePairingState = data;
+                this.cdRef.markForCheck();
+            });
+        this.halvesPairingStateSubscription = this.store.select(getHalvesPairingState)
+            .subscribe(data => {
+                this.halvesPairingState = data;
                 this.cdRef.markForCheck();
             });
         this.newPairedDevicesStateSubscription = this.store.select(getNewPairedDevicesState)
@@ -248,6 +257,7 @@ export class MainAppComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.actionsSubscription.unsubscribe();
         this.donglePairingStateSubscription.unsubscribe();
+        this.halvesPairingStateSubscription.unsubscribe();
         this.newPairedDevicesStateSubscription.unsubscribe();
         this.errorPanelHeightSubscription.unsubscribe();
         this.saveToKeyboardStateSubscription.unsubscribe();
@@ -338,6 +348,7 @@ export class MainAppComponent implements OnDestroy {
         return this.showFirmwareUpgradePanel
             || this.showUpdateAvailable
             || this.donglePairingState?.showDonglePairingPanel
+            || this.halvesPairingState?.showHalvesPairingPanel
             || this.newPairedDevicesState?.showNewPairedDevicesPanel
             || !!this.sharedConfigChange;
     }
@@ -354,6 +365,10 @@ export class MainAppComponent implements OnDestroy {
 
     updateFirmware(): void {
         this.store.dispatch(new UpdateFirmwareAction(false));
+    }
+
+    startHalvesPairing(): void {
+        this.store.dispatch(new StartLeftHalfPairingAction());
     }
 
     startDonglePairing(): void {
