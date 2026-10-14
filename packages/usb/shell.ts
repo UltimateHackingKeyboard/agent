@@ -103,7 +103,7 @@ try {
     let stdinClosed = false;
     let idleMs = 0;
 
-    const initialCommand = argv._.map(arg => String(arg)).join(' ');
+    const initialCommand = argv._.map((arg: string | number) => String(arg)).join(' ');
     if (initialCommand.length > 0) {
         pending.push(initialCommand);
     }
