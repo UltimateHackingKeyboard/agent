@@ -35,7 +35,7 @@ export class FileDialogService extends MainServiceBase {
     }
 
     private async openUserConfig(): Promise<OpenUserConfigDialogResult> {
-        const defaultPath = await this.getUserConfigFolder();
+        const defaultPath = await this.getDefaultUserConfigFolder();
         this.logService.misc(`[FileDialogService] open user configuration dialog, defaultPath: ${defaultPath}`);
 
         const result = await dialog.showOpenDialog(this.win, {
@@ -66,8 +66,7 @@ export class FileDialogService extends MainServiceBase {
 
     private async saveUserConfig(_event: Electron.IpcMainInvokeEvent,
                                  data: SaveUserConfigDialogData): Promise<SaveUserConfigDialogResult> {
-        const folder = await this.getUserConfigFolder();
-        const defaultPath = folder ? join(folder, data.fileName) : data.fileName;
+        const defaultPath = join(await this.getDefaultUserConfigFolder(), data.fileName);
         this.logService.misc(`[FileDialogService] save user configuration dialog, defaultPath: ${defaultPath}`);
 
         const result = await dialog.showSaveDialog(this.win, {
@@ -130,6 +129,38 @@ export class FileDialogService extends MainServiceBase {
         const folder = await settings.get(USER_CONFIG_FOLDER_SETTING);
 
         return typeof folder === 'string' && folder.length > 0 ? folder : undefined;
+    }
+
+    /**
+     * Always returns an absolute folder. The native file chooser must never
+     * receive a relative default path: on Linux the xdg-desktop-portal file
+     * chooser opens at the unusable relative directory "." and cancels the
+     * request ("Request ended (non-user cancelled)").
+     */
+    private async getDefaultUserConfigFolder(): Promise<string> {
+        const rememberedFolder = await this.getUserConfigFolder();
+
+        if (rememberedFolder && await this.directoryExists(rememberedFolder)) {
+            return rememberedFolder;
+        }
+
+        return this.getFallbackUserConfigFolder();
+    }
+
+    private getFallbackUserConfigFolder(): string {
+        try {
+            return app.getPath('downloads');
+        } catch {
+            return app.getPath('home');
+        }
+    }
+
+    private async directoryExists(dir: string): Promise<boolean> {
+        try {
+            return (await fs.stat(dir)).isDirectory();
+        } catch {
+            return false;
+        }
     }
 
     private async saveUserConfigFolder(filePath: string): Promise<void> {
