@@ -1592,23 +1592,17 @@ export class DeviceService {
             return;
         }
 
-        let updateMethod = 'updateModuleWithKboot'
+        const isMcuboot = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
+        const supportsKbootNative = isVersionGte(uhkDeviceFirmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE);
 
-        if (uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
-            if (isVersionLt(uhkDeviceFirmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE)) {
-                eventSender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
-                    moduleName: moduleInfo.module.name,
-                    newFirmwareChecksum: '',
-                    reason: ModuleFirmwareUpgradeSkipReason.Uhk80Limitation,
-                } as ModuleFirmwareUpgradeSkipInfo);
+        if (isMcuboot && !supportsKbootNative) {
+            eventSender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
+                moduleName: moduleInfo.module.name,
+                newFirmwareChecksum: '',
+                reason: ModuleFirmwareUpgradeSkipReason.Uhk80Limitation,
+            } as ModuleFirmwareUpgradeSkipInfo);
 
-                return;
-            }
-
-            updateMethod = 'updateModuleWithKbootNative'
-        }
-        else if (isVersionGte(uhkDeviceFirmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE)) {
-            updateMethod = 'updateModuleWithKbootNative'
+            return;
         }
 
         if (moduleInfo.module.firmwareUpgradeSupported) {
@@ -1640,11 +1634,20 @@ export class DeviceService {
                     newFirmwareChecksum: moduleConfig.md5,
                 } as CurrentlyUpdatingModuleInfo);
 
-                await this.operations[updateMethod](
-                    getModuleFirmwarePath(moduleInfo.module, packageJson),
-                    uhkDeviceProduct,
-                    moduleInfo.module
-                );
+                const firmwarePath = getModuleFirmwarePath(moduleInfo.module, packageJson);
+
+                if (supportsKbootNative) {
+                    await this.operations.updateModuleWithKbootNative(firmwarePath, uhkDeviceProduct, moduleInfo.module);
+                }
+                else {
+                    await this.operations.updateModuleWithKboot({
+                        firmwarePath,
+                        device: uhkDeviceProduct,
+                        module: moduleInfo.module,
+                        onProgress: this.createFirmwareProgressReporter(eventSender, moduleInfo.module.name),
+                        prompt: (message) => this.firmwareUpgradePrompt(eventSender, message),
+                    });
+                }
 
                 this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
             } else {
