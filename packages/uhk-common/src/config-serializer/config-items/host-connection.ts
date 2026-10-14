@@ -1,3 +1,4 @@
+import { fromStringUnsafe } from '../../util/from-string-unsafe.js';
 import { assertEnum } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { isSerialisationInfoLt } from './serialisation-info.js';
@@ -193,7 +194,7 @@ export class HostConnection {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV8(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
-        this.type = HostConnections[<string>jsonObject.type];
+        this.type = fromStringUnsafe(HostConnections, jsonObject.type);
         if (this.hasAddress()) {
             this.address = jsonObject.address;
 
@@ -220,7 +221,7 @@ export class HostConnection {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV9(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
-        this.type = HostConnections[<string>jsonObject.type];
+        this.type = fromStringUnsafe(HostConnections, jsonObject.type);
         if (this.hasAddress()) {
             this.address = jsonObject.address;
         }

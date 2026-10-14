@@ -190,7 +190,7 @@ export class Keymap {
         this.abbreviation = jsonObject.abbreviation;
         this.name = jsonObject.name;
         this.description = jsonObject.description;
-        this.layers = jsonObject.layers.map((layer) => new Layer().fromJsonObject(layer, macros, serialisationInfo));
+        this.layers = jsonObject.layers.map((layer: unknown) =>new Layer().fromJsonObject(layer, macros, serialisationInfo));
     }
 
     private fromBinaryV1(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): void {
