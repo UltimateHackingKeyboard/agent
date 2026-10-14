@@ -1,3 +1,4 @@
+import { fromStringUnsafe } from '../../../util/from-string-unsafe.js';
 import { assertEnum, assertUInt8 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { KeyModifiers } from '../key-modifiers.js';
@@ -251,12 +252,12 @@ export class KeystrokeAction extends KeyAction {
         if (jsonObject.type === 'media') {
             this.type = jsonObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
         } else {
-            this.type = KeystrokeType[jsonObject.type];
+            this.type = fromStringUnsafe(KeystrokeType, jsonObject.type);
         }
 
         this._scancode = jsonObject.scancode;
         this.modifierMask = jsonObject.modifierMask;
-        this.secondaryRoleAction = SecondaryRoleAction[jsonObject.secondaryRoleAction];
+        this.secondaryRoleAction = fromStringUnsafe(SecondaryRoleAction, jsonObject.secondaryRoleAction);
     }
 
     private fromJsonObjectV6(jsonObject: JsonObjectKeystrokeAction, serialisationInfo: SerialisationInfo): void {

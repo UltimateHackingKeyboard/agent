@@ -2,8 +2,10 @@ import { SvgKeyboardKey } from '../keys';
 
 export class SvgModule {
     // circle svg elements that not programmable. Part of the coverages
-    circles = [];
-    coverages = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    circles: any[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    coverages: any[] = [];
     keyboardKeys: SvgKeyboardKey[];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     attributes: any;
@@ -14,7 +16,7 @@ export class SvgModule {
     moduleNavPath: any;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(obj: { rect: any[], path: any[], $: Object, circle?: any[], g?: any[] }) {
+    constructor(obj: { rect: any[], path: any[], $: Record<string, string>, circle?: any[], g?: any[] }) {
         this.keyboardKeys = [];
         if (obj.rect) {
             const keys = obj.rect.map(rect => rect.$);
@@ -100,7 +102,8 @@ export class SvgModule {
                     };
 
                     if (g.path) {
-                        key.elements.paths = g.path.map(path => {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        key.elements.paths = g.path.map((path: any) => {
                             path = path.$;
                             const style = parseStyle(path.style as string);
 
@@ -113,7 +116,8 @@ export class SvgModule {
                     }
 
                     if (g.circle) {
-                        key.elements.circles = g.circle.map(circle => {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        key.elements.circles = g.circle.map((circle: any) => {
                             circle = circle.$;
                             const style = parseStyle(circle.style as string);
 
@@ -128,7 +132,7 @@ export class SvgModule {
                     }
 
                     if (g.rect) {
-                        const rect = g.rect.find(r => r.$.id.endsWith('print'));
+                        const rect = g.rect.find((r: { $: Record<string, string> }) => r.$.id.endsWith('print'));
                         if (rect) {
                             key.x = +rect.$.x;
                             key.y = +rect.$.y;
@@ -159,7 +163,7 @@ function parseStyle(style: string): Record<string, string> | undefined {
 
     return style
         .split(';')
-        .reduce((result: unknown, value: string) => {
+        .reduce((result: Record<string, string>, value: string) => {
             const split = value.split(':');
             if (split.length < 2) {
                 return result;

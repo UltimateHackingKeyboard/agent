@@ -81,7 +81,7 @@ export function assertEnum<E>(enumerated: E) {
             }
 
             if (this[priv] !== newVal) {
-                if (enumerated[newVal] === undefined) {
+                if (enumerated[newVal as keyof E] === undefined) {
                     throw new Error(`${target.constructor.name}.${key}: ${newVal} is not enum`);
                 }
                 this[priv] = newVal;

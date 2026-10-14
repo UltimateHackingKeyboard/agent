@@ -9,7 +9,7 @@ const argv = yargs
     .argv;
 
 const { operations } = Uhk(argv);
-let i2cRecovery;
+let i2cRecovery: number;
 
 setInterval(async function () {
     try {

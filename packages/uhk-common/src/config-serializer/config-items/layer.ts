@@ -1,3 +1,4 @@
+import { fromStringUnsafe } from '../../util/from-string-unsafe.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { assertEnum } from '../assert.js';
 
@@ -126,7 +127,7 @@ export class Layer {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObjectV1(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
-        this.modules = jsonObject.modules.map((module) => {
+        this.modules = jsonObject.modules.map((module: unknown) => {
             return new Module().fromJsonObject(module, macros, serialisationInfo);
         });
     }
@@ -139,8 +140,8 @@ export class Layer {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObjectV5(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
-        this.id = LayerName[<string>jsonObject.id];
-        this.modules = jsonObject.modules.map((module) => {
+        this.id = fromStringUnsafe(LayerName, jsonObject.id);
+        this.modules = jsonObject.modules.map((module: unknown) => {
             return new Module().fromJsonObject(module, macros, serialisationInfo);
         });
     }

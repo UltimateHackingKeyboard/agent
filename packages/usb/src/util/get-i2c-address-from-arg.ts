@@ -1,4 +1,4 @@
-import { ModuleSlotToI2cAddress } from 'uhk-common';
+import { fromStringUnsafe, ModuleSlotToI2cAddress } from 'uhk-common';
 
 import { InvalidArgumentError } from '../invalid-argument-error.js';
 
@@ -9,7 +9,7 @@ export function getI2cAddressArgs(): string {
 }
 
 export function getI2cAddressFromArg(arg: string): ModuleSlotToI2cAddress {
-    const i2cAddress = ModuleSlotToI2cAddress[arg];
+    const i2cAddress = fromStringUnsafe(ModuleSlotToI2cAddress, arg);
 
     if (i2cAddress) {
         return i2cAddress;

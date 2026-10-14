@@ -45,6 +45,6 @@ export class NgSelectMaxHeight implements OnDestroy {
             dropdownPanel.classList.add('ng-select-bottom');
         }
 
-        dropdownPanelItems.style['max-height'] = `${newHeight}px`;
+        dropdownPanelItems.style.maxHeight = `${newHeight}px`;
     }
 }

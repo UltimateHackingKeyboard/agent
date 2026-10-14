@@ -15,7 +15,7 @@ import {
     template: '<template #secondaryContainer></template>'
 }))
 export class SecondSideMenuContainerComponent {
-    @ViewChild('secondaryContainer', { read: ViewContainerRef }) container;
+    @ViewChild('secondaryContainer', { read: ViewContainerRef }) container: ViewContainerRef;
 
     private readonly cdRef = inject(ChangeDetectorRef);
     private readonly componentFactoryResolver = inject(ComponentFactoryResolver);

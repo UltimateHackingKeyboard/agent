@@ -1,3 +1,4 @@
+import { fromStringUnsafe } from '../../../util/from-string-unsafe.js';
 import { assertEnum, assertUInt8 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { SerialisationInfo } from '../serialisation-info.js';
@@ -137,7 +138,7 @@ export class MouseButtonMacroAction extends MacroAction {
 
     private fromJsonObjectV1(jsObject: JsObjectMouseButtonMacroAction): void {
         this.assertMacroActionType(jsObject);
-        this.action = MacroMouseSubAction[jsObject.action];
+        this.action = fromStringUnsafe(MacroMouseSubAction, jsObject.action);
         this.mouseButtonsMask = jsObject.mouseButtonsMask;
     }
 

@@ -1026,7 +1026,7 @@ export class UhkOperations {
      */
     private async sendConfigToKeyboard(
         buffer: Buffer,
-        isUserConfiguration,
+        isUserConfiguration: boolean,
         onProgress?: ProgressCallback
     ): Promise<void> {
         const command = isUserConfiguration
