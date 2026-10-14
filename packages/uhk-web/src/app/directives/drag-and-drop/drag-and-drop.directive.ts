@@ -37,6 +37,7 @@ export class DragAndDropDirective implements OnDestroy {
     private startX = 0;
     private startY = 0;
     private initialRect: DOMRect;
+    private initialOrder: HTMLElement[] = [];
 
     private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
@@ -68,6 +69,7 @@ export class DragAndDropDirective implements OnDestroy {
         this.offsetX = event.clientX - rect.left;
         this.offsetY = event.clientY - rect.top;
         this.initialRect = rect;
+        this.initialOrder = Array.from(this.elementRef.nativeElement.children) as HTMLElement[];
 
         window.addEventListener('pointermove', this.onPointerMove);
         window.addEventListener('pointerup', this.onPointerUp);
@@ -110,12 +112,31 @@ export class DragAndDropDirective implements OnDestroy {
         }
 
         const reordered = this.dragging ? this.getReorderedModel() : undefined;
+        this.restoreDomOrder();
         this.cleanup();
 
         if (reordered) {
             this.dragAndDropChange.emit(reordered);
         }
     };
+
+    /**
+     * Puts the list items back into their pre-drag DOM order.
+     *
+     * The reordering is shown live by moving the actual DOM nodes, but that leaves the DOM out of
+     * sync with the view order Angular tracks for the bound model. Restoring the original order
+     * before emitting lets Angular re-render the reordered model with its own, consistent view
+     * order instead of duplicating or misplacing items.
+     */
+    private restoreDomOrder(): void {
+        const container = this.elementRef.nativeElement;
+
+        for (const child of this.initialOrder) {
+            container.appendChild(child);
+        }
+
+        this.initialOrder = [];
+    }
 
     private beginDrag(): void {
         this.dragging = true;
@@ -309,5 +330,6 @@ export class DragAndDropDirective implements OnDestroy {
         this.mirror = undefined;
         this.pointerId = -1;
         this.initialRect = undefined;
+        this.initialOrder = [];
     }
 }
