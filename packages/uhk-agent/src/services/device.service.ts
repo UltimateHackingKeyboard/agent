@@ -717,7 +717,7 @@ export class DeviceService {
                     );
                 }
                 else {
-                    if (isVersionLt(hardwareModules.rightModuleInfo.firmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE)) {
+                    if (this.options['legacy-kboot'] || isVersionLt(hardwareModules.rightModuleInfo.firmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE)) {
                         await this.operations
                             .updateModuleWithKboot({
                                 firmwarePath: getModuleFirmwarePath(leftModuleInfo.module, packageJson),
@@ -1594,6 +1594,7 @@ export class DeviceService {
 
         const isMcuboot = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
         const supportsKbootNative = isVersionGte(uhkDeviceFirmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE);
+        const useKbootNative = supportsKbootNative && !(this.options['legacy-kboot'] && !isMcuboot);
 
         if (isMcuboot && !supportsKbootNative) {
             eventSender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, {
@@ -1636,7 +1637,7 @@ export class DeviceService {
 
                 const firmwarePath = getModuleFirmwarePath(moduleInfo.module, packageJson);
 
-                if (supportsKbootNative) {
+                if (useKbootNative) {
                     await this.operations.updateModuleWithKbootNative(firmwarePath, uhkDeviceProduct, moduleInfo.module);
                 }
                 else {
