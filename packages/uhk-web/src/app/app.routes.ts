@@ -1,4 +1,4 @@
-import { ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders, Provider } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { deviceRoutes } from './components/device';
@@ -77,6 +77,6 @@ const appRoutes: Routes = [
     }
 ];
 
-export const appRoutingProviders = [];
+export const appRoutingProviders: Provider[] = [];
 
 export const routing: ModuleWithProviders<RouterModule> = RouterModule.forRoot(appRoutes, { useHash: true });
