@@ -79,7 +79,6 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
     readonly dragAndDropHandle = '.action--movable';
     faPlus = faPlus;
     scrollTopPosition: number;
-    isMacroReordering = false;
 
     private scrollToBottomIntervalTimer: number;
     private scrollToBottomSetTimeoutTimer: number;
@@ -88,10 +87,6 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
         if (this.scrollTopPosition) {
             window.scrollTo(window.scrollX, this.scrollTopPosition);
             this.scrollTopPosition = undefined;
-        }
-
-        if (this.isMacroReordering) {
-            this.isMacroReordering = false;
         }
     }
 
@@ -168,7 +163,6 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
     }
 
     macroActionReordered(macroActions: MacroAction[]): void {
-        this.isMacroReordering = true;
         this.scrollTopPosition = window.scrollY;
         this.reorder.emit({
             macroId: this.macro.id,
@@ -176,12 +170,7 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
         });
     }
 
-    macroActionTrackByFn(index: number, macroAction: MacroAction): string {
-        if (this.isMacroReordering) {
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
-            return index.toString() + macroAction.toString();
-        }
-
+    macroActionTrackByFn(index: number): string {
         return index.toString();
     }
 

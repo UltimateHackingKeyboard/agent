@@ -5,7 +5,7 @@
              [dragAndDrop]="macro.macroActions"
              [dragAndDropHandle]="dragAndDropHandle"
              (dragAndDropChange)="macroActionReordered($event)">
-            <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index; trackBy:macroActionTrackByFn.bind(this)"
+            <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index; trackBy:macroActionTrackByFn"
                         [class.active]="selectedMacroActionId?.id === macroActionIndex"
                         [isMacroCommandSupported]="isMacroCommandSupported"
                         [macroAction]="macroAction"
