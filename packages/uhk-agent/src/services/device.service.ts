@@ -745,7 +745,7 @@ export class DeviceService {
                         hardwareModules,
                         moduleSlotId: ModuleSlotToId.leftModule,
                         packageJson,
-                        uhkDeviceProduct: UHK_80_DEVICE_LEFT,
+                        uhkDeviceProduct,
                         uhkDeviceFirmwareVersion: packageJson.firmwareVersion,
                     });
                 }
@@ -760,14 +760,16 @@ export class DeviceService {
                 } as ModuleFirmwareUpgradeSkipInfo);
                 this.logService.misc('[DeviceService] Skip left firmware upgrade.');
 
+                const isUhk80 = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
+
                 await this.updateModuleFirmware({
                     eventSender: event.sender,
                     forceUpgrade: data.forceUpgrade,
                     hardwareModules,
                     moduleSlotId: ModuleSlotToId.leftModule,
                     packageJson,
-                    uhkDeviceProduct: UHK_80_DEVICE_LEFT,
-                    uhkDeviceFirmwareVersion: leftModuleInfo.info.firmwareVersion,
+                    uhkDeviceProduct: isUhk80 ? UHK_80_DEVICE_LEFT : uhkDeviceProduct,
+                    uhkDeviceFirmwareVersion: isUhk80 ? leftModuleInfo.info.firmwareVersion : hardwareModules.rightModuleInfo.firmwareVersion,
                 });
             }
 
