@@ -12,4 +12,9 @@ export type MODULE_FLASH_STATE_TYPE = typeof MODULE_FLASH_STATE[MODULE_FLASH_STA
 export interface ModuleFlashResponse {
     state: MODULE_FLASH_STATE_TYPE;
     errorCode?: number;
+    writtenBytes: number;
+    /**
+     * 0 when the firmware does not report progress
+     */
+    totalBytes: number;
 }

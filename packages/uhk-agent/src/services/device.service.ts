@@ -1640,7 +1640,12 @@ export class DeviceService {
                 const firmwarePath = getModuleFirmwarePath(moduleInfo.module, packageJson);
 
                 if (useKbootNative) {
-                    await this.operations.updateModuleWithKbootNative(firmwarePath, uhkDeviceProduct, moduleInfo.module);
+                    await this.operations.updateModuleWithKbootNative(
+                        firmwarePath,
+                        uhkDeviceProduct,
+                        moduleInfo.module,
+                        this.createFirmwareProgressReporter(eventSender, moduleInfo.module.name)
+                    );
                 }
                 else {
                     await this.operations.updateModuleWithKboot({
