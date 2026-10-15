@@ -110,7 +110,7 @@ import { ZephyrLogService } from './zephyr-log.service';
 // the poller iterates at most every 250ms, so it is at least 10 seconds
 const DONGLE_BOND_POLL_ITERATIONS = 40;
 
-const FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE = '17.2.0';
+const DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE = '4.21.0';
 
 interface UpdateModuleFirmwareOptions {
     eventSender: Electron.WebContents;
@@ -119,7 +119,7 @@ interface UpdateModuleFirmwareOptions {
     moduleSlotId: ModuleSlotToId;
     packageJson: FirmwareJson;
     uhkDeviceProduct: UhkDeviceProduct;
-    uhkDeviceFirmwareVersion: string;
+    uhkDeviceProtocolVersion: string;
 }
 
 const getConnectedUhk80LeftHID = (): Promise<Device> => getCurrenUhk80LeftHID()
@@ -739,7 +739,7 @@ export class DeviceService {
                         moduleSlotId: ModuleSlotToId.leftModule,
                         packageJson,
                         uhkDeviceProduct: UHK_80_DEVICE_LEFT,
-                        uhkDeviceFirmwareVersion: packageJson.firmwareVersion,
+                        uhkDeviceProtocolVersion: packageJson.deviceProtocolVersion,
                     });
 
                     await this.waitForUhkDeviceWithConnectPrompt(
@@ -749,7 +749,7 @@ export class DeviceService {
                     );
                 }
                 else {
-                    if (this.options['legacy-kboot'] || isVersionLt(hardwareModules.rightModuleInfo.firmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE)) {
+                    if (this.options['legacy-kboot'] || isVersionLt(hardwareModules.rightModuleInfo.deviceProtocolVersion, DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE)) {
                         this.logModuleFlashMethod(leftModuleInfo.module.name, uhkDeviceProduct, hardwareModules.rightModuleInfo.firmwareVersion, false);
                         await this.operations
                             .updateModuleWithKboot({
@@ -768,7 +768,7 @@ export class DeviceService {
                             moduleSlotId: ModuleSlotToId.leftHalf,
                             packageJson,
                             uhkDeviceProduct,
-                            uhkDeviceFirmwareVersion: hardwareModules.rightModuleInfo.firmwareVersion,
+                            uhkDeviceProtocolVersion: hardwareModules.rightModuleInfo.deviceProtocolVersion,
                         });
                     }
 
@@ -779,7 +779,7 @@ export class DeviceService {
                         moduleSlotId: ModuleSlotToId.leftModule,
                         packageJson,
                         uhkDeviceProduct,
-                        uhkDeviceFirmwareVersion: packageJson.firmwareVersion,
+                        uhkDeviceProtocolVersion: packageJson.deviceProtocolVersion,
                     });
                 }
             }
@@ -802,7 +802,7 @@ export class DeviceService {
                     moduleSlotId: ModuleSlotToId.leftModule,
                     packageJson,
                     uhkDeviceProduct: isUhk80 ? UHK_80_DEVICE_LEFT : uhkDeviceProduct,
-                    uhkDeviceFirmwareVersion: isUhk80 ? leftModuleInfo.info.firmwareVersion : hardwareModules.rightModuleInfo.firmwareVersion,
+                    uhkDeviceProtocolVersion: isUhk80 ? packageJson.deviceProtocolVersion : hardwareModules.rightModuleInfo.deviceProtocolVersion,
                 });
             }
 
@@ -813,7 +813,7 @@ export class DeviceService {
                 moduleSlotId: ModuleSlotToId.rightModule,
                 packageJson,
                 uhkDeviceProduct,
-                uhkDeviceFirmwareVersion: hardwareModules.rightModuleInfo.firmwareVersion,
+                uhkDeviceProtocolVersion: hardwareModules.rightModuleInfo.deviceProtocolVersion,
             });
 
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
@@ -942,12 +942,12 @@ export class DeviceService {
 
             const firmwarePath = getModuleFirmwarePath(uhkModule, packageJson);
             const prompt = (message: string | undefined): void => this.firmwareUpgradePrompt(event.sender, message);
-            const { firmwareVersion } = await this.operations.getDeviceVersionInfo();
+            const { deviceProtocolVersion } = await this.operations.getDeviceVersionInfo();
             const isMcuboot = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
-            const supportsKbootNative = isVersionGte(firmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE);
+            const supportsKbootNative = isVersionGte(deviceProtocolVersion, DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE);
             const useKbootNative = supportsKbootNative && !(this.options['legacy-kboot'] && !isMcuboot);
             const flashingDevice = isMcuboot && uhkModule.slotId === ModuleSlotToId.leftModule ? UHK_80_DEVICE_LEFT : uhkDeviceProduct;
-            this.logModuleFlashMethod(uhkModule.name, flashingDevice, firmwareVersion, useKbootNative);
+            this.logModuleFlashMethod(uhkModule.name, flashingDevice, deviceProtocolVersion, useKbootNative);
 
             if (useKbootNative) {
                 await this.dongleZephyrLogService.disable();
@@ -1662,12 +1662,12 @@ export class DeviceService {
         this.logService.misc(`[DeviceService] ----------- ${name} -----------`);
     }
 
-    private logModuleFlashMethod(moduleName: string, uhkDeviceProduct: UhkDeviceProduct, firmwareVersion: string, useKbootNative: boolean): void {
+    private logModuleFlashMethod(moduleName: string, uhkDeviceProduct: UhkDeviceProduct, deviceProtocolVersion: string, useKbootNative: boolean): void {
         const reason = useKbootNative
-            ? `firmware ${firmwareVersion} >= ${FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE}`
+            ? `device protocol ${deviceProtocolVersion} >= ${DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE}`
             : this.options['legacy-kboot']
                 ? '--legacy-kboot requested'
-                : `firmware ${firmwareVersion} < ${FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE}`;
+                : `device protocol ${deviceProtocolVersion} < ${DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE}`;
         const method = useKbootNative ? 'native kboot' : 'legacy kboot';
 
         this.logService.misc(`[DeviceService] Flashing "${moduleName}" module via ${uhkDeviceProduct.logName} using **${method}** (because ${reason})`);
@@ -1680,7 +1680,7 @@ export class DeviceService {
         moduleSlotId,
         packageJson,
         uhkDeviceProduct,
-        uhkDeviceFirmwareVersion,
+        uhkDeviceProtocolVersion,
     }: UpdateModuleFirmwareOptions): Promise<void> {
         const moduleInfo = hardwareModules.moduleInfos.find(info => info.module.slotId === moduleSlotId);
 
@@ -1692,7 +1692,7 @@ export class DeviceService {
             this.logFirmwareUpgradeSeparator(moduleInfo.module.name);
         }
         const isMcuboot = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
-        const supportsKbootNative = isVersionGte(uhkDeviceFirmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE);
+        const supportsKbootNative = isVersionGte(uhkDeviceProtocolVersion, DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE);
         const useKbootNative = supportsKbootNative && !(this.options['legacy-kboot'] && !isMcuboot);
 
         if (isMcuboot && !supportsKbootNative) {
@@ -1735,7 +1735,7 @@ export class DeviceService {
                 } as CurrentlyUpdatingModuleInfo);
 
                 const firmwarePath = getModuleFirmwarePath(moduleInfo.module, packageJson);
-                this.logModuleFlashMethod(moduleInfo.module.name, uhkDeviceProduct, uhkDeviceFirmwareVersion, useKbootNative);
+                this.logModuleFlashMethod(moduleInfo.module.name, uhkDeviceProduct, uhkDeviceProtocolVersion, useKbootNative);
 
                 if (useKbootNative) {
                     await this.updateModuleWithKbootNative(
