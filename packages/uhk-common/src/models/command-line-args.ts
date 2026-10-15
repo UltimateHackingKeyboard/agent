@@ -47,6 +47,11 @@ export interface CommandLineArgs extends DeviceIdentifier {
     'ignore-firmware-checksums'?: boolean;
 
     /**
+     * Flash UHK 60 modules with the legacy Agent-driven kboot even when the firmware supports native kboot
+     */
+    'legacy-kboot'?: boolean;
+
+    /**
      * logging categories
      */
     log?: string;

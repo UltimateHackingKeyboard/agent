@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@uhk/mcumgr": "file:../mcumgr",
+    "crc16-xmodem": "file:../crc16-xmodem",
     "kboot": "file:../kboot",
     "is-root": "3.0.0",
     "nrf-intel-hex": "1.4.0",

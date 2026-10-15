@@ -9,6 +9,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'disable-agent-update-protection', type: Boolean },
     { name: 'error-simulation', type: String },
     { name: 'ignore-firmware-checksums', type: Boolean },
+    { name: 'legacy-kboot', type: Boolean },
     { name: 'log', type: String },
     { name: 'help', type: Boolean },
     { name: 'pid', type: Number },
@@ -64,6 +65,11 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'ignore-firmware-checksums',
                 description: 'Always upgrade firmware of devices and modules even the checksums are same',
+                type: Boolean
+            },
+            {
+                name: 'legacy-kboot',
+                description: 'Flash UHK 60 modules with the legacy Agent-driven kboot even when the firmware supports native kboot',
                 type: Boolean
             },
             {
