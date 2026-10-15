@@ -21,6 +21,10 @@ import { GetAgentContributorsAction } from '../../../store/actions/contributors.
 })
 export class AboutComponent implements OnInit {
     version: string = VERSIONS.version;
+    agentTag: string = VERSIONS.agentTag;
+    agentBranch?: string = VERSIONS.agentBranch;
+    isRelease: boolean = /^v\d+\.\d+\.\d+$/.test(VERSIONS.agentTag);
+    agentTagUrl: string = `https://builds.uhk.io/agent/${VERSIONS.agentTag}`;
     agentGithubUrl: string = AGENT_GITHUB_URL;
     agentContributorsUrl: string = AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
     logoClickCounter = 0;
