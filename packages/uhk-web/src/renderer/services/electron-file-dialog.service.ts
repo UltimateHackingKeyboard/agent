@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, from, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 import {
     IpcEvents,
@@ -31,12 +31,24 @@ export class ElectronFileDialogService extends FileDialogService {
         );
     }
 
-    saveUserConfigurationFile(fileName: string, data: Uint8Array, _mimeType: string): Observable<SaveFileResult> {
+    saveUserConfigurationFile(fileName: string, data: Uint8Array, mimeType: string): Observable<SaveFileResult> {
         return from(
             (window as any).electron.ipcRenderer.invoke(IpcEvents.fileDialog.saveUserConfig, {
                 fileName,
                 content: toBase64(data),
             }) as Promise<SaveUserConfigDialogResult>
+        ).pipe(
+            mergeMap(result => {
+                if (result?.portalFailed) {
+                    // The Linux xdg-desktop-portal file chooser could not be shown.
+                    // Save through the renderer instead, which does not use it.
+                    return super.saveUserConfigurationFile(fileName, data, mimeType).pipe(
+                        map(saved => ({ ...saved, savedWithoutDialog: true }))
+                    );
+                }
+
+                return of(result);
+            })
         );
     }
 

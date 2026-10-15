@@ -2,6 +2,7 @@ import { app, dialog, ipcMain } from 'electron';
 import settings from 'electron-settings';
 import { promises as fs } from 'fs';
 import { dirname, join } from 'path';
+import process from 'node:process';
 
 import {
     IpcEvents,
@@ -16,6 +17,22 @@ import {
 import { MainServiceBase } from './main-service-base';
 
 const USER_CONFIG_FOLDER_SETTING = 'user-config-folder';
+
+/**
+ * On Linux Electron routes the file dialogs through xdg-desktop-portal. When the
+ * portal's FileChooser backend is missing or broken - for example
+ * xdg-desktop-portal-gnome without Nautilus, or a compositor that cannot export
+ * the parent window handle - the portal aborts the request with response code 2
+ * and Chromium logs "Request ended (non-user cancelled)". Electron maps that
+ * error onto a regular cancellation, so the dialog silently does nothing.
+ *
+ * A real cancellation can only happen after the dialog has been shown and the
+ * user has interacted with it, which always takes noticeably longer than the
+ * immediate portal abort, so a dialog that is "cancelled" this fast never
+ * appeared. In that case the caller falls back to a save method that does not
+ * depend on the portal.
+ */
+const DIALOG_NEVER_APPEARED_THRESHOLD_MS = 500;
 
 export class FileDialogService extends MainServiceBase {
     constructor(protected logService: LogService,
@@ -35,7 +52,7 @@ export class FileDialogService extends MainServiceBase {
     }
 
     private async openUserConfig(): Promise<OpenUserConfigDialogResult> {
-        const defaultPath = await this.getUserConfigFolder();
+        const defaultPath = await this.getDefaultUserConfigFolder();
         this.logService.misc(`[FileDialogService] open user configuration dialog, defaultPath: ${defaultPath}`);
 
         const result = await dialog.showOpenDialog(this.win, {
@@ -66,10 +83,10 @@ export class FileDialogService extends MainServiceBase {
 
     private async saveUserConfig(_event: Electron.IpcMainInvokeEvent,
                                  data: SaveUserConfigDialogData): Promise<SaveUserConfigDialogResult> {
-        const folder = await this.getUserConfigFolder();
-        const defaultPath = folder ? join(folder, data.fileName) : data.fileName;
+        const defaultPath = join(await this.getDefaultUserConfigFolder(), data.fileName);
         this.logService.misc(`[FileDialogService] save user configuration dialog, defaultPath: ${defaultPath}`);
 
+        const startedAt = Date.now();
         const result = await dialog.showSaveDialog(this.win, {
             defaultPath,
             filters: [
@@ -79,6 +96,15 @@ export class FileDialogService extends MainServiceBase {
         });
 
         if (result.canceled || !result.filePath) {
+            const elapsed = Date.now() - startedAt;
+
+            if (process.platform === 'linux' && elapsed < DIALOG_NEVER_APPEARED_THRESHOLD_MS) {
+                this.logService.misc(
+                    `[FileDialogService] the save dialog closed after ${elapsed} ms without appearing; ` +
+                    'the xdg-desktop-portal file chooser is unavailable');
+                return { canceled: true, portalFailed: true };
+            }
+
             return { canceled: true };
         }
 
@@ -130,6 +156,37 @@ export class FileDialogService extends MainServiceBase {
         const folder = await settings.get(USER_CONFIG_FOLDER_SETTING);
 
         return typeof folder === 'string' && folder.length > 0 ? folder : undefined;
+    }
+
+    /**
+     * Always returns an absolute folder. The native file chooser must never
+     * receive a relative default path: on Linux the xdg-desktop-portal file
+     * chooser opens at the unusable relative directory "." for those.
+     */
+    private async getDefaultUserConfigFolder(): Promise<string> {
+        const rememberedFolder = await this.getUserConfigFolder();
+
+        if (rememberedFolder && await this.directoryExists(rememberedFolder)) {
+            return rememberedFolder;
+        }
+
+        return this.getFallbackUserConfigFolder();
+    }
+
+    private getFallbackUserConfigFolder(): string {
+        try {
+            return app.getPath('downloads');
+        } catch {
+            return app.getPath('home');
+        }
+    }
+
+    private async directoryExists(dir: string): Promise<boolean> {
+        try {
+            return (await fs.stat(dir)).isDirectory();
+        } catch {
+            return false;
+        }
     }
 
     private async saveUserConfigFolder(filePath: string): Promise<void> {

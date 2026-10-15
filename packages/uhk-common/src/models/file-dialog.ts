@@ -15,6 +15,13 @@ export interface SaveUserConfigDialogData {
 export interface SaveUserConfigDialogResult {
     canceled: boolean;
     filePath?: string;
+    /**
+     * True when the native save dialog never appeared, because the Linux
+     * xdg-desktop-portal file chooser backend failed and aborted the request
+     * (Chromium logs "Request ended (non-user cancelled)"). The caller should
+     * fall back to a non-portal save method.
+     */
+    portalFailed?: boolean;
 }
 
 export interface SelectSharedConfigDialogResult {
