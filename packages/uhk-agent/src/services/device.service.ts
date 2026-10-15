@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
+import { Device } from 'node-hid';
 import { rm } from 'node:fs/promises';
 import os from 'node:os';
 import {
@@ -47,6 +48,8 @@ import {
     shouldUpgradeFirmware,
     SHELL_COMMAND_TOO_LONG_ERROR,
     simulateInvalidUserConfigError,
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
     UHK_DEVICE_IDS,
@@ -117,6 +120,9 @@ interface UpdateModuleFirmwareOptions {
     uhkDeviceProduct: UhkDeviceProduct;
     uhkDeviceFirmwareVersion: string;
 }
+
+const getConnectedUhk80LeftHID = (): Promise<Device> => getCurrenUhk80LeftHID()
+    .then(device => device ?? Promise.reject(new Error('The UHK 80 left half is not connected via USB.')));
 
 /**
  * IpcMain pair of the UHK Communication
@@ -561,8 +567,15 @@ export class DeviceService {
             uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
+            const isUhk60 = uhkDeviceProduct.id === UHK_60_DEVICE.id || uhkDeviceProduct.id === UHK_60_V2_DEVICE.id;
             let dongleHid = await getCurrentUhkDongleHID();
             if (dongleHid) {
+                this.logFirmwareUpgradeSeparator(UHK_DONGLE.logName);
+            }
+            if (dongleHid && isUhk60) {
+                this.logService.misc(`[DeviceService] Skip dongle firmware upgrade, the connected keyboard is ${uhkDeviceProduct.logName}.`);
+            }
+            else if (dongleHid) {
                 this.logService.misc('[DeviceService] UHK Dongle firmware upgrade starts:',
                     JSON.stringify(UHK_DONGLE, usbDeviceJsonFormatter));
                 const dongleFirmwarePath = getDeviceFirmwarePath(UHK_DONGLE, packageJson);
@@ -616,6 +629,7 @@ export class DeviceService {
                 await snooze(1000);
             }
 
+            this.logFirmwareUpgradeSeparator(uhkDeviceProduct.logName);
             let hardwareModules = await this.getHardwareModules(false);
 
             this.logService.misc('[DeviceService] UHK Device firmware upgrade starts:',
@@ -673,6 +687,7 @@ export class DeviceService {
                 .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
             const leftModuleFirmwareInfo = hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
 
+            this.logFirmwareUpgradeSeparator(leftModuleInfo.module.name);
             this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
             this.logService.misc('[DeviceService] Left module remote firmware checksum: ', leftModuleInfo.info.remoteFirmwareChecksum);
             if (leftModuleFirmwareInfo) {
@@ -712,12 +727,29 @@ export class DeviceService {
 
                     await this.waitForUhkDeviceWithConnectPrompt(
                         event.sender,
+                        UHK_80_DEVICE_LEFT,
+                        'To continue the firmware upgrade, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)'
+                    );
+
+                    await this.updateModuleFirmware({
+                        eventSender: event.sender,
+                        forceUpgrade: data.forceUpgrade,
+                        hardwareModules,
+                        moduleSlotId: ModuleSlotToId.leftModule,
+                        packageJson,
+                        uhkDeviceProduct: UHK_80_DEVICE_LEFT,
+                        uhkDeviceFirmwareVersion: packageJson.firmwareVersion,
+                    });
+
+                    await this.waitForUhkDeviceWithConnectPrompt(
+                        event.sender,
                         uhkDeviceProduct,
                         'To finish the firmware upgrade, now connect the right half via USB. (You can disconnect the left half or use a second USB cable.)'
                     );
                 }
                 else {
                     if (this.options['legacy-kboot'] || isVersionLt(hardwareModules.rightModuleInfo.firmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE)) {
+                        this.logModuleFlashMethod(leftModuleInfo.module.name, uhkDeviceProduct, hardwareModules.rightModuleInfo.firmwareVersion, false);
                         await this.operations
                             .updateModuleWithKboot({
                                 firmwarePath: getModuleFirmwarePath(leftModuleInfo.module, packageJson),
@@ -797,6 +829,7 @@ export class DeviceService {
             await rm(firmwarePathData.tmpDirectory, { recursive: true, force: true });
         }
 
+        this.logFirmwareUpgradeSeparator('Finishing firmware upgrade');
         await snooze(500);
 
         try {
@@ -1579,6 +1612,21 @@ export class DeviceService {
         }
     }
 
+    private logFirmwareUpgradeSeparator(name: string): void {
+        this.logService.misc(`[DeviceService] ----------- ${name} -----------`);
+    }
+
+    private logModuleFlashMethod(moduleName: string, uhkDeviceProduct: UhkDeviceProduct, firmwareVersion: string, useKbootNative: boolean): void {
+        const reason = useKbootNative
+            ? `firmware ${firmwareVersion} >= ${FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE}`
+            : this.options['legacy-kboot']
+                ? '--legacy-kboot requested'
+                : `firmware ${firmwareVersion} < ${FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE}`;
+        const method = useKbootNative ? 'native kboot' : 'legacy kboot';
+
+        this.logService.misc(`[DeviceService] Flashing "${moduleName}" module via ${uhkDeviceProduct.logName} using **${method}** (because ${reason})`);
+    }
+
     private async updateModuleFirmware({
         eventSender,
         forceUpgrade,
@@ -1594,6 +1642,9 @@ export class DeviceService {
             return;
         }
 
+        if (moduleSlotId !== ModuleSlotToId.leftHalf) {
+            this.logFirmwareUpgradeSeparator(moduleInfo.module.name);
+        }
         const isMcuboot = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
         const supportsKbootNative = isVersionGte(uhkDeviceFirmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE);
         const useKbootNative = supportsKbootNative && !(this.options['legacy-kboot'] && !isMcuboot);
@@ -1638,14 +1689,24 @@ export class DeviceService {
                 } as CurrentlyUpdatingModuleInfo);
 
                 const firmwarePath = getModuleFirmwarePath(moduleInfo.module, packageJson);
+                this.logModuleFlashMethod(moduleInfo.module.name, uhkDeviceProduct, uhkDeviceFirmwareVersion, useKbootNative);
 
                 if (useKbootNative) {
-                    await this.operations.updateModuleWithKbootNative(
-                        firmwarePath,
-                        uhkDeviceProduct,
-                        moduleInfo.module,
-                        this.createFirmwareProgressReporter(eventSender, moduleInfo.module.name)
-                    );
+                    const leftHalfDevice = uhkDeviceProduct === UHK_80_DEVICE_LEFT
+                        ? new UhkHidDevice(this.logService, this.options, this.rootDir, await getConnectedUhk80LeftHID())
+                        : undefined;
+                    const operations = leftHalfDevice ? new UhkOperations(this.logService, leftHalfDevice) : this.operations;
+
+                    try {
+                        await operations.updateModuleWithKbootNative(
+                            firmwarePath,
+                            uhkDeviceProduct,
+                            moduleInfo.module,
+                            this.createFirmwareProgressReporter(eventSender, moduleInfo.module.name)
+                        );
+                    } finally {
+                        await leftHalfDevice?.close();
+                    }
                 }
                 else {
                     await this.operations.updateModuleWithKboot({
