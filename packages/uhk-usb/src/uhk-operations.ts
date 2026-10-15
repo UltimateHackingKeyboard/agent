@@ -81,12 +81,17 @@ import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-stri
 
 const existsAsync = promisify(fs.exists);
 
+// eslint-disable-next-line no-control-regex
+const stripTerminalControl = (text: string): string => text.replace(/\x1b\[[0-9;?]*[A-Za-z]/g, '').replace(/\r/g, '');
+
 interface GetModulePropertyArguments {
     module: ModuleSlotToId,
     property: ModulePropertyId
 }
 
 export class UhkOperations {
+    private deviceLogPartialLine = '';
+
     constructor(private logService: LogService,
                 private device: UhkHidDevice) {
     }
@@ -372,12 +377,24 @@ export class UhkOperations {
             throw new Error('Module firmware crc validation failed');
         }
 
-        this.logService.misc('[UhkOperations][kboot-native] flashing module');
-        await this.flashModule(module);
+        const previousShellEnabled = await this.getVariable(UsbVariables.ShellEnabled) as number;
+        this.logService.misc(`[UhkOperations][kboot-native] enabling the ${device.logName} log (was ${previousShellEnabled})`);
+        await this.setVariable(UsbVariables.ShellEnabled, 1);
+        this.deviceLogPartialLine = '';
 
-        this.logService.misc('[UhkOperations][kboot-native] wait until flashing finished');
-        const { response, lastBusyResponse } = await this.waitUntilModuleFlashFinished(onProgress);
+        let flashResult: ModuleFlashResult;
+        try {
+            this.logService.misc('[UhkOperations][kboot-native] flashing module');
+            await this.flashModule(module);
 
+            this.logService.misc('[UhkOperations][kboot-native] wait until flashing finished');
+            flashResult = await this.waitUntilModuleFlashFinished(onProgress, device.logName);
+        }
+        finally {
+            await this.finishDeviceLog(device.logName, previousShellEnabled);
+        }
+
+        const { response, lastBusyResponse } = flashResult;
         if (response.state === MODULE_FLASH_STATE.Error) {
             const message = `Flashing the "${module.name}" module failed while ${describeModuleFlashPhase(lastBusyResponse)}: `
                 + `${describeModuleFlashError(response.errorCode)} (error code: ${response.errorCode}). `
@@ -622,9 +639,15 @@ export class UhkOperations {
         }
     }
 
-    public async waitUntilModuleFlashFinished(onProgress?: ProgressCallback): Promise<ModuleFlashResult> {
+    /**
+     * @param deviceLogName when given, the device log is read and logged while waiting
+     */
+    public async waitUntilModuleFlashFinished(onProgress?: ProgressCallback, deviceLogName?: string): Promise<ModuleFlashResult> {
         let lastBusyResponse: ModuleFlashResponse | undefined;
         while (true) {
+            if (deviceLogName) {
+                await this.logDeviceLog(deviceLogName);
+            }
             const response = await this.getModuleFlashState();
             if (response.state === MODULE_FLASH_STATE.TryingToReach) {
                 this.logService.misc('[DeviceOperation] Module flash trying to reach the module bootloader, wait...');
@@ -657,6 +680,31 @@ export class UhkOperations {
             }
 
             return { response, lastBusyResponse };
+        }
+    }
+
+    /**
+     * Logs the complete lines of the device log; an unfinished last line waits for the next read.
+     * @param flush also log the unfinished last line
+     */
+    private async logDeviceLog(deviceLogName: string, flush = false): Promise<void> {
+        const log = await this.getVariableWithIteration(UsbVariables.ShellBuffer, false);
+        const lines = (this.deviceLogPartialLine + stripTerminalControl(log)).split('\n');
+        this.deviceLogPartialLine = flush ? '' : lines.pop();
+
+        lines
+            .filter(line => line.trim() !== '')
+            .forEach(line => this.logService.misc(`[${deviceLogName} log] ${line}`));
+    }
+
+    private async finishDeviceLog(deviceLogName: string, previousShellEnabled: number): Promise<void> {
+        try {
+            await this.logDeviceLog(deviceLogName, true);
+            this.logService.misc(`[UhkOperations][kboot-native] restoring the ${deviceLogName} log to ${previousShellEnabled}`);
+            await this.setVariable(UsbVariables.ShellEnabled, previousShellEnabled);
+        }
+        catch (error) {
+            this.logService.error(`[UhkOperations][kboot-native] finishing the ${deviceLogName} log failed`, error);
         }
     }
 
@@ -951,7 +999,7 @@ export class UhkOperations {
         return responseBuffer[1];
     }
 
-    private async getVariableWithIteration(variableId: UsbVariables): Promise<string> {
+    private async getVariableWithIteration(variableId: UsbVariables, logSegments = true): Promise<string> {
         // Firmware status buffer is STATUS_BUFFER_MAX_LENGTH (3000); shell buffer is 2048.
         // Each USB transfer returns at most (report length - 1) payload bytes (~62).
         // The buffers are NUL terminated strings.
@@ -964,7 +1012,9 @@ export class UhkOperations {
             const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
             const responseBuffer = await this.device.write(buffer);
             const segment = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
-            this.logService.misc(`[DeviceOperation] status buffer segment: ${segment}`);
+            if (logSegments) {
+                this.logService.misc(`[DeviceOperation] status buffer segment: ${segment}`);
+            }
             message += segment;
 
             // The content of the variable is a NUL terminated string.
