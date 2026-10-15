@@ -7,6 +7,11 @@ import { SHARED_CONFIG_DEFAULT_FILE_NAME, UploadFileData } from 'uhk-common';
 export interface SaveFileResult {
     canceled: boolean;
     filePath?: string;
+    /**
+     * True when the native save dialog could not be used and the file was saved
+     * through the renderer instead (browser download), so no dialog was shown.
+     */
+    savedWithoutDialog?: boolean;
 }
 
 /**
