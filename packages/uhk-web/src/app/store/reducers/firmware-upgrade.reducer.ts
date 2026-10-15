@@ -320,6 +320,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 upgradeState: FirmwareUpgradeStates.Recovering,
+                connectPrompt: undefined,
                 log: [{ message: '', cssClass: XtermCssClass.standard }]
             };
         }
@@ -330,6 +331,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 upgradeState: response.success ? FirmwareUpgradeStates.Success : FirmwareUpgradeStates.Failed,
+                connectPrompt: undefined,
             };
         }
 

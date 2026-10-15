@@ -23,6 +23,8 @@ const MODULE_FLASH_ERROR_DESCRIPTIONS: Record<number, string> = {
     10: 'the module did not confirm the firmware write',
 };
 
+export const isModuleUnreachableError = (errorCode: number | undefined): boolean => errorCode === 2 || errorCode === 3;
+
 export function describeModuleFlashError(errorCode: number | undefined): string {
     return MODULE_FLASH_ERROR_DESCRIPTIONS[errorCode ?? 0] ?? 'unknown error';
 }

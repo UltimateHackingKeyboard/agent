@@ -52,6 +52,7 @@ import {
 import {
     describeModuleFlashError,
     describeModuleFlashPhase,
+    isModuleUnreachableError,
     MODULE_FLASH_STATE,
     MODULE_FLASH_STATE_TYPE,
     ModuleFlashResponse,
@@ -352,7 +353,11 @@ export class UhkOperations {
         firmwarePath: string,
         device: UhkDeviceProduct,
         module: UhkModule,
-        onProgress?: ProgressCallback
+        onProgress?: ProgressCallback,
+        /**
+         * When given, an unreachable module makes the user reconnect it, and flashing is retried until the module answers.
+         */
+        prompt?: PromptCallback,
     ): Promise<void> {
         this.logService.misc(`[UhkOperations][kboot-native] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
@@ -382,15 +387,45 @@ export class UhkOperations {
         await this.setVariable(UsbVariables.ShellEnabled, 1);
         this.deviceLogPartialLine = '';
 
-        let flashResult: ModuleFlashResult;
-        try {
-            this.logService.misc('[UhkOperations][kboot-native] flashing module');
-            await this.flashModule(module);
+        const moduleName = module.name.toLowerCase();
+        const reconnectMessage = `The ${moduleName} is not responding. Disconnect it and reconnect it, repeatedly if needed, until this message disappears.`;
+        let tryingToReachCount = 0;
+        let isPromptShown = false;
+        const onModuleFlashState = (state: MODULE_FLASH_STATE_TYPE): void => {
+            tryingToReachCount += state === MODULE_FLASH_STATE.TryingToReach ? 1 : 0;
+            const shouldShowPrompt = prompt && !isPromptShown && state === MODULE_FLASH_STATE.TryingToReach && tryingToReachCount >= 2;
+            const isReached = state !== MODULE_FLASH_STATE.TryingToReach && state !== MODULE_FLASH_STATE.Error;
+            if (shouldShowPrompt) {
+                this.logService.misc(`[UhkOperations][kboot-native] ${reconnectMessage}`);
+                prompt(reconnectMessage);
+                isPromptShown = true;
+            }
+            if (isPromptShown && isReached) {
+                prompt(undefined);
+                isPromptShown = false;
+            }
+        };
 
-            this.logService.misc('[UhkOperations][kboot-native] wait until flashing finished');
-            flashResult = await this.waitUntilModuleFlashFinished(onProgress, device.logName);
+        let flashResult: ModuleFlashResult;
+        let shouldFlash = true;
+        try {
+            while (shouldFlash) {
+                this.logService.misc('[UhkOperations][kboot-native] flashing module');
+                await this.flashModule(module);
+
+                this.logService.misc('[UhkOperations][kboot-native] wait until flashing finished');
+                flashResult = await this.waitUntilModuleFlashFinished(onProgress, device.logName, onModuleFlashState);
+
+                shouldFlash = isPromptShown && isModuleUnreachableError(flashResult.response.errorCode);
+                if (shouldFlash) {
+                    this.logService.misc(`[UhkOperations][kboot-native] "${module.name}" not reached yet, retrying`);
+                }
+            }
         }
         finally {
+            if (isPromptShown) {
+                prompt(undefined);
+            }
             await this.finishDeviceLog(device.logName, previousShellEnabled);
         }
 
@@ -642,13 +677,18 @@ export class UhkOperations {
     /**
      * @param deviceLogName when given, the device log is read and logged while waiting
      */
-    public async waitUntilModuleFlashFinished(onProgress?: ProgressCallback, deviceLogName?: string): Promise<ModuleFlashResult> {
+    public async waitUntilModuleFlashFinished(
+        onProgress?: ProgressCallback,
+        deviceLogName?: string,
+        onState?: (state: MODULE_FLASH_STATE_TYPE) => void,
+    ): Promise<ModuleFlashResult> {
         let lastBusyResponse: ModuleFlashResponse | undefined;
         while (true) {
             if (deviceLogName) {
                 await this.logDeviceLog(deviceLogName);
             }
             const response = await this.getModuleFlashState();
+            onState?.(response.state);
             if (response.state === MODULE_FLASH_STATE.TryingToReach) {
                 this.logService.misc('[DeviceOperation] Module flash trying to reach the module bootloader, wait...');
                 onProgress?.(0);

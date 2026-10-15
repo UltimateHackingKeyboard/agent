@@ -941,6 +941,7 @@ export class DeviceService {
             this.logService.misc('[DeviceService] UHK Module: ', JSON.stringify(uhkModule));
 
             const firmwarePath = getModuleFirmwarePath(uhkModule, packageJson);
+            const prompt = (message: string | undefined): void => this.firmwareUpgradePrompt(event.sender, message);
             const { firmwareVersion } = await this.operations.getDeviceVersionInfo();
             const isMcuboot = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
             const supportsKbootNative = isVersionGte(firmwareVersion, FIRMWARE_VERSION_SUPPORT_KBOOT_NATIVE);
@@ -951,14 +952,15 @@ export class DeviceService {
             if (useKbootNative) {
                 await this.dongleZephyrLogService.disable();
                 await this.leftHalfZephyrLogService.disable();
-                await this.updateModuleWithKbootNative(firmwarePath, flashingDevice, uhkModule);
+                await this.updateModuleWithKbootNative(firmwarePath, flashingDevice, uhkModule, undefined, prompt);
             }
             else {
                 await this.operations
                     .updateModuleWithKboot({
                         firmwarePath,
                         device: uhkDeviceProduct,
-                        module: uhkModule
+                        module: uhkModule,
+                        prompt,
                     });
             }
 
@@ -1642,6 +1644,7 @@ export class DeviceService {
         uhkDeviceProduct: UhkDeviceProduct,
         module: UhkModule,
         onProgress?: (progress: number) => void,
+        prompt?: (message: string | undefined) => void,
     ): Promise<void> {
         const leftHalfDevice = uhkDeviceProduct === UHK_80_DEVICE_LEFT
             ? new UhkHidDevice(this.logService, this.options, this.rootDir, await getConnectedUhk80LeftHID())
@@ -1649,7 +1652,7 @@ export class DeviceService {
         const operations = leftHalfDevice ? new UhkOperations(this.logService, leftHalfDevice) : this.operations;
 
         try {
-            await operations.updateModuleWithKbootNative(firmwarePath, uhkDeviceProduct, module, onProgress);
+            await operations.updateModuleWithKbootNative(firmwarePath, uhkDeviceProduct, module, onProgress, prompt);
         } finally {
             await leftHalfDevice?.close();
         }
