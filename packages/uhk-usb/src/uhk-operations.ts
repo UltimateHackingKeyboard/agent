@@ -50,9 +50,12 @@ import {
     UsbVariables
 } from './constants.js';
 import {
+    describeModuleFlashError,
+    describeModuleFlashPhase,
     MODULE_FLASH_STATE,
     MODULE_FLASH_STATE_TYPE,
     ModuleFlashResponse,
+    ModuleFlashResult,
 } from './models/module-flash-state.js';
 import {
     DebugInfo,
@@ -373,12 +376,15 @@ export class UhkOperations {
         await this.flashModule(module);
 
         this.logService.misc('[UhkOperations][kboot-native] wait until flashing finished');
-        const response = await this.waitUntilModuleFlashFinished(onProgress);
+        const { response, lastBusyResponse } = await this.waitUntilModuleFlashFinished(onProgress);
 
         if (response.state === MODULE_FLASH_STATE.Error) {
-            this.logService.error(`[UhkOperations][kboot-native] error occurred in the module flashing process. Error code: ${response.errorCode}`);
+            const message = `Flashing the "${module.name}" module failed while ${describeModuleFlashPhase(lastBusyResponse)}: `
+                + `${describeModuleFlashError(response.errorCode)} (error code: ${response.errorCode}). `
+                + 'The "Kboot:" lines of the firmware log have the details.';
+            this.logService.error(`[UhkOperations][kboot-native] ${message}`);
 
-            throw new Error(`Error occurred in the module flashing process. Error code: ${response.errorCode}`);
+            throw new Error(message);
         }
 
         this.logService.misc(`[UhkOperations][kboot-native] "${module.name}" firmware successfully flashed`);
@@ -616,12 +622,22 @@ export class UhkOperations {
         }
     }
 
-    public async waitUntilModuleFlashFinished(onProgress?: ProgressCallback): Promise<ModuleFlashResponse> {
+    public async waitUntilModuleFlashFinished(onProgress?: ProgressCallback): Promise<ModuleFlashResult> {
+        let lastBusyResponse: ModuleFlashResponse | undefined;
         while (true) {
             const response = await this.getModuleFlashState();
+            if (response.state === MODULE_FLASH_STATE.TryingToReach) {
+                this.logService.misc('[DeviceOperation] Module flash trying to reach the module bootloader, wait...');
+                onProgress?.(0);
+                lastBusyResponse = response;
+                await snooze(200);
+                continue;
+            }
+
             if (response.state === MODULE_FLASH_STATE.Erasing) {
                 this.logService.misc('[DeviceOperation] Module flash erasing, wait...');
                 onProgress?.(0);
+                lastBusyResponse = response;
                 await snooze(200);
                 continue;
             }
@@ -631,6 +647,7 @@ export class UhkOperations {
                 if (response.totalBytes > 0) {
                     onProgress?.(Math.round(response.writtenBytes / response.totalBytes * 100));
                 }
+                lastBusyResponse = response;
                 await snooze(200);
                 continue;
             }
@@ -639,7 +656,7 @@ export class UhkOperations {
                 onProgress?.(100);
             }
 
-            return response;
+            return { response, lastBusyResponse };
         }
     }
 
@@ -843,7 +860,7 @@ export class UhkOperations {
 
     public async flashModule(module: UhkModule): Promise<void> {
         this.logService.usbOps('[DeviceOperation] USB[T]: Flash module');
-        const buffer = Buffer.from([UsbCommand.FlashModule, module.slotId]);
+        const buffer = Buffer.from([UsbCommand.FlashModule, module.slotId, module.i2cAddress]);
 
         await this.device.write(buffer);
     }
