@@ -8,8 +8,8 @@ export interface SaveFileResult {
     canceled: boolean;
     filePath?: string;
     /**
-     * True when the native save dialog could not be used and the file was saved
-     * through the renderer instead (browser download), so no dialog was shown.
+     * True when the native save dialog could not be shown and the configuration
+     * was written to a fallback folder instead. filePath holds the written path.
      */
     savedWithoutDialog?: boolean;
 }

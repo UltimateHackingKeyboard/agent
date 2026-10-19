@@ -1,7 +1,7 @@
 import { app, dialog, ipcMain } from 'electron';
 import settings from 'electron-settings';
 import { promises as fs } from 'fs';
-import { dirname, join } from 'path';
+import { dirname, join, parse } from 'path';
 import process from 'node:process';
 
 import {
@@ -29,8 +29,9 @@ const USER_CONFIG_FOLDER_SETTING = 'user-config-folder';
  * A real cancellation can only happen after the dialog has been shown and the
  * user has interacted with it, which always takes noticeably longer than the
  * immediate portal abort, so a dialog that is "cancelled" this fast never
- * appeared. In that case the caller falls back to a save method that does not
- * depend on the portal.
+ * appeared. In that case the service bypasses the dialog: the open dialog
+ * reports portalFailed so the renderer can use its own picker, and the save
+ * dialog writes the file to the fallback folder itself.
  */
 const DIALOG_NEVER_APPEARED_THRESHOLD_MS = 500;
 
@@ -55,6 +56,7 @@ export class FileDialogService extends MainServiceBase {
         const defaultPath = await this.getDefaultUserConfigFolder();
         this.logService.misc(`[FileDialogService] open user configuration dialog, defaultPath: ${defaultPath}`);
 
+        const startedAt = Date.now();
         const result = await dialog.showOpenDialog(this.win, {
             defaultPath,
             properties: ['openFile'],
@@ -65,6 +67,13 @@ export class FileDialogService extends MainServiceBase {
         });
 
         if (result.canceled || result.filePaths.length === 0) {
+            if (this.dialogNeverAppeared(startedAt)) {
+                this.logService.misc(
+                    `[FileDialogService] the open dialog closed after ${Date.now() - startedAt} ms without appearing; ` +
+                    'the xdg-desktop-portal file chooser is unavailable');
+                return { canceled: true, portalFailed: true };
+            }
+
             return { canceled: true };
         }
 
@@ -96,13 +105,13 @@ export class FileDialogService extends MainServiceBase {
         });
 
         if (result.canceled || !result.filePath) {
-            const elapsed = Date.now() - startedAt;
-
-            if (process.platform === 'linux' && elapsed < DIALOG_NEVER_APPEARED_THRESHOLD_MS) {
+            if (this.dialogNeverAppeared(startedAt)) {
                 this.logService.misc(
-                    `[FileDialogService] the save dialog closed after ${elapsed} ms without appearing; ` +
+                    `[FileDialogService] the save dialog closed after ${Date.now() - startedAt} ms without appearing; ` +
                     'the xdg-desktop-portal file chooser is unavailable');
-                return { canceled: true, portalFailed: true };
+                const filePath = await this.saveUserConfigWithoutDialog(data.fileName, data.content);
+
+                return { canceled: false, filePath, savedWithoutDialog: true };
             }
 
             return { canceled: true };
@@ -178,6 +187,54 @@ export class FileDialogService extends MainServiceBase {
             return app.getPath('downloads');
         } catch {
             return app.getPath('home');
+        }
+    }
+
+    /**
+     * A real cancellation can only happen after the dialog has been shown and the
+     * user has interacted with it, which always takes noticeably longer than the
+     * immediate portal abort, so a dialog that is "cancelled" this fast never
+     * appeared.
+     */
+    private dialogNeverAppeared(startedAt: number): boolean {
+        return process.platform === 'linux' && Date.now() - startedAt < DIALOG_NEVER_APPEARED_THRESHOLD_MS;
+    }
+
+    /**
+     * Writes the configuration without the native save dialog, because the Linux
+     * xdg-desktop-portal file chooser could not be shown. The file goes into the
+     * remembered configuration folder when it still exists, otherwise into the
+     * downloads folder. Never overwrites an existing file.
+     */
+    private async saveUserConfigWithoutDialog(fileName: string, base64Content: string): Promise<string> {
+        const folder = await this.getDefaultUserConfigFolder();
+        await fs.mkdir(folder, { recursive: true });
+
+        const filePath = await this.uniqueFilePath(join(folder, fileName));
+        await fs.writeFile(filePath, Buffer.from(base64Content, 'base64'));
+        this.logService.misc(`[FileDialogService] saved user configuration without a save dialog: ${filePath}`);
+
+        return filePath;
+    }
+
+    private async uniqueFilePath(filePath: string): Promise<string> {
+        const { dir, name, ext } = parse(filePath);
+        let candidate = filePath;
+
+        for (let counter = 1; await this.fileExists(candidate); counter++) {
+            candidate = join(dir, `${name} (${counter})${ext}`);
+        }
+
+        return candidate;
+    }
+
+    private async fileExists(filePath: string): Promise<boolean> {
+        try {
+            await fs.access(filePath);
+
+            return true;
+        } catch {
+            return false;
         }
     }
 

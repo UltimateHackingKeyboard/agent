@@ -524,7 +524,7 @@ export class UserConfigEffects {
 
         return new ShowNotificationAction({
             type: NotificationType.Info,
-            message: 'The system save dialog is unavailable, so the configuration was saved to your downloads folder.'
+            message: `The system save dialog is unavailable, so the configuration was saved to ${result.filePath}.`
         });
     }
 

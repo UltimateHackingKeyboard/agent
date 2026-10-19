@@ -17,38 +17,32 @@ export class ElectronFileDialogService extends FileDialogService {
         return from(
             (window as any).electron.ipcRenderer.invoke(IpcEvents.fileDialog.openUserConfig) as Promise<OpenUserConfigDialogResult>
         ).pipe(
-            map(result => {
-                if (!result || result.canceled || !result.data) {
-                    return null;
+            mergeMap(result => {
+                if (result?.portalFailed) {
+                    // The Linux xdg-desktop-portal file chooser could not be shown.
+                    // Pick the file through the renderer instead, which does not use it.
+                    return super.openUserConfigurationFile();
                 }
 
-                return {
+                if (!result || result.canceled || !result.data) {
+                    return of(null);
+                }
+
+                return of({
                     filename: result.filePath,
                     data: result.data,
                     saveInHistory: false,
-                };
+                });
             })
         );
     }
 
-    saveUserConfigurationFile(fileName: string, data: Uint8Array, mimeType: string): Observable<SaveFileResult> {
+    saveUserConfigurationFile(fileName: string, data: Uint8Array, _mimeType: string): Observable<SaveFileResult> {
         return from(
             (window as any).electron.ipcRenderer.invoke(IpcEvents.fileDialog.saveUserConfig, {
                 fileName,
                 content: toBase64(data),
             }) as Promise<SaveUserConfigDialogResult>
-        ).pipe(
-            mergeMap(result => {
-                if (result?.portalFailed) {
-                    // The Linux xdg-desktop-portal file chooser could not be shown.
-                    // Save through the renderer instead, which does not use it.
-                    return super.saveUserConfigurationFile(fileName, data, mimeType).pipe(
-                        map(saved => ({ ...saved, savedWithoutDialog: true }))
-                    );
-                }
-
-                return of(result);
-            })
         );
     }
 
