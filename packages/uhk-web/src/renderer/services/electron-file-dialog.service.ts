@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, from, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 import {
     IpcEvents,
@@ -17,16 +17,22 @@ export class ElectronFileDialogService extends FileDialogService {
         return from(
             (window as any).electron.ipcRenderer.invoke(IpcEvents.fileDialog.openUserConfig) as Promise<OpenUserConfigDialogResult>
         ).pipe(
-            map(result => {
-                if (!result || result.canceled || !result.data) {
-                    return null;
+            mergeMap(result => {
+                if (result?.portalFailed) {
+                    // The Linux xdg-desktop-portal file chooser could not be shown.
+                    // Pick the file through the renderer instead, which does not use it.
+                    return super.openUserConfigurationFile();
                 }
 
-                return {
+                if (!result || result.canceled || !result.data) {
+                    return of(null);
+                }
+
+                return of({
                     filename: result.filePath,
                     data: result.data,
                     saveInHistory: false,
-                };
+                });
             })
         );
     }
