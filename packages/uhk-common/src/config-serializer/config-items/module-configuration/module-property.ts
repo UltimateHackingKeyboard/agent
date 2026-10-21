@@ -23,6 +23,8 @@ export enum KeyClusterProperty  {
 export type KeyClusterModuleProperty = ModuleProperty | KeyClusterProperty;
 
 export enum TouchpadProperty  {
+    DoubleTapAndHoldTimeout = 251,
+    DragStyle = 252,
     PinchZoomSpeedDivisor = 253,
     PinchZoomMode = 254,
     HoldContinuationTimeout = 255,

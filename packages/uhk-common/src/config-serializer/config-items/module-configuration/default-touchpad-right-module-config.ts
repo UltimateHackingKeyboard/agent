@@ -1,6 +1,7 @@
 import { ModuleConfiguration } from '../module-configuration.js';
 import { ModuleId } from './module-id.js';
 import { NavigationMode } from './navigation-mode.js';
+import { TouchpadDragStyle } from './touchpad-drag-style.js';
 
 export function defaultTouchpadRightModuleConfig(): ModuleConfiguration {
     const config = new ModuleConfiguration();
@@ -33,6 +34,8 @@ export function defaultTouchpadRightModuleConfig(): ModuleConfiguration {
     config.touchpadPinchZoomDivisor = 4;
     config.touchpadHoldContinuationTimeout = 0;
     config.touchpadPinchToZoom = NavigationMode.Zoom;
+    config.touchpadDragStyle = TouchpadDragStyle.EitherTapAndHold;
+    config.touchpadDoubleTapAndHoldTimeout = 200;
 
     return config;
 }
