@@ -15,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import {
     copyRgbColor,
+    enumFromString,
     getScancodesForKeyLanguage,
     KeyAction,
     KeyLanguage,
@@ -154,7 +155,7 @@ export class KeypressTabComponent extends Tab implements OnChanges, OnDestroy {
         if (scTypePair[1] === 'media') {
             keystrokeAction.type = keystrokeAction.scancode > 255 ? KeystrokeType.longMedia : KeystrokeType.shortMedia;
         } else {
-            keystrokeAction.type = KeystrokeType[scTypePair[1]];
+            keystrokeAction.type = enumFromString(KeystrokeType, scTypePair[1]);
         }
         keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(this.leftModifiers, this.rightModifiers);
 

@@ -6,7 +6,7 @@ export class IpcUhkRenderer implements IpcCommonRenderer {
         (window as any).electron.ipcRenderer.send(channel, args);
     }
 
-    public on(channel: string, listener: (_, ...args: any[]) => void): this {
+    public on(channel: string, listener: (_: unknown, ...args: any[]) => void): this {
         (window as any).electron.ipcRenderer.on(channel, listener);
         return this;
     }

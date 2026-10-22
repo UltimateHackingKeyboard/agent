@@ -214,7 +214,7 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
 
     private propagateValueChange(value: number, skipFirstChange = false): void {
         if (!this.changeObserver$) {
-            Observable.create(observer => {
+            Observable.create((observer: Observer<number>) => {
                 this.changeObserver$ = observer;
             }).pipe(
                 debounceTime(this.changeDebounceTime),

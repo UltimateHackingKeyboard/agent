@@ -11,7 +11,7 @@ const SLAVE_ID_TO_NAME = [
     'kboot'
 ];
 
-const STATUS_CODE_TO_NAME = {
+const STATUS_CODE_TO_NAME: Record<number, string> = {
     0: 'nak',
     1: 'failure',
     1100: 'busy',

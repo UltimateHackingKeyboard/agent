@@ -1,3 +1,4 @@
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { assertEnum } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { SerialisationInfo } from '../serialisation-info.js';
@@ -133,7 +134,7 @@ export class MouseAction extends KeyAction {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV1(jsObject: any): MouseAction {
         this.assertKeyActionType(jsObject);
-        this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
+        this.mouseAction = enumFromString(MouseActionParam, jsObject.mouseAction);
         return this;
     }
 

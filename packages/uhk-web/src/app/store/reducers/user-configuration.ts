@@ -961,7 +961,7 @@ export function reducer(
         }
 
         case MacroActions.ActionTypes.Remove: {
-            const newState = {
+            const newState: State = {
                 ...state,
                 selectedMacroId: undefined
             };
@@ -1229,7 +1229,7 @@ export function reducer(
             userConfiguration.moduleConfigurations = userConfiguration.moduleConfigurations.map(moduleConfiguration => {
                 if(moduleConfiguration.id === payload.moduleId) {
                     moduleConfiguration = new ModuleConfiguration(moduleConfiguration);
-                    moduleConfiguration[payload.propertyName] = payload.value;
+                    (moduleConfiguration as unknown as Record<string, unknown>)[payload.propertyName] = payload.value;
 
                     return moduleConfiguration;
                 }
@@ -1245,7 +1245,7 @@ export function reducer(
         case UserConfig.ActionTypes.SetUserConfigurationRgbValue: {
             const payload = (action as UserConfig.SetUserConfigurationRgbValueAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            userConfiguration[payload.propertyName] = new RgbColor(payload.value);
+            (userConfiguration as unknown as Record<string, unknown>)[payload.propertyName] = new RgbColor(payload.value);
 
             return {
                 ...state,
@@ -1260,7 +1260,7 @@ export function reducer(
                 ...state,
                 userConfiguration,
             };
-            userConfiguration[payload.propertyName] = payload.value;
+            (userConfiguration as unknown as Record<string, unknown>)[payload.propertyName] = payload.value;
 
             if (payload.propertyName === 'backlightingMode') {
                 newState.selectedBacklightingColorIndex = -1;
@@ -1306,7 +1306,7 @@ export function reducer(
         }
 
         case KeymapActions.ActionTypes.Select: {
-            const newState = {
+            const newState: State = {
                 ...state,
                 selectedKeymapAbbr: (action as KeymapActions.SelectKeymapAction).payload,
                 lastEditedKey: defaultLastEditKey(),
@@ -1648,7 +1648,7 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
             const keyActions = modules[moduleIdx].keyActions;
             for (let keyActionIdx = 0; keyActionIdx < keyActions.length; ++keyActionIdx) {
                 const action = keyActions[keyActionIdx];
-                if (action && action.hasOwnProperty(property) && action[property] === value) {
+                if (action && action.hasOwnProperty(property) && (action as unknown as Record<string, unknown>)[property] === value) {
                     keyActionsToClear.push({
                         layerIdx,
                         moduleIdx,

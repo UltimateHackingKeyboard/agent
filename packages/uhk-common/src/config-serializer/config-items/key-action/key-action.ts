@@ -1,4 +1,5 @@
 import { defaultRgbColor, RgbColorInterface } from '../../../models/rgb-color-interface.js';
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { assertUInt8 } from '../../assert.js';
 import { Macro } from '../macro.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
@@ -61,7 +62,7 @@ export abstract class KeyAction implements RgbColorInterface {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     assertKeyActionType(jsObject: any): void {
         const keyActionClassname: string = this.getName();
-        const keyActionTypeString: string = keyActionType[keyActionClassname];
+        const keyActionTypeString: string = keyActionType[keyActionClassname as keyof typeof keyActionType];
         if (jsObject.keyActionType !== keyActionTypeString) {
             throw new Error(`Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`);
         }
@@ -70,7 +71,7 @@ export abstract class KeyAction implements RgbColorInterface {
     readAndAssertKeyActionId(buffer: UhkBuffer): KeyActionId {
         const classname: string = this.getName();
         const readKeyActionId: number = buffer.readUInt8();
-        const keyActionId: number = KeyActionId[classname];
+        const keyActionId: number = enumFromString(KeyActionId, classname);
         if (keyActionId === KeyActionId.KeystrokeAction) {
             if (readKeyActionId < KeyActionId.KeystrokeAction || readKeyActionId > KeyActionId.LastKeystrokeAction) {
                 throw new Error(`Invalid ${classname} first byte: ${readKeyActionId}`);

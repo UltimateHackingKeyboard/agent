@@ -23,8 +23,8 @@ export class FirmwareFileUploadComponent {
 
     private _uploadFileData: UploadFileData;
 
-    changeFile(event): void {
-        const files = event.srcElement.files;
+    changeFile(event: Event): void {
+        const files = (event.target as HTMLInputElement).files;
 
         if (files.length === 0) {
             return;
@@ -33,7 +33,7 @@ export class FirmwareFileUploadComponent {
         const fileReader = new FileReader();
         fileReader.onloadend = () => {
             const arrayBuffer = new Uint8Array(fileReader.result as ArrayBuffer);
-            const target = event.target || event.srcElement || event.currentTarget;
+            const target = (event.target || event.srcElement || event.currentTarget) as HTMLInputElement;
             this._uploadFileData = {
                 filename: target.value,
                 data: Array.from(arrayBuffer),
