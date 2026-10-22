@@ -12,7 +12,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', ({ assert }) => {
         jsonTester( assert, {
             userConfigMajorVersion: 15,
-            userConfigMinorVersion: 0,
+            userConfigMinorVersion: 1,
             userConfigPatchVersion: 0,
             lastSaveAgentTag: '',
             lastSaveFirmwareTag: '',
@@ -185,7 +185,9 @@ describe('user-configuration', () => {
                     invertScrollDirectionY: false,
                     touchpadPinchZoomDivisor: 4,
                     touchpadHoldContinuationTimeout: 0,
-                    touchpadPinchToZoom: 'Zoom'
+                    touchpadPinchToZoom: 'Zoom',
+                    touchpadDragStyle: 'EitherTapAndHold',
+                    touchpadDoubleTapAndHoldTimeout: 200
                 },
                 {
                     id: 'TrackballRight',
