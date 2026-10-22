@@ -1,6 +1,6 @@
 #!/usr/bin/env -S node --loader ts-node/esm --no-warnings=ExperimentalWarning
 
-import { fromStringUnsafe } from 'uhk-common';
+import { enumFromString } from 'uhk-common';
 import {
     UhkHidDevice,
     UhkOperations,
@@ -41,13 +41,13 @@ try {
         for (const hidDevice of hidDevices) {
             const uhkHidDevice = new UhkHidDevice(logger, argv, rootDir, hidDevice);
             const uhkOperations = new UhkOperations(logger, uhkHidDevice);
-            await uhkOperations.setVariable(fromStringUnsafe(UsbVariables, variable), value);
+            await uhkOperations.setVariable(enumFromString(UsbVariables, variable), value);
         }
     }
     else {
         const { operations } = Uhk(argv);
 
-        await operations.setVariable(fromStringUnsafe(UsbVariables, variable), value);
+        await operations.setVariable(enumFromString(UsbVariables, variable), value);
     }
 } catch (error) {
     await errorHandler(error);

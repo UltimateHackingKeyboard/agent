@@ -1,4 +1,4 @@
-import { fromStringUnsafe } from '../../../util/from-string-unsafe.js';
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 
 export enum MacroActionId {
@@ -60,7 +60,7 @@ export abstract class MacroAction {
     readAndAssertMacroActionId(buffer: UhkBuffer): MacroActionId {
         const classname: string = this.getName();
         const readMacroActionId: MacroActionId = buffer.readUInt8();
-        const macroActionId: MacroActionId = fromStringUnsafe(MacroActionId, classname);
+        const macroActionId: MacroActionId = enumFromString(MacroActionId, classname);
         if (macroActionId === MacroActionId.KeyMacroAction) {
             if (readMacroActionId < MacroActionId.KeyMacroAction || readMacroActionId > MacroActionId.LastKeyMacroAction) {
                 throw new Error(`Invalid ${classname} first byte: ${readMacroActionId}`);

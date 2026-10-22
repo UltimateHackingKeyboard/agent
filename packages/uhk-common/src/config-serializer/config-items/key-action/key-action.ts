@@ -1,5 +1,5 @@
 import { defaultRgbColor, RgbColorInterface } from '../../../models/rgb-color-interface.js';
-import { fromStringUnsafe } from '../../../util/from-string-unsafe.js';
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { assertUInt8 } from '../../assert.js';
 import { Macro } from '../macro.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
@@ -71,7 +71,7 @@ export abstract class KeyAction implements RgbColorInterface {
     readAndAssertKeyActionId(buffer: UhkBuffer): KeyActionId {
         const classname: string = this.getName();
         const readKeyActionId: number = buffer.readUInt8();
-        const keyActionId: number = fromStringUnsafe(KeyActionId, classname);
+        const keyActionId: number = enumFromString(KeyActionId, classname);
         if (keyActionId === KeyActionId.KeystrokeAction) {
             if (readKeyActionId < KeyActionId.KeystrokeAction || readKeyActionId > KeyActionId.LastKeystrokeAction) {
                 throw new Error(`Invalid ${classname} first byte: ${readKeyActionId}`);

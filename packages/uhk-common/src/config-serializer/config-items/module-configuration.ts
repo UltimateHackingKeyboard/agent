@@ -1,4 +1,4 @@
-import { fromStringUnsafe } from '../../util/from-string-unsafe.js';
+import { enumFromString } from '../../util/enum-from-string.js';
 import { assertEnum, assertFloat, assertUInt16 } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { ModuleId } from './module-configuration/module-id.js';
@@ -243,16 +243,16 @@ export class ModuleConfiguration {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV7(jsonObject: any): void {
-        this.id = fromStringUnsafe(ModuleId, jsonObject.id);
+        this.id = enumFromString(ModuleId, jsonObject.id);
 
-        this.navigationModeBaseLayer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeBaseLayer);
-        this.navigationModeModLayer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeModLayer);
-        this.navigationModeFnLayer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeFnLayer);
-        this.navigationModeMouseLayer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeMouseLayer);
-        this.navigationModeFn2Layer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeFn2Layer);
-        this.navigationModeFn3Layer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeFn3Layer);
-        this.navigationModeFn4Layer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeFn4Layer);
-        this.navigationModeFn5Layer = fromStringUnsafe(NavigationMode, jsonObject.navigationModeFn5Layer);
+        this.navigationModeBaseLayer = enumFromString(NavigationMode, jsonObject.navigationModeBaseLayer);
+        this.navigationModeModLayer = enumFromString(NavigationMode, jsonObject.navigationModeModLayer);
+        this.navigationModeFnLayer = enumFromString(NavigationMode, jsonObject.navigationModeFnLayer);
+        this.navigationModeMouseLayer = enumFromString(NavigationMode, jsonObject.navigationModeMouseLayer);
+        this.navigationModeFn2Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn2Layer);
+        this.navigationModeFn3Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn3Layer);
+        this.navigationModeFn4Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn4Layer);
+        this.navigationModeFn5Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn5Layer);
 
         this.speed = jsonObject.speed;
         this.baseSpeed = jsonObject.baseSpeed;
@@ -273,7 +273,7 @@ export class ModuleConfiguration {
         } else if (this.id === ModuleId.TouchpadRight){
             this.touchpadPinchZoomDivisor = jsonObject.touchpadPinchZoomDivisor;
             this.touchpadHoldContinuationTimeout = jsonObject.touchpadHoldContinuationTimeout;
-            this.touchpadPinchToZoom = fromStringUnsafe(NavigationMode, jsonObject.touchpadPinchToZoom);
+            this.touchpadPinchToZoom = enumFromString(NavigationMode, jsonObject.touchpadPinchToZoom);
         }
     }
 

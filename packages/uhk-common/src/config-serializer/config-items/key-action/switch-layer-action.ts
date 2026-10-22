@@ -1,4 +1,4 @@
-import { fromStringUnsafe } from '../../../util/from-string-unsafe.js';
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { assertEnum } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { SerialisationInfo } from '../serialisation-info.js';
@@ -145,7 +145,7 @@ export class SwitchLayerAction extends KeyAction {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV1(jsonObject: any): void {
         this.assertKeyActionType(jsonObject);
-        this.layer = fromStringUnsafe(LayerName, jsonObject.layer);
+        this.layer = enumFromString(LayerName, jsonObject.layer);
 
         // Backward compatibility when "switchLayerMode" was a boolean type as "toggle"
         if (typeof jsonObject.toggle === 'boolean') {

@@ -1,4 +1,4 @@
-import { fromStringUnsafe } from '../../util/from-string-unsafe.js';
+import { enumFromString } from '../../util/enum-from-string.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { assertEnum } from '../assert.js';
 
@@ -140,7 +140,7 @@ export class Layer {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObjectV5(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
-        this.id = fromStringUnsafe(LayerName, jsonObject.id);
+        this.id = enumFromString(LayerName, jsonObject.id);
         this.modules = jsonObject.modules.map((module: unknown) => {
             return new Module().fromJsonObject(module, macros, serialisationInfo);
         });

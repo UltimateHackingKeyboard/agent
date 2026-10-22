@@ -1,4 +1,4 @@
-import { fromStringUnsafe } from '../../../util/from-string-unsafe.js';
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { assertEnum, assertUInt8, assertUInt16 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { KeyModifiers } from '../key-modifiers.js';
@@ -178,11 +178,11 @@ export class KeyMacroAction extends MacroAction {
 
     private fromJsonObjectV1(jsObject: JsObjectKeyMacroAction): void {
         this.assertMacroActionType(jsObject);
-        this.action = fromStringUnsafe(MacroKeySubAction, jsObject.action);
+        this.action = enumFromString(MacroKeySubAction, jsObject.action);
         if (jsObject.type === 'media') {
             this.type = jsObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
         } else {
-            this.type = fromStringUnsafe(KeystrokeType, jsObject.type);
+            this.type = enumFromString(KeystrokeType, jsObject.type);
         }
         this._scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
