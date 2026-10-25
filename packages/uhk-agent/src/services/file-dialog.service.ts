@@ -1,17 +1,19 @@
 import { app, dialog, ipcMain } from 'electron';
 import settings from 'electron-settings';
-import { promises as fs } from 'fs';
-import { dirname, join, parse } from 'path';
+import { promises as fs, Dirent } from 'fs';
+import { dirname, extname, isAbsolute, join, parse, relative, resolve } from 'path';
 import process from 'node:process';
 
 import {
     IpcEvents,
+    ListUserConfigFilesResult,
     LogService,
     OpenUserConfigDialogResult,
     SaveUserConfigDialogData,
     SaveUserConfigDialogResult,
     SelectSharedConfigDialogResult,
     SHARED_CONFIG_DEFAULT_FILE_NAME,
+    UserConfigFileInfo,
 } from 'uhk-common';
 
 import { MainServiceBase } from './main-service-base';
@@ -30,7 +32,7 @@ const USER_CONFIG_FOLDER_SETTING = 'user-config-folder';
  * user has interacted with it, which always takes noticeably longer than the
  * immediate portal abort, so a dialog that is "cancelled" this fast never
  * appeared. In that case the service bypasses the dialog: the open dialog
- * reports portalFailed so the renderer can use its own picker, and the save
+ * reports portalFailed so the renderer shows its own in-app picker, and the save
  * dialog writes the file to the fallback folder itself.
  */
 const DIALOG_NEVER_APPEARED_THRESHOLD_MS = 500;
@@ -48,6 +50,10 @@ export class FileDialogService extends MainServiceBase {
         ipcMain.handle(IpcEvents.fileDialog.selectSharedConfig, this.selectSharedConfig.bind(this));
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         ipcMain.handle(IpcEvents.fileDialog.getDefaultSharedConfig, this.getDefaultSharedConfig.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ipcMain.handle(IpcEvents.fileDialog.listUserConfigFiles, this.listUserConfigFiles.bind(this));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ipcMain.handle(IpcEvents.fileDialog.readUserConfigFile, this.readUserConfigFile.bind(this));
 
         logService.misc('[FileDialogService] init success');
     }
@@ -151,6 +157,70 @@ export class FileDialogService extends MainServiceBase {
             canceled: false,
             filePath: result.filePath,
         };
+    }
+
+    /**
+     * Lists the user configuration files of the import folder. The in-app picker
+     * uses it instead of the native open dialog when the Linux xdg-desktop-portal
+     * file chooser is unavailable.
+     */
+    private async listUserConfigFiles(): Promise<ListUserConfigFilesResult> {
+        const folder = await this.getDefaultUserConfigFolder();
+        this.logService.misc(`[FileDialogService] list user configuration files, folder: ${folder}`);
+
+        return {
+            folder,
+            files: await this.listUserConfigFilesIn(folder),
+        };
+    }
+
+    private async listUserConfigFilesIn(folder: string): Promise<UserConfigFileInfo[]> {
+        let entries: Dirent[];
+
+        try {
+            entries = await fs.readdir(folder, { withFileTypes: true });
+        } catch (error) {
+            this.logService.misc(`[FileDialogService] cannot list user configuration files, folder: ${folder}`, error);
+
+            return [];
+        }
+
+        return entries
+            .filter(entry => entry.isFile() && ['.json', '.bin'].includes(extname(entry.name).toLowerCase()))
+            .map(entry => ({ name: entry.name, path: join(folder, entry.name) }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    /**
+     * Reads a user configuration file that the in-app picker selected. Only files
+     * of the import folder are read, so a compromised renderer cannot use this
+     * channel to read arbitrary files.
+     */
+    private async readUserConfigFile(_event: Electron.IpcMainInvokeEvent,
+                                     filePath: string): Promise<OpenUserConfigDialogResult> {
+        const folder = await this.getDefaultUserConfigFolder();
+
+        if (!this.isInsideFolder(filePath, folder)) {
+            this.logService.error(`[FileDialogService] refusing to read a user configuration outside of ${folder}: ${filePath}`);
+
+            return { canceled: true };
+        }
+
+        const buffer = await fs.readFile(filePath);
+        await this.saveUserConfigFolder(filePath);
+        this.logService.misc(`[FileDialogService] opened user configuration with the in-app picker: ${filePath}`);
+
+        return {
+            canceled: false,
+            filePath,
+            data: Array.from(buffer),
+        };
+    }
+
+    private isInsideFolder(filePath: string, folder: string): boolean {
+        const relativePath = relative(resolve(folder), resolve(filePath));
+
+        return relativePath.length > 0 && !relativePath.startsWith('..') && !isAbsolute(relativePath);
     }
 
     private getDefaultSharedConfig(): string {

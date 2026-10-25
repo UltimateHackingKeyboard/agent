@@ -102,6 +102,8 @@ export class FileDialog {
     public static readonly saveUserConfig = 'file-dialog-save-user-config';
     public static readonly selectSharedConfig = 'file-dialog-select-shared-config';
     public static readonly getDefaultSharedConfig = 'file-dialog-get-default-shared-config';
+    public static readonly listUserConfigFiles = 'file-dialog-list-user-config-files';
+    public static readonly readUserConfigFile = 'file-dialog-read-user-config-file';
 }
 
 export class SharedConfig {
