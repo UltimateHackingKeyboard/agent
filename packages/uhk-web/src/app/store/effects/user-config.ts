@@ -45,7 +45,7 @@ import {
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
-import { FileDialogService } from '../../services/file-dialog.service';
+import { FileDialogService, SaveFileResult } from '../../services/file-dialog.service';
 import { Uhk80MigratorService } from '../../services/uhk80-migrator.service';
 import {
     AppState,
@@ -311,7 +311,9 @@ export class UserConfigEffects {
 
                 return this.fileDialogService.saveUserConfigurationFile('UserConfiguration.json', data, 'text/plain')
                     .pipe(
-                        map(() => new EmptyAction()),
+                        map(result => result.savedWithoutDialog
+                            ? this.showSaveWithoutDialogNotification(result)
+                            : new EmptyAction()),
                         catchError(error => this.showFileSaveErrorNotification(error))
                     );
             })
@@ -330,7 +332,9 @@ export class UserConfigEffects {
 
                 return this.fileDialogService.saveUserConfigurationFile('UserConfiguration.bin', data, 'application/octet-stream')
                     .pipe(
-                        map(() => new EmptyAction()),
+                        map(result => result.savedWithoutDialog
+                            ? this.showSaveWithoutDialogNotification(result)
+                            : new EmptyAction()),
                         catchError(error => this.showFileSaveErrorNotification(error))
                     );
             })
@@ -513,6 +517,15 @@ export class UserConfigEffects {
             type: NotificationType.Error,
             message: 'Failed to save the user configuration file.'
         }));
+    }
+
+    private showSaveWithoutDialogNotification(result: SaveFileResult): Action {
+        this.logService.misc('[UserConfigEffects] Saved the user configuration without a save dialog', result.filePath);
+
+        return new ShowNotificationAction({
+            type: NotificationType.Info,
+            message: `The system save dialog is unavailable, so the configuration was saved to ${result.filePath}.`
+        });
     }
 
     private getUserConfiguration(uhkDeviceProduct: UhkDeviceProduct): Observable<UserConfiguration> {
