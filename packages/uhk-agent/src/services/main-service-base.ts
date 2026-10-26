@@ -1,5 +1,5 @@
-import storage from 'electron-settings';
 import { ApplicationSettings, LogService } from 'uhk-common';
+import { getApplicationSettings } from '../util';
 
 export class MainServiceBase {
     constructor(protected logService: LogService,
@@ -16,15 +16,7 @@ export class MainServiceBase {
     }
 
     protected async getApplicationSettings(): Promise<ApplicationSettings> {
-        const value = await storage.get('application-settings');
-        if (!value) {
-            return {
-                checkForUpdateOnStartUp: true,
-                everAttemptedSavingToKeyboard: false
-            };
-        }
-
-        return JSON.parse(<string>value);
+        return getApplicationSettings();
     }
 
 }

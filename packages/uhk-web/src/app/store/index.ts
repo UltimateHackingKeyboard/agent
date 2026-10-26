@@ -121,6 +121,7 @@ export const metaReducers: MetaReducer<AppState>[] = environment.production
 export const advanceSettingsState = (state: AppState) => state.advanceSettings;
 export const getIsAdvancedSettingsMenuVisible = createSelector(advanceSettingsState, fromAdvancedSettings.isAdvancedSettingsMenuVisible);
 export const getAlwaysEnableAdvancedMode = createSelector(advanceSettingsState, fromAdvancedSettings.isAlwaysEnableAdvancedMode);
+export const getBootloaderTimeout = createSelector(advanceSettingsState, fromAdvancedSettings.getBootloaderTimeout);
 export const isLeftHalfPairing = createSelector(advanceSettingsState, fromAdvancedSettings.isLeftHalfPairing);
 export const isCheckingHalvesBond = createSelector(advanceSettingsState, fromAdvancedSettings.isCheckingHalvesBond);
 export const getIsI2cDebuggingEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingEnabled);
@@ -918,6 +919,7 @@ export const getApplicationSettings = createSelector(
     backlightingColorPalette,
     keyboardHalvesAlwaysJoined,
     getAlwaysEnableAdvancedMode,
+    getBootloaderTimeout,
     getMacroGroupingSettings,
     getSharedConfigurationFilePath,
     getDetectSharedConfigurationChanges,
@@ -927,6 +929,7 @@ export const getApplicationSettings = createSelector(
         backlightingColorPalette,
         keyboardHalvesAlwaysJoined,
         alwaysEnableAdvancedMode,
+        bootloaderTimeout,
         macroGrouping,
         sharedConfigurationFilePath,
         detectSharedConfigurationChanges,
@@ -942,6 +945,7 @@ export const getApplicationSettings = createSelector(
             keyboardHalvesAlwaysJoined,
             minimizeToTray: app.minimizeToTray,
             alwaysEnableAdvancedMode,
+            bootloaderTimeout,
             macroGrouping,
             smartMacroPanelWidth,
             sharedConfigurationFilePath,
