@@ -54,6 +54,7 @@
     "colord": "2.9.3",
     "file-saver": "2.0.5",
     "gramli-angular-notifier": "21.1.0",
+    "md5": "2.3.0",
     "monaco-editor": "0.56.0",
     "naive-autocompletion-parser": "1.1.11",
     "ng2-nouislider": "2.0.0",
