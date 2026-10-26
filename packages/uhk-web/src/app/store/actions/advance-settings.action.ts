@@ -20,6 +20,7 @@ export enum ActionTypes {
     toggleRightHalfZephyrLogging = '[advanceSettings] toggle right half zephyr logging',
     toggleZephyrLogging = '[advanceSettings] toggle zephyr logging',
     showAdvancedSettingsMenu = '[advanceSettings] show menu',
+    setBootloaderTimeout = '[advanceSettings] set bootloader timeout',
     toggleAlwaysEnableAdvancedMode = '[advanceSettings] toggle always enable advanced mode',
     zephyrLog = '[advanceSettings] zephyr log',
 }
@@ -109,6 +110,15 @@ export class ShowAdvancedSettingsMenuAction implements Action {
     type = ActionTypes.showAdvancedSettingsMenu;
 }
 
+export class SetBootloaderTimeoutAction implements Action {
+    type = ActionTypes.setBootloaderTimeout;
+
+    /**
+     * @param payload - bootloader timeout in millisecond
+     */
+    constructor(public payload: number) {}
+}
+
 export class ToggleAlwaysEnableAdvancedModeAction implements Action {
     type = ActionTypes.toggleAlwaysEnableAdvancedMode;
 
@@ -136,6 +146,7 @@ export type Actions =
     | ToggleRightHalfZephyrLoggingAction
     | ToggleZephyrLoggingAction
     | ShowAdvancedSettingsMenuAction
+    | SetBootloaderTimeoutAction
     | ToggleAlwaysEnableAdvancedModeAction
     | StartLeftHalfPairingAction
     | LeftHalfPairingSuccessAction

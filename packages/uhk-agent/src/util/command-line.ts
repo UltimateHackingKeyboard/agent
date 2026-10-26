@@ -1,9 +1,15 @@
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
-import { CommandLineArgs } from 'uhk-common';
+import {
+    CommandLineArgs,
+    DEFAULT_BOOTLOADER_TIMEOUT_MS,
+    MAX_BOOTLOADER_TIMEOUT_MS,
+    MIN_BOOTLOADER_TIMEOUT_MS,
+} from 'uhk-common';
 import { assertCommandLineOptions } from 'uhk-usb';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
+    { name: 'bootloader-timeout', type: Number },
     { name: 'capture-oled', type: String },
     { name: 'devtools', type: Boolean },
     { name: 'disable-agent-update-protection', type: Boolean },
@@ -41,6 +47,13 @@ const sections: commandLineUsage.Section[] = [
     {
         header: 'Options',
         optionList: [
+            {
+                name: 'bootloader-timeout',
+                description: 'Bootloader timeout in milliseconds. It overrides the bootloader timeout of the Advanced settings. ' +
+                    'Increase it when the firmware update fails because the operating system is slow to expose the bootloader serial port. ' +
+                    `Default is ${DEFAULT_BOOTLOADER_TIMEOUT_MS}, minimum is ${MIN_BOOTLOADER_TIMEOUT_MS}, maximum is ${MAX_BOOTLOADER_TIMEOUT_MS}.`,
+                type: Number
+            },
             {
                 name: 'capture-oled',
                 description: 'Capture UHK 80 OLED content into the given path as png',
