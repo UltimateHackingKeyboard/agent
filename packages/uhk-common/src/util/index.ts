@@ -1,4 +1,5 @@
 export { IpcEvents } from './ipcEvents.js';
+export * from './clamp-bootloader-timeout.js';
 export * from './constants.js';
 export * from './copy-rgb-color.js';
 export * from './convert-array-to-hex-array.js';

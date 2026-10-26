@@ -27,6 +27,7 @@ export * from './is-serial-port-in-vid-pids.js';
 export * from './is-uhk-device-connected.js';
 export * from './is-uhk-keyboard-connected.js';
 export * from './list-available-devices.js';
+export * from './open-mcu-bootloader-peripheral.js';
 export * from './snooze.js';
 export * from './validate-connected-devices.js';
 export { default as readUhkResponseAs0EndString } from './read-uhk-response-as-0-end-string.js';
