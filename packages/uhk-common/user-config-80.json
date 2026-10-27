@@ -1,6 +1,6 @@
 {
   "userConfigMajorVersion": 15,
-  "userConfigMinorVersion": 0,
+  "userConfigMinorVersion": 1,
   "userConfigPatchVersion": 0,
   "lastSaveAgentTag": "",
   "lastSaveFirmwareTag": "",
@@ -209,7 +209,9 @@
       "invertScrollDirectionY": false,
       "touchpadPinchZoomDivisor": 4,
       "touchpadHoldContinuationTimeout": 0,
-      "touchpadPinchToZoom": "Zoom"
+      "touchpadPinchToZoom": "Zoom",
+      "touchpadDragStyle": "EitherTapAndHold",
+      "touchpadDoubleTapAndHoldTimeout": 200
     },
     {
       "id": "TrackballRight",

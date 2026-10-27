@@ -275,6 +275,47 @@
                         />
                     </td>
                 </tr>
+                <tr class="separator">
+                    <td>Drag style
+                        <circle-tooltip [tooltip]="dragStyleTooltip" width="400" placement="bottom top"/>
+                    </td>
+                    <td>
+                        <div class="select-container align-slider">
+                            <ng-select [items]="dragStyleOptions"
+                                       [ngModel]="moduleConfiguration.touchpadDragStyle"
+                                       (ngModelChange)="onSetModuleConfigurationValue('touchpadDragStyle', $event)"
+                                       [clearable]="false"
+                                       bindLabel="label"
+                                       bindValue="value"
+                            />
+                        </div>
+                        <ng-template #dragStyleTooltip>
+                            <p class="text-start">Gesture that starts drag-and-drop, i.e., keeps the left button pressed while the finger moves.</p>
+                            <ul class="no-indent text-start">
+                                <li><strong>Tap and hold</strong>: Touch and keep the finger still until the touchpad recognizes the hold gesture.</li>
+                                <li><strong>Double-tap and hold</strong>: Tap and touch again within the double-tap-and-hold timeout.</li>
+                                <li><strong>Either</strong>: Both of the above.</li>
+                                <li><strong>None</strong>: Tap-to-drag is disabled. Taps still produce clicks.</li>
+                            </ul>
+                        </ng-template>
+                    </td>
+                </tr>
+                <tr class="separator">
+                    <td>Double-tap-and-hold timeout
+                        <circle-tooltip tooltip="Maximum delay in milliseconds between a tap and the next touch for the touch to be recognized as a double-tap-and-hold. This is also how long the left button is held after a tap."
+                                        width="300"/>
+                    </td>
+                    <td>
+                        <slider-wrapper
+                            [min]="0"
+                            [max]="2000"
+                            [step]="1"
+                            [disabled]="!isDoubleTapAndHoldEnabled()"
+                            [ngModel]="moduleConfiguration.touchpadDoubleTapAndHoldTimeout"
+                            (ngModelChange)="onSetModuleConfigurationValue('touchpadDoubleTapAndHoldTimeout', $event)"
+                        />
+                    </td>
+                </tr>
             </ng-container>
             </tbody>
         </table>

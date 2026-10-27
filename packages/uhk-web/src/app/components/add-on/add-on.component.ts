@@ -3,7 +3,7 @@ import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { UHK_MODULES } from 'uhk-common';
-import { ModuleConfiguration, ModuleId, NavigationMode } from 'uhk-common';
+import { ModuleConfiguration, ModuleId, NavigationMode, TouchpadDragStyle } from 'uhk-common';
 
 import { AppState, getOperatingSystem, getSelectedModuleConfiguration } from '../../store';
 import { SetModuleConfigurationValueAction } from '../../store/actions/user-config';
@@ -38,6 +38,25 @@ export class AddOnComponent implements OnDestroy {
         },
         {
             value:  NavigationMode.None,
+            label: 'None'
+        }
+    ];
+
+    dragStyleOptions = [
+        {
+            value: TouchpadDragStyle.EitherTapAndHold,
+            label: 'Either'
+        },
+        {
+            value: TouchpadDragStyle.TapAndHold,
+            label: 'Tap and hold'
+        },
+        {
+            value: TouchpadDragStyle.DoubleTapAndHold,
+            label: 'Double-tap and hold'
+        },
+        {
+            value: TouchpadDragStyle.None,
             label: 'None'
         }
     ];
@@ -98,6 +117,10 @@ export class AddOnComponent implements OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    isDoubleTapAndHoldEnabled(): boolean {
+        return (this.moduleConfiguration.touchpadDragStyle & TouchpadDragStyle.DoubleTapAndHold) !== 0;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

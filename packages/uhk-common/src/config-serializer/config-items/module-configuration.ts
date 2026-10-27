@@ -5,6 +5,7 @@ import { TouchpadProperty } from './module-configuration/module-property.js';
 import { KeyClusterProperty } from './module-configuration/module-property.js';
 import { ModuleProperty } from './module-configuration/module-property.js';
 import { NavigationMode } from './module-configuration/navigation-mode.js';
+import { TouchpadDragStyle } from './module-configuration/touchpad-drag-style.js';
 import { SerialisationInfo } from './serialisation-info.js';
 
 export class ModuleConfiguration {
@@ -42,6 +43,8 @@ export class ModuleConfiguration {
     @assertUInt16 touchpadPinchZoomDivisor: number;
     @assertUInt16 touchpadHoldContinuationTimeout: number;
     @assertEnum(NavigationMode) touchpadPinchToZoom: NavigationMode = NavigationMode.Zoom;
+    @assertEnum(TouchpadDragStyle) touchpadDragStyle: TouchpadDragStyle;
+    @assertUInt16 touchpadDoubleTapAndHoldTimeout: number;
 
     constructor(other?: ModuleConfiguration) {
         if (!other) {
@@ -78,6 +81,8 @@ export class ModuleConfiguration {
         this.touchpadPinchZoomDivisor = other.touchpadPinchZoomDivisor;
         this.touchpadHoldContinuationTimeout = other.touchpadHoldContinuationTimeout;
         this.touchpadPinchToZoom = other.touchpadPinchToZoom;
+        this.touchpadDragStyle = other.touchpadDragStyle;
+        this.touchpadDoubleTapAndHoldTimeout = other.touchpadDoubleTapAndHoldTimeout;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -173,6 +178,8 @@ export class ModuleConfiguration {
             json.touchpadPinchZoomDivisor = this.touchpadPinchZoomDivisor;
             json.touchpadHoldContinuationTimeout = this.touchpadHoldContinuationTimeout;
             json.touchpadPinchToZoom = NavigationMode[this.touchpadPinchToZoom];
+            json.touchpadDragStyle = TouchpadDragStyle[this.touchpadDragStyle];
+            json.touchpadDoubleTapAndHoldTimeout = this.touchpadDoubleTapAndHoldTimeout;
         }
 
         return json;
@@ -194,7 +201,7 @@ export class ModuleConfiguration {
         if (this.id === ModuleId.KeyClusterLeft){
             numberOfProperties += 1;
         }  else if (this.id === ModuleId.TouchpadRight){
-            numberOfProperties += 3;
+            numberOfProperties += 5;
         }
 
         buffer.writeUInt8(numberOfProperties);
@@ -232,6 +239,10 @@ export class ModuleConfiguration {
             buffer.writeUInt8(this.touchpadPinchToZoom);
             buffer.writeUInt8(TouchpadProperty.HoldContinuationTimeout);
             buffer.writeUInt16(this.touchpadHoldContinuationTimeout);
+            buffer.writeUInt8(TouchpadProperty.DragStyle);
+            buffer.writeUInt8(this.touchpadDragStyle);
+            buffer.writeUInt8(TouchpadProperty.DoubleTapAndHoldTimeout);
+            buffer.writeUInt16(this.touchpadDoubleTapAndHoldTimeout);
         }
 
     }
@@ -273,6 +284,8 @@ export class ModuleConfiguration {
             this.touchpadPinchZoomDivisor = jsonObject.touchpadPinchZoomDivisor;
             this.touchpadHoldContinuationTimeout = jsonObject.touchpadHoldContinuationTimeout;
             this.touchpadPinchToZoom = NavigationMode[jsonObject.touchpadPinchToZoom as string];
+            this.touchpadDragStyle = TouchpadDragStyle[jsonObject.touchpadDragStyle as string];
+            this.touchpadDoubleTapAndHoldTimeout = jsonObject.touchpadDoubleTapAndHoldTimeout;
         }
     }
 
@@ -349,6 +362,12 @@ export class ModuleConfiguration {
                                 break;
                             case TouchpadProperty.HoldContinuationTimeout:
                                 this.touchpadHoldContinuationTimeout = buffer.readUInt16();
+                                break;
+                            case TouchpadProperty.DragStyle:
+                                this.touchpadDragStyle = buffer.readUInt8();
+                                break;
+                            case TouchpadProperty.DoubleTapAndHoldTimeout:
+                                this.touchpadDoubleTapAndHoldTimeout = buffer.readUInt16();
                                 break;
 
                             default:
