@@ -42,10 +42,6 @@ export class LayerOptionComponent {
         });
     }
 
-    onCheckboxChange(event: boolean): void {
-        console.log('checkbox', event);
-    }
-
     onRemoveLayer(event: ConfirmCancelEvent): void {
         event.clickEvent.preventDefault();
         event.clickEvent.stopPropagation();
