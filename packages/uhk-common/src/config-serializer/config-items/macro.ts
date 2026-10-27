@@ -106,7 +106,8 @@ export class Macro {
         this.isLooped = jsonObject.isLooped;
         this.isPrivate = jsonObject.isPrivate;
         this.name = jsonObject.name;
-        this.macroActions = jsonObject.macroActions.map((macroAction) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.macroActions = jsonObject.macroActions.map((macroAction: any) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             return MacroActionHelper.createMacroAction(macroAction, serialisationInfo);
         });

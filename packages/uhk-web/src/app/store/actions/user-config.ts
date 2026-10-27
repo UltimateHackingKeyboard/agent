@@ -5,6 +5,7 @@ import { HostConnection, UserConfiguration, ConfigurationReply } from 'uhk-commo
 import {
     ApplyUserConfigurationFromFilePayload,
     ModifyColorOfBacklightingColorPalettePayload,
+    ModuleConfigurationProperty,
     NewerUserConfiguration,
     UserConfigurationRgbValue,
     UserConfigurationValue,
@@ -170,10 +171,10 @@ export class SetHostConnectionSwitchoverAction implements Action {
     }
 }
 
-export class SetModuleConfigurationValueAction implements Action {
+export class SetModuleConfigurationValueAction<K extends ModuleConfigurationProperty = ModuleConfigurationProperty> implements Action {
     type = ActionTypes.SetModuleConfigurationValue;
 
-    constructor(public payload: SetModuleConfigurationValuePayload) {
+    constructor(public payload: SetModuleConfigurationValuePayload<K>) {
     }
 }
 

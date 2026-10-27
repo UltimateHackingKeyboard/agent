@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 import { UHK_MODULES } from 'uhk-common';
 import { ModuleConfiguration, ModuleId, NavigationMode } from 'uhk-common';
 
-import { AppState, getOperatingSystem, getSelectedModuleConfiguration } from '../../store';
+import { ModuleConfigurationProperty } from '../../models';
+import { AppState, getSelectedModuleConfiguration } from '../../store';
 import { SetModuleConfigurationValueAction } from '../../store/actions/user-config';
 
 @Component({
@@ -100,8 +101,7 @@ export class AddOnComponent implements OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onSetModuleConfigurationValue(propertyName: string, value: any) {
+    onSetModuleConfigurationValue<K extends ModuleConfigurationProperty>(propertyName: K, value: ModuleConfiguration[K]) {
         this.store.dispatch(new SetModuleConfigurationValueAction({
             moduleId: this.moduleConfiguration.id,
             propertyName,

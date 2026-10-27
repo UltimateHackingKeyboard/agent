@@ -1,3 +1,4 @@
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { assertEnum } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { SerialisationInfo } from '../serialisation-info.js';
@@ -24,7 +25,7 @@ export class OtherAction extends KeyAction {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): OtherAction {
         this.assertKeyActionType(jsonObject);
-        this.actionSubtype = OtherActionSubTypes[<string>jsonObject.actionSubtype];
+        this.actionSubtype = enumFromString(OtherActionSubTypes, jsonObject.actionSubtype);
         this.rgbColorFromJson(jsonObject, serialisationInfo);
 
         return this;

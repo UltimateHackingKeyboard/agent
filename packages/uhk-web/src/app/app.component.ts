@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild, inject } from '@angular/core';
+import { Component, HostListener, OnDestroy, ChangeDetectorRef, TemplateRef, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { faPuzzlePiece, faArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -113,7 +113,7 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
 })
 export class MainAppComponent implements OnDestroy {
     @ViewChild(SecondSideMenuContainerComponent) secondarySideMenuContainer: SecondSideMenuContainerComponent;
-    @ViewChild('manuallyUpdateNotification', { static: true }) manuallyUpdateNotificationTmpl;
+    @ViewChild('manuallyUpdateNotification', { static: true }) manuallyUpdateNotificationTmpl: TemplateRef<void>;
 
     donglePairingState: DonglePairingState;
     halvesPairingState: HalvesPairingState;

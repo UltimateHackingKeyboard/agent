@@ -169,7 +169,7 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
         }
     }
 
-    private setUserConfigurationValue(propertyName: string, value: boolean): void {
+    private setUserConfigurationValue(propertyName: keyof HostConnectionsComponent, value: boolean): void {
         const hasChanged = this[propertyName] !== value;
 
         if (hasChanged) {

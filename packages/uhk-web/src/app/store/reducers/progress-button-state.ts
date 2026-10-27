@@ -9,7 +9,7 @@ export interface ProgressButtonState {
     action?: Action;
 }
 
-export const initProgressButtonState = {
+export const initProgressButtonState: ProgressButtonState = {
     showButton: false,
     text: null,
     showProgress: false,

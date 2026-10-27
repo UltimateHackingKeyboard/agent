@@ -8,7 +8,8 @@ import {
 
 import { InvalidArgumentError } from './invalid-argument-error.js';
 
-export async function errorHandler(error) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function errorHandler(error: any) {
     if (error instanceof InvalidArgumentError) {
         console.error(error.message);
     }

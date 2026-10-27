@@ -141,7 +141,8 @@ export class Module {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObjectV1(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.id = jsonObject.id;
-        this.keyActions = jsonObject.keyActions.map((keyActionJson) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.keyActions = jsonObject.keyActions.map((keyActionJson: any) => {
             const keyAction = KeyActionHelper.fromJSONObject(keyActionJson, macros, serialisationInfo);
             if (keyActionJson?.label) {
                 keyAction.label = keyActionJson.label;

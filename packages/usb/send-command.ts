@@ -16,7 +16,7 @@ try {
 
     const { device } = Uhk(argv);
 
-    const buffer = Buffer.from(argv._.map(arg => parseInt(arg, 10)));
+    const buffer = Buffer.from(argv._.map((arg: string | number) => parseInt(String(arg), 10)));
 
     const response = await device.write(buffer);
 
