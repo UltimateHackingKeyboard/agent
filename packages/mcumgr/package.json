@@ -7,8 +7,7 @@
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
     "clean": "rimraf ./node_modules ./dist",
-    "lint": "eslint",
-    "test": "node --loader=ts-node/esm --test \"**/*.test.ts\""
+    "lint": "eslint"
   },
   "keywords": [
     "mcu",
@@ -19,6 +18,7 @@
   "license": "See in LICENSE",
   "description": "Micro controller manager utility",
   "dependencies": {
+    "crc16-xmodem": "file:../crc16-xmodem",
     "debug": "^4.4.1",
     "tslib": "^2.8.1"
   },

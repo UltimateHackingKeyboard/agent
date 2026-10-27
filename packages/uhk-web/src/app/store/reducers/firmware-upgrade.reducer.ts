@@ -2,8 +2,10 @@ import { Action } from '@ngrx/store';
 import {
     CurrentlyUpdatingModuleInfo,
     Dongle,
+    FIRMWARE_UPGRADE_METHODS,
     FirmwareJson,
     FirmwareUpgradeFailReason,
+    HalvesInfo,
     HardwareModules,
     isOfficialUhkFirmware,
     ModuleFirmwareUpgradeProgress,
@@ -113,7 +115,7 @@ export function reducer(state = initialState, action: Action): State {
                 dongle: payload.dongle,
                 hardwareModules,
                 modules: mapModules(state.firmwareJson, hardwareModules, state.modules, payload.dongle, state.connectedDevice),
-                recoveryModules: calculateRecoveryModules(hardwareModules.moduleInfos)
+                recoveryModules: calculateRecoveryModules(hardwareModules.moduleInfos, payload.connectedDevice, payload.halvesInfo)
             };
         }
 
@@ -318,6 +320,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 upgradeState: FirmwareUpgradeStates.Recovering,
+                connectPrompt: undefined,
                 log: [{ message: '', cssClass: XtermCssClass.standard }]
             };
         }
@@ -328,6 +331,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 upgradeState: response.success ? FirmwareUpgradeStates.Success : FirmwareUpgradeStates.Failed,
+                connectPrompt: undefined,
             };
         }
 
@@ -463,7 +467,10 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
     return modules;
 }
 
-function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModule> {
+function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>, connectedDevice?: UhkDeviceProduct, halvesInfo?: HalvesInfo): Array<UhkModule> {
+    // The UHK 60 left half is flashed through the right half like a module, so it can be recovered the same way.
+    const isUhk60 = connectedDevice?.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.KBOOT;
+    const canRecoverLeftHalf = isUhk60 && halvesInfo?.isLeftHalfConnected === false;
     let hasLeftSlotModule = false;
     let hasRightSlotModule = false;
 
@@ -484,7 +491,9 @@ function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModu
 
     return UHK_MODULES.reduce((result: Array<UhkModule>, module) => {
         if (module.firmwareUpgradeSupported ) {
-            if (!hasLeftSlotModule && module.slotId === ModuleSlotToId.leftModule) {
+            if (canRecoverLeftHalf && module.slotId === ModuleSlotToId.leftHalf) {
+                result.push(module);
+            } else if (!hasLeftSlotModule && module.slotId === ModuleSlotToId.leftModule) {
                 result.push(module);
             } else if (!hasRightSlotModule && module.slotId === ModuleSlotToId.rightModule) {
                 result.push(module);
