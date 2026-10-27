@@ -38,6 +38,7 @@ import {
     ModuleFirmwareUpgradeSkipReason,
     ModuleInfo,
     ModuleSlotToId,
+    RecoveryDeviceInfo,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
     RightSlotModules,
     SaveUserConfigurationData,
@@ -839,7 +840,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
-    public async recoveryDevice(event: Electron.IpcMainEvent, args: [{ deviceId: UHK_DEVICE_IDS_TYPE, userConfig: Object }]): Promise<void> {
+    public async recoveryDevice(event: Electron.IpcMainEvent, args: [RecoveryDeviceInfo]): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
         };
