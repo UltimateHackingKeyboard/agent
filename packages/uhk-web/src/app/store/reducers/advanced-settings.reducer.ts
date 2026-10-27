@@ -1,4 +1,4 @@
-import { getFormattedTimestamp, UhkDeviceProduct, ZephyrLogEntry } from 'uhk-common';
+import { clampBootloaderTimeout, DEFAULT_BOOTLOADER_TIMEOUT_MS, getFormattedTimestamp, UhkDeviceProduct, ZephyrLogEntry } from 'uhk-common';
 
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { appendXtermLogs } from '../../util/merge-xterm-logs';
@@ -9,6 +9,7 @@ import {
     IsDongleZephyrLoggingEnabledReplyAction,
     IsLeftHalfZephyrLoggingEnabledReplyAction,
     IsRightHalfZephyrLoggingEnabledReplyAction,
+    SetBootloaderTimeoutAction,
     ToggleAlwaysEnableAdvancedModeAction,
     ZephyrLogAction,
 } from '../actions/advance-settings.action';
@@ -25,6 +26,10 @@ export enum ActiveButton {
 export interface State {
     activeButton: ActiveButton;
     alwaysEnableAdvancedMode: boolean;
+    /**
+     * Timeout in millisecond that the bootloader waits for the firmware update to start.
+     */
+    bootloaderTimeout: number;
     i2cDebuggingRingBellEnabled: boolean,
     i2cLogs: Array<XtermLog>;
     isLeftHalfPairing: boolean;
@@ -41,6 +46,7 @@ export interface State {
 export const initialState = (): State => ({
     activeButton: ActiveButton.None,
     alwaysEnableAdvancedMode: false,
+    bootloaderTimeout: DEFAULT_BOOTLOADER_TIMEOUT_MS,
     i2cDebuggingRingBellEnabled: false,
     i2cLogs: [],
     isDongleZephyrLoggingEnabled: false,
@@ -62,6 +68,7 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             return {
                 ...state,
                 alwaysEnableAdvancedMode,
+                bootloaderTimeout: clampBootloaderTimeout(settings.bootloaderTimeout),
                 menuVisible: alwaysEnableAdvancedMode || state.menuVisible,
             };
         }
@@ -252,6 +259,13 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
             };
         }
 
+        case ActionTypes.setBootloaderTimeout: {
+            return {
+                ...state,
+                bootloaderTimeout: clampBootloaderTimeout((action as SetBootloaderTimeoutAction).payload),
+            }
+        }
+
         case ActionTypes.toggleAlwaysEnableAdvancedMode: {
             const alwaysEnableAdvancedMode = (action as ToggleAlwaysEnableAdvancedModeAction).payload;
 
@@ -287,6 +301,7 @@ export function reducer(state = initialState(), action: Actions | App.Actions | 
 
 export const isAdvancedSettingsMenuVisible = (state: State): boolean => state.menuVisible;
 export const isAlwaysEnableAdvancedMode = (state: State): boolean => state.alwaysEnableAdvancedMode;
+export const getBootloaderTimeout = (state: State): number => state.bootloaderTimeout;
 export const isLeftHalfPairing = (state: State): boolean => state.isLeftHalfPairing;
 export const isCheckingHalvesBond = (state: State): boolean => state.isCheckingHalvesBond;
 export const isI2cDebuggingEnabled = (state: State): boolean => state.activeButton === ActiveButton.I2CRecoveryDebugging;

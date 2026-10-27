@@ -7,6 +7,7 @@ import {
     AreBleAddressesPairedIpcResponse,
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
+    clampBootloaderTimeout,
     CommandLineArgs,
     ConfigurationReply,
     convertBleAddressArrayToString,
@@ -77,6 +78,7 @@ import {
     TmpFirmware,
     UhkHidDevice,
     UhkOperations,
+    UpdateDeviceFirmwareOptions,
     usbDeviceJsonFormatter,
     UsbVariables,
     waitForDevices,
@@ -87,6 +89,7 @@ import {
     backupUserConfiguration,
     copySmartMacroDocToWebserver,
     deleteUserConfigHistory,
+    getApplicationSettings,
     getBackupUserConfigurationContent,
     getDefaultFirmwarePath,
     getSmartMacroDocRootPath,
@@ -509,6 +512,22 @@ export class DeviceService {
         this.logService.misc('[DeviceService] closed.');
     }
 
+    /**
+     * The bootloader timeout comes from the command line argument or from the Advanced settings of Agent.
+     * The command line argument has precedence.
+     */
+    private async resolveBootloaderTimeout(): Promise<number> {
+        const commandLineTimeout = this.options['bootloader-timeout'];
+
+        if (commandLineTimeout !== undefined) {
+            return clampBootloaderTimeout(commandLineTimeout);
+        }
+
+        const { bootloaderTimeout } = await getApplicationSettings();
+
+        return clampBootloaderTimeout(bootloaderTimeout);
+    }
+
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
@@ -546,6 +565,10 @@ export class DeviceService {
             uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
+            const updateDeviceFirmwareOptions: UpdateDeviceFirmwareOptions = {
+                bootloaderTimeout: await this.resolveBootloaderTimeout(),
+            };
+
             let dongleHid = await getCurrentUhkDongleHID();
             if (dongleHid) {
                 this.logService.misc('[DeviceService] UHK Dongle firmware upgrade starts:',
@@ -571,7 +594,7 @@ export class DeviceService {
                             moduleName: UHK_DONGLE.name,
                             newFirmwareChecksum: deviceConfig.md5,
                         } as CurrentlyUpdatingModuleInfo);
-                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE, this.createFirmwareProgressReporter(event.sender, UHK_DONGLE.name));
+                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE, this.createFirmwareProgressReporter(event.sender, UHK_DONGLE.name), updateDeviceFirmwareOptions);
                         this.logService.misc('[DeviceService] Waiting for keyboard');
                         await waitForDevices(UHK_DONGLE.keyboard);
                         await dongleUhkDevice.close();
@@ -620,7 +643,7 @@ export class DeviceService {
                     newFirmwareChecksum: deviceConfig.md5,
                     moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
                 } as CurrentlyUpdatingModuleInfo);
-                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, this.createFirmwareProgressReporter(event.sender, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME));
+                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, this.createFirmwareProgressReporter(event.sender, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME), updateDeviceFirmwareOptions);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevices(uhkDeviceProduct.keyboard);
 
@@ -692,7 +715,7 @@ export class DeviceService {
 
                     await snooze(1000);
                     const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
-                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name));
+                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name), updateDeviceFirmwareOptions);
 
                     await this.waitForUhkDeviceWithConnectPrompt(
                         event.sender,
@@ -860,7 +883,9 @@ export class DeviceService {
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-            await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
+            await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, undefined, {
+                bootloaderTimeout: await this.resolveBootloaderTimeout(),
+            });
 
             this.logService.misc('[DeviceService] Waiting for keyboard');
             await waitForDevices(uhkDeviceProduct.keyboard);

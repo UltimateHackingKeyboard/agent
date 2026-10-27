@@ -55,4 +55,10 @@ export interface ApplicationSettings {
      * changes on the other computer. Requires sharedConfigurationFilePath to be set.
      */
     detectSharedConfigurationChanges?: boolean;
+    /**
+     * Time in milliseconds that the bootloader waits for the firmware update to start.
+     * Hosts that are slow to expose the bootloader serial port may need a higher value.
+     * When unset then DEFAULT_BOOTLOADER_TIMEOUT_MS is used.
+     */
+    bootloaderTimeout?: number;
 }

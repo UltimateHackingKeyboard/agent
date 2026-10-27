@@ -8,6 +8,7 @@ import {
     Buffer,
     CommandLineArgs,
     convertBleAddressArrayToString,
+    DEFAULT_BOOTLOADER_TIMEOUT_MS,
     DeviceConnectionState,
     FIRMWARE_UPGRADE_METHODS,
     HalvesInfo,
@@ -73,7 +74,7 @@ import {
     validateConnectedDevices,
 } from './utils/index.js';
 
-export const BOOTLOADER_TIMEOUT_MS = 5000;
+export const BOOTLOADER_TIMEOUT_MS = DEFAULT_BOOTLOADER_TIMEOUT_MS;
 
 export const UHK_HID_DEVICE_NOT_CONNECTED = '[UhkHidDevice] Device is not connected';
 

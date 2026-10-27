@@ -13,6 +13,8 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import {
     KeyboardLayout,
+    MAX_BOOTLOADER_TIMEOUT_MS,
+    MIN_BOOTLOADER_TIMEOUT_MS,
     UHK_60_DEVICE,
     UHK_60_V2_DEVICE,
     UHK_80_DEVICE,
@@ -31,6 +33,7 @@ import {
 } from '../../../store';
 
 import {
+    SetBootloaderTimeoutAction,
     StartLeftHalfPairingAction,
     ToggleDongleZephyrLoggingAction,
     ToggleI2cDebuggingAction,
@@ -72,6 +75,8 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     UHK_DONGLE = UHK_DONGLE;
     UHK_80_DEVICE_LEFT = UHK_80_DEVICE_LEFT;
+    minBootloaderTimeout = MIN_BOOTLOADER_TIMEOUT_MS;
+    maxBootloaderTimeout = MAX_BOOTLOADER_TIMEOUT_MS;
 
     private readonly cdRef = inject(ChangeDetectorRef);
     private i2cErrorsLength = 0;
@@ -158,6 +163,10 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     onToggleZephyrLogging(): void {
         this.store.dispatch(new ToggleZephyrLoggingAction());
+    }
+
+    onBootloaderTimeoutChanged(timeout: string): void {
+        this.store.dispatch(new SetBootloaderTimeoutAction(Number.parseInt(timeout)));
     }
 
     onToggleDongleZephyrLogging(): void {

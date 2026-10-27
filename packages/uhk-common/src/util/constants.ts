@@ -7,4 +7,20 @@ export const MAX_ALLOWED_MACROS_TOOLTIP = `No more than ${MAX_ALLOWED_MACROS} ma
 export const DEFAULT_DEVICE_NAME = 'My UHK';
 
 export const UHK_EEPROM_SIZE = 32768;
-export const ERR_UPDATER_INVALID_SIGNATURE = 'ERR_UPDATER_INVALID_SIGNATURE'
+export const ERR_UPDATER_INVALID_SIGNATURE = 'ERR_UPDATER_INVALID_SIGNATURE';
+
+/**
+ * Time in milliseconds that the UHK bootloader waits for the mcumgr firmware update to start.
+ * Agent sends this value to the device when it reenumerates it into bootloader mode, and also
+ * uses it as the time budget to open the bootloader serial port.
+ */
+export const DEFAULT_BOOTLOADER_TIMEOUT_MS = 5000;
+/**
+ * Lower bound of the configurable bootloader timeout. A shorter timeout is not enough for the
+ * bootloader to be detected on the slower hosts.
+ */
+export const MIN_BOOTLOADER_TIMEOUT_MS = 1000;
+/**
+ * Upper bound of the configurable bootloader timeout.
+ */
+export const MAX_BOOTLOADER_TIMEOUT_MS = 60000;
