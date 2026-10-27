@@ -95,7 +95,8 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "buildTarget": "uhk-web:build",
-            "port": 8080
+            "port": 8080,
+            "prebundle": false
           },
           "configurations": {
             "production": {
