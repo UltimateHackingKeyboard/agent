@@ -113,7 +113,7 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
 })
 export class MainAppComponent implements OnDestroy {
     @ViewChild(SecondSideMenuContainerComponent) secondarySideMenuContainer: SecondSideMenuContainerComponent;
-    @ViewChild('manuallyUpdateNotification', { static: true }) manuallyUpdateNotificationTmpl: TemplateRef<unknown>;
+    @ViewChild('manuallyUpdateNotification', { static: true }) manuallyUpdateNotificationTmpl: TemplateRef<void>;
 
     donglePairingState: DonglePairingState;
     halvesPairingState: HalvesPairingState;

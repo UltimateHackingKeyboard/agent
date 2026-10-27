@@ -44,6 +44,7 @@ import {
     UserConfiguration
 } from 'uhk-common';
 import {
+    applyModuleConfigurationValue,
     BleAddingStates,
     BleAddingState,
     BacklightingOption,
@@ -1229,7 +1230,7 @@ export function reducer(
             userConfiguration.moduleConfigurations = userConfiguration.moduleConfigurations.map(moduleConfiguration => {
                 if(moduleConfiguration.id === payload.moduleId) {
                     moduleConfiguration = new ModuleConfiguration(moduleConfiguration);
-                    (moduleConfiguration as unknown as Record<string, unknown>)[payload.propertyName] = payload.value;
+                    applyModuleConfigurationValue(moduleConfiguration, payload);
 
                     return moduleConfiguration;
                 }
