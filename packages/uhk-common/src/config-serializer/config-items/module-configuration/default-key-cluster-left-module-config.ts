@@ -30,6 +30,8 @@ export function defaultKeyClusterLeftModuleConfig(): ModuleConfiguration {
     config.invertScrollDirectionX = false;
     config.invertScrollDirectionY = false;
 
+    config.angle = 0;
+
     config.keyClusterSwapAxes = false;
 
     return config;

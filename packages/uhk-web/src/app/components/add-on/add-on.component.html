@@ -212,6 +212,21 @@
                     >
                 </td>
             </tr>
+            <tr class="separator">
+                <td>Angle offset
+                    <circle-tooltip tooltip="Clockwise rotation of the module on the desk, in degrees. Movement is rotated back, so pushing away from you moves the cursor up even when the keyboard halves are angled."
+                                    width="300"/>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="-180"
+                        [max]="180"
+                        [step]="1"
+                        [ngModel]="moduleConfiguration.angle"
+                        (ngModelChange)="onSetModuleConfigurationValue('angle', $event)"
+                    />
+                </td>
+            </tr>
 
             <ng-container *ngIf="moduleConfiguration.id === ModuleId.TouchpadRight">
                 <tr>

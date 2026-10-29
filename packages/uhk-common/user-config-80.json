@@ -183,6 +183,7 @@
       "axisLockSkew": 0.5,
       "invertScrollDirectionX": false,
       "invertScrollDirectionY": false,
+      "angle": 0,
       "keyClusterSwapAxes": false,
       "keyClusterInvertHorizontalScrolling": false
     },
@@ -207,6 +208,7 @@
       "axisLockSkew": 0.5,
       "invertScrollDirectionX": false,
       "invertScrollDirectionY": false,
+      "angle": 0,
       "touchpadPinchZoomDivisor": 4,
       "touchpadHoldContinuationTimeout": 0,
       "touchpadPinchToZoom": "Zoom",
@@ -233,7 +235,8 @@
       "axisLockFirstTickSkew": 2,
       "axisLockSkew": 0.5,
       "invertScrollDirectionX": false,
-      "invertScrollDirectionY": false
+      "invertScrollDirectionY": false,
+      "angle": 0
     },
     {
       "id": "TrackpointRight",
@@ -255,7 +258,8 @@
       "axisLockFirstTickSkew": 2,
       "axisLockSkew": 0.5,
       "invertScrollDirectionX": false,
-      "invertScrollDirectionY": false
+      "invertScrollDirectionY": false,
+      "angle": 0
     }
   ],
   "keymaps": [

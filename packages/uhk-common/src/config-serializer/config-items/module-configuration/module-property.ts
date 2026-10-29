@@ -9,7 +9,8 @@ export enum ModuleProperty {
     ScrollAxisLock = 7,
     CaretAxisLock = 8,
     InvertScrollDirectionY = 9,
-    InvertScrollDirectionX = 10
+    InvertScrollDirectionX = 10,
+    Angle = 11,
 }
 
 export enum KeyClusterProperty  {

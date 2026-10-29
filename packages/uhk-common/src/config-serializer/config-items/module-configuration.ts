@@ -36,6 +36,8 @@ export class ModuleConfiguration {
     invertScrollDirectionX: boolean;
     invertScrollDirectionY: boolean;
 
+    @assertFloat angle: number;
+
     // Key cluster
     keyClusterSwapAxes: boolean;
 
@@ -75,6 +77,8 @@ export class ModuleConfiguration {
 
         this.invertScrollDirectionX = other.invertScrollDirectionX;
         this.invertScrollDirectionY = other.invertScrollDirectionY;
+
+        this.angle = other.angle;
 
         this.keyClusterSwapAxes = other.keyClusterSwapAxes;
 
@@ -168,6 +172,7 @@ export class ModuleConfiguration {
             axisLockSkew: this.axisLockSkew,
             invertScrollDirectionX: this.invertScrollDirectionX,
             invertScrollDirectionY: this.invertScrollDirectionY,
+            angle: this.angle,
         };
 
         if (this.id === ModuleId.KeyClusterLeft){
@@ -197,7 +202,7 @@ export class ModuleConfiguration {
         buffer.writeUInt8(this.navigationModeFn4Layer);
         buffer.writeUInt8(this.navigationModeFn5Layer);
 
-        let numberOfProperties = 11;
+        let numberOfProperties = 12;
         if (this.id === ModuleId.KeyClusterLeft){
             numberOfProperties += 1;
         }  else if (this.id === ModuleId.TouchpadRight){
@@ -228,6 +233,8 @@ export class ModuleConfiguration {
         buffer.writeBoolean(this.invertScrollDirectionY);
         buffer.writeUInt8(ModuleProperty.InvertScrollDirectionX);
         buffer.writeBoolean(this.invertScrollDirectionX);
+        buffer.writeUInt8(ModuleProperty.Angle);
+        buffer.writeFloat(this.angle);
 
         if (this.id === ModuleId.KeyClusterLeft){
             buffer.writeUInt8(KeyClusterProperty.SwapAxes);
@@ -275,6 +282,7 @@ export class ModuleConfiguration {
         this.axisLockSkew = jsonObject.axisLockSkew;
         this.invertScrollDirectionX = jsonObject.invertScrollDirectionX;
         this.invertScrollDirectionY = jsonObject.invertScrollDirectionY;
+        this.angle = jsonObject.angle;
 
         if (this.id === ModuleId.KeyClusterLeft){
             this.keyClusterSwapAxes = jsonObject.keyClusterSwapAxes;
@@ -338,6 +346,9 @@ export class ModuleConfiguration {
                     break;
                 case ModuleProperty.InvertScrollDirectionX:
                     this.invertScrollDirectionX = buffer.readBoolean();
+                    break;
+                case ModuleProperty.Angle:
+                    this.angle = buffer.readFloat();
                     break;
 
                 default: {

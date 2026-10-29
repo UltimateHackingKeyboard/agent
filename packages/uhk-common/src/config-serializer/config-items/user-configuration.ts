@@ -1572,6 +1572,8 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
 
         const defaultTouchpadConfig = defaultTouchpadRightModuleConfig();
         for (const moduleConfiguration of this.moduleConfigurations) {
+            moduleConfiguration.angle = 0;
+
             if (moduleConfiguration.id === ModuleId.TouchpadRight) {
                 moduleConfiguration.touchpadDragStyle = defaultTouchpadConfig.touchpadDragStyle;
                 moduleConfiguration.touchpadDoubleTapAndHoldTimeout = defaultTouchpadConfig.touchpadDoubleTapAndHoldTimeout;

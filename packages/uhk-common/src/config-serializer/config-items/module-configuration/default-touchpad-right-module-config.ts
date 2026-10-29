@@ -31,6 +31,8 @@ export function defaultTouchpadRightModuleConfig(): ModuleConfiguration {
     config.invertScrollDirectionX = false;
     config.invertScrollDirectionY = false;
 
+    config.angle = 0;
+
     config.touchpadPinchZoomDivisor = 4;
     config.touchpadHoldContinuationTimeout = 0;
     config.touchpadPinchToZoom = NavigationMode.Zoom;

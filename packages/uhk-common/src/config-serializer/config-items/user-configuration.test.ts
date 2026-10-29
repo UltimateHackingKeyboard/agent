@@ -159,6 +159,7 @@ describe('user-configuration', () => {
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
                     invertScrollDirectionY: false,
+                    angle: 0,
                     keyClusterSwapAxes: false,
                     keyClusterInvertHorizontalScrolling: false
                 },
@@ -183,6 +184,7 @@ describe('user-configuration', () => {
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
                     invertScrollDirectionY: false,
+                    angle: 0,
                     touchpadPinchZoomDivisor: 4,
                     touchpadHoldContinuationTimeout: 0,
                     touchpadPinchToZoom: 'Zoom',
@@ -209,7 +211,8 @@ describe('user-configuration', () => {
                     axisLockFirstTickSkew: 2,
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
-                    invertScrollDirectionY: false
+                    invertScrollDirectionY: false,
+                    angle: 0
                 },
                 {
                     id: 'TrackpointRight',
@@ -231,7 +234,8 @@ describe('user-configuration', () => {
                     axisLockFirstTickSkew: 2,
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
-                    invertScrollDirectionY: false
+                    invertScrollDirectionY: false,
+                    angle: 0
                 }
             ],
             macros: [],
