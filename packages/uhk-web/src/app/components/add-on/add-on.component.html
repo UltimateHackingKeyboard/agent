@@ -227,7 +227,8 @@
                     <td>
                         <div class="d-flex align-items-center gap-1">
                             <div class="select-container align-slider">
-                                <ng-select [items]="pitchToZoomOptions"
+                                <!-- appendTo: the settings panel scrolls inside an as-split-area, which clips the open dropdown -->
+                                <ng-select appendTo="body" [items]="pitchToZoomOptions"
                                            [ngModel]="moduleConfiguration.touchpadPinchToZoom"
                                            (ngModelChange)="onSetModuleConfigurationValue('touchpadPinchToZoom', $event)"
                                            [clearable]="false"
@@ -317,7 +318,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeBaseLayer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeBaseLayer', $event)"
                                    [clearable]="false"
@@ -333,7 +334,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeModLayer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeModLayer', $event)"
                                    [clearable]="false"
@@ -349,7 +350,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeMouseLayer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeMouseLayer', $event)"
                                    [clearable]="false"
@@ -365,7 +366,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeFnLayer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeFnLayer', $event)"
                                    [clearable]="false"
@@ -381,7 +382,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeFn2Layer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn2Layer', $event)"
                                    [clearable]="false"
@@ -397,7 +398,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeFn3Layer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn3Layer', $event)"
                                    [clearable]="false"
@@ -413,7 +414,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeFn4Layer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn4Layer', $event)"
                                    [clearable]="false"
@@ -429,7 +430,7 @@
                 </td>
                 <td>
                     <div class="select-container">
-                        <ng-select [items]="navigationModOptions"
+                        <ng-select appendTo="body" [items]="navigationModOptions"
                                    [ngModel]="moduleConfiguration.navigationModeFn5Layer"
                                    (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn5Layer', $event)"
                                    [clearable]="false"
