@@ -22,6 +22,7 @@ import { defaultKeyClusterLeftModuleConfig } from './module-configuration/defaul
 import { defaultTouchpadRightModuleConfig } from './module-configuration/default-touchpad-right-module-config.js';
 import { defaultTrackballRightModuleConfig } from './module-configuration/default-trackball-right-module-config.js';
 import { defaultTrackpointRightModuleConfig } from './module-configuration/default-trackpoint-right-module-config.js';
+import { ModuleId } from './module-configuration/module-id.js';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration.js';
 import { RgbColor } from './rgb-color.js';
 import { isAllowedScancode } from './scancode-checker.js';
@@ -261,6 +262,7 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         this.migrateToV13();
         this.migrateToV14();
         this.migrateToV15();
+        this.migrateToV15_1();
 
         this.recalculateConfigurationLength();
 
@@ -372,6 +374,10 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         }
 
         if (this.migrateToV15()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV15_1()) {
             this.userConfigurationLength = 0;
         }
 
@@ -1550,6 +1556,30 @@ export class UserConfiguration implements AdvancedSecondaryRoleConfiguration, Mo
         // singlepoint instead, which is set in user-config-80.json rather than here.
         this.bluetoothAlwaysAdvertise = true;
         this.bluetoothKeepConnectionsAlive = true;
+
+        return true;
+    }
+
+    private migrateToV15_1(): boolean {
+        if (this.userConfigMajorVersion > 15) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 1) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 1;
+
+        const defaultTouchpadConfig = defaultTouchpadRightModuleConfig();
+        for (const moduleConfiguration of this.moduleConfigurations) {
+            moduleConfiguration.angle = 0;
+
+            if (moduleConfiguration.id === ModuleId.TouchpadRight) {
+                moduleConfiguration.touchpadDragStyle = defaultTouchpadConfig.touchpadDragStyle;
+                moduleConfiguration.touchpadDoubleTapAndHoldTimeout = defaultTouchpadConfig.touchpadDoubleTapAndHoldTimeout;
+            }
+        }
 
         return true;
     }

@@ -41,6 +41,12 @@ table.settings {
                     &.align-slider {
                         margin-left: $settings-slider-align;
                     }
+
+                    // Fits the longest option of the touchpad drag style select
+                    // ("Tap or double-tap and hold") without truncation.
+                    &.wide {
+                        width: 230px;
+                    }
                 }
             }
         }

@@ -3,7 +3,7 @@ import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { UHK_MODULES } from 'uhk-common';
-import { ModuleConfiguration, ModuleId, NavigationMode } from 'uhk-common';
+import { ModuleConfiguration, ModuleId, NavigationMode, TouchpadDragStyle } from 'uhk-common';
 
 import { ModuleConfigurationProperty } from '../../models';
 import { AppState, getSelectedModuleConfiguration } from '../../store';
@@ -39,6 +39,25 @@ export class AddOnComponent implements OnDestroy {
         },
         {
             value:  NavigationMode.None,
+            label: 'None'
+        }
+    ];
+
+    dragStyleOptions = [
+        {
+            value: TouchpadDragStyle.EitherTapAndHold,
+            label: 'Tap or double-tap and hold'
+        },
+        {
+            value: TouchpadDragStyle.TapAndHold,
+            label: 'Tap and hold'
+        },
+        {
+            value: TouchpadDragStyle.DoubleTapAndHold,
+            label: 'Double-tap and hold'
+        },
+        {
+            value: TouchpadDragStyle.None,
             label: 'None'
         }
     ];
@@ -99,6 +118,10 @@ export class AddOnComponent implements OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    isDoubleTapAndHoldEnabled(): boolean {
+        return (this.moduleConfiguration.touchpadDragStyle & TouchpadDragStyle.DoubleTapAndHold) !== 0;
     }
 
     onSetModuleConfigurationValue<K extends ModuleConfigurationProperty>(propertyName: K, value: ModuleConfiguration[K]) {

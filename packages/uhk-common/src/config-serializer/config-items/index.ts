@@ -23,6 +23,7 @@ export * from './module.js';
 export * from './module-configuration/module-id.js';
 export * from './module-configuration/module-property.js';
 export * from './module-configuration/navigation-mode.js';
+export * from './module-configuration/touchpad-drag-style.js';
 export * from './module-configuration.js';
 export * from './mouse-speed-configuration.js';
 export * from './rgb-color.js';
