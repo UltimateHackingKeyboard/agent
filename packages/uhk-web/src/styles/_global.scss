@@ -17,24 +17,37 @@ body {
     --titlebar-title-gap: 0.5rem;
 }
 
-// Shared title row of the header component: title, its actions and the
-// draggable area on one line.
+// Shared title row of the header component: title and its actions on one line.
 uhk-header .pane-title {
     display: flex;
     align-items: center;
     column-gap: 0.25rem;
 }
 
-// Invisible draggable area between the header actions and the window controls.
-.titlebar-drag-surface {
-    flex: 1 1 auto;
-    align-self: flex-start;
-    // Keep the draggable band lined up with the window controls despite the gap
-    // added above the title.
-    margin-top: calc(-1 * var(--titlebar-title-gap));
-    height: var(--titlebar-height, 0);
-    -webkit-app-region: drag;
-    app-region: drag;
+// Interactive controls must opt out of the draggable title row (the <h1>) so
+// they keep receiving clicks. Their descendants are included too, because the
+// deep hit target (for example the <path> inside an icon) is what receives the
+// click and app-region is not inherited.
+a,
+button,
+input,
+select,
+textarea,
+auto-grow-input,
+fa-icon,
+i,
+img,
+a *,
+button *,
+input *,
+select *,
+textarea *,
+auto-grow-input *,
+fa-icon *,
+i *,
+img * {
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
 }
 
 // Grouped header actions (make-default / duplicate / delete): equal-sized icons
@@ -136,11 +149,14 @@ ul.gap-035 {
 }
 
 // Page titles used to render oversized; keep them compact so the title bar does
-// not waste vertical space.
+// not waste vertical space. The title row doubles as the window drag handle on
+// every page; interactive bits inside it opt out (see below).
 h1 {
     padding-top: var(--titlebar-title-gap);
     margin-bottom: 1rem;
     font-size: 1.75rem;
+    -webkit-app-region: drag;
+    app-region: drag;
 }
 
 input {
