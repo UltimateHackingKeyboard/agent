@@ -23,7 +23,6 @@ uhk-header .pane-title {
     display: flex;
     align-items: center;
     column-gap: 0.25rem;
-    margin-bottom: 0.5rem;
 }
 
 // Invisible draggable area between the header actions and the window controls.
@@ -140,7 +139,8 @@ ul.gap-035 {
 // not waste vertical space.
 h1 {
     padding-top: var(--titlebar-title-gap);
-    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
 }
 
 input {
