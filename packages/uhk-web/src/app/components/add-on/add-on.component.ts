@@ -45,7 +45,7 @@ export class AddOnComponent implements OnDestroy {
     dragStyleOptions = [
         {
             value: TouchpadDragStyle.EitherTapAndHold,
-            label: 'Either'
+            label: 'Tap or double-tap and hold'
         },
         {
             value: TouchpadDragStyle.TapAndHold,
