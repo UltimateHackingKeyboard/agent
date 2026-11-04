@@ -228,7 +228,7 @@
                 </td>
             </tr>
 
-            <ng-container *ngIf="moduleConfiguration.id === ModuleId.TouchpadRight">
+            <ng-template #touchpadExtendedSettings>
                 <tr>
                     <td colspan="2">
                         <h3 class="margin-top">Extended settings</h3>
@@ -332,7 +332,11 @@
                         />
                     </td>
                 </tr>
-            </ng-container>
+            </ng-template>
+            </tbody>
+            <tbody *ngIf="moduleConfiguration.id === ModuleId.TouchpadRight"
+                   class="extended-settings-above-navigation">
+                <ng-container *ngTemplateOutlet="touchpadExtendedSettings"></ng-container>
             </tbody>
         </table>
     </div>
@@ -496,6 +500,10 @@
                     </div>
                 </td>
             </tr>
+            </tbody>
+            <tbody *ngIf="moduleConfiguration.id === ModuleId.TouchpadRight"
+                   class="extended-settings-below-navigation">
+                <ng-container *ngTemplateOutlet="touchpadExtendedSettings"></ng-container>
             </tbody>
         </table>
     </div>
