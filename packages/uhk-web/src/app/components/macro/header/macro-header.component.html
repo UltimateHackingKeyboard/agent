@@ -1,29 +1,34 @@
 <uhk-header>
-    <fa-icon [icon]="faPlay"></fa-icon>
-    <auto-grow-input [ngModel]="macro.name"
-                     maxParentWidthPercent="0.8"
-                     [selectAfterInit]="isNew"
-                     (ngModelChange)="editMacroName($event)"></auto-grow-input>
-    <button type="button"
-            class="macro__remove float-end btn btn-link p-0"
-            aria-label="Delete macro"
-            ngbTooltip="Delete macro"
-            tooltipClass="tooltip-nowrap"
-            placement="bottom-right"
-            (click)="removeMacro()">
-        <fa-icon [icon]="faTrash"></fa-icon>
-    </button>
-    <button type="button"
-            class="macro__duplicate float-end btn btn-link p-0"
-            [class.disabled]="maxMacroCountReached"
-            [disabled]="maxMacroCountReached"
-            aria-label="Duplicate macro"
-            [ngbTooltip]="maxMacroCountReached ? maxAllowedMacrosTooltip : 'Duplicate macro'"
-            tooltipClass="tooltip-nowrap"
-            placement="bottom-right"
-            (click)="duplicateMacro()">
-        <fa-icon [icon]="faCopy"></fa-icon>
-    </button>
+    <div class="pane-title">
+        <fa-icon [icon]="faPlay"></fa-icon>
+        <auto-grow-input [ngModel]="macro.name"
+                         maxParentWidthPercent="0.8"
+                         [selectAfterInit]="isNew"
+                         (ngModelChange)="editMacroName($event)"></auto-grow-input>
+        <div class="titlebar-actions" role="group" aria-label="Macro actions">
+            <button type="button"
+                    class="macro__duplicate btn btn-link"
+                    [class.disabled]="maxMacroCountReached"
+                    [disabled]="maxMacroCountReached"
+                    aria-label="Duplicate macro"
+                    [ngbTooltip]="maxMacroCountReached ? maxAllowedMacrosTooltip : 'Duplicate macro'"
+                    tooltipClass="tooltip-nowrap"
+                    placement="bottom"
+                    (click)="duplicateMacro()">
+                <fa-icon [icon]="faCopy"></fa-icon>
+            </button>
+            <button type="button"
+                    class="macro__remove btn btn-link"
+                    aria-label="Delete macro"
+                    ngbTooltip="Delete macro"
+                    tooltipClass="tooltip-nowrap"
+                    placement="bottom"
+                    (click)="removeMacro()">
+                <fa-icon [icon]="faTrash"></fa-icon>
+            </button>
+        </div>
+        <span class="titlebar-drag-surface"></span>
+    </div>
 </uhk-header>
 <back-to/>
 <div *ngIf="assignments.length" class="my-2">

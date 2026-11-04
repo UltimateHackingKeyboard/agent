@@ -34,29 +34,6 @@
     }
 }
 
-// Make-default / duplicate / delete grouped into one control: no outer frame,
-// just hairline dividers between equal-sized icons.
-.keymap__actions {
-    display: inline-flex;
-    align-items: center;
-    margin-left: 0.25rem;
-
-    > fa-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        // Keep every icon in the group the same size.
-        font-size: 1.125rem;
-        line-height: 1;
-        cursor: pointer;
-        padding: 0.3rem 0.55rem;
-
-        &:not(:first-child) {
-            border-left: 1px solid var(--color-sidemenu-border);
-        }
-    }
-}
-
 .keymap__download {
     top: 10px;
     font-size: 0.8em;
@@ -69,46 +46,23 @@
     }
 }
 
-.pane-title {
-    display: flex;
-    align-items: center;
-    column-gap: 0.25rem;
-    // Breathing room above the title and its buttons.
-    --titlebar-title-gap: 0.5rem;
-    padding-top: var(--titlebar-title-gap);
-    margin-bottom: 0.5rem;
+// Space between the keymap name and the literal "keymap (abbr)" label.
+.pane-title__label {
+    margin-left: 0.25rem;
+}
 
-    // Invisible draggable area between the title buttons and the window
-    // controls. It has no pattern so the title row stays clean.
-    .titlebar-drag-surface {
-        flex: 1 1 auto;
-        align-self: flex-start;
-        // Keep the draggable band lined up with the window controls despite the
-        // gap added above the title.
-        margin-top: calc(-1 * var(--titlebar-title-gap));
-        height: var(--titlebar-height, 0);
-        -webkit-app-region: drag;
-        app-region: drag;
-    }
+.pane-title__abbrev {
+    border: none;
+    border-bottom: 2px dotted #999;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    // Just wide enough for three characters so the parens hug the abbrev.
+    width: 2.9em;
+    text-align: center;
 
-    // Space between the keymap name and the literal "keymap (abbr)" label.
-    &__label {
-        margin-left: 0.25rem;
-    }
-
-    &__abbrev {
-        border: none;
-        border-bottom: 2px dotted #999;
-        background: transparent;
-        padding: 0;
-        margin: 0;
-        // Just wide enough for three characters so the parens hug the abbrev.
-        width: 2.9em;
-        text-align: center;
-
-        &:focus {
-            box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
-            border-color: transparent;
-        }
+    &:focus {
+        box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
+        border-color: transparent;
     }
 }
