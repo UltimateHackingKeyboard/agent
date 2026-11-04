@@ -3,7 +3,30 @@
 
 :host {
     .main-div {
+        // Height of the chromeless window's title bar. Electron's window controls
+        // overlay exposes its height through the titlebar-area-height env var; the
+        // fallback covers macOS, where the native traffic lights have no such
+        // variable. Zero outside Electron so browser builds keep the full height.
+        --titlebar-height: 0px;
         height: 100vh;
+        padding-top: var(--titlebar-height);
+
+        &.electron {
+            --titlebar-height: env(titlebar-area-height, 36px);
+        }
+
+        .window-drag-region {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--titlebar-height);
+            background-color: var(--color-bg);
+            z-index: 1030;
+            -webkit-app-region: drag;
+            app-region: drag;
+            user-select: none;
+        }
 
         .inner-content {
             margin-left: $side-menu-width;
@@ -59,7 +82,7 @@ app-update-available,
 shared-config-change-panel {
     height: $main-content-top-margin-on-update;
     position: fixed;
-    top: 0;
+    top: var(--titlebar-height);
     left: 0;
     right: 0;
     z-index: 1000;
@@ -94,7 +117,7 @@ shared-config-change-panel {
     position: fixed;
     overflow-y: auto;
     overflow-x: hidden;
-    top: 0;
+    top: var(--titlebar-height);
     transition-timing-function: ease-out;
     transition: 0.5s;
 
@@ -111,12 +134,12 @@ shared-config-change-panel {
 
 .top-notification-panel-visible .secondary-menu-wrapper,
 .top-notification-panel-visible side-menu {
-    top: $main-content-top-margin-on-update;
+    top: calc(var(--titlebar-height) + #{$main-content-top-margin-on-update});
 }
 
 .top-notification-panel-visible:has(app-update-available.two-line) .secondary-menu-wrapper,
 .top-notification-panel-visible:has(app-update-available.two-line) side-menu {
-    top: $main-content-top-margin-on-update-two-line;
+    top: calc(var(--titlebar-height) + #{$main-content-top-margin-on-update-two-line});
 }
 
 .top-notification-panel-visible .inner-content {

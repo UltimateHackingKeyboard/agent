@@ -1,4 +1,7 @@
-<div class="main-div" [class.top-notification-panel-visible]="isTopNotificationPanelVisible()">
+<div class="main-div"
+     [class.electron]="runningInElectron$ | async"
+     [class.top-notification-panel-visible]="isTopNotificationPanelVisible()">
+    <div class="window-drag-region"></div>
     <app-update-available *ngIf="showUpdateAvailable && (appUpdateNotification$ | async) as appUpdateNotification"
                           [@topNotificationPanelVisible]
                           [notification]="appUpdateNotification"
