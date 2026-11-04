@@ -1,8 +1,3 @@
----
-description: Keep UI and presentation code out of uhk-common
-alwaysApply: true
----
-
 # Package boundaries: uhk-common vs uhk-web
 
 `uhk-common` is for shared, UI-agnostic domain logic (config serializers, USB helpers, pure data transforms). Do **not** put presentation-oriented helpers there.

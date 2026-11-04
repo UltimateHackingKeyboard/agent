@@ -1,3 +1,4 @@
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { assertEnum, assertUInt8 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { SerialisationInfo } from '../serialisation-info.js';
@@ -31,7 +32,7 @@ export class ConnectionsAction extends KeyAction {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): ConnectionsAction {
         this.assertKeyActionType(jsonObject);
-        this.command = ConnectionCommands[<string>jsonObject.command]
+        this.command = enumFromString(ConnectionCommands, jsonObject.command)
         if (this.hasHostConnectionId()) {
             this.hostConnectionId = jsonObject.hostConnectionId;
         }

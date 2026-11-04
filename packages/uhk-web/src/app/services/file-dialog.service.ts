@@ -7,6 +7,11 @@ import { SHARED_CONFIG_DEFAULT_FILE_NAME, UploadFileData } from 'uhk-common';
 export interface SaveFileResult {
     canceled: boolean;
     filePath?: string;
+    /**
+     * True when the native save dialog could not be shown and the configuration
+     * was written to a fallback folder instead. filePath holds the written path.
+     */
+    savedWithoutDialog?: boolean;
 }
 
 /**

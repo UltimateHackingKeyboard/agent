@@ -20,6 +20,7 @@ import {
     LogService,
     ModuleFirmwareUpgradeProgress,
     ModuleFirmwareUpgradeSkipInfo,
+    RecoveryDeviceInfo,
     SaveUserConfigurationData,
     UHK_DEVICE_IDS_TYPE,
     UpdateFirmwareData,
@@ -161,7 +162,7 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.recoveryDevice, {
             deviceId,
             userConfig: userConfig.toJsonObject()
-        });
+        } as RecoveryDeviceInfo);
     }
 
     recoveryModule(moduleId: number): void {

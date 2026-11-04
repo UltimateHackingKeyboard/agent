@@ -114,7 +114,7 @@ export class TypingBehaviorPage implements AdvancedSecondaryRoleConfiguration, O
         this.store.dispatch(new LoadTypingBehaviorPresetAction(name));
     }
 
-    onSetPropertyValue(propertyName: string, value: number): void {
+    onSetPropertyValue(propertyName: keyof TypingBehaviorPage, value: number): void {
         // The slider fires a change event after preset loaded otherwise it Changes the Simple preset to Advanced
         if (this[propertyName] === value) {
             return;

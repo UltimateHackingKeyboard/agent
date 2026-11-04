@@ -143,8 +143,8 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
         this._onChanged(this._model);
     }
 
-    keyEnter(event): void {
-        event.target.blur();
+    keyEnter(event: Event): void {
+        (event.target as HTMLElement).blur();
     }
 
     calculateTextWidth(text: string): void {

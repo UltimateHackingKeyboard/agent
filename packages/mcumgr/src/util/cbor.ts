@@ -178,9 +178,9 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
     let offset = 0;
 
     if (typeof tagger !== "function")
-        tagger = function(value) { return value; };
+        tagger = function(value: unknown): unknown { return value; };
     if (typeof simpleValue !== "function")
-        simpleValue = function() { return undefined; };
+        simpleValue = function(): undefined { return undefined; };
 
     function commitRead<T extends number | Uint8Array>(length: number, value: T): T {
         offset += length;
@@ -364,7 +364,7 @@ export function decode(data: ArrayBuffer | SharedArrayBuffer, tagger?: Function,
             }
 
             case 5: {
-                const retObject = {};
+                const retObject: Record<string | number, unknown> = {};
                 for (i = 0; i < length || length < 0 && !readBreak(); ++i) {
                     const key = decodeItem() as string | number;
                     retObject[key] = decodeItem();

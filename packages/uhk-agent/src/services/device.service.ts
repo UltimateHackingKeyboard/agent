@@ -38,6 +38,7 @@ import {
     ModuleFirmwareUpgradeSkipReason,
     ModuleInfo,
     ModuleSlotToId,
+    RecoveryDeviceInfo,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
     RightSlotModules,
     SaveUserConfigurationData,
@@ -330,7 +331,7 @@ export class DeviceService {
         logService.misc('[DeviceService] init success');
     }
 
-    public async areBleAddressesPaired(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async areBleAddressesPaired(event: Electron.IpcMainEvent, args: [string[]]): Promise<void> {
         this.logService.misc('[DeviceService] Check BLE Addresses are paired');
 
         const response: AreBleAddressesPairedIpcResponse = {
@@ -365,7 +366,7 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async loadConfigurations(event: Electron.IpcMainEvent, args: []): Promise<void> {
         this.logService.misc('[DeviceService] load user configuration');
 
         let response: ConfigurationReply;
@@ -839,7 +840,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
-    public async recoveryDevice(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async recoveryDevice(event: Electron.IpcMainEvent, args: [RecoveryDeviceInfo]): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
         };
@@ -895,7 +896,7 @@ export class DeviceService {
         this.startPollUhkDevice();
     }
 
-    public async recoveryModule(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async recoveryModule(event: Electron.IpcMainEvent, args: [number]): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
         };
@@ -1161,7 +1162,7 @@ export class DeviceService {
         }
     }
 
-    private async changeKeyboardLayout(event: Electron.IpcMainEvent, args): Promise<void> {
+    private async changeKeyboardLayout(event: Electron.IpcMainEvent, args: [KeyboardLayout, unknown]): Promise<void> {
         const layout: KeyboardLayout = args[0];
         const hardwareConfiguration: HardwareConfiguration = new HardwareConfiguration().fromJsonObject(args[1]);
         const layoutName = layout === KeyboardLayout.ISO ? 'iso': 'ansi';
@@ -1444,7 +1445,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.deleteUserConfigHistoryReply, response);
     }
 
-    private async toggleI2cDebugging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
+    private async toggleI2cDebugging(_: Electron.IpcMainEvent, [enabled]: [boolean]): Promise<void> {
         this.logService.misc('[DeviceService] Toggle I2C debugging =>', enabled);
 
         this.isI2cDebuggingEnabled = enabled;
@@ -1465,7 +1466,7 @@ export class DeviceService {
         }
     }
 
-    private async toggleRightHalfZephyrLogging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
+    private async toggleRightHalfZephyrLogging(_: Electron.IpcMainEvent, [enabled]: [boolean]): Promise<void> {
         this.logService.misc('[DeviceService] Toggle Right Half zephyr logging =>', enabled);
 
         try {

@@ -167,7 +167,7 @@ export class SmartMacroDocService {
         event.sender.send(IpcEvents.smartMacroDoc.serviceListening, this.port);
     }
 
-    private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args): Promise<void> {
+    private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args: [FirmwareRepoInfo]): Promise<void> {
         try {
             const firmwareRepoInfo: FirmwareRepoInfo = args[0];
             if (!firmwareRepoInfo.firmwareGitRepo || !firmwareRepoInfo.firmwareGitTag) {

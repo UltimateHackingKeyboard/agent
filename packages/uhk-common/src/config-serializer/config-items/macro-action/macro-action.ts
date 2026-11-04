@@ -1,3 +1,4 @@
+import { enumFromString } from '../../../util/enum-from-string.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 
 export enum MacroActionId {
@@ -50,7 +51,7 @@ export abstract class MacroAction {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     assertMacroActionType(jsObject: any) {
         const macroActionClassname = this.getName();
-        const macroActionTypeString = macroActionType[macroActionClassname];
+        const macroActionTypeString = macroActionType[macroActionClassname as keyof typeof macroActionType];
         if (jsObject.macroActionType !== macroActionTypeString) {
             throw new Error(`Invalid ${macroActionClassname}.macroActionType: ${jsObject.macroActionType}`);
         }
@@ -59,7 +60,7 @@ export abstract class MacroAction {
     readAndAssertMacroActionId(buffer: UhkBuffer): MacroActionId {
         const classname: string = this.getName();
         const readMacroActionId: MacroActionId = buffer.readUInt8();
-        const macroActionId: MacroActionId = MacroActionId[classname];
+        const macroActionId: MacroActionId = enumFromString(MacroActionId, classname);
         if (macroActionId === MacroActionId.KeyMacroAction) {
             if (readMacroActionId < MacroActionId.KeyMacroAction || readMacroActionId > MacroActionId.LastKeyMacroAction) {
                 throw new Error(`Invalid ${classname} first byte: ${readMacroActionId}`);

@@ -11,7 +11,6 @@
     <input #checkbox class="form-check-input"
            type="checkbox"
            [ngModel]="layerOption.selected"
-           (ngModelChange)="onCheckboxChange($event)"
            id="layer_checkbox_{{layerOption.id}}"
     >
     <label class="form-check-label"

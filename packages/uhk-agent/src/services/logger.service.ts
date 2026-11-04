@@ -73,7 +73,8 @@ export class ElectronLogService extends LogService {
         }
     }
 
-    usbOps(...args) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    usbOps(...args: any[]): void {
         if (!this._options.usbOps) {
             return;
         }

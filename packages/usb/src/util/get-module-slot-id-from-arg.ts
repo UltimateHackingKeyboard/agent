@@ -1,4 +1,4 @@
-import { ModuleSlotToId } from 'uhk-common';
+import { enumFromString, ModuleSlotToId } from 'uhk-common';
 
 import { InvalidArgumentError } from '../invalid-argument-error.js';
 
@@ -9,7 +9,7 @@ export function getModuleSlotIdArgs(): string {
 }
 
 export function getModuleSlotIdFromArg(arg: string): ModuleSlotToId {
-    const moduleSlotToId = ModuleSlotToId[arg];
+    const moduleSlotToId = enumFromString(ModuleSlotToId, arg);
 
     if (moduleSlotToId) {
         return moduleSlotToId;
