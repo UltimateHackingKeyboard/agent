@@ -88,6 +88,13 @@ ul.gap-035 {
     padding-top: 10px;
 }
 
+// Page titles used to render oversized; keep them compact so the title bar does
+// not waste vertical space.
+h1 {
+    padding-top: 0;
+    font-size: 1.5rem;
+}
+
 input {
     background-color: var(--color-input-bg);
     color: var(--color-input-text);

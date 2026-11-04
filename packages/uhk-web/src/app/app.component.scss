@@ -9,23 +9,9 @@
         // variable. Zero outside Electron so browser builds keep the full height.
         --titlebar-height: 0px;
         height: 100vh;
-        padding-top: var(--titlebar-height);
 
         &.electron {
             --titlebar-height: env(titlebar-area-height, 36px);
-        }
-
-        .window-drag-region {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: var(--titlebar-height);
-            background-color: var(--color-bg);
-            z-index: 1030;
-            -webkit-app-region: drag;
-            app-region: drag;
-            user-select: none;
         }
 
         .inner-content {
@@ -143,9 +129,9 @@ shared-config-change-panel {
 }
 
 .top-notification-panel-visible .inner-content {
-    padding-top: $main-content-top-margin-on-update;
+    padding-top: calc(var(--titlebar-height) + #{$main-content-top-margin-on-update});
 }
 
 .top-notification-panel-visible:has(app-update-available.two-line) .inner-content {
-    padding-top: $main-content-top-margin-on-update-two-line;
+    padding-top: calc(var(--titlebar-height) + #{$main-content-top-margin-on-update-two-line});
 }
