@@ -39,27 +39,29 @@ $ng-select-marked-text: $color-select-hover-text;
             border-width: 4px 4px 2.5px;
         }
     }
+}
 
-    .ng-dropdown-panel {
-        .ng-dropdown-panel-items {
-            .ng-optgroup {
-                font-weight: 700;
-                padding-bottom: 0;
-                padding-top: 0;
-            }
+// Not nested under .ng-select: selects opened with appendTo="body" render their
+// panel in the body, so it must be matched without an ancestor.
+.ng-dropdown-panel {
+    .ng-dropdown-panel-items {
+        .ng-optgroup {
+            font-weight: 700;
+            padding-bottom: 0;
+            padding-top: 0;
+        }
 
-            .ng-option {
-                padding-bottom: 1px;
-                padding-top: 1px;
+        .ng-option {
+            padding-bottom: 1px;
+            padding-top: 1px;
 
-                .indent-dropdown-item {
-                    display: flex;
-                    justify-content: space-between;
+            .indent-dropdown-item {
+                display: flex;
+                justify-content: space-between;
 
-                    .scancode--searchterm {
-                        text-align: right;
-                        color: var(--color-input-text);
-                    }
+                .scancode--searchterm {
+                    text-align: right;
+                    color: var(--color-input-text);
                 }
             }
         }
