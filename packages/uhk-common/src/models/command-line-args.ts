@@ -27,6 +27,12 @@ export interface CommandLineArgs extends DeviceIdentifier {
     'capture-oled'?: string;
 
     /**
+     * Timeout in milliseconds that the bootloader waits for the firmware update to start.
+     * It overrides the Advanced settings of Agent.
+     */
+    'bootloader-timeout'?: number;
+
+    /**
      * Allow Developer Tools menu
      */
     devtools?: boolean;

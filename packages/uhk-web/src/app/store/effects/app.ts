@@ -161,6 +161,7 @@ export class ApplicationEffects {
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,
                 ActionTypes.ToggleMinimizeToTray,
+                AdvanceSettingsActionTypes.setBootloaderTimeout,
                 AdvanceSettingsActionTypes.toggleAlwaysEnableAdvancedMode,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration,

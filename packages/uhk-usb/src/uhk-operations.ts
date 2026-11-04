@@ -1,10 +1,11 @@
-import { McuManager, SerialPeripheral } from '@uhk/mcumgr';
+import { McuManager } from '@uhk/mcumgr';
 import * as fs from 'fs';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 import {
     ALL_UHK_DEVICES,
     BleAddressPair,
     Buffer,
+    clampBootloaderTimeout,
     ConfigSizesInfo,
     convertBleAddressArrayToString,
     DeviceVersionInformation,
@@ -53,6 +54,7 @@ import {
     I2cBaudRate,
     I2cErrorBuffer,
     LoadConfigurationsResult,
+    UpdateDeviceFirmwareOptions,
     UpdateLeftModuleWithKbootOptions,
     UpdateModuleWithKbootOptions,
 } from './models/index.js';
@@ -65,7 +67,7 @@ import {
     waitForDevice
 } from './util.js';
 import { generateDeviceSerialNumber } from './utils/generate-device-serial-number.js';
-import { convertMsToDuration, convertSlaveI2cErrorBuffer, snooze, waitUntil} from './utils/index.js';
+import { convertMsToDuration, convertSlaveI2cErrorBuffer, openMcuBootloaderPeripheral, snooze, waitUntil} from './utils/index.js';
 import { normalizeStatusBuffer } from './utils/normalize-status-buffer.js';
 import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
 
@@ -127,7 +129,10 @@ export class UhkOperations {
         await this.device.write(transfer);
     }
 
-    public async updateDeviceFirmware(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback): Promise<void> {
+    public async updateDeviceFirmware(firmwarePath: string,
+                                      device: UhkDeviceProduct,
+                                      onProgress?: ProgressCallback,
+                                      options?: UpdateDeviceFirmwareOptions): Promise<void> {
         this.logService.misc(`[UhkOperations] Start flashing device firmware with ${device.firmwareUpgradeMethod}`);
 
         switch (device.firmwareUpgradeMethod) {
@@ -135,7 +140,7 @@ export class UhkOperations {
                 return this.updateRightFirmwareWithKboot(firmwarePath, device, onProgress);
 
             case FIRMWARE_UPGRADE_METHODS.MCUBOOT:
-                return this.updateFirmwareWithMcuManager(firmwarePath, device, onProgress);
+                return this.updateFirmwareWithMcuManager(firmwarePath, device, onProgress, options);
 
             default:
                 throw new Error(`Firmware upgrade method not implemented: ${device.firmwareUpgradeMethod}`);
@@ -194,17 +199,23 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateFirmwareWithMcuManager(firmwarePath: string, device: UhkDeviceProduct, onProgress?: ProgressCallback) {
+    public async updateFirmwareWithMcuManager(firmwarePath: string,
+                                              device: UhkDeviceProduct,
+                                              onProgress?: ProgressCallback,
+                                              options?: UpdateDeviceFirmwareOptions): Promise<void> {
         if (!(await existsAsync(firmwarePath))) {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
 
+        const bootloaderTimeout = clampBootloaderTimeout(options?.bootloaderTimeout);
         this.logService.misc(`[UhkOperations] Start flashing ${device.logName} firmware with mcumgr`);
+        this.logService.misc(`[UhkOperations] Bootloader timeout: ${bootloaderTimeout}ms`);
 
         this.logService.misc('[UhkOperations] Reenumerate bootloader');
-        const reenumerateResult = await this.device.reenumerate({
+        await this.device.reenumerate({
             device,
             enumerationMode: EnumerationModes.Bootloader,
+            timeout: bootloaderTimeout,
         });
         await this.device.close();
 
@@ -217,8 +228,13 @@ export class UhkOperations {
             await snooze(1000);
         }
 
-        this.logService.misc(`[UhkOperations] Init SerialPeripheral: ${reenumerateResult.serialPath}`);
-        const peripheral = new SerialPeripheral(reenumerateResult.serialPath);
+        // The operating system may need more time to make the serial port openable. Keep trying until the
+        // bootloader timeout expires, so a slow host cannot fail the flashing with a transient error.
+        const peripheral = await openMcuBootloaderPeripheral({
+            bootloaderVidPids: device.bootloader,
+            logService: this.logService,
+            timeout: bootloaderTimeout,
+        });
         const mcuManager = new McuManager(peripheral);
         this.logService.misc(`[UhkOperations] Read ${device.logName} firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
