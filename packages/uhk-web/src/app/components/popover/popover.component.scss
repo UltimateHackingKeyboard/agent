@@ -69,6 +69,23 @@
     border-radius: 0 0 5px 5px;
 }
 
+// Toggle buttons that look physically pushed in when active.
+.note-toggle {
+    --bs-btn-active-bg: var(--color-btn-pressed-bg);
+    --bs-btn-active-border-color: var(--color-btn-pressed-border);
+
+    &.active,
+    &:active {
+        box-shadow: inset 0 2px 4px var(--color-btn-pressed-shadow);
+    }
+
+    // Keep the keyboard focus ring on top of the pressed-in shadow.
+    &.active:focus-visible,
+    &:active:focus-visible {
+        box-shadow: inset 0 2px 4px var(--color-btn-pressed-shadow), var(--bs-btn-focus-box-shadow);
+    }
+}
+
 .popover-title {
     background-color: var(--color-popover-bg);
 
