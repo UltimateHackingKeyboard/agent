@@ -14,6 +14,7 @@ import { VersionInformation } from '../models/version-information.js';
 export const VERSIONS: VersionInformation = {
     agentRepo: ${writeValue(getGitRepo())},
     agentTag: ${writeValue(await getGitTag())},
+    agentBranch: ${writeValue(await getGitBranch())},
     version: ${writeValue(packageJson.version)},
     firmwareVersion: ${writeValue(packageJson.firmwareVersion)},
     deviceProtocolVersion: ${writeValue(packageJson.deviceProtocolVersion)},
@@ -72,6 +73,33 @@ async function getGitTag() {
     const shaResponse = await execAsync('git rev-parse --verify --short HEAD')
 
     return shaResponse.stdout.trim()
+}
+
+async function getGitBranch() {
+    if (process.env.CI) {
+        const branch = process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF_NAME;
+
+        // GITHUB_REF_NAME is the tag name on tag builds, where the branch is irrelevant
+        if (branch && !/^v\d+\.\d+\.\d+$/.test(branch)) {
+            return branch;
+        }
+
+        return undefined;
+    }
+
+    try {
+        const branchResponse = await execAsync('git rev-parse --abbrev-ref HEAD');
+        const branch = branchResponse.stdout.trim();
+
+        // "HEAD" means a detached HEAD, which has no branch
+        if (branch && branch !== 'HEAD') {
+            return branch;
+        }
+    } catch (error) {
+        console.log('Failed to determine the Agent git branch')
+    }
+
+    return undefined;
 }
 
 async function execAsync(command) {

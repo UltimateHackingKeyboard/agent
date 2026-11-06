@@ -10,7 +10,8 @@
     "experimentalDecorators": true,
     "target": "ES2024",
     "importHelpers": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noImplicitAny": true
   },
   "ts-node": {
     "esm": true,

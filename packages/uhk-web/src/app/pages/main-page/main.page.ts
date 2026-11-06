@@ -10,7 +10,7 @@ export class MainPage {
     constructor() {
     }
 
-    onActivate(e, outlet) {
+    onActivate(e: unknown, outlet: HTMLElement) {
         outlet.scrollIntoView();
     }
 }

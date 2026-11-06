@@ -55,8 +55,9 @@ export class AppRendererService {
             }));
         });
 
-        this.ipcRenderer.on('__ELECTRON_LOG_IPC__', (event: string, { level, data }) => {
-            const message = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.ipcRenderer.on('__ELECTRON_LOG_IPC__', (event: string, { level, data }: { level: string, data: any[] }) => {
+            const message: string[] = [];
 
             if (data.length > 0
                 && data[data.length - 1]?.substr

@@ -12,7 +12,7 @@ export function parseStatusBuffer(macros: Macro[], statusBuffer: string): string
 }
 
 function splitToErrorBlocks(text: string): string[] {
-    const errorBlocks = [];
+    const errorBlocks: string[] = [];
     const lines = text.split('\n');
     let block = '';
 

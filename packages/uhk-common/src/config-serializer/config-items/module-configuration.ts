@@ -1,3 +1,4 @@
+import { enumFromString } from '../../util/enum-from-string.js';
 import { assertEnum, assertFloat, assertUInt16 } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { ModuleId } from './module-configuration/module-id.js';
@@ -5,6 +6,7 @@ import { TouchpadProperty } from './module-configuration/module-property.js';
 import { KeyClusterProperty } from './module-configuration/module-property.js';
 import { ModuleProperty } from './module-configuration/module-property.js';
 import { NavigationMode } from './module-configuration/navigation-mode.js';
+import { TouchpadDragStyle } from './module-configuration/touchpad-drag-style.js';
 import { SerialisationInfo } from './serialisation-info.js';
 
 export class ModuleConfiguration {
@@ -35,6 +37,8 @@ export class ModuleConfiguration {
     invertScrollDirectionX: boolean;
     invertScrollDirectionY: boolean;
 
+    @assertFloat angle: number;
+
     // Key cluster
     keyClusterSwapAxes: boolean;
 
@@ -42,6 +46,8 @@ export class ModuleConfiguration {
     @assertUInt16 touchpadPinchZoomDivisor: number;
     @assertUInt16 touchpadHoldContinuationTimeout: number;
     @assertEnum(NavigationMode) touchpadPinchToZoom: NavigationMode = NavigationMode.Zoom;
+    @assertEnum(TouchpadDragStyle) touchpadDragStyle: TouchpadDragStyle;
+    @assertUInt16 touchpadDoubleTapAndHoldTimeout: number;
 
     constructor(other?: ModuleConfiguration) {
         if (!other) {
@@ -73,11 +79,15 @@ export class ModuleConfiguration {
         this.invertScrollDirectionX = other.invertScrollDirectionX;
         this.invertScrollDirectionY = other.invertScrollDirectionY;
 
+        this.angle = other.angle;
+
         this.keyClusterSwapAxes = other.keyClusterSwapAxes;
 
         this.touchpadPinchZoomDivisor = other.touchpadPinchZoomDivisor;
         this.touchpadHoldContinuationTimeout = other.touchpadHoldContinuationTimeout;
         this.touchpadPinchToZoom = other.touchpadPinchToZoom;
+        this.touchpadDragStyle = other.touchpadDragStyle;
+        this.touchpadDoubleTapAndHoldTimeout = other.touchpadDoubleTapAndHoldTimeout;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -163,6 +173,7 @@ export class ModuleConfiguration {
             axisLockSkew: this.axisLockSkew,
             invertScrollDirectionX: this.invertScrollDirectionX,
             invertScrollDirectionY: this.invertScrollDirectionY,
+            angle: this.angle,
         };
 
         if (this.id === ModuleId.KeyClusterLeft){
@@ -173,6 +184,8 @@ export class ModuleConfiguration {
             json.touchpadPinchZoomDivisor = this.touchpadPinchZoomDivisor;
             json.touchpadHoldContinuationTimeout = this.touchpadHoldContinuationTimeout;
             json.touchpadPinchToZoom = NavigationMode[this.touchpadPinchToZoom];
+            json.touchpadDragStyle = TouchpadDragStyle[this.touchpadDragStyle];
+            json.touchpadDoubleTapAndHoldTimeout = this.touchpadDoubleTapAndHoldTimeout;
         }
 
         return json;
@@ -190,11 +203,11 @@ export class ModuleConfiguration {
         buffer.writeUInt8(this.navigationModeFn4Layer);
         buffer.writeUInt8(this.navigationModeFn5Layer);
 
-        let numberOfProperties = 11;
+        let numberOfProperties = 12;
         if (this.id === ModuleId.KeyClusterLeft){
             numberOfProperties += 1;
         }  else if (this.id === ModuleId.TouchpadRight){
-            numberOfProperties += 3;
+            numberOfProperties += 5;
         }
 
         buffer.writeUInt8(numberOfProperties);
@@ -221,6 +234,8 @@ export class ModuleConfiguration {
         buffer.writeBoolean(this.invertScrollDirectionY);
         buffer.writeUInt8(ModuleProperty.InvertScrollDirectionX);
         buffer.writeBoolean(this.invertScrollDirectionX);
+        buffer.writeUInt8(ModuleProperty.Angle);
+        buffer.writeFloat(this.angle);
 
         if (this.id === ModuleId.KeyClusterLeft){
             buffer.writeUInt8(KeyClusterProperty.SwapAxes);
@@ -232,6 +247,10 @@ export class ModuleConfiguration {
             buffer.writeUInt8(this.touchpadPinchToZoom);
             buffer.writeUInt8(TouchpadProperty.HoldContinuationTimeout);
             buffer.writeUInt16(this.touchpadHoldContinuationTimeout);
+            buffer.writeUInt8(TouchpadProperty.DragStyle);
+            buffer.writeUInt8(this.touchpadDragStyle);
+            buffer.writeUInt8(TouchpadProperty.DoubleTapAndHoldTimeout);
+            buffer.writeUInt16(this.touchpadDoubleTapAndHoldTimeout);
         }
 
     }
@@ -242,16 +261,16 @@ export class ModuleConfiguration {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private fromJsonObjectV7(jsonObject: any): void {
-        this.id = ModuleId[jsonObject.id as string];
+        this.id = enumFromString(ModuleId, jsonObject.id);
 
-        this.navigationModeBaseLayer = NavigationMode[jsonObject.navigationModeBaseLayer as string];
-        this.navigationModeModLayer = NavigationMode[jsonObject.navigationModeModLayer as string];
-        this.navigationModeFnLayer = NavigationMode[jsonObject.navigationModeFnLayer as string];
-        this.navigationModeMouseLayer = NavigationMode[jsonObject.navigationModeMouseLayer as string];
-        this.navigationModeFn2Layer = NavigationMode[jsonObject.navigationModeFn2Layer as string];
-        this.navigationModeFn3Layer = NavigationMode[jsonObject.navigationModeFn3Layer as string];
-        this.navigationModeFn4Layer = NavigationMode[jsonObject.navigationModeFn4Layer as string];
-        this.navigationModeFn5Layer = NavigationMode[jsonObject.navigationModeFn5Layer as string];
+        this.navigationModeBaseLayer = enumFromString(NavigationMode, jsonObject.navigationModeBaseLayer);
+        this.navigationModeModLayer = enumFromString(NavigationMode, jsonObject.navigationModeModLayer);
+        this.navigationModeFnLayer = enumFromString(NavigationMode, jsonObject.navigationModeFnLayer);
+        this.navigationModeMouseLayer = enumFromString(NavigationMode, jsonObject.navigationModeMouseLayer);
+        this.navigationModeFn2Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn2Layer);
+        this.navigationModeFn3Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn3Layer);
+        this.navigationModeFn4Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn4Layer);
+        this.navigationModeFn5Layer = enumFromString(NavigationMode, jsonObject.navigationModeFn5Layer);
 
         this.speed = jsonObject.speed;
         this.baseSpeed = jsonObject.baseSpeed;
@@ -264,6 +283,7 @@ export class ModuleConfiguration {
         this.axisLockSkew = jsonObject.axisLockSkew;
         this.invertScrollDirectionX = jsonObject.invertScrollDirectionX;
         this.invertScrollDirectionY = jsonObject.invertScrollDirectionY;
+        this.angle = jsonObject.angle;
 
         if (this.id === ModuleId.KeyClusterLeft){
             this.keyClusterSwapAxes = jsonObject.keyClusterSwapAxes;
@@ -272,7 +292,9 @@ export class ModuleConfiguration {
         } else if (this.id === ModuleId.TouchpadRight){
             this.touchpadPinchZoomDivisor = jsonObject.touchpadPinchZoomDivisor;
             this.touchpadHoldContinuationTimeout = jsonObject.touchpadHoldContinuationTimeout;
-            this.touchpadPinchToZoom = NavigationMode[jsonObject.touchpadPinchToZoom as string];
+            this.touchpadPinchToZoom = enumFromString(NavigationMode, jsonObject.touchpadPinchToZoom);
+            this.touchpadDragStyle = enumFromString(TouchpadDragStyle, jsonObject.touchpadDragStyle);
+            this.touchpadDoubleTapAndHoldTimeout = jsonObject.touchpadDoubleTapAndHoldTimeout;
         }
     }
 
@@ -326,6 +348,9 @@ export class ModuleConfiguration {
                 case ModuleProperty.InvertScrollDirectionX:
                     this.invertScrollDirectionX = buffer.readBoolean();
                     break;
+                case ModuleProperty.Angle:
+                    this.angle = buffer.readFloat();
+                    break;
 
                 default: {
                     if (this.id === ModuleId.KeyClusterLeft){
@@ -349,6 +374,12 @@ export class ModuleConfiguration {
                                 break;
                             case TouchpadProperty.HoldContinuationTimeout:
                                 this.touchpadHoldContinuationTimeout = buffer.readUInt16();
+                                break;
+                            case TouchpadProperty.DragStyle:
+                                this.touchpadDragStyle = buffer.readUInt8();
+                                break;
+                            case TouchpadProperty.DoubleTapAndHoldTimeout:
+                                this.touchpadDoubleTapAndHoldTimeout = buffer.readUInt16();
                                 break;
 
                             default:

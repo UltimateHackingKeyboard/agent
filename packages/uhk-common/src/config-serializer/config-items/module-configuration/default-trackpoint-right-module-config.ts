@@ -30,5 +30,7 @@ export function defaultTrackpointRightModuleConfig(): ModuleConfiguration {
     config.invertScrollDirectionX = false;
     config.invertScrollDirectionY = false;
 
+    config.angle = 0;
+
     return config;
 }

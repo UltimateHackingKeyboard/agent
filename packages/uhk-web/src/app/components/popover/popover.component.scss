@@ -69,6 +69,23 @@
     border-radius: 0 0 5px 5px;
 }
 
+// Toggle buttons that look physically pushed in when active.
+.note-toggle {
+    --bs-btn-active-bg: var(--color-btn-pressed-bg);
+    --bs-btn-active-border-color: var(--color-btn-pressed-border);
+
+    &.active,
+    &:active {
+        box-shadow: inset 0 2px 4px var(--color-btn-pressed-shadow);
+    }
+
+    // Keep the keyboard focus ring on top of the pressed-in shadow.
+    &.active:focus-visible,
+    &:active:focus-visible {
+        box-shadow: inset 0 2px 4px var(--color-btn-pressed-shadow), var(--bs-btn-focus-box-shadow);
+    }
+}
+
 .popover-title {
     background-color: var(--color-popover-bg);
 
@@ -133,9 +150,13 @@
         min-height: 3.5rem;
         border-width: 1px;
 
+        // Match the active style of the other controls in the popover (ng-select, see
+        // $ng-select-highlight / $ng-select-box-shadow in styles/_ng-select.scss):
+        // a bright blue border plus a soft halo. Bootstrap's stock focus ring is a
+        // paler border with a heavier glow, which reads as a different style.
         &:focus {
-            border-width: 1px;
-            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2);
+            border-color: #007eff;
+            box-shadow: 0 0 0 3px rgba(0, 126, 255, 0.1);
         }
     }
 }

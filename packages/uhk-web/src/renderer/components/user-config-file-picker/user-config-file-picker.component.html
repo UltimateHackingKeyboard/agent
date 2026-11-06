@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h4 class="modal-title">Import device configuration</h4>
+</div>
+<div class="modal-body">
+    <p>
+        The system file dialog is unavailable, so pick a configuration file from
+        <strong>{{ folder }}</strong>.
+    </p>
+    <div class="list-group" *ngIf="files.length > 0; else emptyFolder">
+        <button
+            *ngFor="let file of files"
+            type="button"
+            class="list-group-item list-group-item-action"
+            (click)="select(file)"
+        >{{ file.name }}</button>
+    </div>
+    <ng-template #emptyFolder>
+        <p class="text-muted mb-0">No .json or .bin configuration file was found in this folder.</p>
+    </ng-template>
+</div>
+<div class="modal-footer">
+    <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()"
+    >Cancel</button>
+</div>

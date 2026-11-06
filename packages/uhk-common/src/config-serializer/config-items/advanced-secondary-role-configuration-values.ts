@@ -1,4 +1,5 @@
 import { UHK_80_USER_CONFIG } from '../../user-config-80.js';
+import { enumFromString } from '../../util/enum-from-string.js';
 
 import { AdvancedSecondaryRoleConfiguration } from './advanced-secondary-role-configuration';
 import { SecondaryRoleAdvancedStrategyTimeoutAction } from './secondary-role-advanced-strategy-timeout-action.js';
@@ -39,9 +40,9 @@ export const SIMPLE_ADVANCED_SECONDARY_ROLE_CONFIGURATION_PRESET: AdvancedSecond
     configuration: {
         secondaryRoleAdvancedStrategyTimeout: UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTimeout, // TODO: Firngrod, can the timeout be disabled with the new implementation?
         secondaryRoleAdvancedStrategyMinimumHoldTime: UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyMinimumHoldTime,
-        secondaryRoleAdvancedStrategyTimeoutAction: SecondaryRoleAdvancedStrategyTimeoutAction[UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTimeoutAction],
-        secondaryRoleAdvancedStrategyTimeoutType: SecondaryRoleAdvancedStrategyTimeoutType[UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTimeoutType],
-        secondaryRoleAdvancedStrategyTrigger: SecondaryRoleAdvancedStrategyTriggeringEvent[UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTrigger],
+        secondaryRoleAdvancedStrategyTimeoutAction: enumFromString(SecondaryRoleAdvancedStrategyTimeoutAction, UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTimeoutAction),
+        secondaryRoleAdvancedStrategyTimeoutType: enumFromString(SecondaryRoleAdvancedStrategyTimeoutType, UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTimeoutType),
+        secondaryRoleAdvancedStrategyTrigger: enumFromString(SecondaryRoleAdvancedStrategyTriggeringEvent, UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTrigger),
         secondaryRoleAdvancedStrategySafetyMargin: UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategySafetyMargin,
         secondaryRoleAdvancedStrategyDoubletapToPrimary: UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyDoubletapToPrimary,
         secondaryRoleAdvancedStrategyTriggerByMouse: UHK_80_USER_CONFIG.secondaryRoleAdvancedStrategyTriggerByMouse,

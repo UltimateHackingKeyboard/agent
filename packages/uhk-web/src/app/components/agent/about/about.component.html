@@ -10,7 +10,10 @@
         </div>
         <div class="mb-3">
             <div>
-                Agent version: <span class="text-bold">{{ version }}</span>
+                Agent version: <span class="text-bold">{{ version }}</span><ng-container *ngIf="!isRelease">, <a
+                    class="link-github"
+                    [href]="agentTagUrl"
+                    externalUrl>{{ agentTag }}</a><ng-container *ngIf="agentBranch">, {{ agentBranch }}</ng-container></ng-container>
             </div>
             <a class="link-github" [href]="agentGithubUrl" externalUrl>Agent on GitHub</a>
         </div>

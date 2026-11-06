@@ -130,7 +130,7 @@ function createResizeStream(
         zone.runOutsideAngular(() => {
             if (emitInitialResult) {
                 const [result] = calculateResult(nativeElement, window, offsetSize, []);
-                if (emitInZone) zone.run(() => void subscriber.next(result));
+                if (emitInZone) zone.run((): void => void subscriber.next(result));
                 else subscriber.next(result);
             }
 
@@ -138,13 +138,13 @@ function createResizeStream(
                 lastEntries = entries;
                 const [result, size] = calculateResult(nativeElement, window, offsetSize, entries);
 
-                if (emitInZone) zone.run(() => void subscriber.next(result));
+                if (emitInZone) zone.run((): void => void subscriber.next(result));
                 else subscriber.next(result);
 
                 if (!areBoundsEqual(lastBounds || {} as  Omit<NgxResizeResult, 'entries' | 'dpr'>, size)) lastBounds = size;
             };
 
-            const boundCallback = () => void callback(lastEntries);
+            const boundCallback = (): void => void callback(lastEntries);
 
             observer = new ResizeObserver(callback);
 

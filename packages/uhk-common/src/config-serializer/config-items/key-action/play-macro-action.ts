@@ -181,7 +181,7 @@ export class PlayMacroAction extends KeyAction {
         this.rgbColorFromJson(jsonObject, serialisationInfo);
 
         if (Array.isArray(jsonObject.macroArguments)) {
-            this.macroArguments = jsonObject.macroArguments.map(macroArgument => {
+            this.macroArguments = jsonObject.macroArguments.map((macroArgument: unknown) => {
                 const argument = new MacroArgumentAction();
                 argument.fromJsonObject(macroArgument);
 

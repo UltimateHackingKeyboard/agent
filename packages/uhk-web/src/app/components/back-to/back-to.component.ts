@@ -15,7 +15,7 @@ export class BackToComponent implements OnDestroy {
     backUrl: string | undefined;
     backText: string;
     backSuffix = '';
-    queryParams = {};
+    queryParams: Record<string, string> = {};
 
     private readonly cdRef = inject(ChangeDetectorRef);
     private readonly route = inject(ActivatedRoute);

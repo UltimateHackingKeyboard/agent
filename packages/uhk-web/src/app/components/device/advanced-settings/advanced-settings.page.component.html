@@ -66,6 +66,25 @@
                         Logging
                     </button>
                 </div>
+
+                <div class="bootloader-timeout mt-3">
+                    <label class="mb-0" for="bootloaderTimeout">Bootloader timeout:</label>
+                    <input id="bootloaderTimeout"
+                           type="number"
+                           class="form-control d-inline-block mx-1"
+                           style="width: 7rem"
+                           [min]="minBootloaderTimeout"
+                           [max]="maxBootloaderTimeout"
+                           [ngModel]="state.bootloaderTimeout"
+                           #bootloaderTimeoutInput
+                           (blur)="onBootloaderTimeoutChanged(bootloaderTimeoutInput.value)"
+                    >
+                    <span>ms</span>
+                    <circle-tooltip
+                        tooltip="Time that the bootloader waits for the firmware update to start. Increase it when the firmware update fails because the operating system is slow to expose the bootloader serial port, for example with a connection or an 'Access denied' error. The --bootloader-timeout command line option overrides this setting."
+                        [width]="420"
+                    />
+                </div>
             </div>
         </div>
 

@@ -8,6 +8,7 @@ import {
     AreBleAddressesPairedIpcResponse,
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
+    clampBootloaderTimeout,
     CommandLineArgs,
     ConfigurationReply,
     convertBleAddressArrayToString,
@@ -42,6 +43,7 @@ import {
     ModuleFirmwareUpgradeSkipReason,
     ModuleInfo,
     ModuleSlotToId,
+    RecoveryDeviceInfo,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
     RightSlotModules,
     SaveUserConfigurationData,
@@ -84,6 +86,7 @@ import {
     TmpFirmware,
     UhkHidDevice,
     UhkOperations,
+    UpdateDeviceFirmwareOptions,
     usbDeviceJsonFormatter,
     UsbVariables,
     waitForDevices,
@@ -94,6 +97,7 @@ import {
     backupUserConfiguration,
     copySmartMacroDocToWebserver,
     deleteUserConfigHistory,
+    getApplicationSettings,
     getBackupUserConfigurationContent,
     getDefaultFirmwarePath,
     getSmartMacroDocRootPath,
@@ -352,7 +356,7 @@ export class DeviceService {
         logService.misc('[DeviceService] init success');
     }
 
-    public async areBleAddressesPaired(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async areBleAddressesPaired(event: Electron.IpcMainEvent, args: [string[]]): Promise<void> {
         this.logService.misc('[DeviceService] Check BLE Addresses are paired');
 
         const response: AreBleAddressesPairedIpcResponse = {
@@ -387,7 +391,7 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async loadConfigurations(event: Electron.IpcMainEvent, args: []): Promise<void> {
         this.logService.misc('[DeviceService] load user configuration');
 
         let response: ConfigurationReply;
@@ -531,6 +535,22 @@ export class DeviceService {
         this.logService.misc('[DeviceService] closed.');
     }
 
+    /**
+     * The bootloader timeout comes from the command line argument or from the Advanced settings of Agent.
+     * The command line argument has precedence.
+     */
+    private async resolveBootloaderTimeout(): Promise<number> {
+        const commandLineTimeout = this.options['bootloader-timeout'];
+
+        if (commandLineTimeout !== undefined) {
+            return clampBootloaderTimeout(commandLineTimeout);
+        }
+
+        const { bootloaderTimeout } = await getApplicationSettings();
+
+        return clampBootloaderTimeout(bootloaderTimeout);
+    }
+
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
@@ -569,6 +589,10 @@ export class DeviceService {
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             const isUhk60 = uhkDeviceProduct.id === UHK_60_DEVICE.id || uhkDeviceProduct.id === UHK_60_V2_DEVICE.id;
+            const updateDeviceFirmwareOptions: UpdateDeviceFirmwareOptions = {
+                bootloaderTimeout: await this.resolveBootloaderTimeout(),
+            };
+
             let dongleHid = await getCurrentUhkDongleHID();
             if (dongleHid) {
                 this.logFirmwareUpgradeSeparator(UHK_DONGLE.logName);
@@ -600,7 +624,7 @@ export class DeviceService {
                             moduleName: UHK_DONGLE.name,
                             newFirmwareChecksum: deviceConfig.md5,
                         } as CurrentlyUpdatingModuleInfo);
-                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE, this.createFirmwareProgressReporter(event.sender, UHK_DONGLE.name));
+                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE, this.createFirmwareProgressReporter(event.sender, UHK_DONGLE.name), updateDeviceFirmwareOptions);
                         this.logService.misc('[DeviceService] Waiting for keyboard');
                         await waitForDevices(UHK_DONGLE.keyboard);
                         await dongleUhkDevice.close();
@@ -650,7 +674,7 @@ export class DeviceService {
                     newFirmwareChecksum: deviceConfig.md5,
                     moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
                 } as CurrentlyUpdatingModuleInfo);
-                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, this.createFirmwareProgressReporter(event.sender, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME));
+                await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, this.createFirmwareProgressReporter(event.sender, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME), updateDeviceFirmwareOptions);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevices(uhkDeviceProduct.keyboard);
 
@@ -724,7 +748,7 @@ export class DeviceService {
 
                     await snooze(1000);
                     const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
-                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name));
+                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name), updateDeviceFirmwareOptions);
 
                     await this.waitForUhkDeviceWithConnectPrompt(
                         event.sender,
@@ -862,7 +886,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
-    public async recoveryDevice(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async recoveryDevice(event: Electron.IpcMainEvent, args: [RecoveryDeviceInfo]): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
         };
@@ -883,7 +907,9 @@ export class DeviceService {
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-            await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct);
+            await this.operations.updateDeviceFirmware(deviceFirmwarePath, uhkDeviceProduct, undefined, {
+                bootloaderTimeout: await this.resolveBootloaderTimeout(),
+            });
 
             this.logService.misc('[DeviceService] Waiting for keyboard');
             await waitForDevices(uhkDeviceProduct.keyboard);
@@ -918,7 +944,7 @@ export class DeviceService {
         this.startPollUhkDevice();
     }
 
-    public async recoveryModule(event: Electron.IpcMainEvent, args): Promise<void> {
+    public async recoveryModule(event: Electron.IpcMainEvent, args: [number]): Promise<void> {
         const response: FirmwareUpgradeIpcResponse = {
             success: false,
         };
@@ -1207,7 +1233,7 @@ export class DeviceService {
         }
     }
 
-    private async changeKeyboardLayout(event: Electron.IpcMainEvent, args): Promise<void> {
+    private async changeKeyboardLayout(event: Electron.IpcMainEvent, args: [KeyboardLayout, unknown]): Promise<void> {
         const layout: KeyboardLayout = args[0];
         const hardwareConfiguration: HardwareConfiguration = new HardwareConfiguration().fromJsonObject(args[1]);
         const layoutName = layout === KeyboardLayout.ISO ? 'iso': 'ansi';
@@ -1490,7 +1516,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.deleteUserConfigHistoryReply, response);
     }
 
-    private async toggleI2cDebugging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
+    private async toggleI2cDebugging(_: Electron.IpcMainEvent, [enabled]: [boolean]): Promise<void> {
         this.logService.misc('[DeviceService] Toggle I2C debugging =>', enabled);
 
         this.isI2cDebuggingEnabled = enabled;
@@ -1511,7 +1537,7 @@ export class DeviceService {
         }
     }
 
-    private async toggleRightHalfZephyrLogging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
+    private async toggleRightHalfZephyrLogging(_: Electron.IpcMainEvent, [enabled]: [boolean]): Promise<void> {
         this.logService.misc('[DeviceService] Toggle Right Half zephyr logging =>', enabled);
 
         try {

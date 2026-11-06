@@ -1,6 +1,6 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions, systemPreferences } from 'electron';
 
-export const setMenu = (win: BrowserWindow, allowDevTools): void => {
+export const setMenu = (win: BrowserWindow, allowDevTools: boolean): void => {
     if (!allowDevTools && process.platform !== 'darwin') {
         win.setMenuBarVisibility(false);
 

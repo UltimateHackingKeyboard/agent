@@ -1,3 +1,22 @@
 :host {
     --slider-value-width: 50px;
 }
+
+// The extended settings sit below the navigation modes only when the two
+// columns are next to each other; otherwise they stay in the main settings
+// column. The tbody display is restored explicitly because Bootstrap has no
+// table-row-group display utility.
+tbody.extended-settings-below-navigation {
+    display: none;
+}
+
+// TODO: Bootstrap upgrade with SCSS support so a mixin could be used here
+@media (min-width: 992px) {
+    tbody.extended-settings-above-navigation {
+        display: none;
+    }
+
+    tbody.extended-settings-below-navigation {
+        display: table-row-group;
+    }
+}

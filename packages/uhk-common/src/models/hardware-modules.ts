@@ -12,7 +12,7 @@ export interface HardwareModules {
     rightModuleInfo?: RightModuleInfo;
 }
 
-export function defaultHardwareModules() {
+export function defaultHardwareModules(): HardwareModules {
     return {
         moduleInfos: [],
         rightModuleInfo: {

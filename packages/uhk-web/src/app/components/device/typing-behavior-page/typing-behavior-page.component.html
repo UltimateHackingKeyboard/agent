@@ -97,7 +97,9 @@
                 <td>
                     <div class="timeout-action-container">
                         <div class="timeout-action-action-container">
+                            <!-- appendTo: the settings panel scrolls inside an as-split-area, which clips the open dropdown -->
                             <ng-select
+                                appendTo="body"
                                 [clearable]="false"
                                 [items]="timeoutActionActionDropdownOptions"
                                 [ngModel]="secondaryRoleAdvancedStrategyTimeoutAction"
@@ -109,6 +111,7 @@
 
                         <div class="timeout-action-type-container">
                             <ng-select
+                                appendTo="body"
                                 [clearable]="false"
                                 [items]="timeoutActionTypeDropdownOptions"
                                 [ngModel]="secondaryRoleAdvancedStrategyTimeoutType"

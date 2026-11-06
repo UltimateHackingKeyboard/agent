@@ -96,6 +96,9 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --color-input-border: #{$secondary};
 
     --color-btn-secondary-border: #{$secondary};
+    --color-btn-pressed-bg: #{shade-color($btn-default-bg, 25%)};
+    --color-btn-pressed-border: #{shade-color($btn-default-border, 25%)};
+    --color-btn-pressed-shadow: rgba(0, 0, 0, 0.6);
 
     --color-icon-hover: #{$primary};
     --color-icon-hover-delete: #{$icon-hover-delete};

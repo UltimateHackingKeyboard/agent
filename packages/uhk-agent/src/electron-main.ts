@@ -29,6 +29,7 @@ import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
 import {
     captureOled,
+    DARK_WINDOW_BACKGROUND_COLOR,
     getWindowBackgroundColor,
     options,
     cliUsage,
@@ -100,6 +101,8 @@ async function createWindow() {
         await smartMacroDocService.start();
     }
 
+    const backgroundColor = await getWindowBackgroundColor();
+
     // Create the browser window.
     win = new BrowserWindow({
         title: 'UHK Agent',
@@ -107,13 +110,24 @@ async function createWindow() {
         y: loadedWindowState.y,
         width: loadedWindowState.width,
         height: loadedWindowState.height,
+        // Chromeless window: hide the OS title bar. macOS keeps its traffic
+        // lights, Windows/Linux get the native window controls back through the
+        // title bar overlay. The renderer draws the draggable region below the
+        // controls (see .window-drag-region in uhk-web).
+        titleBarStyle: 'hidden',
+        ...(isMac ? {} : {
+            titleBarOverlay: {
+                color: backgroundColor,
+                symbolColor: backgroundColor === DARK_WINDOW_BACKGROUND_COLOR ? '#bbb' : '#111',
+            }
+        }),
         webPreferences: {
             contextIsolation: false,
             spellcheck: false,
             preload: path.join(import.meta.dirname, 'preload.js')
         },
         icon: path.join(import.meta.dirname, 'renderer/assets/images/agent-app-icon.png'),
-        backgroundColor: await getWindowBackgroundColor(),
+        backgroundColor,
         show: false
     });
 

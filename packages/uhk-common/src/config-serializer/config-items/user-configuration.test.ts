@@ -12,7 +12,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', ({ assert }) => {
         jsonTester( assert, {
             userConfigMajorVersion: 15,
-            userConfigMinorVersion: 0,
+            userConfigMinorVersion: 1,
             userConfigPatchVersion: 0,
             lastSaveAgentTag: '',
             lastSaveFirmwareTag: '',
@@ -159,6 +159,7 @@ describe('user-configuration', () => {
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
                     invertScrollDirectionY: false,
+                    angle: 0,
                     keyClusterSwapAxes: false,
                     keyClusterInvertHorizontalScrolling: false
                 },
@@ -183,9 +184,12 @@ describe('user-configuration', () => {
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
                     invertScrollDirectionY: false,
+                    angle: 0,
                     touchpadPinchZoomDivisor: 4,
                     touchpadHoldContinuationTimeout: 0,
-                    touchpadPinchToZoom: 'Zoom'
+                    touchpadPinchToZoom: 'Zoom',
+                    touchpadDragStyle: 'EitherTapAndHold',
+                    touchpadDoubleTapAndHoldTimeout: 200
                 },
                 {
                     id: 'TrackballRight',
@@ -207,7 +211,8 @@ describe('user-configuration', () => {
                     axisLockFirstTickSkew: 2,
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
-                    invertScrollDirectionY: false
+                    invertScrollDirectionY: false,
+                    angle: 0
                 },
                 {
                     id: 'TrackpointRight',
@@ -229,7 +234,8 @@ describe('user-configuration', () => {
                     axisLockFirstTickSkew: 2,
                     axisLockSkew: 0.5,
                     invertScrollDirectionX: false,
-                    invertScrollDirectionY: false
+                    invertScrollDirectionY: false,
+                    angle: 0
                 }
             ],
             macros: [],

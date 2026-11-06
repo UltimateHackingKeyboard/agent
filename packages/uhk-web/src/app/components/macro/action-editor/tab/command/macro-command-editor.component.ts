@@ -271,7 +271,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.setCursorPosition();
 
         if (!this.changeObserver$) {
-            Observable.create(observer => {
+            Observable.create((observer: Observer<string>) => {
                 this.changeObserver$ = observer;
             }).pipe(
                 debounceTime(MACRO_CHANGE_DEBOUNCE_TIME),
