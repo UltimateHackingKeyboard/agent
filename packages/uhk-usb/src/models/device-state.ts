@@ -2,6 +2,7 @@ export interface DeviceState {
     isEepromBusy: boolean;
     isMacroStatusDirty: boolean;
     isPeerBondBroken: boolean;
+    isModuleFlashBusy: boolean;
     isZephyrLogAvailable: boolean;
     areHalvesMerged: boolean;
     isLeftHalfConnected: boolean;

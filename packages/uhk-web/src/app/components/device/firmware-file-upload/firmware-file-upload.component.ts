@@ -3,6 +3,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+import { ContextMenuComponent } from '@perfectmemory/ngx-contextmenu';
 import { UploadFileData } from 'uhk-common';
 import { UpdateFirmwareWithPayload } from '../../../models';
 
@@ -17,6 +18,7 @@ export class FirmwareFileUploadComponent {
 
     @Input() showPopover: boolean;
     @Input() disabled: boolean;
+    @Input() recoveryContextMenu: ContextMenuComponent<unknown>;
 
     @Output() fileChanged = new EventEmitter<UpdateFirmwareWithPayload>();
     @ViewChild('inputControl', { static: true }) fileUpload: ElementRef<HTMLInputElement>;

@@ -180,7 +180,9 @@ export class SmartMacroDocService {
             // not exist on GitHub, in which case we fall back to the bundled firmware grammar.
             return await this.downloadDocumentation(event, firmwareRepoInfo);
         } catch (error) {
-            this.logService.error(serviceLogMessage('download running firmware documentation failed'), error);
+            const message: string = error?.message ?? '';
+            const reason = message.split(' - ')[0];
+            this.logService.error(serviceLogMessage(`download running firmware documentation failed: ${reason}. This is normal for unpublished builds.`));
             return this.fallbackToBundledFirmware(event);
         }
     }
