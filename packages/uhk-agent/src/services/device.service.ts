@@ -90,7 +90,6 @@ import {
     usbDeviceJsonFormatter,
     UsbVariables,
     waitForDevices,
-    waitForUhkDeviceConnected,
     waitUntil,
 } from 'uhk-usb';
 import {
@@ -115,6 +114,9 @@ import { ZephyrLogService } from './zephyr-log.service';
 const DONGLE_BOND_POLL_ITERATIONS = 40;
 
 const DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE = '4.21.0';
+
+const UHK80_LEFT_HALF_CONNECT_MESSAGE = 'To continue the firmware upgrade, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)';
+const UHK80_RIGHT_HALF_CONNECT_MESSAGE = 'To finish the firmware upgrade, now connect the right half via USB. (You can disconnect the left half or use a second USB cable.)';
 
 interface UpdateModuleFirmwareOptions {
     eventSender: Electron.WebContents;
@@ -708,6 +710,22 @@ export class DeviceService {
                 this.logService.misc('Skip right firmware upgrade.');
             }
 
+            const isUhk80 = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
+
+            // The UHK 80 right module (trackpoint, touchpad or trackball) is flashed through the right half,
+            // so update it right after the right half firmware, while the right half is still connected.
+            if (isUhk80) {
+                await this.updateModuleFirmware({
+                    eventSender: event.sender,
+                    forceUpgrade: data.forceUpgrade,
+                    hardwareModules,
+                    moduleSlotId: ModuleSlotToId.rightModule,
+                    packageJson,
+                    uhkDeviceProduct,
+                    uhkDeviceProtocolVersion: hardwareModules.rightModuleInfo.deviceProtocolVersion,
+                });
+            }
+
             const leftModuleInfo: ModuleInfo = hardwareModules.moduleInfos
                 .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
             const leftModuleFirmwareInfo = hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
@@ -743,18 +761,12 @@ export class DeviceService {
                     await this.waitForUhkDeviceWithConnectPrompt(
                         event.sender,
                         UHK_80_DEVICE_LEFT,
-                        'To continue the firmware upgrade, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)'
+                        UHK80_LEFT_HALF_CONNECT_MESSAGE
                     );
 
                     await snooze(1000);
                     const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
                     await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT, this.createFirmwareProgressReporter(event.sender, leftModuleInfo.module.name), updateDeviceFirmwareOptions);
-
-                    await this.waitForUhkDeviceWithConnectPrompt(
-                        event.sender,
-                        UHK_80_DEVICE_LEFT,
-                        'To continue the firmware upgrade, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)'
-                    );
 
                     await this.updateModuleFirmware({
                         eventSender: event.sender,
@@ -765,12 +777,6 @@ export class DeviceService {
                         uhkDeviceProduct: UHK_80_DEVICE_LEFT,
                         uhkDeviceProtocolVersion: packageJson.deviceProtocolVersion,
                     });
-
-                    await this.waitForUhkDeviceWithConnectPrompt(
-                        event.sender,
-                        uhkDeviceProduct,
-                        'To finish the firmware upgrade, now connect the right half via USB. (You can disconnect the left half or use a second USB cable.)'
-                    );
                 }
                 else {
                     if (this.options['legacy-kboot'] || isVersionLt(hardwareModules.rightModuleInfo.deviceProtocolVersion, DEVICE_PROTOCOL_VERSION_SUPPORT_KBOOT_NATIVE)) {
@@ -817,8 +823,6 @@ export class DeviceService {
                 } as ModuleFirmwareUpgradeSkipInfo);
                 this.logService.misc('[DeviceService] Skip left firmware upgrade.');
 
-                const isUhk80 = uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT;
-
                 await this.updateModuleFirmware({
                     eventSender: event.sender,
                     forceUpgrade: data.forceUpgrade,
@@ -830,15 +834,28 @@ export class DeviceService {
                 });
             }
 
-            await this.updateModuleFirmware({
-                eventSender: event.sender,
-                forceUpgrade: data.forceUpgrade,
-                hardwareModules,
-                moduleSlotId: ModuleSlotToId.rightModule,
-                packageJson,
-                uhkDeviceProduct,
-                uhkDeviceProtocolVersion: hardwareModules.rightModuleInfo.deviceProtocolVersion,
-            });
+            // The UHK 80 is driven by its right half, and the left half work may have required swapping the
+            // USB cable, so make sure the right half is plugged back in before the upgrade is considered done.
+            if (isUhk80) {
+                await this.waitForUhkDeviceWithConnectPrompt(
+                    event.sender,
+                    uhkDeviceProduct,
+                    UHK80_RIGHT_HALF_CONNECT_MESSAGE
+                );
+            }
+
+            // The UHK 80 right module is already updated right after the right half firmware.
+            if (!isUhk80) {
+                await this.updateModuleFirmware({
+                    eventSender: event.sender,
+                    forceUpgrade: data.forceUpgrade,
+                    hardwareModules,
+                    moduleSlotId: ModuleSlotToId.rightModule,
+                    packageJson,
+                    uhkDeviceProduct,
+                    uhkDeviceProtocolVersion: hardwareModules.rightModuleInfo.deviceProtocolVersion,
+                });
+            }
 
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
@@ -978,6 +995,14 @@ export class DeviceService {
             if (useKbootNative) {
                 await this.dongleZephyrLogService.disable();
                 await this.leftHalfZephyrLogService.disable();
+
+                if (flashingDevice === UHK_80_DEVICE_LEFT) {
+                    await this.waitForUhk80LeftHalfApplicationWithConnectPrompt(
+                        event.sender,
+                        `To recover the ${uhkModule.name} module, now connect the left half via USB. (You can disconnect the right half or use a second USB cable.)`
+                    );
+                }
+
                 await this.updateModuleWithKbootNative(firmwarePath, flashingDevice, uhkModule, undefined, prompt);
             }
             else {
@@ -1764,6 +1789,13 @@ export class DeviceService {
                 this.logModuleFlashMethod(moduleInfo.module.name, uhkDeviceProduct, uhkDeviceProtocolVersion, useKbootNative);
 
                 if (useKbootNative) {
+                    if (uhkDeviceProduct === UHK_80_DEVICE_LEFT) {
+                        await this.waitForUhk80LeftHalfApplicationWithConnectPrompt(
+                            eventSender,
+                            UHK80_LEFT_HALF_CONNECT_MESSAGE
+                        );
+                    }
+
                     await this.updateModuleWithKbootNative(
                         firmwarePath,
                         uhkDeviceProduct,
@@ -1802,18 +1834,49 @@ export class DeviceService {
         }
     }
 
-    private async waitForUhkDeviceWithConnectPrompt(
+    /**
+     * Waits until the device is reachable, showing a connect prompt while it is not.
+     */
+    private async waitForDeviceWithConnectPrompt(
+        eventSender: Electron.WebContents,
+        isConnected: () => Promise<boolean>,
+        message: string
+    ): Promise<void> {
+        if (!(await isConnected())) {
+            this.firmwareUpgradePrompt(eventSender, message)
+        }
+
+        await waitUntil({
+            shouldWait: async () => !(await isConnected()),
+            wait: 250,
+        });
+
+        this.firmwareUpgradePrompt(eventSender, undefined)
+    }
+
+    private waitForUhkDeviceWithConnectPrompt(
         eventSender: Electron.WebContents,
         device: UhkDeviceProduct,
         message: string
     ): Promise<void> {
-        if (!(await isUhkDeviceConnected(device))) {
-            this.firmwareUpgradePrompt(eventSender, message)
-        }
+        return this.waitForDeviceWithConnectPrompt(eventSender, () => isUhkDeviceConnected(device), message);
+    }
 
-        await waitForUhkDeviceConnected(device);
-
-        this.firmwareUpgradePrompt(eventSender, undefined)
+    /**
+     * The UHK 80 left module is flashed through the left half's own USB connection, and the native kboot
+     * commands go to its application, so the application must be reachable. The plain
+     * isUhkDeviceConnected() check also matches the left half bootloader, which is still enumerated for a
+     * moment after reflashing the left half.
+     */
+    private waitForUhk80LeftHalfApplicationWithConnectPrompt(
+        eventSender: Electron.WebContents,
+        message: string
+    ): Promise<void> {
+        return this.waitForDeviceWithConnectPrompt(
+            eventSender,
+            async () => (await getCurrenUhk80LeftHID()) !== undefined,
+            message
+        );
     }
 
     private firmwareUpgradePrompt(
