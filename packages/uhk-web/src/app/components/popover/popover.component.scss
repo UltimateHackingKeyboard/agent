@@ -150,9 +150,13 @@
         min-height: 3.5rem;
         border-width: 1px;
 
+        // Match the active style of the other controls in the popover (ng-select, see
+        // $ng-select-highlight / $ng-select-box-shadow in styles/_ng-select.scss):
+        // a bright blue border plus a soft halo. Bootstrap's stock focus ring is a
+        // paler border with a heavier glow, which reads as a different style.
         &:focus {
-            border-width: 1px;
-            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2);
+            border-color: #007eff;
+            box-shadow: 0 0 0 3px rgba(0, 126, 255, 0.1);
         }
     }
 }
