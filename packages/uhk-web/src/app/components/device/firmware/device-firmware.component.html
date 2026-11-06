@@ -86,6 +86,7 @@
                     </ng-template>
                 </context-menu>
                 <firmware-file-upload [disabled]="flashFirmwareButtonDisabled$ | async"
+                                      [recoveryContextMenu]="recoveryContextMenu"
                                       class="action-button"
                                       (fileChanged)="changeFile($event)"
                                       [showPopover]="firmwareUpgradeStates.showForceFirmwareUpgradeWith"
