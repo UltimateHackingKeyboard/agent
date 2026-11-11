@@ -1,0 +1,60 @@
+# Local development manifest. Wraps the AppImage built from the working tree
+# instead of the published release. Run `TEST_BUILD=true npm run pack` in the
+# repository root first, then build this file from the packaging/flatpak directory.
+app-id: com.ultimategadgetlabs.agent
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '25.08'
+command: run.sh
+separate-locales: false
+finish-args:
+  # Rendering
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
+  # Agent downloads firmware, firmware documentation and checks for updates
+  - --share=network
+  # Raw HID (hidraw) and USB serial (ttyACM/ttyUSB) access to the keyboard, its
+  # halves and its modules. `--device=all` is required: the narrower --device=usb
+  # and --device=input do not cover hot-plugged hidraw nodes.
+  - --device=all
+  # User-chosen firmware files and user configuration import/export
+  - --filesystem=home
+  # System tray + notifications
+  - --socket=pulseaudio
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.StatusNotifierWatcher
+modules:
+  - name: uhk-agent
+    buildsystem: simple
+    build-commands:
+      - chmod +x uhk-agent-x86_64.AppImage 2>/dev/null || true
+      - ./uhk-agent-x86_64.AppImage --appimage-extract
+      - mkdir -p ${FLATPAK_DEST}/main
+      - cp -a squashfs-root/. ${FLATPAK_DEST}/main/
+      - install -Dm755 run.sh ${FLATPAK_DEST}/bin/run.sh
+      - install -Dm644 ${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 ${FLATPAK_ID}.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png
+    sources:
+      - type: file
+        path: ../../dist/UHK.Agent-11.0.0-linux-x86_64.AppImage
+        dest-filename: uhk-agent-x86_64.AppImage
+      - type: script
+        dest-filename: run.sh
+        commands:
+          - mkdir -p "${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
+          - export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
+          - export LD_LIBRARY_PATH="/app/main/usr/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+          - exec zypak-wrapper /app/main/uhk-agent "$@"
+      - type: file
+        path: com.ultimategadgetlabs.agent.desktop
+      - type: file
+        path: com.ultimategadgetlabs.agent.metainfo.xml
+      - type: file
+        path: com.ultimategadgetlabs.agent.png

@@ -73,7 +73,7 @@ modules:
           - export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
           # The AppImage bundles libappindicator/libnotify/libXss for the tray icon.
           - export LD_LIBRARY_PATH="/app/main/usr/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
-          - exec zypak-wrapper /app/main/uhk-agent --ozone-platform-hint=auto "$@"
+          - exec zypak-wrapper /app/main/uhk-agent "$@"
       - type: file
         path: com.ultimategadgetlabs.agent.desktop
       - type: file
