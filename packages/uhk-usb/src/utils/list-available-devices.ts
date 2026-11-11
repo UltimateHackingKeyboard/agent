@@ -53,7 +53,13 @@ export async function listAvailableDevices(options: ListAvailableDevicesOptions)
         }
     }
 
-    const serialDevices = options.serialDevices ?? await SerialPort.list();
+    const serialDevices = options.serialDevices ?? await SerialPort.list().catch((error): PortInfo[] => {
+        // `SerialPort.list()` shells out to `udevadm`, which is not available in a
+        // Flatpak sandbox. Serial ports are only logged here, so a listing failure
+        // must not fail the device permission check.
+        options.logService.misc('[UhkHidDevice] Cannot list serial devices:', error);
+        return [];
+    });
     for (const serialDevice of serialDevices) {
         const id = `s-${serialDevice.vendorId}-${serialDevice.productId}-${serialDevice.path}`
         const existingPrevDevice = prevDevices.get(id);

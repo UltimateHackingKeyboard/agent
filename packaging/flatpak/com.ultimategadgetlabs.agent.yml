@@ -48,7 +48,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/UltimateHackingKeyboard/agent/releases/download/v11.0.0/UHK.Agent-11.0.0-linux-x86_64.AppImage
-        sha512: j0jeR2m+lLcAgNBhDH73S4L4HoMisGJIQtJOxz0JUQDyOpAeeBu81lfH0wGAJU8fqOr3uzxk4wxuceoN5deudw==
+        sha512: 8f48de4769be94b70080d0610c7ef74b82f81e8322b0624842d24ec73d095100f23a901e781bbcd657c7d30180254f1fa8eaf7bb3c64e30c6e71ea0de5d7ae77
         dest-filename: uhk-agent-x86_64.AppImage
         only-arches:
           - x86_64
@@ -58,7 +58,7 @@ modules:
           is-main-source: true
       - type: file
         url: https://github.com/UltimateHackingKeyboard/agent/releases/download/v11.0.0/UHK.Agent-11.0.0-linux-arm64.AppImage
-        sha512: nk/h5uqwt08ojbv9QjcrDyoT8JCc5phgVdPm22QF1xpPnG+EtHKo40q5x9+FyIZR4TSWRQ+St9m0OV9zfbSxPw==
+        sha512: 9e4fe1e6eab0b74f288dbbfd42372b0f2a13f0909ce6986055d3e6db6405d71a4f9c6f84b472a8e34ab9c7df85c88651e13496450f92b7d9b4395f737db4b13f
         dest-filename: uhk-agent-aarch64.AppImage
         only-arches:
           - aarch64

@@ -21,8 +21,11 @@ against the Flathub Electron base app through
 
 ## Building locally
 
+Run from this directory — the manifest's `path:` sources are relative to it.
+
 ```
-flatpak install flathub org.freedesktop.Platform//25.08 org.freedesktop.Sdk//25.08 org.electronjs.Electron2.BaseApp//25.08
+cd packaging/flatpak
+flatpak install --user flathub org.freedesktop.Platform//25.08 org.freedesktop.Sdk//25.08 org.electronjs.Electron2.BaseApp//25.08
 flatpak-builder --user --install --force-clean build-dir com.ultimategadgetlabs.agent.yml
 flatpak run com.ultimategadgetlabs.agent
 ```
@@ -48,12 +51,18 @@ Each Agent release produces a new AppImage. Flathub's
 `latest-linux-arm64.yml` published alongside the release and opens a PR that bumps the
 `url` and `sha512` automatically, so the manifest should not need manual updates.
 
-To bump it by hand, replace the version in both `url`s and copy the new `sha512` values
-from the corresponding `latest-linux*.yml`:
+To bump it by hand, replace the version in both `url`s and convert the new `sha512`
+values from the corresponding `latest-linux*.yml` to hex:
 
 ```
 curl -sSL https://github.com/UltimateHackingKeyboard/agent/releases/latest/download/latest-linux.yml
 curl -sSL https://github.com/UltimateHackingKeyboard/agent/releases/latest/download/latest-linux-arm64.yml
+```
+
+The yml files publish the digest as base64; flatpak-builder expects hex. For example:
+
+```
+echo 'j0jeR2m+lLcAgNBhDH73S4L4HoMisGJIQtJOxz0JUQDyOpAeeBu81lfH0wGAJU8fqOr3uzxk4wxuceoN5deudw==' | base64 -d | xxd -p -c 256
 ```
 
 Also add a `<release>` entry to `com.ultimategadgetlabs.agent.metainfo.xml`.
