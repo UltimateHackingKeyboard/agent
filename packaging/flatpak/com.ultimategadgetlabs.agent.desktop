@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=UHK Agent
+Comment=Agent is the configuration application of the Ultimate Hacking Keyboard
+Exec=run.sh %U
+Icon=com.ultimategadgetlabs.agent
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=UHK;keyboard;keymap;macro;config;
+StartupWMClass=UHK Agent

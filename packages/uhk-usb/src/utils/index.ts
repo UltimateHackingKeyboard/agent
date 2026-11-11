@@ -21,6 +21,7 @@ export * from './get-package-json-from-path-async.js';
 export * from './get-uhk-hid-devices.js';
 export * from './get-uhk-dongles.js';
 export * from './is-dongle-communication-device.js';
+export * from './is-flatpak.js';
 export * from './is-left-half-communication-device.js';
 export * from './is-right-half-communication-device.js';
 export * from './is-serial-port-in-vid-pids.js';

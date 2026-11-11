@@ -10,6 +10,7 @@ import {
     IpcEvents,
     LogService,
 } from 'uhk-common';
+import { isFlatpak } from 'uhk-usb';
 import { MainServiceBase } from './main-service-base';
 import { getUpdaterLoggerService } from '../util';
 
@@ -81,11 +82,21 @@ export class AppUpdateService extends MainServiceBase {
         });
 
         ipcMain.on(IpcEvents.autoUpdater.updateAndRestart, () => {
+            if (isFlatpak()) {
+                this.logService.misc('[AppUpdateService] Update and restart is not supported in Flatpak.');
+                return;
+            }
+
             this.logService.misc('[AppUpdateService] update and restart from renderer process');
             return autoUpdater.quitAndInstall(true, true);
         });
 
         ipcMain.on(IpcEvents.autoUpdater.downloadUpdate, () => {
+            if (isFlatpak()) {
+                this.logService.misc('[AppUpdateService] Download update is not supported in Flatpak.');
+                return;
+            }
+
             this.logService.misc('[AppUpdateService] download update from renderer process');
             autoUpdater.downloadUpdate()
                 .catch((error) => {
@@ -118,6 +129,17 @@ export class AppUpdateService extends MainServiceBase {
         if (isDev) {
             const msg = '[AppUpdateService] Application update is not working in dev mode.';
             this.logService.misc(msg);
+
+            if (this.sendAutoUpdateNotification) {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+            }
+
+            return;
+        }
+
+        if (isFlatpak()) {
+            const msg = 'Agent updates are handled by Flathub. Update Agent through your software center.';
+            this.logService.misc(`[AppUpdateService] ${msg}`);
 
             if (this.sendAutoUpdateNotification) {
                 this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);

@@ -67,6 +67,7 @@ import {
     getNumberOfConnectedDevices,
     getUhkHidDevices,
     isDongleCommunicationDevice,
+    isFlatpak,
     isSerialPortInVidPids,
     listAvailableDevices,
     snooze,
@@ -779,6 +780,15 @@ export class UhkHidDevice {
         }
 
         if (this.options['preserve-udev-rules']) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        if (isFlatpak()) {
+            // Flatpak grants device access through its own permissions and does not
+            // expose the host udev rules to the sandbox. Whether the keyboard is
+            // usable is determined by hasPermission() opening the device, so the
+            // missing /etc/udev/rules.d/50-uhk60.rules must not force the setup page.
             this._udevRulesInfo = UdevRulesInfo.Ok;
             return UdevRulesInfo.Ok;
         }

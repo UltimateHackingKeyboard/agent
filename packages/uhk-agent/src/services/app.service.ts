@@ -3,6 +3,7 @@ import settings from 'electron-settings';
 import * as os from 'os';
 
 import { AppStartInfo, CommandLineArgs, IpcEvents, LogService } from 'uhk-common';
+import { isFlatpak } from 'uhk-usb';
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
 import { getUdevFileContentAsync, isRunningOnWayland } from '../util';
@@ -49,6 +50,7 @@ export class AppService extends MainServiceBase {
                     log: this.options.log
                 },
                 isRunningOnWayland: isRunningOnWayland(),
+                isFlatpak: isFlatpak(),
                 platform: process.platform as string,
                 osVersion: os.release(),
                 udevFileContent: await getUdevFileContentAsync(this.rootDir)

@@ -4,6 +4,7 @@ import path from 'node:path';
 import * as sudo from '@vscode/sudo-prompt';
 
 import { CommandLineArgs, IpcEvents, LogService, IpcResponse } from 'uhk-common';
+import { isFlatpak } from 'uhk-usb';
 import { makeTmpDir } from 'uhk-fs';
 
 import { DeviceService } from './device.service';
@@ -52,6 +53,19 @@ export class SudoService {
     }
 
     private async setPrivilegeOnLinux(event: Electron.IpcMainEvent) {
+        if (isFlatpak()) {
+            this.logService.misc('[SudoService] Cannot set privilege in Flatpak, skipping.');
+
+            const response = new IpcResponse();
+            response.success = false;
+            response.error = {
+                message: 'Agent runs in a Flatpak sandbox, so it cannot install the udev rules. Install them on the host system.'
+            };
+
+            event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
+            return;
+        }
+
         await this.deviceService.stopPollUhkDevice();
         const tmpDirectory = await makeTmpDir();
         const rulesDir = path.join(this.rootDir, 'rules');

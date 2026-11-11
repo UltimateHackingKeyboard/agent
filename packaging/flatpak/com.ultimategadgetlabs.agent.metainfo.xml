@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Ultimate Gadget Laboratories Kft. -->
+<component type="desktop-application">
+  <id>com.ultimategadgetlabs.agent</id>
+
+  <name>UHK Agent</name>
+  <summary>Configure the Ultimate Hacking Keyboard</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-proprietary</project_license>
+
+  <developer id="com.ultimategadgetlabs">
+    <name>Ultimate Gadget Laboratories</name>
+  </developer>
+
+  <description>
+    <p>
+      Agent is the configuration application of the Ultimate Hacking Keyboard. It lets
+      you remap keys, create layers, assign macros, set up the modules and update the
+      firmware of your keyboard.
+    </p>
+    <p>
+      A UHK connected over USB is required: Agent is the tool that talks to the keyboard
+      and writes your configuration to it.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">com.ultimategadgetlabs.agent.desktop</launchable>
+
+  <url type="homepage">https://ultimatehackingkeyboard.com</url>
+  <url type="bugtracker">https://github.com/UltimateHackingKeyboard/agent/issues</url>
+  <url type="vcs-browser">https://github.com/UltimateHackingKeyboard/agent</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Editing the keymap of a UHK 80</caption>
+      <image type="source">https://uhk.io/wp-content/uploads/2025/08/agent-screenshot-uhk80-1536x780.png</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="11.0.0" date="2026-10-06"/>
+  </releases>
+
+  <content_rating type="oars-1.1"/>
+
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </recommends>
+</component>

@@ -31,6 +31,7 @@ export interface State {
     minimizeToTray: boolean;
     errorPanelHeight: number;
     isRunningOnWayland: boolean;
+    isFlatpak: boolean;
     started: boolean;
     commandLineArgs: CommandLineArgs;
     undoableNotification?: Notification;
@@ -60,6 +61,7 @@ export const initialState: State = {
     minimizeToTray: false,
     errorPanelHeight: DEFAULT_ERROR_PANEL_HEIGHT,
     isRunningOnWayland: false,
+    isFlatpak: false,
     started: false,
     commandLineArgs: {},
     navigationCountAfterNotification: 0,
@@ -92,6 +94,7 @@ export function reducer(
                 ...state,
                 commandLineArgs: payload.commandLineArgs,
                 isRunningOnWayland: payload.isRunningOnWayland,
+                isFlatpak: payload.isFlatpak,
                 platform: payload.platform,
                 osVersion: payload.osVersion,
                 udevFileContent: payload.udevFileContent

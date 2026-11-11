@@ -3,12 +3,17 @@
              [smallText]="true"
              ></uhk-message>
 
-<div *ngIf="state.updateUdevRules" class="text-center">
+<div *ngIf="state.updateUdevRules && !state.isFlatpak" class="text-center">
     You seem to have an old udev rule file installed. New Agent versions require and updated udev rule file to find
     your UHK.
 </div>
 
-<div class="text-center">
+<div *ngIf="state.isFlatpak" class="text-center">
+    Agent runs in a Flatpak sandbox, so it cannot set up the udev rules itself. Run the command below on your host
+    system to grant UHK access.
+</div>
+
+<div *ngIf="!state.isFlatpak" class="text-center">
     <button class="btn btn-default btn-lg btn-primary mt-4"
             (click)="setUpPermissions.emit()">
         <span *ngIf="!state.updateUdevRules">Set up permissions</span>
@@ -18,20 +23,20 @@
 <div class="mt-2">
     <div class="text-center">
         <a class="link-inline"
-           *ngIf="state.showWhatWillThisDo"
+           *ngIf="state.showWhatWillThisDo && !state.isFlatpak"
            (click)="whatWillThisDo.emit()">What will this do?
         </a>
     </div>
 
     <div>
         <p class="privilege-error"
-           *ngIf="state.permissionSetupFailed">
+           *ngIf="state.permissionSetupFailed && !state.isFlatpak">
             Agent wasn't able to set up permissions via PolicyKit. This is most likely because the
             <code>polkit</code> package is not installed on your system.
         </p>
 
-        <div *ngIf="state.showWhatWillThisDoContent">
-            If you want to set up permissions manually:
+        <div *ngIf="state.showWhatWillThisDoContent || state.isFlatpak">
+            <span *ngIf="!state.isFlatpak">If you want to set up permissions manually:</span>
             <udev-rules [udevFileContent]="state.udevFileContent"></udev-rules>
         </div>
     </div>
