@@ -77,12 +77,22 @@ Also add a `<release>` entry to `com.ultimategadgetlabs.agent.metainfo.xml`.
 
 ## Submitting to Flathub
 
-The Flathub repository is separate from this one. Copy `com.ultimategadgetlabs.agent.*`
-into a checkout of a `flathub/com.ultimategadgetlabs.agent` repository and open a PR
-against [flathub/flathub](https://github.com/flathub/flathub) (see
-[the submission docs](https://docs.flathub.org/docs/for-app-authors/submission)). The
-maintainer who owns the `ultimategadgetlabs.com` domain must be involved, since Flathub
-verifies domain ownership.
+The submission is a pull request against the **`new-pr`** branch of
+[`flathub/flathub`](https://github.com/flathub/flathub) — not a new repository. The
+`flathub/com.ultimategadgetlabs.agent` repository is created by the Flathub reviewers
+after the submission is approved and merged; it does not exist yet.
+
+The process (see [the submission docs](https://docs.flathub.org/docs/for-app-authors/submission)):
+
+1. Fork `flathub/flathub` (leave "Copy the master branch only" unchecked).
+2. Check out `new-pr` and create a branch from it.
+3. Add the `com.ultimategadgetlabs.agent.*` files in a `com.ultimategadgetlabs.agent/`
+   directory, commit and push.
+4. Open the PR against the **`new-pr`** base branch, titled "Add
+   com.ultimategadgetlabs.agent".
+
+The maintainer who owns the `ultimategadgetlabs.com` domain must be involved, since
+Flathub verifies domain ownership.
 
 The manifest must point at a release that includes the sysfs fallback, otherwise firmware
 upgrades fail in the sandbox. Release the fix first, then update the manifest's `url` and
