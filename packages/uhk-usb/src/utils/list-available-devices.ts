@@ -1,9 +1,9 @@
 import { Device } from 'node-hid';
 import { PortInfo } from '@serialport/bindings-interface';
-import { SerialPort } from 'serialport';
 import { LogService } from 'uhk-common';
 
 import { getUhkHidDevices } from './get-uhk-hid-devices.js';
+import { safeListSerialPorts } from './safe-list-serial-ports.js';
 import { usbDeviceJsonFormatter } from './usb-device-json-formatter.js';
 
 enum UsbDeviceConnectionStates {
@@ -53,13 +53,7 @@ export async function listAvailableDevices(options: ListAvailableDevicesOptions)
         }
     }
 
-    const serialDevices = options.serialDevices ?? await SerialPort.list().catch((error): PortInfo[] => {
-        // `SerialPort.list()` shells out to `udevadm`, which is not available in a
-        // Flatpak sandbox. Serial ports are only logged here, so a listing failure
-        // must not fail the device permission check.
-        options.logService.misc('[UhkHidDevice] Cannot list serial devices:', error);
-        return [];
-    });
+    const serialDevices = options.serialDevices ?? await safeListSerialPorts(options.logService);
     for (const serialDevice of serialDevices) {
         const id = `s-${serialDevice.vendorId}-${serialDevice.productId}-${serialDevice.path}`
         const existingPrevDevice = prevDevices.get(id);

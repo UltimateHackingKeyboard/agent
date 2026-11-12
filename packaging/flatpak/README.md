@@ -10,6 +10,14 @@ it at build time, unpacks it with `--appimage-extract` (no FUSE needed) and runs
 against the Flathub Electron base app through
 [zypak](https://github.com/refi64/zypak), which provides a working Chromium sandbox.
 
+## Sandbox limitations
+
+The sandbox has no `udevadm`, so `SerialPort.list()` cannot enumerate serial ports. Agent
+therefore falls back to reading `/sys/class/tty` on Linux. The MCU bootloader is a
+CDC-ACM serial device, so this fallback is required for firmware upgrades to work. It is
+implemented in `packages/uhk-usb/src/utils/safe-list-serial-ports.ts` and is not
+Flatpak-specific.
+
 ## Files
 
 | File | Purpose |
@@ -75,6 +83,10 @@ against [flathub/flathub](https://github.com/flathub/flathub) (see
 [the submission docs](https://docs.flathub.org/docs/for-app-authors/submission)). The
 maintainer who owns the `ultimategadgetlabs.com` domain must be involved, since Flathub
 verifies domain ownership.
+
+The manifest must point at a release that includes the sysfs fallback, otherwise firmware
+upgrades fail in the sandbox. Release the fix first, then update the manifest's `url` and
+`sha512` (or let `x-checker-data` do it).
 
 Before submitting:
 

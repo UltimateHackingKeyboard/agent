@@ -1,7 +1,6 @@
 import isRoot from 'is-root';
 import { Device, HIDAsync } from 'node-hid';
 import * as path from 'path';
-import { SerialPort } from 'serialport';
 import {
     ALL_UHK_DEVICES,
     BLE_ADDRESS_LENGTH,
@@ -70,6 +69,7 @@ import {
     isFlatpak,
     isSerialPortInVidPids,
     listAvailableDevices,
+    safeListSerialPorts,
     snooze,
     usbDeviceJsonFormatter,
     validateConnectedDevices,
@@ -403,7 +403,7 @@ export class UhkHidDevice {
             }
         }
 
-        const serialDevices = await SerialPort.list();
+        const serialDevices = await safeListSerialPorts(this.logService);
 
         for (const serialDevice of serialDevices) {
             if (isSerialPortInVidPids(serialDevice, UHK_DONGLE.bootloader)) {
@@ -511,7 +511,7 @@ export class UhkHidDevice {
             for (const vidPid of vidPidPairs) {
 
                 if (enumerationMode === EnumerationModes.Bootloader && device.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
-                    const serialDevices = await SerialPort.list();
+                    const serialDevices = await safeListSerialPorts(this.logService);
                     await listAvailableDevices({
                         serialDevices,
                         logService: this.logService,
