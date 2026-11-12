@@ -6,6 +6,12 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [11.0.1] - 2026-11-12
+
+Firmware: 18.0.3 | Device Protocol: 4.19.0 | User Config: 15.0.0 | Hardware Config: 1.0.0
+
+- Fix: list serial ports via sysfs when `udevadm` is unavailable, so the keyboard and firmware updates work in the Flatpak sandbox.
+
 ## [11.0.0] - 2026-10-06
 
 Firmware: 18.0.3 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v18.0.3)] | Device Protocol: 4.19.0 | User Config: 15.0.0 | Hardware Config: 1.0.0
