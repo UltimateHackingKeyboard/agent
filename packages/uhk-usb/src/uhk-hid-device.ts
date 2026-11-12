@@ -1,7 +1,6 @@
 import isRoot from 'is-root';
 import { Device, HIDAsync } from 'node-hid';
 import * as path from 'path';
-import { SerialPort } from 'serialport';
 import {
     ALL_UHK_DEVICES,
     BLE_ADDRESS_LENGTH,
@@ -67,8 +66,10 @@ import {
     getNumberOfConnectedDevices,
     getUhkHidDevices,
     isDongleCommunicationDevice,
+    isFlatpak,
     isSerialPortInVidPids,
     listAvailableDevices,
+    safeListSerialPorts,
     snooze,
     usbDeviceJsonFormatter,
     validateConnectedDevices,
@@ -402,7 +403,7 @@ export class UhkHidDevice {
             }
         }
 
-        const serialDevices = await SerialPort.list();
+        const serialDevices = await safeListSerialPorts(this.logService);
 
         for (const serialDevice of serialDevices) {
             if (isSerialPortInVidPids(serialDevice, UHK_DONGLE.bootloader)) {
@@ -510,7 +511,7 @@ export class UhkHidDevice {
             for (const vidPid of vidPidPairs) {
 
                 if (enumerationMode === EnumerationModes.Bootloader && device.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
-                    const serialDevices = await SerialPort.list();
+                    const serialDevices = await safeListSerialPorts(this.logService);
                     await listAvailableDevices({
                         serialDevices,
                         logService: this.logService,
@@ -779,6 +780,15 @@ export class UhkHidDevice {
         }
 
         if (this.options['preserve-udev-rules']) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        if (isFlatpak()) {
+            // Flatpak grants device access through its own permissions and does not
+            // expose the host udev rules to the sandbox. Whether the keyboard is
+            // usable is determined by hasPermission() opening the device, so the
+            // missing /etc/udev/rules.d/50-uhk60.rules must not force the setup page.
             this._udevRulesInfo = UdevRulesInfo.Ok;
             return UdevRulesInfo.Ok;
         }

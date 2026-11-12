@@ -11,3 +11,5 @@ tmp/
 repos/
 !smart-macro-docs/node_modules
 !smart-macro-docs/node_modules/**/dist
+build-dir/
+.flatpak-builder/

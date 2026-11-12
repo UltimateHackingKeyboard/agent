@@ -1,0 +1,82 @@
+app-id: com.ultimategadgetlabs.agent
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '25.08'
+command: run.sh
+separate-locales: false
+finish-args:
+  # Rendering
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
+  # Agent downloads firmware, firmware documentation and checks for updates
+  - --share=network
+  # Raw HID (hidraw) and USB serial (ttyACM/ttyUSB) access to the keyboard, its
+  # halves and its modules. `--device=all` is required: the narrower --device=usb
+  # and --device=input do not cover hot-plugged hidraw nodes.
+  - --device=all
+  # User-chosen firmware files and user configuration import/export
+  - --filesystem=home
+  # System tray + notifications
+  - --socket=pulseaudio
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.StatusNotifierWatcher
+modules:
+  - name: uhk-agent
+    buildsystem: simple
+    build-commands:
+      # Unpack the AppImage. No FUSE is available in the build sandbox, but the
+      # static AppImage runtime extracts itself without mounting.
+      - chmod +x uhk-agent-x86_64.AppImage uhk-agent-aarch64.AppImage 2>/dev/null || true
+      - |
+        if [ -f uhk-agent-x86_64.AppImage ]; then
+          ./uhk-agent-x86_64.AppImage --appimage-extract
+        else
+          ./uhk-agent-aarch64.AppImage --appimage-extract
+        fi
+      - mkdir -p ${FLATPAK_DEST}/main
+      - cp -a squashfs-root/. ${FLATPAK_DEST}/main/
+      - install -Dm755 run.sh ${FLATPAK_DEST}/bin/run.sh
+      - install -Dm644 ${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 ${FLATPAK_ID}.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png
+    sources:
+      - type: file
+        url: https://github.com/UltimateHackingKeyboard/agent/releases/download/v11.0.0/UHK.Agent-11.0.0-linux-x86_64.AppImage
+        sha512: 8f48de4769be94b70080d0610c7ef74b82f81e8322b0624842d24ec73d095100f23a901e781bbcd657c7d30180254f1fa8eaf7bb3c64e30c6e71ea0de5d7ae77
+        dest-filename: uhk-agent-x86_64.AppImage
+        only-arches:
+          - x86_64
+        x-checker-data:
+          type: electron-updater
+          url: https://github.com/UltimateHackingKeyboard/agent/releases/latest/download/latest-linux.yml
+          is-main-source: true
+      - type: file
+        url: https://github.com/UltimateHackingKeyboard/agent/releases/download/v11.0.0/UHK.Agent-11.0.0-linux-arm64.AppImage
+        sha512: 9e4fe1e6eab0b74f288dbbfd42372b0f2a13f0909ce6986055d3e6db6405d71a4f9c6f84b472a8e34ab9c7df85c88651e13496450f92b7d9b4395f737db4b13f
+        dest-filename: uhk-agent-aarch64.AppImage
+        only-arches:
+          - aarch64
+        x-checker-data:
+          type: electron-updater
+          url: https://github.com/UltimateHackingKeyboard/agent/releases/latest/download/latest-linux-arm64.yml
+      - type: script
+        dest-filename: run.sh
+        commands:
+          # Keep Electron's temporary files inside the app's runtime dir.
+          - mkdir -p "${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
+          - export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
+          # The AppImage bundles libappindicator/libnotify/libXss for the tray icon.
+          - export LD_LIBRARY_PATH="/app/main/usr/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+          - exec zypak-wrapper /app/main/uhk-agent "$@"
+      - type: file
+        path: com.ultimategadgetlabs.agent.desktop
+      - type: file
+        path: com.ultimategadgetlabs.agent.metainfo.xml
+      - type: file
+        path: com.ultimategadgetlabs.agent.png

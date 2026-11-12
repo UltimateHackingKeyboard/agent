@@ -505,6 +505,7 @@ export const getPrivilegePageState = createSelector(
 
         return {
             permissionSetupFailed,
+            isFlatpak: app.isFlatpak,
             udevFileContent,
             updateUdevRules,
             showWhatWillThisDo: !app.privilegeWhatWillThisDoClicked && !permissionSetupFailed,

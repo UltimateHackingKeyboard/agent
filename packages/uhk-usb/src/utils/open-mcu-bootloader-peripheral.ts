@@ -1,9 +1,9 @@
 import { PortInfo } from '@serialport/bindings-interface';
 import { Peripheral, SerialPeripheral } from '@uhk/mcumgr';
-import { SerialPort } from 'serialport';
 import { LogService, VidPidPair } from 'uhk-common';
 
 import { isSerialPortInVidPids } from './is-serial-port-in-vid-pids.js';
+import { safeListSerialPorts } from './safe-list-serial-ports.js';
 import { snooze } from './snooze.js';
 
 export interface OpenMcuBootloaderPeripheralOptions {
@@ -44,7 +44,7 @@ export async function openMcuBootloaderPeripheral(options: OpenMcuBootloaderPeri
         logService,
         timeout,
         retryDelay = 250,
-        listSerialPorts = () => SerialPort.list(),
+        listSerialPorts = () => safeListSerialPorts(logService),
         createPeripheral = (path: string) => new SerialPeripheral(path),
     } = options;
 
