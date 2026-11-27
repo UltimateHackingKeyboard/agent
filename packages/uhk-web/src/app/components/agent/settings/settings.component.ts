@@ -13,7 +13,6 @@ import {
     getAnimationEnabled,
     getAppTheme,
     getDetectSharedConfigurationChanges,
-    getIsAdvancedSettingsMenuVisible,
     getKeyLanguage,
     getMacroGroupingSettings,
     getMinimizeToTray,
@@ -67,7 +66,6 @@ export class SettingsComponent {
     faCog = faCog;
     keyboardHalvesAlwaysJoined$: Observable<boolean>;
     alwaysEnableAdvancedMode$: Observable<boolean>;
-    alwaysEnableAdvancedModeSettingVisible$: Observable<boolean>;
     macroGroupingSettings$: Observable<MacroGroupingSettings>;
     sharedConfigurationFilePath$: Observable<string | undefined>;
     hasSharedConfigurationFilePath$: Observable<boolean>;
@@ -93,7 +91,6 @@ export class SettingsComponent {
         this.isLinux$ = this.store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
         this.keyboardHalvesAlwaysJoined$ = this.store.select(keyboardHalvesAlwaysJoined);
         this.alwaysEnableAdvancedMode$ = this.store.select(getAlwaysEnableAdvancedMode);
-        this.alwaysEnableAdvancedModeSettingVisible$ = this.store.select(getIsAdvancedSettingsMenuVisible);
         this.macroGroupingSettings$ = this.store.select(getMacroGroupingSettings);
         this.sharedConfigurationFilePath$ = this.store.select(getSharedConfigurationFilePath);
         this.hasSharedConfigurationFilePath$ = this.sharedConfigurationFilePath$.pipe(map(filePath => !!filePath));
